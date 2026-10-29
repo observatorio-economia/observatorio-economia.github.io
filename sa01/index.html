@@ -434,6 +434,7 @@ body.obs-proj table { font-size: 17px; }
           <option value="blanco" data-i18n="fp.p.blanco">En blanco</option>
         </select>
         <button type="button" class="btn quiet small" id="fp-load" data-i18n="fp.load">Cargar</button>
+        <button type="button" class="btn quiet small" id="fp-clear" data-i18n="pz.clear">Borrar la pizarra</button>
       </div>
       <div class="fp-pal" id="fp-pal"></div>
       <p class="fp-help" id="fp-help"></p>
@@ -615,6 +616,7 @@ window.OBS = (() => {
      opciones: { mode: "causal" | "flow", palette: [{ type, es, va, kind: "agente" | "fondo", color }],
                  edgeLabels: [{ es, va, kind: "dinero" | "real" }], labels: t, onChange(modelo), onLoops(bucles) }
      api: load(modelo), toJSON(), clear(), setMode("dibujar" | "jugar"), getMode(), addNode(texto?, tipo?), loops(), relabel(), destroy()
+   Pizarra.bindClear(botón, api, hecho?) → convierte un botón en «Borrar la pizarra», con confirmación de dos clics
    Modelo: { nodes: [{ id, label, x, y, type? }], edges: [{ id, from, to, sign: 1 | -1, label?, kind?: "dinero" | "real" }] }
    En modo «flow», los elementos de tipo «fondo» se dibujan como rectángulos y los «agentes» como círculos;
    las fichas de dinero son círculos y las de bienes o trabajo, cuadrados (y la flecha, discontinua).
@@ -629,12 +631,14 @@ window.Pizarra = (() => {
       "pz.grow": "hace crecer", "pz.shrink": "hace menguar", "pz.up": "Más", "pz.down": "Menos", "pz.label": "Qué circula",
       "pz.type": "Tipo", "pz.empty": "Haz doble clic en un hueco para crear un elemento", "pz.R": "bucle reforzador (R)",
       "pz.B": "bucle compensador (B)", "pz.board": "Pizarra de sistemas", "pz.done": "Hecho", "pz.flowLoop": "circuito",
-      "pz.money": "Dinero", "pz.real": "Bienes o trabajo", "pz.kind": "Qué circula por la flecha" },
+      "pz.money": "Dinero", "pz.real": "Bienes o trabajo", "pz.kind": "Qué circula por la flecha",
+      "pz.clear": "Borrar la pizarra", "pz.clearSure": "¿Seguro? Pulsa otra vez" },
     va: { "pz.new": "Element nou", "pz.rename": "Canviar el nom", "pz.delete": "Esborrar", "pz.flip": "Canviar el signe",
       "pz.grow": "fa créixer", "pz.shrink": "fa minvar", "pz.up": "Més", "pz.down": "Menys", "pz.label": "Què circula",
       "pz.type": "Tipus", "pz.empty": "Fes doble clic en un buit per a crear un element", "pz.R": "bucle reforçador (R)",
       "pz.B": "bucle compensador (B)", "pz.board": "Pissarra de sistemes", "pz.done": "Fet", "pz.flowLoop": "circuit",
-      "pz.money": "Diners", "pz.real": "Béns o treball", "pz.kind": "Què circula per la fletxa" }
+      "pz.money": "Diners", "pz.real": "Béns o treball", "pz.kind": "Què circula per la fletxa",
+      "pz.clear": "Esborrar la pissarra", "pz.clearSure": "Segur? Torna a polsar" }
   };
   if (window.OBS) window.OBS.register(DICT);
   const sv = (tag, attrs = {}, text) => {
@@ -1049,7 +1053,25 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
     draw();
     return { load, toJSON, clear, setMode, getMode: () => play, addNode: (l, type) => addNode(l, null, type), loops, relabel, destroy };
   }
-  return { create, W, H };
+  /* Botón «Borrar la pizarra» con confirmación de dos clics (sin ventanas emergentes, que no siempre funcionan dentro de Claude):
+     el primer clic pide «¿Seguro? Pulsa otra vez»; si se pulsa antes de 4 s, vacía la pizarra (api.clear) y llama a hecho(). */
+  function bindClear(btn, api, hecho) {
+    const tr = k => window.OBS ? window.OBS.t(k) : DICT.es[k];
+    let armado = null;
+    const desarmar = () => { clearTimeout(armado); armado = null; btn.textContent = tr("pz.clear"); btn.removeAttribute("aria-live"); };
+    btn.addEventListener("click", () => {
+      if (!armado) {
+        btn.setAttribute("aria-live", "polite"); btn.textContent = tr("pz.clearSure");
+        armado = setTimeout(desarmar, 4000);
+        return;
+      }
+      desarmar();
+      api.clear();
+      if (hecho) hecho();
+    });
+    btn.addEventListener("blur", () => { if (armado) desarmar(); });
+  }
+  return { create, bindClear, W, H };
 })();
 
 // PIZARRA-ENGINE:END
@@ -1941,6 +1963,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
   $("fp-load").addEventListener("click", () => {
     board.load(PRE[$("fp-preset").value]()); OBS.store.set(KEY, JSON.stringify(board.toJSON())); $("fp-json").value = JSON.stringify(board.toJSON(), null, 1); setPlay("dibujar");
   });
+  Pizarra.bindClear($("fp-clear"), board, () => setPlay("dibujar"));
   const status = (msg, bad) => { $("fp-status").textContent = msg; $("fp-status").className = "fp-status" + (bad ? " bad" : ""); };
   $("fp-copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("fp-json").value); status(t("fp.s.copied")); } catch { $("fp-json").select(); status(t("fp.s.nocopy"), true); } });
   $("fp-down").addEventListener("click", async () => status(await OBS.download("pizarra-flujo-sa1.json", $("fp-json").value, "application/json")));
