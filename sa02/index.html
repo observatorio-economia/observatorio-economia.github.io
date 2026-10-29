@@ -281,7 +281,7 @@ body.obs-proj .obs-tools.keep { display: flex; }
       <button type="button" id="pick-A" aria-pressed="true" data-survey="A">
         <span class="k" data-i18n="pick.A.k">ENCUESTA A · UNA POR HOGAR</span>
         <span class="t" data-i18n="pick.A.t">Decisiones de la familia en 2020</span>
-        <span class="d" data-i18n="pick.A.d">Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia.</span>
+        <span class="d" data-i18n="pick.A.d">Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia. Si en 2020 vivíais en otro país, contestad sobre lo que hicisteis allí.</span>
       </button>
       <button type="button" id="pick-B" aria-pressed="false" data-survey="B">
         <span class="k" data-i18n="pick.B.k">ENCUESTA B · UNA FILA POR PERSONA</span>
@@ -394,7 +394,7 @@ body.obs-proj .obs-tools.keep { display: flex; }
   </section>
 
   <footer>
-    <span data-i18n="f.ine">Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (población de 10 años o más). Es la última edición publicada que se ha podido consultar.</span>
+    <span data-i18n="f.ine">Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio por sexo», documento de trabajo del INE (2014), tabla 1 (población de 10 años o más). Es la última edición publicada que se ha podido consultar.</span>
     <span data-i18n-html="f.esf">La encuesta B se inspira en la actividad «Mis usos del tiempo» de Economistas sin Fronteras.</span>
   </footer>
 </div>
@@ -567,16 +567,16 @@ window.OBS = (() => {
   const TRAB_ES = ["Sí", "No"], TRAB_VA = ["Sí", "No"];
   const MAXP = 8;
   // INE, EET 2009-2010, día promedio por sexo (horas decimales)
-  const INE = { hogar: { M: 4 + 4/60, H: 1 + 50/60 }, trabajo: { M: 1 + 53/60, H: 3 + 3/60 } };
+  const INE = { hogar: { M: 4 + 7/60, H: 1 + 54/60 }, trabajo: { M: 1 + 54/60, H: 3 + 4/60 } }; // INE, documento de trabajo 2014, tabla 1
 
   // ---------- Textos ----------
   const ES = {
     "tabs.aria": "Secciones", "pick.aria": "Elige la encuesta",
     "h.eyebrow": "Observatorio · SA 2 · El comportamiento humano en la actividad económica",
     "h.title": "¿Se puede decidir bien cuando nadie sabe lo que va a pasar?",
-    "h.lede": "Herramientas de la situación de aprendizaje 2. <strong>Encuestas:</strong> qué decidió vuestra familia en 2020 y cuánto tiempo dedica cada persona a los cuidados y al hogar; son anónimas, sin nombres, ingresos ni datos de salud. <strong>Matriz:</strong> qué pasa en la estantería cuando todos esperan lo mismo.",
+    "h.lede": "Herramientas de la situación de aprendizaje 2. <strong>Encuestas:</strong> qué decidió vuestra familia en 2020 y cuánto tiempo dedica cada persona a los cuidados y al hogar; sin nombres, ingresos ni datos de salud (el código no lleva vuestro nombre). <strong>Matriz:</strong> qué pasa en la estantería cuando todos esperan lo mismo.",
     "tab.contestar": "Contestar", "tab.introducir": "Introducir códigos", "tab.resultados": "Resultados", "tab.matriz": "Matriz",
-    "pick.A.k": "ENCUESTA A · UNA POR HOGAR", "pick.A.t": "Decisiones de la familia en 2020", "pick.A.d": "Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia.",
+    "pick.A.k": "ENCUESTA A · UNA POR HOGAR", "pick.A.t": "Decisiones de la familia en 2020", "pick.A.d": "Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia. Si en 2020 vivíais en otro país, contestad sobre lo que hicisteis allí.",
     "pick.B.k": "ENCUESTA B · UNA FILA POR PERSONA", "pick.B.t": "Horas de cuidados y de hogar", "pick.B.d": "Cuánto tiempo dedicó ayer cada persona de casa a los cuidados, al hogar y al trabajo pagado.",
     "b1": "¿Qué día fue ayer?", "b2": "Para cada persona de casa (tú incluida): ¿cuántas horas dedicó ayer al hogar y los cuidados, y cuántas al trabajo pagado?",
     "b2.help": "Hogar y cuidados: cocinar, limpiar, lavar y planchar, hacer la compra, cuidar de niños o de personas mayores, gestiones de la casa. Trabajo pagado: horas de trabajo, sin contar los desplazamientos. Usa medias horas si hace falta (1,5 = una hora y media).",
@@ -626,16 +626,16 @@ window.OBS = (() => {
     "m.payoff.help": "Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.",
     "m.col1": "Los demás compran lo normal", "m.col2": "Los demás compran de más", "m.row1": "Yo compro lo normal", "m.row2": "Yo compro de más",
     "m.c11": "Hay para todos y gasto lo justo.", "m.c12": "Llego tarde y me quedo sin papel.", "m.c21": "Tengo de sobra, pero he gastado más y me ocupa la despensa.", "m.c22": "Algo consigo, pero la estantería se vacía y otros se quedan sin nada.",
-    "f.ine": "Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (población de 10 años o más). Es la última edición publicada que se ha podido consultar.",
+    "f.ine": "Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio por sexo», documento de trabajo del INE (2014), tabla 1 (población de 10 años o más). Es la última edición publicada que se ha podido consultar.",
     "f.esf": "La encuesta B se inspira en la actividad <a href=\"https://ecosfron.org/repositorio-materiales-ies/mis-usos-del-tiempo/\" target=\"_blank\" rel=\"noopener\">«Mis usos del tiempo»</a> de Economistas sin Fronteras."
   };
   const VA = {
     "tabs.aria": "Seccions", "pick.aria": "Tria l'enquesta",
     "h.eyebrow": "Observatori · SA 2 · El comportament humà en l'activitat econòmica",
     "h.title": "Es pot decidir bé quan ningú sap què passarà?",
-    "h.lede": "Ferramentes de la situació d'aprenentatge 2. <strong>Enquestes:</strong> què va decidir la vostra família en 2020 i quant de temps dedica cada persona a les cures i a la llar; són anònimes, sense noms, ingressos ni dades de salut. <strong>Matriu:</strong> què passa en el prestatge quan tots esperen el mateix.",
+    "h.lede": "Ferramentes de la situació d'aprenentatge 2. <strong>Enquestes:</strong> què va decidir la vostra família en 2020 i quant de temps dedica cada persona a les cures i a la llar; sense noms, ingressos ni dades de salut (el codi no porta el vostre nom). <strong>Matriu:</strong> què passa en el prestatge quan tots esperen el mateix.",
     "tab.contestar": "Contestar", "tab.introducir": "Introduir codis", "tab.resultados": "Resultats", "tab.matriz": "Matriu",
-    "pick.A.k": "ENQUESTA A · UNA PER LLAR", "pick.A.t": "Decisions de la família en 2020", "pick.A.d": "Nou preguntes sobre el que vau fer a casa quan va començar la pandèmia.",
+    "pick.A.k": "ENQUESTA A · UNA PER LLAR", "pick.A.t": "Decisions de la família en 2020", "pick.A.d": "Nou preguntes sobre el que vau fer a casa quan va començar la pandèmia. Si el 2020 vivíeu en un altre país, contesteu sobre el que vau fer allà.",
     "pick.B.k": "ENQUESTA B · UNA FILA PER PERSONA", "pick.B.t": "Hores de cures i de llar", "pick.B.d": "Quant de temps va dedicar ahir cada persona de casa a les cures, a la llar i al treball pagat.",
     "b1": "Quin dia va ser ahir?", "b2": "Per a cada persona de casa (tu inclosa): quantes hores va dedicar ahir a la llar i les cures, i quantes al treball pagat?",
     "b2.help": "Llar i cures: cuinar, netejar, llavar i planxar, fer la compra, cuidar xiquets o persones majors, gestions de la casa. Treball pagat: hores de treball, sense comptar els desplaçaments. Usa mitges hores si cal (1,5 = una hora i mitja).",
@@ -685,7 +685,7 @@ window.OBS = (() => {
     "m.payoff.help": "El que li passa a una llar segons el que faça i el que facen els altres. Si crec que els altres compraran de més, em convé comprar de més; si tots pensem igual, el prestatge es buida encara que es fabrique el mateix de sempre.",
     "m.col1": "Els altres compren el normal", "m.col2": "Els altres compren de més", "m.row1": "Jo compre el normal", "m.row2": "Jo compre de més",
     "m.c11": "N'hi ha per a tots i gaste el just.", "m.c12": "Arribe tard i em quede sense paper.", "m.c21": "En tinc de sobra, però he gastat més i m'ocupa el rebost.", "m.c22": "Alguna cosa aconseguisc, però el prestatge es buida i altres es queden sense res.",
-    "f.ine": "Dada de referència: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (població de 10 anys o més). És l'última edició publicada que s'ha pogut consultar.",
+    "f.ine": "Dada de referència: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio por sexo», document de treball de l'INE (2014), taula 1 (població de 10 anys o més). És l'última edició publicada que s'ha pogut consultar.",
     "f.esf": "L'enquesta B s'inspira en l'activitat <a href=\"https://ecosfron.org/repositorio-materiales-ies/mis-usos-del-tiempo/\" target=\"_blank\" rel=\"noopener\">«Mis usos del tiempo»</a> d'Economistas sin Fronteras."
   };
   // Preguntas y opciones como claves de traducción
