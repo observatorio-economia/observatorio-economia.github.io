@@ -1,0 +1,2058 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../../assets/observatorio.css">
+<script src="../../assets/menu.js"></script>
+<title data-i18n="page.title">Observatorio · SA 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 920px); arriba un selector de herramienta y, debajo, las pestañas de cada una. Línea gráfica del Observatorio: papel blanco, grafito y azul tinta.
+   Arroz: azul = consumidas, ocre = reserva, rojo = sin sus 3 raciones. Flujo: azul = dinero, ocre = maquinaria y bienes, gris = trabajo. */
+:root {
+  --bg: #ffffff;
+  --paper: #f6f7f9;
+  --ink: #23262b;
+  --muted: #5d636c;
+  --rule: #d9dde3;
+  --accent: #2f4f8a;
+  --accent-soft: #edf1f8;
+  --ref: #9aa1ab;
+  --ok: #2d6a4f;
+  --bad: #a4372c;
+  --s2: #b35c1e;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c;
+    --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b; --s2: #cf7034;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c;
+  --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b; --s2: #cf7034;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+#obs-bar { padding-top: 18px; }
+header.top { padding-block: 4px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.15; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 66ch; display: flex; flex-direction: column; gap: 8px; }
+
+/* Selector de herramienta (primer nivel) */
+.toolpick { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.toolpick label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.select-wrap { position: relative; display: inline-flex; min-width: 0; }
+.select-wrap select {
+  appearance: none; -webkit-appearance: none; font: 600 18px var(--font-display); color: var(--ink); background: var(--bg);
+  border: 2px solid var(--ink); border-radius: 4px; padding: 7px 40px 7px 12px; cursor: pointer; max-width: 100%;
+}
+.select-wrap::after { content: ""; position: absolute; right: 14px; top: 50%; width: 8px; height: 8px; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button {
+  font: 500 15px var(--font-body); color: var(--muted); background: none; border: 0;
+  padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer;
+}
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.view { display: flex; flex-direction: column; gap: 26px; }
+.block { display: flex; flex-direction: column; gap: 16px; }
+.block + .block { border-top: 2px solid var(--ink); padding-top: 24px; }
+.notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+.notice.warn { border-left-color: var(--bad); }
+.notice strong { font-weight: 600; }
+
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 5px 10px; font-size: 14px; }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* Barra de rondas */
+.roundbar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; border: 2px solid var(--ink); border-radius: 6px; padding: 10px 12px; }
+.roundbar .arrow { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--accent); background: var(--bg); color: var(--accent); cursor: pointer; display: grid; place-items: center; }
+.roundbar .arrow svg { width: 22px; height: 22px; }
+.roundbar .arrow:disabled { border-color: var(--rule); color: var(--ref); cursor: not-allowed; }
+.roundbar .mid { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; min-width: 0; }
+.roundbar .rk { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1; }
+.roundbar .rt { font-size: 14px; color: var(--muted); }
+.dots { display: flex; gap: 8px; }
+.dots button { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--accent); background: transparent; padding: 0; cursor: pointer; }
+.dots button[aria-current="true"] { background: var(--accent); }
+
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: middle; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.team { font-weight: 600; white-space: normal; min-width: 9em; }
+td.err { color: var(--bad); font-size: 13px; white-space: normal; text-align: left; min-width: 12em; }
+td.pos { color: var(--ok); font-weight: 600; } td.neg { color: var(--bad); font-weight: 600; }
+table.bids { min-width: 640px; }
+table.bids input { width: 4.2em; font: 15px var(--font-mono); text-align: right; color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 6px; }
+table.bids input.bad { border-color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
+table.result { min-width: 680px; }
+table.flow { min-width: 760px; }
+tr.cur td { background: var(--accent-soft); }
+
+.stats { display: flex; gap: 14px 30px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat b.neg { color: var(--bad); } .stat b.pos { color: var(--ok); }
+.stat span { font-size: 13px; color: var(--muted); }
+
+.plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.plate { border: 1px solid var(--rule); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.plate.out { border-color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
+.plate .n { font-family: var(--font-display); font-weight: 600; font-size: 17px; line-height: 1.15; }
+.plate .s { font-size: 13px; color: var(--muted); }
+.rations { display: flex; flex-wrap: wrap; gap: 4px; }
+.rations i { width: 16px; height: 16px; border-radius: 3px; background: var(--accent); }
+.rations i.res { background: var(--s2); }
+.rations i.miss { background: transparent; border: 1.5px dashed var(--bad); }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; align-self: flex-start; }
+.chip.ok { color: var(--ok); } .chip.bad { color: var(--bad); }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; background: var(--accent); }
+.legend i.res { background: var(--s2); }
+.legend i.miss { background: transparent; border: 1.5px dashed var(--bad); }
+.legend i.dot { border-radius: 50%; }
+.legend i.goods { background: var(--s2); }
+.legend i.work { background: var(--ref); }
+
+.qcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+.qcard { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.qcard .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.qcard .q { font-weight: 600; }
+.opt { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) 4.2em; gap: 8px; align-items: center; font-size: 14px; }
+.opt .l { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
+.opt input { width: 100%; font: 15px var(--font-mono); text-align: right; color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 6px; }
+.bars { display: flex; flex-direction: column; gap: 5px; }
+.bar { display: grid; grid-template-columns: 1.6em 1fr 4.2em; gap: 8px; align-items: center; font-size: 13px; }
+.track { height: 12px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+.fill.key { background: var(--s2); }
+.bar .val { font-family: var(--font-mono); text-align: right; }
+.bar .l { font-family: var(--font-mono); color: var(--muted); }
+
+/* Flujo de la renta */
+.circuit { border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
+.circuit svg { width: 100%; height: auto; display: block; }
+svg .link { stroke: var(--rule); stroke-linecap: round; fill: none; }
+svg .node { fill: var(--bg); stroke-width: 2; }
+svg .node.sec { stroke: var(--ink); }
+svg .node.fam { stroke: var(--accent); }
+svg .node.own { stroke: var(--s2); }
+svg .nname { font-family: var(--font-display); font-weight: 600; font-size: 15px; fill: var(--ink); }
+svg .nval { font-family: var(--font-mono); font-size: 14px; fill: var(--ink); }
+svg .nsub { font-family: var(--font-body); font-size: 12px; fill: var(--muted); }
+svg .tk-money { fill: var(--accent); }
+svg .tk-goods { fill: var(--s2); }
+svg .tk-work { fill: var(--ref); }
+/* Reinversión (acumulación): verde, para distinguirla del resto del dinero */
+svg .tk-reinv { fill: var(--s3); }
+svg .link.reinv { stroke: var(--s3); stroke-opacity: .6; }
+svg .rlabel { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--s3); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+.legend i.reinv { background: var(--s3); }
+/* Barras de lo producido en cada vuelta */
+.growth { border: 1px solid var(--rule); background: var(--paper); }
+.growth svg { width: 100%; height: auto; display: block; }
+.growth .bar-c { fill: var(--s2); } .growth .bar-v { fill: var(--ref); } .growth .bar-r { fill: var(--s3); } .growth .bar-k { fill: var(--accent); }
+.growth .other { opacity: .4; }
+.growth text { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.growth text.tot { fill: var(--ink); font-weight: 500; }
+.legend i.c-mat { background: var(--s2); } .legend i.c-sal { background: var(--ref); } .legend i.c-cons { background: var(--accent); }
+svg .loop { fill: none; stroke: var(--rule); }
+.vbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.vbar .vk { font-family: var(--font-display); font-weight: 700; font-size: 24px; min-width: 5.5em; font-variant-numeric: tabular-nums; }
+.slider { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.vbar .slider { flex: 1 1 240px; }
+.slider .lab { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--muted); }
+.slider output { font-family: var(--font-mono); color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
+.check { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; }
+.check .mark { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+.check .mark.ok { color: var(--ok); } .check .mark.bad { color: var(--bad); }
+.flows { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 3px; font-size: 14px; }
+.flows b { font-family: var(--font-mono); font-weight: 500; }
+.empty { border: 1px dashed var(--rule); border-radius: 6px; padding: 22px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a, .small a { color: var(--accent); }
+@media (max-width: 640px) {
+  .stat b { font-size: 24px; }
+  .roundbar .arrow { width: 42px; height: 42px; }
+  .roundbar .rk { font-size: 22px; }
+}
+
+/* Pizarra del flujo de la renta (motor común de la pizarra) */
+.fp-bar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.fp-bar .grow { flex: 1 1 auto; }
+.fp-bar select { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 8px; min-width: 0; max-width: 100%; }
+.fp-mode { display: inline-flex; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
+.fp-mode button { font: 600 15px var(--font-body); padding: 8px 16px; border: 0; background: var(--bg); color: var(--ink); cursor: pointer; min-height: 40px; }
+.fp-mode button + button { border-left: 2px solid var(--ink); }
+.fp-mode button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.fp-pal { display: flex; flex-direction: column; gap: 8px; }
+.fp-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.fp-row .k { font-size: 13px; color: var(--muted); min-width: 5.5em; }
+.fp-chip { font: 500 14px var(--font-body); color: var(--ink); background: var(--bg); border: 1.5px solid var(--ink); padding: 5px 12px; cursor: pointer; min-height: 34px; }
+.fp-chip.agente { border-radius: 999px; }
+.fp-chip.fondo { border-radius: 4px; border-color: var(--s2); }
+.fp-chip:hover { background: var(--accent-soft); }
+.fp-chip:disabled { opacity: .4; cursor: not-allowed; }
+.fp-help { font-size: 15px; color: var(--muted); max-width: 72ch; }
+.fp-help b { color: var(--ink); font-weight: 600; }
+.fp-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--muted); }
+.fp-legend span { display: inline-flex; gap: 6px; align-items: center; }
+.fp-legend .sym { font-size: 15px; } .fp-legend .m { color: var(--accent); } .fp-legend .r { color: var(--s2); }
+ol.fp-tries { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+ol.fp-tries li { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+ol.fp-tries .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+ol.fp-tries .a { font-size: 14px; color: var(--muted); }
+details.fp-share { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; }
+details.fp-share > summary { cursor: pointer; font-weight: 600; }
+details.fp-share[open] > summary { margin-bottom: 10px; }
+details.fp-share textarea { width: 100%; min-height: 120px; font: 13px var(--font-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 8px; resize: vertical; }
+.fp-status { font-size: 14px; min-height: 1.4em; color: var(--muted); } .fp-status.bad { color: var(--bad); }
+body.obs-proj .fp-mode button { font-size: 19px; padding: 12px 22px; }
+body.obs-proj .fp-chip { font-size: 18px; padding: 8px 16px; }
+body.obs-proj .fp-help { font-size: 19px; }
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
+body.obs-proj .roundbar .rk { font-size: 34px; }
+body.obs-proj .roundbar .arrow { width: 60px; height: 60px; }
+body.obs-proj .select-wrap select { font-size: 22px; }
+body.obs-proj table { font-size: 17px; }
+</style>
+
+<div class="wrap">
+  <div id="obs-bar"></div>
+  <header class="top">
+    <span class="eyebrow" data-i18n="head.eyebrow">Observatorio · SA 1 · ¿Qué es la economía?</span>
+    <div class="toolpick">
+      <label for="tool" data-i18n="tool.label">Herramienta</label>
+      <span class="select-wrap"><select id="tool">
+        <option value="arroz" data-i18n="tool.arroz">El juego del arroz</option>
+        <option value="flujo" data-i18n="tool.flujo">El flujo de la renta</option>
+      </select></span>
+    </div>
+    <h1 id="h1"></h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+
+  <!-- ===================== ARROZ · MERCADO ===================== -->
+  <section class="view" id="view-arroz-mercado" role="tabpanel" hidden>
+    <div class="roundbar">
+      <button type="button" class="arrow" id="r-prev" data-i18n-attr="aria-label:round.prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="mid">
+        <span class="rk" id="r-k"></span>
+        <span class="rt" id="r-t"></span>
+        <div class="dots" id="r-dots"></div>
+      </div>
+      <button type="button" class="arrow" id="r-next" data-i18n-attr="aria-label:round.next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="notice" id="round-info" aria-live="polite"></div>
+
+    <div class="block">
+      <div class="prose">
+        <h2 data-i18n="bids.h">Pujas de la ronda</h2>
+        <p class="small" data-i18n="bids.help">Copia de cada tarjeta de puja las raciones que pide el equipo (como máximo 5) y lo que ofrece por cada una. La reserva inicial viene de la ronda anterior. Si dos equipos ofrecen lo mismo, sortéalo y escribe en «Sorteo» quién va antes (1 = primero).</p>
+      </div>
+      <div class="scroll"><table class="bids" id="bids"></table></div>
+      <div class="actions">
+        <button type="button" class="btn quiet small" id="clear-round" data-i18n="bids.clearRound">Borrar esta ronda</button>
+        <button type="button" class="btn quiet small" id="clear-all" data-i18n="bids.clearAll">Borrar el juego</button>
+      </div>
+      <div class="notice warn" id="tie-note" hidden></div>
+    </div>
+
+    <div class="block">
+      <div class="prose"><h2 data-i18n="res.h">Qué ha pasado</h2></div>
+      <div class="stats" id="stats"></div>
+      <div class="legend">
+        <span><i></i><span data-i18n="leg.cons">Ración consumida</span></span>
+        <span><i class="res"></i><span data-i18n="leg.res">Ración guardada como reserva</span></span>
+        <span><i class="miss"></i><span data-i18n="leg.miss">Ración que le falta</span></span>
+      </div>
+      <div class="plates" id="plates"></div>
+      <details>
+        <summary class="small" style="cursor:pointer;color:var(--accent)" data-i18n="res.sheet">Ver la hoja de control completa</summary>
+        <div class="scroll" style="margin-top:10px"><table class="result" id="result"></table></div>
+      </details>
+    </div>
+
+    <div class="block">
+      <div class="prose">
+        <h2 data-i18n="sum.h">Las tres rondas</h2>
+        <p class="small" data-i18n="sum.help">Cada equipo necesita 3 raciones: los cinco juntos, 15 por ronda.</p>
+      </div>
+      <div class="scroll"><table id="summary"></table></div>
+      <p id="summary-note"></p>
+    </div>
+
+    <div class="block">
+      <div class="prose">
+        <h3 data-i18n="ex.h">Para probar la herramienta antes de clase</h3>
+        <p class="small" data-i18n="ex.help">Cargan pujas inventadas en las tres rondas. Borran lo que haya escrito.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn ghost small" id="ex-hoard" data-i18n="ex.hoard">Ejemplo: el comerciante acumula</button>
+        <button type="button" class="btn ghost small" id="ex-fair" data-i18n="ex.fair">Ejemplo: nadie acapara</button>
+      </div>
+      <p class="small" id="ex-flag"></p>
+    </div>
+  </section>
+
+  <!-- ===================== ARROZ · VOTACIONES ===================== -->
+  <section class="view" id="view-arroz-votar" role="tabpanel" hidden>
+    <div class="prose">
+      <h2 data-i18n="vote.h">Lo que espera la clase</h2>
+      <p data-i18n-html="vote.p">Cada alumno o alumna vota con su tarjeta de <a href="https://www.plickers.com/" target="_blank" rel="noopener">Plickers</a> (o a mano alzada). Escribe cuántas personas eligen cada letra. Es evaluación inicial: no puntúa.</p>
+      <p class="small" data-i18n="vote.when">La primera pregunta va después de la explicación inicial y antes de las reglas; la segunda, justo después de leer la tarjeta de la ronda 3; la tercera, en el cierre.</p>
+    </div>
+    <div class="qcards" id="qcards"></div>
+    <div class="notice" id="vote-note"></div>
+    <div class="actions"><button type="button" class="btn quiet small" id="clear-votes" data-i18n="vote.clear">Borrar los votos</button></div>
+  </section>
+
+  <!-- ===================== FLUJO · PIZARRA ===================== -->
+  <section class="view" id="view-flujo-pizarra" role="tabpanel" hidden>
+    <div id="pizarra-host" class="block">
+      <div class="prose">
+        <h2 data-i18n="fp.h">Dibuja el circuito</h2>
+        <p class="small" data-i18n="fp.p">Pon los agentes y los fondos, únelos con flechas y escribe qué circula por cada una. Después, pulsa «Jugar» y mira cómo da vueltas.</p>
+      </div>
+      <div class="fp-bar">
+        <div class="fp-mode" role="group" data-i18n-attr="aria-label:fp.mode" aria-label="Modo">
+          <button type="button" id="fp-draw" aria-pressed="true" data-i18n="fp.draw">Dibujar</button>
+          <button type="button" id="fp-play" aria-pressed="false" data-i18n="fp.play">Jugar</button>
+        </div>
+        <span class="grow"></span>
+        <label class="small" for="fp-preset" data-i18n="fp.preset">Ejemplo</label>
+        <select id="fp-preset">
+          <option value="dos" data-i18n="fp.p.dos">Dos agentes</option>
+          <option value="sectores" data-i18n="fp.p.sect">Con Estado, bancos y exterior</option>
+          <option value="excedente" data-i18n="fp.p.exc">Con excedente</option>
+          <option value="blanco" data-i18n="fp.p.blanco">En blanco</option>
+        </select>
+        <button type="button" class="btn quiet small" id="fp-load" data-i18n="fp.load">Cargar</button>
+        <button type="button" class="btn quiet small" id="fp-clear" data-i18n="pz.clear">Borrar la pizarra</button>
+      </div>
+      <div class="fp-pal" id="fp-pal"></div>
+      <p class="fp-help" id="fp-help"></p>
+      <div id="fp-board"></div>
+      <div class="fp-legend">
+        <span><span class="sym m">●</span><span data-i18n="fp.l.money">dinero</span></span>
+        <span><span class="sym r">■</span><span data-i18n="fp.l.real">bienes o trabajo (flecha discontinua)</span></span>
+        <span><span class="sym">◯</span><span data-i18n="fp.l.agent">agente</span></span>
+        <span><span class="sym">▭</span><span data-i18n="fp.l.fund">fondo: lo que se acumula o se reparte</span></span>
+      </div>
+      <div class="block">
+        <h3 data-i18n="fp.try">Prueba esto</h3>
+        <ol class="fp-tries">
+          <li><span class="k" data-i18n="fp.k1">Reto 1</span><span data-i18n="fp.q1">Con «Dos agentes», sigue el dinero y luego los bienes y el trabajo.</span><span class="a" data-i18n="fp.a1">¿Van en el mismo sentido? ¿Por qué el circuito podría repetirse siempre igual?</span></li>
+          <li><span class="k" data-i18n="fp.k2">Reto 2</span><span data-i18n="fp.q2">Carga «Con Estado, bancos y exterior».</span><span class="a" data-i18n="fp.a2">¿Qué flechas sacan dinero del circuito entre familias y empresas, y cuáles lo devuelven?</span></li>
+          <li><span class="k" data-i18n="fp.k3">Reto 3</span><span data-i18n="fp.q3">Carga «Con excedente» y borra la flecha de reinversión.</span><span class="a" data-i18n="fp.a3">¿Qué le pasa a la producción de la vuelta siguiente? ¿Y si todo el excedente se reinvierte?</span></li>
+        </ol>
+      </div>
+      <details class="fp-share">
+        <summary data-i18n="fp.s.title">Guardar o compartir el dibujo</summary>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <p class="small" data-i18n="fp.s.help">El dibujo se guarda solo en este navegador. Para pasarlo a otro ordenador, copia este texto o descárgalo, y pégalo allí con «Cargar el texto».</p>
+          <textarea id="fp-json" spellcheck="false" data-i18n-attr="aria-label:fp.s.title"></textarea>
+          <div class="actions">
+            <button type="button" class="btn ghost small" id="fp-copy" data-i18n="fp.s.copy">Copiar</button>
+            <button type="button" class="btn ghost small" id="fp-down" data-i18n="fp.s.down">Descargar</button>
+            <button type="button" class="btn quiet small" id="fp-in" data-i18n="fp.s.in">Cargar el texto</button>
+            <span class="fp-status" id="fp-status" aria-live="polite"></span>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== FLUJO · SIMPLE y AMPLIADO (misma estructura) ===================== -->
+  <section class="view" id="view-flujo-simple" role="tabpanel" hidden></section>
+  <section class="view" id="view-flujo-ampliado" role="tabpanel" hidden></section>
+
+  <footer>
+    <span data-i18n-html="foot.arroz">Juego del arroz: reglas, rentas y raciones del material de la SA 1 (sesión 1). Las cifras son del juego, no datos históricos; reproducen el patrón que describe Amartya Sen en <em>Poverty and Famines</em> (1981), cap. 6.</span>
+    <span data-i18n="foot.flujo">Flujo de la renta: cifras inventadas para el aula, en millones de euros.</span>
+    <span data-i18n="foot.store">Lo que se escribe aquí se guarda solo en este navegador, para no perderlo si se recarga la página.</span>
+  </footer>
+</div>
+
+<script>
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
+  "use strict";
+  const PANEL_URL = "../../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
+    }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+// PIZARRA-ENGINE:BEGIN
+/* Pizarra del Observatorio: motor propio para dibujar sistemas (elementos y flechas) y ponerlos en marcha.
+   Idea de interacción inspirada en las «explorable explanations»; el código es original.
+   Pizarra.create(contenedor, opciones) → api
+     opciones: { mode: "causal" | "flow", palette: [{ type, es, va, kind: "agente" | "fondo", color }],
+                 edgeLabels: [{ es, va, kind: "dinero" | "real" }], labels: t, onChange(modelo), onLoops(bucles) }
+     api: load(modelo), toJSON(), clear(), setMode("dibujar" | "jugar"), getMode(), addNode(texto?, tipo?), loops(), relabel(), destroy()
+   Pizarra.bindClear(botón, api, hecho?) → convierte un botón en «Borrar la pizarra», con confirmación de dos clics
+   Modelo: { nodes: [{ id, label, x, y, type? }], edges: [{ id, from, to, sign: 1 | -1, label?, kind?: "dinero" | "real" }] }
+   En modo «flow», los elementos de tipo «fondo» se dibujan como rectángulos y los «agentes» como círculos;
+   las fichas de dinero son círculos y las de bienes o trabajo, cuadrados (y la flecha, discontinua).
+   Modo «causal»: cada flecha hace crecer (+) o menguar (−) al elemento al que llega; al jugar, los empujones viajan por las flechas.
+   Modo «flow»: cada flecha lleva una etiqueta (salarios, bienes…) y, al jugar, circulan fichas por el circuito. */
+window.Pizarra = (() => {
+  "use strict";
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 960, H = 560, R0 = 34;
+  const DICT = {
+    es: { "pz.new": "Nuevo elemento", "pz.rename": "Renombrar", "pz.delete": "Borrar", "pz.flip": "Cambiar signo",
+      "pz.grow": "hace crecer", "pz.shrink": "hace menguar", "pz.up": "Más", "pz.down": "Menos", "pz.label": "Qué circula",
+      "pz.type": "Tipo", "pz.empty": "Haz doble clic en un hueco para crear un elemento", "pz.R": "bucle reforzador (R)",
+      "pz.B": "bucle compensador (B)", "pz.board": "Pizarra de sistemas", "pz.done": "Hecho", "pz.flowLoop": "circuito",
+      "pz.money": "Dinero", "pz.real": "Bienes o trabajo", "pz.kind": "Qué circula por la flecha",
+      "pz.clear": "Borrar la pizarra", "pz.clearSure": "¿Seguro? Pulsa otra vez" },
+    va: { "pz.new": "Element nou", "pz.rename": "Canviar el nom", "pz.delete": "Esborrar", "pz.flip": "Canviar el signe",
+      "pz.grow": "fa créixer", "pz.shrink": "fa minvar", "pz.up": "Més", "pz.down": "Menys", "pz.label": "Què circula",
+      "pz.type": "Tipus", "pz.empty": "Fes doble clic en un buit per a crear un element", "pz.R": "bucle reforçador (R)",
+      "pz.B": "bucle compensador (B)", "pz.board": "Pissarra de sistemes", "pz.done": "Fet", "pz.flowLoop": "circuit",
+      "pz.money": "Diners", "pz.real": "Béns o treball", "pz.kind": "Què circula per la fletxa",
+      "pz.clear": "Esborrar la pissarra", "pz.clearSure": "Segur? Torna a polsar" }
+  };
+  if (window.OBS) window.OBS.register(DICT);
+  const sv = (tag, attrs = {}, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v);
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const uid = p => p + Math.random().toString(36).slice(2, 8);
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const CSS = `
+.pz { position: relative; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+.pz svg { display: block; width: 100%; height: auto; }
+.pz .pz-edge { fill: none; stroke: var(--muted); stroke-width: 2.5; }
+.pz .pz-edge.pos { stroke: var(--s1); } .pz .pz-edge.neg { stroke: var(--s2); } .pz .pz-edge.flow { stroke: var(--ink); stroke-opacity: .55; }
+.pz .pz-edge.flow.real { stroke-dasharray: 9 6; }
+.pz .pz-edge.sel { stroke-width: 4.5; }
+.pz .pz-hit { fill: none; stroke: transparent; stroke-width: 22; cursor: pointer; }
+.pz .pz-head.pos { fill: var(--s1); } .pz .pz-head.neg { fill: var(--s2); } .pz .pz-head.flow { fill: var(--ink); fill-opacity: .55; }
+.pz .pz-sign { font: 700 17px var(--font-body); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.pz .pz-sign-bg { stroke-width: 2; fill: var(--bg); }
+.pz .pz-sign-bg.pos { stroke: var(--s1); } .pz .pz-sign-bg.neg { stroke: var(--s2); }
+.pz .pz-sign.pos { fill: var(--s1); } .pz .pz-sign.neg { fill: var(--s2); }
+.pz .pz-elabel { font: 500 13px var(--font-body); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; pointer-events: none; }
+.pz .pz-node .body { fill: var(--bg); stroke: var(--ink); stroke-width: 2.5; cursor: grab; }
+.pz .pz-node.sel .body { stroke: var(--accent); stroke-width: 4; }
+.pz .pz-node .lvl { pointer-events: none; }
+.pz .pz-node text { font: 600 15px var(--font-body); fill: var(--ink); text-anchor: middle; paint-order: stroke; stroke: var(--paper); stroke-width: 5px; pointer-events: none; }
+.pz .pz-handle { fill: var(--accent); stroke: var(--bg); stroke-width: 2; cursor: crosshair; }
+.pz .pz-handle-t { fill: var(--bg); font: 700 16px var(--font-body); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.pz .pz-btn { cursor: pointer; }
+.pz .pz-btn circle { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; }
+.pz .pz-btn path { fill: var(--ink); }
+.pz .pz-btn:hover circle { fill: var(--accent-soft); }
+.pz .pz-temp { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 6 5; fill: none; pointer-events: none; }
+.pz .pz-pulse circle { stroke: var(--bg); stroke-width: 2; }
+.pz .pz-pulse.pos circle { fill: var(--s1); } .pz .pz-pulse.neg circle { fill: var(--s2); }
+.pz .pz-pulse text { fill: #fff; font: 700 13px var(--font-body); text-anchor: middle; dominant-baseline: central; }
+.pz .pz-token { fill: var(--accent); stroke: var(--bg); stroke-width: 1.5; pointer-events: none; }
+.pz .pz-token.real { fill: var(--s2); }
+.pz .pz-loop circle { fill: var(--bg); stroke-width: 2; }
+.pz .pz-loop.r circle { stroke: var(--s2); } .pz .pz-loop.b circle { stroke: var(--s1); }
+.pz .pz-loop text { font: 700 16px var(--font-display); text-anchor: middle; dominant-baseline: central; }
+.pz .pz-loop.r text { fill: var(--s2); } .pz .pz-loop.b text { fill: var(--s1); }
+.pz .pz-empty { font: 500 16px var(--font-body); fill: var(--muted); text-anchor: middle; }
+.pz .pz-pop { position: absolute; z-index: 5; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.14); max-width: calc(100% - 12px); }
+.pz .pz-pop button { font: 500 14px var(--font-body); padding: 6px 10px; border-radius: 4px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; min-height: 36px; }
+.pz .pz-pop button.danger { color: var(--bad); }
+.pz .pz-pop input, .pz .pz-pop select { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--accent); border-radius: 4px; padding: 6px 8px; min-width: 0; width: 14em; max-width: 100%; }
+.pz .pz-pop .k { font-size: 13px; color: var(--muted); }
+.pz .pz-pop .pz-kind { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.pz .pz-pop .pz-kind button { border: 0; border-radius: 0; min-height: 34px; }
+.pz .pz-pop .pz-kind button + button { border-left: 1px solid var(--rule); }
+.pz .pz-pop .pz-kind button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+body.obs-proj .pz .pz-node text { font-size: 19px; }
+body.obs-proj .pz .pz-elabel { font-size: 16px; }
+@media (max-width: 560px) { .pz .pz-node text { font-size: 20px; } .pz .pz-elabel { font-size: 17px; } }`;
+  let cssDone = false;
+  function injectCSS() { if (cssDone) return; cssDone = true; const s = document.createElement("style"); s.textContent = CSS; document.head.append(s); }
+
+  function create(container, opts = {}) {
+    injectCSS();
+    const mode = opts.mode === "flow" ? "flow" : "causal";
+    const L = (k) => (opts.labels || (window.OBS ? window.OBS.t : (x => (DICT.es[x] || x))))(k);
+    const lang = () => (window.OBS ? window.OBS.lang() : "es");
+    const palette = opts.palette || [];
+    let model = { nodes: [], edges: [] };
+    let play = "dibujar";
+    let sel = null; // { kind: "node"|"edge", id }
+    const lvl = new Map(); // nivel de cada elemento al jugar (−1…1)
+    let pulses = [];
+    let raf = null, last = 0, tokenPhase = 0;
+
+    container.classList.add("pz");
+    container.replaceChildren();
+    const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": L("pz.board") });
+    const defs = sv("defs");
+    svg.append(defs);
+    const gLoops = sv("g"), gEdges = sv("g"), gNodes = sv("g"), gFx = sv("g"), gTemp = sv("g");
+    svg.append(gLoops, gEdges, gNodes, gFx, gTemp);
+    container.append(svg);
+    let pop = null;
+
+    const byId = id => model.nodes.find(n => n.id === id);
+    const typeOf = n => palette.find(p => p.type === n.type);
+    const changed = () => { if (opts.onChange) opts.onChange(toJSON()); if (opts.onLoops) opts.onLoops(loops()); };
+    function pt(e) {
+      const m = svg.getScreenCTM(); if (!m) return { x: 0, y: 0 };
+      const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+      return { x: p.x, y: p.y };
+    }
+    const radius = n => R0 * (1 + 0.5 * (lvl.get(n.id) || 0));
+
+    // ---------- Geometría de las flechas (curva cuadrática, siempre hacia la izquierda del sentido) ----------
+    function geom(e) {
+      const a = byId(e.from), b = byId(e.to); if (!a || !b) return null;
+      const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+      const twins = model.edges.filter(x => x.from === e.from && x.to === e.to), k = Math.max(0, twins.indexOf(e));
+      const nx = -dy / d, ny = dx / d, bend = Math.min(60, 26 + d * 0.08) + k * 46;
+      const cx = (a.x + b.x) / 2 + nx * bend, cy = (a.y + b.y) / 2 + ny * bend;
+      const ra = radius(a) + 4, rb = radius(b) + 10;
+      const ua = Math.hypot(cx - a.x, cy - a.y) || 1, ub = Math.hypot(cx - b.x, cy - b.y) || 1;
+      const p0 = { x: a.x + (cx - a.x) / ua * ra, y: a.y + (cy - a.y) / ua * ra };
+      const p2 = { x: b.x + (cx - b.x) / ub * rb, y: b.y + (cy - b.y) / ub * rb };
+      const at = t => ({ x: (1 - t) ** 2 * p0.x + 2 * (1 - t) * t * cx + t * t * p2.x, y: (1 - t) ** 2 * p0.y + 2 * (1 - t) * t * cy + t * t * p2.y });
+      const ang = Math.atan2(p2.y - cy, p2.x - cx);
+      return { p0, p2, c: { x: cx, y: cy }, n: { x: nx, y: ny }, at, ang, d: `M${p0.x.toFixed(1)} ${p0.y.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}` };
+    }
+
+    // ---------- Pintar ----------
+    function draw() {
+      gEdges.replaceChildren(); gNodes.replaceChildren(); gLoops.replaceChildren();
+      for (const e of model.edges) {
+        const g = geom(e); if (!g) continue;
+        const cls = mode === "flow" ? "flow" + (e.kind === "real" ? " real" : "") : e.sign < 0 ? "neg" : "pos";
+        const isSel = sel && sel.kind === "edge" && sel.id === e.id;
+        const grp = sv("g", { "data-edge": e.id });
+        grp.append(sv("path", { d: g.d, class: "pz-edge " + cls + (isSel ? " sel" : "") }));
+        const s = 12, a1 = g.ang + Math.PI * 0.84, a2 = g.ang - Math.PI * 0.84, tip = { x: g.p2.x + Math.cos(g.ang) * 6, y: g.p2.y + Math.sin(g.ang) * 6 };
+        grp.append(sv("path", { d: `M${tip.x} ${tip.y} L${tip.x + s * Math.cos(a1)} ${tip.y + s * Math.sin(a1)} L${tip.x + s * Math.cos(a2)} ${tip.y + s * Math.sin(a2)} Z`, class: "pz-head " + cls }));
+        const m = g.at(0.5);
+        if (mode === "causal") {
+          grp.append(sv("circle", { cx: m.x, cy: m.y, r: 12, class: "pz-sign-bg " + cls }));
+          grp.append(sv("text", { x: m.x, y: m.y, class: "pz-sign " + cls }, e.sign < 0 ? "−" : "+"));
+        } else if (e.label) {
+          // etiqueta hacia fuera de la curva, para que dos flechas paralelas no se pisen
+          const anchor = g.n.x > 0.55 ? "start" : g.n.x < -0.55 ? "end" : "middle";
+          const lx = m.x + g.n.x * 12, ly = anchor === "middle" ? m.y + (g.n.y < 0 ? -10 : 20) : m.y + g.n.y * 12 + 5;
+          grp.append(sv("text", { x: lx, y: ly, class: "pz-elabel", "text-anchor": anchor }, e.label));
+        }
+        const hit = sv("path", { d: g.d, class: "pz-hit" });
+        hit.addEventListener("pointerdown", ev => { ev.stopPropagation(); });
+        hit.addEventListener("click", ev => { ev.stopPropagation(); if (play === "dibujar") selectEdge(e.id, m); });
+        grp.append(hit);
+        gEdges.append(grp);
+      }
+      for (const n of model.nodes) {
+        const lv = lvl.get(n.id) || 0, r = radius(n), ty = typeOf(n);
+        const isSel = sel && sel.kind === "node" && sel.id === n.id;
+        const grp = sv("g", { class: "pz-node" + (isSel ? " sel" : ""), "data-node": n.id, transform: `translate(${n.x} ${n.y})` });
+        const fund = mode === "flow" && ty && ty.kind === "fondo";
+        const body = fund ? sv("rect", { x: -r * 1.15, y: -r * 0.8, width: r * 2.3, height: r * 1.6, rx: 10, class: "body" }) : sv("circle", { r, class: "body" });
+        if (ty && ty.color) body.setAttribute("style", `stroke:${ty.color}`);
+        grp.append(body);
+        if (lv !== 0) grp.append(sv("circle", { r: Math.max(2, r - 5), class: "lvl", style: `fill:${lv > 0 ? "var(--s1)" : "var(--s2)"};fill-opacity:${(0.12 + 0.4 * Math.abs(lv)).toFixed(2)}` }));
+        else if (ty && ty.color) grp.append(fund ? sv("rect", { x: -r * 1.15 + 5, y: -r * 0.8 + 5, width: r * 2.3 - 10, height: r * 1.6 - 10, rx: 7, class: "lvl", style: `fill:${ty.color};fill-opacity:.15` }) : sv("circle", { r: r - 5, class: "lvl", style: `fill:${ty.color};fill-opacity:.15` }));
+        const label = String(n.label || "").length > 30 ? String(n.label).slice(0, 29) + "…" : String(n.label || "");
+        grp.append(sv("text", { y: r + 20 }, label));
+        const tyName = ty && (ty[lang()] || ty.es);
+        if (ty && mode === "flow" && tyName && tyName !== n.label) grp.append(sv("text", { y: -r - 10, style: "font-size:12px;font-weight:500;fill:var(--muted)" }, tyName));
+        if (play === "dibujar") {
+          const h = sv("g", { class: "pz-h", transform: `translate(${r * 0.72} ${-r * 0.72})` });
+          h.append(sv("circle", { r: 13, class: "pz-handle" }), sv("text", { class: "pz-handle-t" }, "+"));
+          h.addEventListener("pointerdown", ev => startLink(ev, n));
+          grp.append(h);
+          body.addEventListener("pointerdown", ev => startDrag(ev, n));
+          body.addEventListener("dblclick", ev => { ev.stopPropagation(); rename(n); });
+        } else if (mode === "causal") {
+          const up = btn(r + 22, -16, true, () => push(n, 1)), dn = btn(r + 22, 18, false, () => push(n, -1));
+          grp.append(up, dn);
+          body.addEventListener("pointerdown", ev => { ev.stopPropagation(); const p = pt(ev); push(n, p.y < n.y ? 1 : -1); });
+        } else {
+          body.addEventListener("pointerdown", ev => { ev.stopPropagation(); burst(n); });
+        }
+        gNodes.append(grp);
+      }
+      if (!model.nodes.length) gNodes.append(sv("text", { x: W / 2, y: H / 2, class: "pz-empty" }, L("pz.empty")));
+      if (mode === "causal") drawLoops();
+    }
+    function btn(x, y, up, fn) {
+      const g = sv("g", { class: "pz-btn", transform: `translate(${x} ${y})`, role: "button", "aria-label": up ? L("pz.up") : L("pz.down") });
+      g.append(sv("circle", { r: 15 }), sv("path", { d: up ? "M-7 4 L0 -6 L7 4 Z" : "M-7 -4 L0 6 L7 -4 Z" }));
+      g.addEventListener("pointerdown", ev => { ev.stopPropagation(); fn(); });
+      return g;
+    }
+    function drawLoops() {
+      for (const lp of loops()) {
+        const ns = lp.ids.map(byId).filter(Boolean); if (ns.length < 2) continue;
+        let cx = ns.reduce((a, n) => a + n.x, 0) / ns.length, cy = ns.reduce((a, n) => a + n.y, 0) / ns.length;
+        for (let k = 0; k < 3; k++) for (const n of model.nodes) { const dx = cx - n.x, dy = cy - n.y, d = Math.hypot(dx, dy) || 1, min = radius(n) + 24; if (d < min) { cx = n.x + dx / d * min; cy = n.y + dy / d * min; } }
+        cx = clamp(cx, 20, W - 20); cy = clamp(cy, 20, H - 20);
+        const g = sv("g", { class: "pz-loop " + (lp.type === "R" ? "r" : "b"), transform: `translate(${cx} ${cy})` });
+        g.append(sv("circle", { r: 15 }), sv("text", {}, lp.type));
+        gLoops.append(g);
+      }
+    }
+
+    // ---------- Bucles: ciclos simples del grafo (pocos elementos, búsqueda directa) ----------
+    function loops() {
+      const ids = model.nodes.map(n => n.id), idx = new Map(ids.map((id, i) => [id, i]));
+      const out = [], seen = new Set();
+      const adj = new Map(ids.map(id => [id, model.edges.filter(e => e.from === id && idx.has(e.to))]));
+      for (let s = 0; s < ids.length && out.length < 40; s++) {
+        const start = ids[s];
+        const stack = [[start, [start], [], 1]];
+        while (stack.length && out.length < 40) {
+          const [cur, path, epath, sign] = stack.pop();
+          for (const e of adj.get(cur)) {
+            if (e.to === start) {
+              const key = [...path].sort().join("|") + "#" + epath.concat(e.id).sort().join("|");
+              if (!seen.has(key)) { seen.add(key); out.push({ ids: path.slice(), type: sign * (e.sign || 1) > 0 ? "R" : "B", labels: path.map(id => (byId(id) || {}).label) }); }
+            } else if (idx.get(e.to) > s && !path.includes(e.to) && path.length < 8) {
+              stack.push([e.to, path.concat(e.to), epath.concat(e.id), sign * (e.sign || 1)]);
+            }
+          }
+        }
+      }
+      return out;
+    }
+
+    // ---------- Edición ----------
+    function closePop() { if (pop) { pop.remove(); pop = null; } }
+    function place(el, x, y) {
+      const r = svg.getBoundingClientRect(), k = r.width / W;
+      container.append(el);
+      const w = el.offsetWidth, h = el.offsetHeight;
+      el.style.left = clamp(x * k - w / 2, 6, Math.max(6, r.width - w - 6)) + "px";
+      el.style.top = clamp(y * k + 10, 6, Math.max(6, r.height - h - 6)) + "px";
+    }
+    function mk(tag, attrs = {}, text) { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; }
+    function select(s) { sel = s; draw(); }
+    function selectNode(n) {
+      closePop(); select({ kind: "node", id: n.id });
+      pop = mk("div", { class: "pz-pop" });
+      const bR = mk("button", { type: "button" }, L("pz.rename")); bR.onclick = () => rename(n);
+      const bD = mk("button", { type: "button", class: "danger" }, L("pz.delete")); bD.onclick = () => removeNode(n.id);
+      pop.append(bR);
+      if (mode === "flow" && palette.length) {
+        const s = mk("select", { "aria-label": L("pz.type") });
+        s.append(mk("option", { value: "" }, "—"));
+        palette.forEach(p => { const o = mk("option", { value: p.type }, p[lang()] || p.es); if (n.type === p.type) o.selected = true; s.append(o); });
+        s.onchange = () => { n.type = s.value || undefined; changed(); draw(); };
+        pop.append(s);
+      }
+      pop.append(bD);
+      place(pop, n.x, n.y + radius(n) + 24);
+    }
+    function selectEdge(id, m) {
+      closePop(); select({ kind: "edge", id });
+      const e = model.edges.find(x => x.id === id); if (!e) return;
+      pop = mk("div", { class: "pz-pop" });
+      if (mode === "causal") {
+        pop.append(mk("span", { class: "k" }, e.sign < 0 ? L("pz.shrink") : L("pz.grow")));
+        const bF = mk("button", { type: "button" }, L("pz.flip")); bF.onclick = () => { e.sign = e.sign < 0 ? 1 : -1; changed(); selectEdge(id, m); };
+        pop.append(bF);
+      } else {
+        const sugg = opts.edgeLabels || [];
+        const dl = mk("datalist", { id: "pz-dl-" + uid("") });
+        sugg.forEach(x => dl.append(mk("option", { value: x[lang()] || x.es })));
+        const inp = mk("input", { type: "text", value: e.label || "", "aria-label": L("pz.label"), placeholder: L("pz.label"), list: dl.id });
+        const seg = mk("div", { class: "pz-kind", role: "group", "aria-label": L("pz.kind") });
+        const bM = mk("button", { type: "button", "aria-pressed": String(e.kind !== "real") }, "● " + L("pz.money"));
+        const bR = mk("button", { type: "button", "aria-pressed": String(e.kind === "real") }, "■ " + L("pz.real"));
+        const setKind = k => { e.kind = k; bM.setAttribute("aria-pressed", String(k !== "real")); bR.setAttribute("aria-pressed", String(k === "real")); changed(); draw(); };
+        bM.onclick = () => setKind("dinero"); bR.onclick = () => setKind("real");
+        inp.oninput = () => {
+          e.label = inp.value.slice(0, 40);
+          const hit = sugg.find(x => [x.es, x.va].some(v => v && v.toLowerCase() === inp.value.trim().toLowerCase()));
+          if (hit && hit.kind) setKind(hit.kind); else { changed(); draw(); }
+        };
+        seg.append(bM, bR);
+        pop.append(dl, inp, seg);
+      }
+      const bD = mk("button", { type: "button", class: "danger" }, L("pz.delete")); bD.onclick = () => { model.edges = model.edges.filter(x => x.id !== id); closePop(); sel = null; changed(); draw(); };
+      pop.append(bD);
+      place(pop, m.x, m.y);
+    }
+    function rename(n, isNew) {
+      closePop(); select({ kind: "node", id: n.id });
+      pop = mk("div", { class: "pz-pop" });
+      const inp = mk("input", { type: "text", value: isNew ? "" : n.label, "aria-label": L("pz.rename"), placeholder: L("pz.new") });
+      const ok = mk("button", { type: "button" }, L("pz.done"));
+      const commit = () => { const v = inp.value.trim(); if (v) n.label = v.slice(0, 40); else if (!n.label) n.label = L("pz.new"); closePop(); changed(); draw(); };
+      ok.onclick = commit;
+      inp.onkeydown = ev => { if (ev.key === "Enter") commit(); if (ev.key === "Escape") { closePop(); } };
+      pop.append(inp, ok);
+      place(pop, n.x, n.y + radius(n) + 24);
+      setTimeout(() => { try { inp.focus(); inp.select(); } catch {} }, 0);
+    }
+    function removeNode(id) {
+      model.nodes = model.nodes.filter(n => n.id !== id);
+      model.edges = model.edges.filter(e => e.from !== id && e.to !== id);
+      lvl.delete(id); closePop(); sel = null; changed(); draw();
+    }
+    function addNode(label, at, type) {
+      let x = at ? at.x : W / 2 + ((model.nodes.length * 97) % 300) - 150, y = at ? at.y : H / 2 + ((model.nodes.length * 61) % 200) - 100;
+      x = clamp(x, R0 + 30, W - R0 - 60); y = clamp(y, R0 + 30, H - R0 - 40);
+      const n = { id: uid("n"), label: label || "", x, y, type: type || undefined };
+      model.nodes.push(n); changed(); draw();
+      if (!label) rename(n, true);
+      return n;
+    }
+
+    // Arrastrar un elemento
+    function startDrag(ev, n) {
+      ev.stopPropagation(); ev.preventDefault();
+      const p0 = pt(ev), ox = n.x, oy = n.y; let moved = false;
+      const mv = e => { const p = pt(e); if (Math.hypot(p.x - p0.x, p.y - p0.y) > 4) { moved = true; closePop(); } n.x = clamp(ox + p.x - p0.x, R0, W - R0); n.y = clamp(oy + p.y - p0.y, R0, H - R0 - 20); draw(); };
+      const up = () => { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", up); if (moved) changed(); else selectNode(n); };
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+    }
+    // Unir dos elementos arrastrando desde el «+»
+    function startLink(ev, a) {
+      ev.stopPropagation(); ev.preventDefault(); closePop();
+      const line = sv("path", { class: "pz-temp" }); gTemp.append(line);
+      const mv = e => { const p = pt(e); line.setAttribute("d", `M${a.x} ${a.y} L${p.x} ${p.y}`); };
+      const up = e => {
+        window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", up);
+        line.remove();
+        const p = pt(e);
+        const b = model.nodes.find(n => n !== a && Math.hypot(n.x - p.x, n.y - p.y) <= radius(n) + 14);
+        if (b && (mode === "flow" ? model.edges.filter(x => x.from === a.id && x.to === b.id).length < 3 : !model.edges.some(x => x.from === a.id && x.to === b.id))) {
+          const ed = { id: uid("e"), from: a.id, to: b.id, sign: 1 };
+          if (mode === "flow") { ed.label = ""; ed.kind = "dinero"; }
+          model.edges.push(ed); changed(); draw();
+          const g = geom(ed); if (g) selectEdge(ed.id, g.at(0.5));
+        }
+      };
+      mv(ev);
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+    }
+    // Fondo: doble clic o doble toque crea un elemento; un toque cierra menús
+    let lastTap = 0;
+    svg.addEventListener("pointerdown", ev => {
+      if (ev.target.closest && (ev.target.closest(".pz-node") || ev.target.closest("[data-edge]"))) return;
+      closePop(); if (sel) { sel = null; draw(); }
+      const now = Date.now();
+      if (play === "dibujar" && now - lastTap < 350) { addNode("", pt(ev)); lastTap = 0; } else lastTap = now;
+    });
+    container.addEventListener("keydown", ev => {
+      if (ev.key === "Escape") { closePop(); sel = null; draw(); }
+      if ((ev.key === "Delete" || ev.key === "Backspace") && sel && !(ev.target.tagName === "INPUT")) {
+        if (sel.kind === "node") removeNode(sel.id); else { model.edges = model.edges.filter(x => x.id !== sel.id); sel = null; closePop(); changed(); draw(); }
+      }
+    });
+    container.tabIndex = 0;
+
+    // ---------- Jugar ----------
+    const SPEED = () => reduced() ? 0.25 : 0.7;   // fracción de flecha por segundo
+    const DECAY = () => reduced() ? 0.55 : 0.78;  // cuánto llega al siguiente salto
+    const MAXP = () => reduced() ? 24 : 90;
+    function push(n, dir) {
+      lvl.set(n.id, clamp((lvl.get(n.id) || 0) + 0.35 * dir, -1, 1));
+      emit(n.id, dir * 0.9);
+      tick();
+    }
+    function emit(id, v) {
+      if (Math.abs(v) < 0.12) return;
+      for (const e of model.edges.filter(x => x.from === id)) if (pulses.length < MAXP()) pulses.push({ e: e.id, t: 0, v: v * (e.sign || 1) });
+    }
+    function burst(n) {
+      for (const e of model.edges.filter(x => x.from === n.id)) for (let k = 0; k < 3 && pulses.length < MAXP(); k++) pulses.push({ e: e.id, t: -k * 0.18, v: 1, flow: true });
+      tick();
+    }
+    function frame(ts) {
+      raf = null;
+      const dt = Math.min(0.05, last ? (ts - last) / 1000 : 0.016); last = ts;
+      const next = [];
+      for (const p of pulses) {
+        p.t += dt * SPEED();
+        if (p.t >= 1) {
+          const e = model.edges.find(x => x.id === p.e); if (!e) continue;
+          if (!p.flow) { lvl.set(e.to, clamp((lvl.get(e.to) || 0) + 0.3 * p.v, -1, 1)); const before = pulses.length; emit(e.to, p.v * DECAY()); next.push(...pulses.splice(before)); }
+        } else next.push(p);
+      }
+      pulses = next;
+      // los niveles vuelven poco a poco a cero
+      let active = pulses.length > 0;
+      for (const [k, v] of lvl) { const nv = v * Math.exp(-dt / 5); if (Math.abs(nv) < 0.01) lvl.delete(k); else { lvl.set(k, nv); active = true; } }
+      if (mode === "flow" && play === "jugar") { tokenPhase = (tokenPhase + dt * SPEED() * 0.6) % 1; active = true; }
+      drawFx(); if (pulses.length || [...lvl.values()].some(v => Math.abs(v) > 0.02)) draw();
+      if (active) tick(); else last = 0;
+    }
+    function tick() { if (!raf) raf = requestAnimationFrame(frame); }
+    function token(q, kind, r) {
+      return kind === "real" ? sv("rect", { x: q.x - r, y: q.y - r, width: 2 * r, height: 2 * r, rx: 1.5, class: "pz-token real" }) : sv("circle", { cx: q.x, cy: q.y, r, class: "pz-token" });
+    }
+    function drawFx() {
+      gFx.replaceChildren();
+      for (const p of pulses) {
+        if (p.t < 0) continue;
+        const e = model.edges.find(x => x.id === p.e); const g = e && geom(e); if (!g) continue;
+        const q = g.at(clamp(p.t, 0, 1));
+        if (p.flow) { gFx.append(token(q, e.kind, 7)); continue; }
+        const grp = sv("g", { class: "pz-pulse " + (p.v < 0 ? "neg" : "pos"), transform: `translate(${q.x} ${q.y})` });
+        grp.append(sv("circle", { r: 10 + 4 * Math.min(1, Math.abs(p.v)) }), sv("text", {}, p.v < 0 ? "−" : "+"));
+        gFx.append(grp);
+      }
+      if (mode === "flow" && play === "jugar" && !reduced()) {
+        for (const e of model.edges) {
+          const g = geom(e); if (!g) continue;
+          for (let k = 0; k < 3; k++) { const q = g.at((tokenPhase + k / 3) % 1); gFx.append(token(q, e.kind, 6)); }
+        }
+      }
+    }
+
+    // ---------- API ----------
+    function load(m) {
+      closePop(); sel = null; pulses = []; lvl.clear();
+      const nodes = Array.isArray(m && m.nodes) ? m.nodes.filter(n => n && n.id).map(n => ({ id: String(n.id), label: String(n.label || ""), x: clamp(+n.x || W / 2, R0, W - R0), y: clamp(+n.y || H / 2, R0, H - R0), type: n.type || undefined })) : [];
+      const ids = new Set(nodes.map(n => n.id));
+      const edges = Array.isArray(m && m.edges) ? m.edges.filter(e => e && ids.has(String(e.from)) && ids.has(String(e.to)) && e.from !== e.to).map(e => ({ id: String(e.id || uid("e")), from: String(e.from), to: String(e.to), sign: e.sign < 0 ? -1 : 1, label: e.label != null ? String(e.label) : undefined, kind: e.kind === "real" ? "real" : e.kind === "dinero" ? "dinero" : undefined })) : [];
+      model = { nodes, edges };
+      draw(); if (opts.onLoops) opts.onLoops(loops());
+    }
+    function toJSON() { return JSON.parse(JSON.stringify({ mode, nodes: model.nodes, edges: model.edges })); }
+    function clear() { load({ nodes: [], edges: [] }); changed(); }
+    function setMode(m) { play = m === "jugar" ? "jugar" : "dibujar"; closePop(); sel = null; if (play === "dibujar") { pulses = []; } draw(); drawFx(); tick(); }
+    function relabel() { svg.setAttribute("aria-label", L("pz.board")); closePop(); draw(); }
+    function destroy() { if (raf) cancelAnimationFrame(raf); container.replaceChildren(); }
+    draw();
+    return { load, toJSON, clear, setMode, getMode: () => play, addNode: (l, type) => addNode(l, null, type), loops, relabel, destroy };
+  }
+  /* Botón «Borrar la pizarra» con confirmación de dos clics (sin ventanas emergentes, que no siempre funcionan dentro de Claude):
+     el primer clic pide «¿Seguro? Pulsa otra vez»; si se pulsa antes de 4 s, vacía la pizarra (api.clear) y llama a hecho(). */
+  function bindClear(btn, api, hecho) {
+    const tr = k => window.OBS ? window.OBS.t(k) : DICT.es[k];
+    let armado = null;
+    const desarmar = () => { clearTimeout(armado); armado = null; btn.textContent = tr("pz.clear"); btn.removeAttribute("aria-live"); };
+    btn.addEventListener("click", () => {
+      if (!armado) {
+        btn.setAttribute("aria-live", "polite"); btn.textContent = tr("pz.clearSure");
+        armado = setTimeout(desarmar, 4000);
+        return;
+      }
+      desarmar();
+      api.clear();
+      if (hecho) hecho();
+    });
+    btn.addEventListener("blur", () => { if (armado) desarmar(); });
+  }
+  return { create, bindClear, W, H };
+})();
+
+// PIZARRA-ENGINE:END
+</script>
+<script>
+(() => {
+  "use strict";
+  const T = (k, v) => OBS.t(k, v);
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const NS = "http://www.w3.org/2000/svg";
+  const sv = (tag, attrs = {}, text) => { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
+  const loc = () => OBS.lang() === "va" ? "ca-ES" : "es-ES";
+  const fmt = (v, d = 0) => isFinite(v) ? Number(v).toLocaleString(loc(), { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // =====================================================================
+  // TEXTOS (castellano / valenciano)
+  // =====================================================================
+  OBS.register({
+    es: {
+      "page.title": "Observatorio · SA 1",
+      "head.eyebrow": "Observatorio · SA 1 · ¿Qué es la economía?",
+      "tool.label": "Herramienta", "tool.arroz": "El juego del arroz", "tool.flujo": "El flujo de la renta",
+      "arroz.h1": "El juego del arroz",
+      "arroz.lede": "Bengala, 1943: ¿faltó comida? En «Mercado» se escriben las pujas de cada equipo y la herramienta reparte, cobra y proyecta quién come. En «Votaciones», tres preguntas rápidas con Plickers. El arroz, las tarjetas y las pujas siguen en papel.",
+      "flujo.h1": "El flujo de la renta",
+      "flujo.lede": "Cómo circulan el dinero, los bienes y el trabajo entre las empresas y las familias. En el flujo simple, el circuito se repite igual cada vuelta; en el ampliado, una parte del excedente se reinvierte y el circuito crece.",
+      "tab.mercado": "Mercado", "tab.votar": "Votaciones", "tab.pizarra": "Pizarra", "tab.simple": "Flujo de la renta simple", "tab.ampliado": "Flujo de la renta ampliado",
+      "round.prev": "Ronda anterior", "round.next": "Ronda siguiente", "round.of": "Ronda {n} de 3", "round.go": "Ir a la ronda {n}",
+      "round.k1": "Ronda 1", "round.k2": "Ronda 2", "round.k3": "Ronda 3",
+      "round.t1": "1942", "round.t2": "Primavera de 1943", "round.t3": "Verano de 1943",
+      "round.sub1": "16 raciones en el mercado", "round.sub2": "15 raciones en el mercado", "round.sub3": "18 raciones · 12 en subasta",
+      "round.info1": "16 raciones en el mercado. Los cinco equipos necesitan 15.",
+      "round.info2": "15 raciones en el mercado: llega justo para los cinco equipos.",
+      "round.info3": "Novedades de esta ronda (tarjeta de la ronda 3): hay 18 raciones, un 13 % más que en la ronda 1. Antes de la subasta, el gobierno compra 3 a 3 monedas para la industria de guerra, que paga 9 de su renta y las recibe, y el ejército compra otras 3. Quedan 12 en subasta: justo las que necesitan los otros cuatro equipos.",
+      "team.jor": "Jornalero agrícola", "team.pes": "Pescador", "team.cam": "Campesino propietario", "team.com": "Comerciante de arroz", "team.ind": "Industria de guerra (Calcuta)",
+      "team.short.jor": "Jornalero", "team.short.pes": "Pescador", "team.short.cam": "Campesino", "team.short.com": "Comerciante", "team.short.ind": "Industria",
+      "bids.h": "Pujas de la ronda",
+      "bids.help": "Copia de cada tarjeta de puja las raciones que pide el equipo (como máximo 5) y lo que ofrece por cada una. La reserva inicial viene de la ronda anterior. Si dos equipos ofrecen lo mismo, sortéalo y escribe en «Sorteo» quién va antes (1 = primero).",
+      "bids.clearRound": "Borrar esta ronda", "bids.clearAll": "Borrar el juego", "bids.again": "Pulsa otra vez para borrar",
+      "col.team": "Equipo", "col.renta": "Renta", "col.ini": "Reserva inicial", "col.pide": "Pide", "col.oferta": "Oferta por ración", "col.sorteo": "Sorteo",
+      "col.oferta2": "Oferta", "col.orden": "Orden", "col.recibe": "Recibe", "col.paga": "Paga", "col.total": "Total", "col.tres": "¿3?", "col.final": "Reserva final",
+      "err.int": "Escribe números enteros.", "err.range": "Puede pedir de 0 a {m} raciones.", "err.neg": "La oferta no puede ser negativa.",
+      "err.money": "Pide {p} × {o} = {x} monedas y solo tiene {d}.", "err.offer": "Falta la oferta.",
+      "tie": "Empate que decide el reparto.", "tie.text": "{pairs} ofrecen lo mismo y no hay raciones para todos. Sortéalo y escribe 1 y 2 en «Sorteo».", "and": " y ",
+      "res.h": "Qué ha pasado", "res.sheet": "Ver la hoja de control completa",
+      "st.rice": "Raciones de arroz", "st.rice3": "Raciones de arroz (12 en subasta)", "st.sold": "Raciones repartidas", "st.avg": "Precio medio pagado (monedas)", "st.res": "Raciones guardadas en reserva", "st.hungry": "Equipos sin sus 3 raciones",
+      "leg.cons": "Ración consumida", "leg.res": "Ración guardada como reserva", "leg.miss": "Ración que le falta",
+      "pl.eats": "come", "pl.out": "sin sus 3 raciones", "pl.gov": "Gobierno: 3 por 9 monedas. ", "pl.gets": "Recibe {n} a {o} = {x} monedas.", "pl.none": "No recibe nada.", "pl.nobid": "No puja.", "pl.had": " Tenía {n} de reserva.",
+      "pl.aria.ok": "Consigue sus 3 raciones y guarda {n}", "pl.aria.out": "Le faltan {n} raciones", "pl.t.cons": "Consumida", "pl.t.back": "Recibida y devuelta", "pl.t.miss": "Le falta", "pl.t.res": "Reserva",
+      "yes": "Sí", "no": "No",
+      "sum.h": "Las tres rondas", "sum.help": "Cada equipo necesita 3 raciones: los cinco juntos, 15 por ronda.",
+      "sum.rice": "Arroz en el mercado", "sum.need": "Lo que necesitan los cinco", "sum.avg": "Precio medio (monedas)", "sum.res": "Reservas al acabar", "sum.com": "Reserva del comerciante", "sum.hungry": "Sin sus 3 raciones", "sum.nobody": "nadie",
+      "sum.empty": "Cuando se escriban las pujas, aquí aparece la comparación de las tres rondas.",
+      "sum.hungryB": "En ninguna ronda faltó arroz: ", "sum.hungryT": "siempre hubo al menos 15 raciones para los cinco equipos. ¿Adónde fue? ¿Qué decidió quién comía?",
+      "sum.okB": "Por ahora nadie se ha quedado sin raciones. ", "sum.okT": "¿Qué cambió en 1943 que el juego no está recogiendo?",
+      "ex.h": "Para probar la herramienta antes de clase", "ex.help": "Cargan pujas inventadas en las tres rondas. Borran lo que haya escrito.",
+      "ex.hoard": "Ejemplo: el comerciante acumula", "ex.fair": "Ejemplo: nadie acapara",
+      "ex.tag.hoard": "el comerciante acumula", "ex.tag.fair": "nadie acapara", "ex.flag": "Ahora se ven pujas inventadas («{t}»). Bórralas antes de jugar con la clase.",
+      "vote.h": "Lo que espera la clase",
+      "vote.p": "Cada alumno o alumna vota con su tarjeta de <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\">Plickers</a> (o a mano alzada). Escribe cuántas personas eligen cada letra. Es evaluación inicial: no puntúa.",
+      "vote.when": "La primera pregunta va después de la explicación inicial y antes de las reglas; la segunda, justo después de leer la tarjeta de la ronda 3; la tercera, en el cierre.",
+      "vote.clear": "Borrar los votos", "vote.q": "Pregunta {n} · {k}", "vote.none": "Sin votos todavía.", "vote.aria": "Votos {l}",
+      "q1.k": "Antes de las reglas", "q1.q": "En el juego, ¿qué crees que pasará?",
+      "q1.a": "Habrá arroz para todos y todos los equipos comerán", "q1.b": "Faltará arroz y algún equipo se quedará sin raciones", "q1.c": "Habrá arroz, pero algún equipo se quedará sin raciones", "q1.d": "No lo sé",
+      "q2.k": "Antes de la ronda 3", "q2.q": "Este verano hay más arroz que nunca. ¿Qué pasará?",
+      "q2.a": "Comerán todos los equipos", "q2.b": "Comerán más equipos que en la ronda 2", "q2.c": "Algún equipo seguirá sin raciones", "q2.d": "Bajará el precio del arroz",
+      "q3.k": "En el cierre", "q3.q": "Si alguien se quedó sin raciones, ¿por qué fue sobre todo?",
+      "q3.a": "Porque faltaba arroz", "q3.b": "Porque otros equipos tenían más renta y pujaron más alto", "q3.c": "Porque alguien guardó reservas", "q3.d": "Por las dos anteriores a la vez (B y C)",
+      "vn.start": "En ocre, la respuesta que el juego pone sobre la mesa. Al acabar, compara la pregunta 1 con la 3: ", "vn.startB": "¿cuántos pensaban al principio que faltaría arroz?",
+      "vn.p1": "Antes de jugar, el {p} % esperaba que faltara arroz. ",
+      "vn.p3": "En el cierre, el {a} % sigue diciendo que faltaba arroz y el {b} % lo explica por la renta o por las reservas. Es la idea que se pondrá a prueba con los datos reales en la sesión 3.",
+      "vn.wait": "En el cierre, la pregunta 3 dirá si el juego ha movido esa idea.",
+      "piz.soon": "En preparación", "piz.h": "Pizarra",
+      "piz.p": "Aquí el alumnado dibujará su propio circuito: elementos como familias, empresas, salarios o excedente, unidos con flechas que se ponen en marcha. Usará la misma pizarra que la SA 5.",
+      "foot.arroz": "Juego del arroz: reglas, rentas y raciones del material de la SA 1 (sesión 1). Las cifras son del juego, no datos históricos; reproducen el patrón que describe Amartya Sen en <em>Poverty and Famines</em> (1981), cap. 6.",
+      "foot.flujo": "Flujo de la renta: cifras inventadas para el aula, en millones de euros.",
+      "foot.store": "Lo que se escribe aquí se guarda solo en este navegador, para no perderlo si se recarga la página.",
+      // Flujo de la renta
+      "f.secI": "Sector de maquinaria y materiales", "f.secII": "Sector de bienes de consumo", "f.fam": "Familias trabajadoras", "f.own": "Propietarios",
+      "f.secI.s": "Maquinaria y materiales", "f.secII.s": "Bienes de consumo",
+      "f.mat": "Materiales y desgaste", "f.sal": "Salarios", "f.exc": "Excedente", "f.prod": "Lo que produce", "f.reinv": "Reinversión", "f.cons": "Consumo de los propietarios",
+      "f.simple.note": "Todo el excedente se gasta en consumo: la vuelta siguiente es igual que esta.",
+      "f.simple.h": "El circuito que se repite", "f.amp.h": "El circuito que crece",
+      "f.simple.p": "Dos sectores producen todo lo que se necesita: uno hace maquinaria y materiales; el otro, bienes de consumo. Con lo que venden pagan los materiales y el desgaste, los salarios y queda un excedente. Aquí los propietarios gastan todo el excedente en consumo: cada vuelta el circuito se repite igual.",
+      "f.amp.p": "Ahora los propietarios del sector de maquinaria reinvierten una parte del excedente: compran más materiales y contratan a más gente. El sector de bienes de consumo reinvierte lo necesario para usar la maquinaria nueva. El circuito crece vuelta a vuelta.",
+      "f.vuelta": "Vuelta {n}", "f.vueltas": "Vueltas", "f.play": "Reproducir", "f.pause": "Pausa", "f.reset": "Volver a la vuelta 1",
+      "f.a": "Parte del excedente del sector de maquinaria que se reinvierte",
+      "f.leg.money": "Dinero", "f.leg.goods": "Maquinaria y bienes", "f.leg.work": "Trabajo", "f.leg.reinv": "Reinversión (lo que se acumula)",
+      "f.g.h": "Lo que se produce en cada vuelta", "f.g.y": "Total producido",
+      "f.g.p.simple": "Todas las barras son iguales: los propietarios consumen todo el excedente y el circuito se repite igual vuelta tras vuelta.",
+      "f.g.p.amp": "La parte verde es el excedente que se reinvierte: en la vuelta siguiente se convierte en más materiales y más salarios, y la barra crece. Eso es la acumulación.",
+      "f.g.p.zero": "Con un 0 % no se reinvierte nada: no hay parte verde y todas las barras son iguales, como en el flujo simple.",
+      "f.selfnew": "maquinaria nueva",
+      "f.flowsH": "Lo que circula en esta vuelta",
+      "f.fl.matI": "Materiales que el sector de maquinaria se fabrica a sí mismo: {x}",
+      "f.fl.ItoII": "Maquinaria y materiales del sector de maquinaria al de consumo: {x} (y el mismo dinero en sentido contrario)",
+      "f.fl.wages": "Salarios a las familias trabajadoras: {x} (las familias los gastan en bienes de consumo)",
+      "f.fl.exc": "Excedente para los propietarios: {x}",
+      "f.fl.cons": "Gasto de los propietarios en bienes de consumo: {x}",
+      "f.fl.reinv": "Reinversión: {x} (más materiales y más salarios para la vuelta siguiente)",
+      "f.check.h": "Condición para que el circuito funcione",
+      "f.check.simple": "Lo que el sector de maquinaria vende al de consumo ({a}) tiene que ser igual a lo que este necesita para reponer sus materiales y su desgaste ({b}).",
+      "f.check.amp": "Lo que el sector de maquinaria vende al de consumo ({a}) tiene que ser igual a lo que este necesita para reponer y ampliar su maquinaria ({b}).",
+      "f.ok": "cuadra", "f.bad": "no cuadra",
+      "f.falta": "Al sector de bienes de consumo le llega menos maquinaria de la que necesita para reponer la gastada (faltan {x}): tiene que producir menos en la vuelta siguiente.",
+      "f.sobra": "El sector de maquinaria produce más de lo que el de consumo puede comprar (sobran {x}).",
+      "f.zero": "Con un 0 % nadie reinvierte y el circuito parte de las mismas cifras que el flujo simple (sector de maquinaria 4.000 + 1.000 + 1.000; sector de consumo 2.000 + 500 + 500): se repite igual en todas las vueltas. Al subir la reinversión, parte de otras cifras (sector de consumo 1.500 + 750 + 750), que dejan sitio para crecer.",
+      "f.grow": "Con un {a} % reinvertido, el total producido crece un {g} % en la última vuelta.",
+      "f.table": "Vuelta a vuelta", "f.download": "Descargar la tabla (Excel)",
+      "f.col.v": "Vuelta", "f.col.Ip": "Maquinaria: produce", "f.col.Im": "Materiales y desgaste", "f.col.Is": "Salarios", "f.col.Ie": "Excedente", "f.col.Ir": "Reinversión",
+      "f.col.IIp": "Consumo: produce", "f.col.IIm": "Materiales y desgaste", "f.col.IIs": "Salarios", "f.col.IIe": "Excedente", "f.col.IIr": "Reinversión", "f.col.tot": "Total producido", "f.col.g": "Crecimiento",
+      "f.csv.I": "Sector de maquinaria", "f.csv.II": "Sector de bienes de consumo",
+      "f.units": "Millones de euros de cada vuelta.",
+      // Ficha docente
+      "fi.arroz.ses": "Sesión 1 (La pista). Evaluación inicial, sin nota.",
+      "fi.arroz.uso": "El docente o la persona responsable del material copia cada tarjeta de puja; la herramienta reparte, cobra y proyecta quién come. Las votaciones con Plickers se hacen antes de las reglas, antes de la ronda 3 y en el cierre.",
+      "fi.flujo.ses": "Sesión 4 (Las herramientas: el modelo de la reproducción y el flujo circular de la renta).",
+      "fi.flujo.uso": "Se proyecta después de construir el ciclo en la pizarra: primero el flujo simple (la condición para que se repita) y después el ampliado (qué pasa si se reinvierte el excedente). La tabla se puede descargar para comprobar los cálculos en una hoja de cálculo."
+    },
+    va: {
+      "page.title": "Observatori · SA 1",
+      "head.eyebrow": "Observatori · SA 1 · Què és l'economia?",
+      "tool.label": "Ferramenta", "tool.arroz": "El joc de l'arròs", "tool.flujo": "El flux de la renda",
+      "arroz.h1": "El joc de l'arròs",
+      "arroz.lede": "Bengala, 1943: va faltar menjar? En «Mercat» s'escriuen les pujes de cada equip i la ferramenta reparteix, cobra i projecta qui menja. En «Votacions», tres preguntes ràpides amb Plickers. L'arròs, les targetes i les pujes continuen en paper.",
+      "flujo.h1": "El flux de la renda",
+      "flujo.lede": "Com circulen els diners, els béns i el treball entre les empreses i les famílies. En el flux simple, el circuit es repetix igual a cada volta; en l'ampliat, una part de l'excedent es reinvertix i el circuit creix.",
+      "tab.mercado": "Mercat", "tab.votar": "Votacions", "tab.pizarra": "Pissarra", "tab.simple": "Flux de la renda simple", "tab.ampliado": "Flux de la renda ampliat",
+      "round.prev": "Ronda anterior", "round.next": "Ronda següent", "round.of": "Ronda {n} de 3", "round.go": "Anar a la ronda {n}",
+      "round.k1": "Ronda 1", "round.k2": "Ronda 2", "round.k3": "Ronda 3",
+      "round.t1": "1942", "round.t2": "Primavera de 1943", "round.t3": "Estiu de 1943",
+      "round.sub1": "16 racions en el mercat", "round.sub2": "15 racions en el mercat", "round.sub3": "18 racions · 12 en subhasta",
+      "round.info1": "16 racions en el mercat. Els cinc equips en necessiten 15.",
+      "round.info2": "15 racions en el mercat: arriba just per als cinc equips.",
+      "round.info3": "Novetats d'esta ronda (targeta de la ronda 3): hi ha 18 racions, un 13 % més que en la ronda 1. Abans de la subhasta, el govern en compra 3 a 3 monedes per a la indústria de guerra, que paga 9 de la seua renda i les rep, i l'exèrcit en compra 3 més. En queden 12 en subhasta: just les que necessiten els altres quatre equips.",
+      "team.jor": "Jornaler agrícola", "team.pes": "Pescador", "team.cam": "Llaurador propietari", "team.com": "Comerciant d'arròs", "team.ind": "Indústria de guerra (Calcuta)",
+      "team.short.jor": "Jornaler", "team.short.pes": "Pescador", "team.short.cam": "Llaurador", "team.short.com": "Comerciant", "team.short.ind": "Indústria",
+      "bids.h": "Pujes de la ronda",
+      "bids.help": "Copia de cada targeta de puja les racions que demana l'equip (com a màxim 5) i el que oferix per cada una. La reserva inicial ve de la ronda anterior. Si dos equips oferixen el mateix, sorteja-ho i escriu en «Sorteig» qui va abans (1 = primer).",
+      "bids.clearRound": "Esborrar esta ronda", "bids.clearAll": "Esborrar el joc", "bids.again": "Torna a prémer per a esborrar",
+      "col.team": "Equip", "col.renta": "Renda", "col.ini": "Reserva inicial", "col.pide": "Demana", "col.oferta": "Oferta per ració", "col.sorteo": "Sorteig",
+      "col.oferta2": "Oferta", "col.orden": "Ordre", "col.recibe": "Rep", "col.paga": "Paga", "col.total": "Total", "col.tres": "3?", "col.final": "Reserva final",
+      "err.int": "Escriu nombres enters.", "err.range": "Pot demanar de 0 a {m} racions.", "err.neg": "L'oferta no pot ser negativa.",
+      "err.money": "Demana {p} × {o} = {x} monedes i només en té {d}.", "err.offer": "Falta l'oferta.",
+      "tie": "Empat que decidix el repartiment.", "tie.text": "{pairs} oferixen el mateix i no hi ha racions per a tots. Sorteja-ho i escriu 1 i 2 en «Sorteig».", "and": " i ",
+      "res.h": "Què ha passat", "res.sheet": "Veure el full de control complet",
+      "st.rice": "Racions d'arròs", "st.rice3": "Racions d'arròs (12 en subhasta)", "st.sold": "Racions repartides", "st.avg": "Preu mitjà pagat (monedes)", "st.res": "Racions guardades en reserva", "st.hungry": "Equips sense les 3 racions",
+      "leg.cons": "Ració consumida", "leg.res": "Ració guardada com a reserva", "leg.miss": "Ració que li falta",
+      "pl.eats": "menja", "pl.out": "sense les 3 racions", "pl.gov": "Govern: 3 per 9 monedes. ", "pl.gets": "Rep {n} a {o} = {x} monedes.", "pl.none": "No rep res.", "pl.nobid": "No puja.", "pl.had": " Tenia {n} de reserva.",
+      "pl.aria.ok": "Aconseguix les 3 racions i en guarda {n}", "pl.aria.out": "Li falten {n} racions", "pl.t.cons": "Consumida", "pl.t.back": "Rebuda i retornada", "pl.t.miss": "Li falta", "pl.t.res": "Reserva",
+      "yes": "Sí", "no": "No",
+      "sum.h": "Les tres rondes", "sum.help": "Cada equip necessita 3 racions: els cinc junts, 15 per ronda.",
+      "sum.rice": "Arròs en el mercat", "sum.need": "El que necessiten els cinc", "sum.avg": "Preu mitjà (monedes)", "sum.res": "Reserves en acabar", "sum.com": "Reserva del comerciant", "sum.hungry": "Sense les 3 racions", "sum.nobody": "ningú",
+      "sum.empty": "Quan s'escriguen les pujes, ací apareixerà la comparació de les tres rondes.",
+      "sum.hungryB": "En cap ronda va faltar arròs: ", "sum.hungryT": "sempre hi va haver almenys 15 racions per als cinc equips. On va anar? Què va decidir qui menjava?",
+      "sum.okB": "De moment ningú s'ha quedat sense racions. ", "sum.okT": "Què va canviar en 1943 que el joc no està recollint?",
+      "ex.h": "Per a provar la ferramenta abans de classe", "ex.help": "Carreguen pujes inventades en les tres rondes. Esborren el que hi haja escrit.",
+      "ex.hoard": "Exemple: el comerciant acumula", "ex.fair": "Exemple: ningú acapara",
+      "ex.tag.hoard": "el comerciant acumula", "ex.tag.fair": "ningú acapara", "ex.flag": "Ara es veuen pujes inventades («{t}»). Esborra-les abans de jugar amb la classe.",
+      "vote.h": "El que espera la classe",
+      "vote.p": "Cada alumne o alumna vota amb la seua targeta de <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\">Plickers</a> (o alçant la mà). Escriu quantes persones trien cada lletra. És avaluació inicial: no puntua.",
+      "vote.when": "La primera pregunta va després de l'explicació inicial i abans de les regles; la segona, just després de llegir la targeta de la ronda 3; la tercera, en el tancament.",
+      "vote.clear": "Esborrar els vots", "vote.q": "Pregunta {n} · {k}", "vote.none": "Encara no hi ha vots.", "vote.aria": "Vots {l}",
+      "q1.k": "Abans de les regles", "q1.q": "En el joc, què creus que passarà?",
+      "q1.a": "Hi haurà arròs per a tots i tots els equips menjaran", "q1.b": "Faltarà arròs i algun equip es quedarà sense racions", "q1.c": "Hi haurà arròs, però algun equip es quedarà sense racions", "q1.d": "No ho sé",
+      "q2.k": "Abans de la ronda 3", "q2.q": "Este estiu hi ha més arròs que mai. Què passarà?",
+      "q2.a": "Menjaran tots els equips", "q2.b": "Menjaran més equips que en la ronda 2", "q2.c": "Algun equip continuarà sense racions", "q2.d": "Baixarà el preu de l'arròs",
+      "q3.k": "En el tancament", "q3.q": "Si algú es va quedar sense racions, per què va ser sobretot?",
+      "q3.a": "Perquè faltava arròs", "q3.b": "Perquè altres equips tenien més renda i van pujar més alt", "q3.c": "Perquè algú va guardar reserves", "q3.d": "Per les dues anteriors alhora (B i C)",
+      "vn.start": "En ocre, la resposta que el joc posa damunt la taula. En acabar, compara la pregunta 1 amb la 3: ", "vn.startB": "quants pensaven al principi que faltaria arròs?",
+      "vn.p1": "Abans de jugar, el {p} % esperava que faltara arròs. ",
+      "vn.p3": "En el tancament, el {a} % continua dient que faltava arròs i el {b} % ho explica per la renda o per les reserves. És la idea que es posarà a prova amb les dades reals en la sessió 3.",
+      "vn.wait": "En el tancament, la pregunta 3 dirà si el joc ha mogut esta idea.",
+      "piz.soon": "En preparació", "piz.h": "Pissarra",
+      "piz.p": "Ací l'alumnat dibuixarà el seu propi circuit: elements com famílies, empreses, salaris o excedent, units amb fletxes que es posen en marxa. Utilitzarà la mateixa pissarra que la SA 5.",
+      "foot.arroz": "Joc de l'arròs: regles, rendes i racions del material de la SA 1 (sessió 1). Les xifres són del joc, no dades històriques; reproduïxen el patró que descriu Amartya Sen en <em>Poverty and Famines</em> (1981), cap. 6.",
+      "foot.flujo": "Flux de la renda: xifres inventades per a l'aula, en milions d'euros.",
+      "foot.store": "El que s'escriu ací només es guarda en este navegador, per a no perdre-ho si es recarrega la pàgina.",
+      "f.secI": "Sector de maquinària i materials", "f.secII": "Sector de béns de consum", "f.fam": "Famílies treballadores", "f.own": "Propietaris",
+      "f.secI.s": "Maquinària i materials", "f.secII.s": "Béns de consum",
+      "f.mat": "Materials i desgast", "f.sal": "Salaris", "f.exc": "Excedent", "f.prod": "El que produïx", "f.reinv": "Reinversió", "f.cons": "Consum dels propietaris",
+      "f.simple.note": "Tot l'excedent es gasta en consum: la volta següent és igual que esta.",
+      "f.simple.h": "El circuit que es repetix", "f.amp.h": "El circuit que creix",
+      "f.simple.p": "Dos sectors produïxen tot el que es necessita: un fa maquinària i materials; l'altre, béns de consum. Amb el que venen paguen els materials i el desgast, els salaris i queda un excedent. Ací els propietaris gasten tot l'excedent en consum: a cada volta el circuit es repetix igual.",
+      "f.amp.p": "Ara els propietaris del sector de maquinària reinvertixen una part de l'excedent: compren més materials i contracten més gent. El sector de béns de consum reinvertix el que cal per a utilitzar la maquinària nova. El circuit creix volta a volta.",
+      "f.vuelta": "Volta {n}", "f.vueltas": "Voltes", "f.play": "Reproduir", "f.pause": "Pausa", "f.reset": "Tornar a la volta 1",
+      "f.a": "Part de l'excedent del sector de maquinària que es reinvertix",
+      "f.leg.money": "Diners", "f.leg.goods": "Maquinària i béns", "f.leg.work": "Treball", "f.leg.reinv": "Reinversió (el que s'acumula)",
+      "f.g.h": "El que es produïx a cada volta", "f.g.y": "Total produït",
+      "f.g.p.simple": "Totes les barres són iguals: els propietaris consumixen tot l'excedent i el circuit es repetix igual volta rere volta.",
+      "f.g.p.amp": "La part verda és l'excedent que es reinvertix: en la volta següent es convertix en més materials i més salaris, i la barra creix. Això és l'acumulació.",
+      "f.g.p.zero": "Amb un 0 % no es reinvertix res: no hi ha part verda i totes les barres són iguals, com en el flux simple.",
+      "f.selfnew": "maquinària nova",
+      "f.flowsH": "El que circula en esta volta",
+      "f.fl.matI": "Materials que el sector de maquinària es fabrica a si mateix: {x}",
+      "f.fl.ItoII": "Maquinària i materials del sector de maquinària al de consum: {x} (i els mateixos diners en sentit contrari)",
+      "f.fl.wages": "Salaris per a les famílies treballadores: {x} (les famílies els gasten en béns de consum)",
+      "f.fl.exc": "Excedent per als propietaris: {x}",
+      "f.fl.cons": "Despesa dels propietaris en béns de consum: {x}",
+      "f.fl.reinv": "Reinversió: {x} (més materials i més salaris per a la volta següent)",
+      "f.check.h": "Condició perquè el circuit funcione",
+      "f.check.simple": "El que el sector de maquinària ven al de consum ({a}) ha de ser igual al que este necessita per a reposar els seus materials i el seu desgast ({b}).",
+      "f.check.amp": "El que el sector de maquinària ven al de consum ({a}) ha de ser igual al que este necessita per a reposar i ampliar la seua maquinària ({b}).",
+      "f.ok": "quadra", "f.bad": "no quadra",
+      "f.falta": "Al sector de béns de consum li arriba menys maquinària de la que necessita per a reposar la gastada (en falten {x}): ha de produir menys en la volta següent.",
+      "f.sobra": "El sector de maquinària produïx més del que el de consum pot comprar (en sobren {x}).",
+      "f.zero": "Amb un 0 % ningú reinvertix i el circuit partix de les mateixes xifres que el flux simple (sector de maquinària 4.000 + 1.000 + 1.000; sector de consum 2.000 + 500 + 500): es repetix igual en totes les voltes. En pujar la reinversió, partix d'altres xifres (sector de consum 1.500 + 750 + 750), que deixen lloc per a créixer.",
+      "f.grow": "Amb un {a} % reinvertit, el total produït creix un {g} % en l'última volta.",
+      "f.table": "Volta a volta", "f.download": "Descarregar la taula (Excel)",
+      "f.col.v": "Volta", "f.col.Ip": "Maquinària: produïx", "f.col.Im": "Materials i desgast", "f.col.Is": "Salaris", "f.col.Ie": "Excedent", "f.col.Ir": "Reinversió",
+      "f.col.IIp": "Consum: produïx", "f.col.IIm": "Materials i desgast", "f.col.IIs": "Salaris", "f.col.IIe": "Excedent", "f.col.IIr": "Reinversió", "f.col.tot": "Total produït", "f.col.g": "Creixement",
+      "f.csv.I": "Sector de maquinària", "f.csv.II": "Sector de béns de consum",
+      "f.units": "Milions d'euros de cada volta.",
+      "fi.arroz.ses": "Sessió 1 (La pista). Avaluació inicial, sense nota.",
+      "fi.arroz.uso": "El docent o la persona responsable del material copia cada targeta de puja; la ferramenta reparteix, cobra i projecta qui menja. Les votacions amb Plickers es fan abans de les regles, abans de la ronda 3 i en el tancament.",
+      "fi.flujo.ses": "Sessió 4 (Les ferramentes: el model de la reproducció i el flux circular de la renda).",
+      "fi.flujo.uso": "Es projecta després de construir el cicle en la pissarra: primer el flux simple (la condició perquè es repetisca) i després l'ampliat (què passa si es reinvertix l'excedent). La taula es pot descarregar per a comprovar els càlculs en un full de càlcul."
+    }
+  });
+
+  // =====================================================================
+  // FICHA DOCENTE (saberes y criterios literales del Decreto 108/2022, Anexo II)
+  // =====================================================================
+  const FICHAS = {
+    arroz: {
+      saberes: [
+        { code: "A1", es: "La economía, las necesidades, los bienes y la escasez.", va: "L'economia, les necessitats, els béns i l'escassetat." },
+        { code: "A2", es: "El contenido económico de las relaciones sociales.", va: "El contingut econòmic de les relacions socials." },
+        { code: "A25", es: "Métodos para el análisis de la realidad económica: el método científico, la modelización y experimentos o ensayos económicos.", va: "Mètodes per a l'anàlisi de la realitat econòmica: el mètode científic, la modelització i experiments o assajos econòmics." }
+      ],
+      criterios: [
+        { code: "6.1", es: "Plantear soluciones socioeconómicas que respondan a necesidades individuales y colectivas investigando y explorando la realidad económica teniendo en cuenta diversos factores y aplicando las herramientas propias del ámbito de la economía. (Evaluación inicial, sin nota.)", va: "Plantejar solucions socioeconòmiques que responguen a necessitats individuals i col·lectives, investigant i explorant la realitat econòmica, tenint en compte diversos factors i aplicant les ferramentes pròpies de l'àmbit de l'economia. (Avaluació inicial, sense nota.)" }
+      ],
+      ses: "fi.arroz.ses", uso: "fi.arroz.uso"
+    },
+    flujo: {
+      saberes: [
+        { code: "A2", es: "El contenido económico de las relaciones sociales.", va: "El contingut econòmic de les relacions socials." },
+        { code: "C1", es: "La macroeconomía. Los agentes económicos y el flujo circular de la renta.", va: "La macroeconomia. Els agents econòmics i el flux circular de la renda." }
+      ],
+      criterios: [
+        { code: "3.1", es: "Conocer cómo se produce el desarrollo económico y el bienestar social valorando, con sentido crítico, el papel de los distintos agentes económicos que intervienen en el flujo circular de la renta.", va: "Conéixer com es produïx el desenrotllament econòmic i el benestar social, valorant, amb sentit crític, el paper dels diferents agents econòmics que intervenen en el flux circular de la renda." },
+        { code: "3.2", es: "Diferenciar los costes y beneficios que se generan en el flujo circular de la renta para cada uno de los agentes económicos, estableciendo relaciones entre ellos y determinando su repercusión en el desarrollo económico y bienestar social.", va: "Diferenciar els costos i beneficis que es generen en el flux circular de la renda per a cada un dels agents econòmics, establint relacions entre estos i determinant-ne la repercussió en el desenrotllament econòmic i benestar social." }
+      ],
+      ses: "fi.flujo.ses", uso: "fi.flujo.uso"
+    }
+  };
+  // Ficha propia (cambia con la herramienta); usa los estilos comunes .obs-ficha
+  const fichaBox = el("details", { class: "obs-ficha", id: "ficha" });
+  function renderFicha() {
+    const f = FICHAS[tool], L = x => x[OBS.lang()] || x.es;
+    const list = arr => el("ul", {}, arr.map(x => el("li", {}, el("span", { class: "code", text: x.code }), L(x))));
+    const open = fichaBox.open;
+    fichaBox.replaceChildren(el("summary", { text: T("obs.ficha") }),
+      el("dl", {},
+        el("dt", { text: T("obs.sessions") }), el("dd", { text: T(f.ses) }),
+        el("dt", { text: T("obs.saberes") }), el("dd", {}, list(f.saberes)),
+        el("dt", { text: T("obs.criterios") }), el("dd", {}, list(f.criterios)),
+        el("dt", { text: T("obs.uso") }), el("dd", { text: T(f.uso) })));
+    fichaBox.open = open;
+  }
+
+  // =====================================================================
+  // NAVEGACIÓN: herramienta (desplegable) → pestañas
+  // =====================================================================
+  const TOOLS = { arroz: ["mercado", "votar"], flujo: ["pizarra", "simple", "ampliado"] };
+  const TABKEY = { mercado: "tab.mercado", votar: "tab.votar", pizarra: "tab.pizarra", simple: "tab.simple", ampliado: "tab.ampliado" };
+  const ALLVIEWS = Object.entries(TOOLS).flatMap(([t, vs]) => vs.map(v => t + "-" + v));
+  let tool = "arroz", tab = "mercado";
+  const lastTab = store.get("sa1-lasttab") || { arroz: "mercado", flujo: "simple" };
+  function route() {
+    const h = location.hash.slice(1);
+    if (ALLVIEWS.includes(h)) { [tool, tab] = h.split("-"); }
+    else if (TOOLS[h]) { tool = h; tab = lastTab[h] || TOOLS[h][0]; }
+    else { tool = store.get("sa1-tool") || "arroz"; if (!TOOLS[tool]) tool = "arroz"; tab = lastTab[tool] || TOOLS[tool][0]; }
+    lastTab[tool] = tab; store.set("sa1-lasttab", lastTab); store.set("sa1-tool", tool);
+    $("tool").value = tool;
+    for (const v of ALLVIEWS) $("view-" + v).hidden = v !== tool + "-" + tab;
+    renderTabs(); renderHead(); renderFicha();
+    if (tool === "flujo" && (tab === "simple" || tab === "ampliado")) FLOWUI[tab].show(); else stopAllFlows();
+  }
+  function renderTabs() {
+    $("tabs").setAttribute("aria-label", T("tool." + tool));
+    $("tabs").replaceChildren(...TOOLS[tool].map(v => {
+      const b = el("button", { role: "tab", id: "tab-" + tool + "-" + v, "aria-selected": String(v === tab), "aria-controls": "view-" + tool + "-" + v, text: T(TABKEY[v]) });
+      b.addEventListener("click", () => { location.hash = tool + "-" + v; });
+      return b;
+    }));
+    for (const v of ALLVIEWS) $("view-" + v).setAttribute("aria-labelledby", "tab-" + v);
+  }
+  function renderHead() {
+    $("h1").textContent = T(tool + ".h1");
+    $("lede").textContent = T(tool + ".lede");
+  }
+  $("tool").addEventListener("change", e => { location.hash = e.target.value; });
+  window.addEventListener("hashchange", route);
+
+  // =====================================================================
+  // JUEGO DEL ARROZ · motor (funciones puras)
+  // =====================================================================
+  const TEAMS = [
+    { id: "jor", renta: [12, 13, 14] },
+    { id: "pes", renta: [12, 8, 6] },
+    { id: "cam", renta: [14, 18, 22] },
+    { id: "com", renta: [18, 26, 34] },
+    { id: "ind", renta: [14, 22, 30] }
+  ];
+  const ROUNDS = [{ supply: 16, auction: 16 }, { supply: 15, auction: 15 }, { supply: 18, auction: 12 }];
+  const NEED = 3, MAXASK = 5, WAR = "ind", GOV_RATIONS = 3, GOV_PRICE = 3;
+  const toInt = s => { const t = String(s ?? "").trim(); if (t === "") return null; const v = Number(t.replace(",", ".")); return Number.isInteger(v) ? v : NaN; };
+
+  // Reparte una ronda. bidsR = { equipo: {pide, oferta, sorteo} } (texto); startRes = reservas iniciales
+  function playRound(r, bidsR, startRes) {
+    const R = ROUNDS[r];
+    const rows = TEAMS.map(t => {
+      const b = bidsR[t.id];
+      const pide = toInt(b.pide), oferta = toInt(b.oferta), sorteo = toInt(b.sorteo);
+      const pre = r === 2 && t.id === WAR ? GOV_RATIONS : 0;
+      const prePaid = pre * GOV_PRICE;
+      const renta = t.renta[r], disponible = renta - prePaid;
+      let err = null;
+      if (Number.isNaN(pide) || Number.isNaN(oferta)) err = ["err.int"];
+      else if (pide != null && (pide < 0 || pide > MAXASK)) err = ["err.range", { m: MAXASK }];
+      else if (oferta != null && oferta < 0) err = ["err.neg"];
+      else if (pide && oferta == null) err = ["err.offer"];
+      else if (pide && pide * oferta > disponible) err = ["err.money", { p: pide, o: oferta, x: pide * oferta, d: disponible }];
+      return { t, pide: err ? 0 : (pide || 0), oferta: err ? 0 : (oferta || 0), sorteo, pre, prePaid, renta, disponible, err, inicial: startRes[t.id] || 0, raw: b };
+    });
+    const valid = rows.filter(x => x.pide > 0);
+    valid.sort((a, b) => b.oferta - a.oferta || (a.sorteo ?? 99) - (b.sorteo ?? 99));
+    let left = R.auction;
+    valid.forEach((x, i) => { x.orden = i + 1; x.recibe = Math.min(x.pide, Math.max(0, left)); left -= x.recibe; });
+    const ties = [];
+    for (let i = 0; i < valid.length; i++) for (let j = i + 1; j < valid.length; j++) {
+      const a = valid[i], b = valid[j];
+      if (a.oferta === b.oferta && (a.sorteo == null || b.sorteo == null || a.sorteo === b.sorteo) && (a.recibe < a.pide || b.recibe < b.pide)) ties.push([a.t.id, b.t.id]);
+    }
+    rows.forEach(x => {
+      if (x.recibe == null) { x.recibe = 0; x.orden = null; }
+      x.paga = x.recibe * x.oferta + x.prePaid;
+      x.total = x.inicial + x.recibe + x.pre;
+      x.come = x.total >= NEED;
+      x.final = x.come ? x.total - NEED : 0;      // regla 6 y hoja de control: si no llega a 3, devuelve lo que tiene
+      x.consumed = x.come ? NEED : 0;
+      x.missing = x.come ? 0 : NEED - x.total;
+    });
+    const sold = rows.reduce((a, x) => a + x.recibe, 0);
+    const paid = rows.reduce((a, x) => a + x.recibe * x.oferta, 0);
+    const entered = rows.some(x => x.raw.pide !== "" || x.raw.oferta !== "");
+    return { r, R, rows, ties, entered, sold, avg: sold ? paid / sold : NaN,
+      hungry: rows.filter(x => !x.come), reserves: rows.reduce((a, x) => a + x.final, 0),
+      endRes: Object.fromEntries(rows.map(x => [x.t.id, x.final])) };
+  }
+  function playAll(allBids) {
+    const out = []; let res = {};
+    for (let r = 0; r < ROUNDS.length; r++) { const o = playRound(r, allBids[r], res); out.push(o); res = o.endRes; }
+    return out;
+  }
+
+  // =====================================================================
+  // JUEGO DEL ARROZ · interfaz
+  // =====================================================================
+  const blank = () => ROUNDS.map(() => Object.fromEntries(TEAMS.map(t => [t.id, { pide: "", oferta: "", sorteo: "" }])));
+  let bids = store.get("arroz-pujas");
+  if (!Array.isArray(bids) || bids.length !== 3) bids = blank();
+  let round = store.get("arroz-ronda"); if (!Number.isInteger(round) || round < 0 || round > 2) round = 0;
+  let exampleKey = store.get("arroz-ejemplo-k") || "";
+  const save = () => { store.set("arroz-pujas", bids); store.set("arroz-ronda", round); store.set("arroz-ejemplo-k", exampleKey); };
+  const teamName = id => T("team." + id);
+
+  function renderRoundBar() {
+    $("r-k").textContent = T("round.of", { n: round + 1 });
+    $("r-t").textContent = T("round.t" + (round + 1)) + " · " + T("round.sub" + (round + 1));
+    $("r-prev").disabled = round === 0; $("r-next").disabled = round === 2;
+    $("r-dots").replaceChildren(...ROUNDS.map((R, i) => {
+      const d = el("button", { type: "button", "aria-label": T("round.go", { n: i + 1 }), "aria-current": String(i === round) });
+      d.addEventListener("click", () => goRound(i));
+      return d;
+    }));
+    $("round-info").replaceChildren(el("span", {}, el("strong", { text: T("round.k" + (round + 1)) + " · " + T("round.t" + (round + 1)) + ". " }), T("round.info" + (round + 1))));
+  }
+  function goRound(i) { round = Math.max(0, Math.min(2, i)); save(); renderRoundBar(); buildBids(); renderArroz(); }
+  $("r-prev").addEventListener("click", () => goRound(round - 1));
+  $("r-next").addEventListener("click", () => goRound(round + 1));
+
+  function buildBids() {
+    const r = round;
+    const head = el("tr", {}, ["col.team", "col.renta", "col.ini", "col.pide", "col.oferta", "col.sorteo", null].map(k => el("th", { text: k ? T(k) : "" })));
+    const body = el("tbody");
+    TEAMS.forEach(t => {
+      const b = bids[r][t.id];
+      const inp = (field, labelKey) => {
+        const i = el("input", { type: "text", inputmode: "numeric", id: `b-${r}-${t.id}-${field}`, "aria-label": T(labelKey) + " · " + teamName(t.id), value: b[field], autocomplete: "off" });
+        i.addEventListener("input", () => { bids[r][t.id][field] = i.value; exampleKey = ""; save(); renderArroz(); });
+        return el("td", {}, i);
+      };
+      const rentaTxt = r === 2 && t.id === WAR ? t.renta[r] + " − 9" : String(t.renta[r]);
+      body.append(el("tr", { "data-team": t.id },
+        el("td", { class: "team", text: teamName(t.id) }), el("td", { text: rentaTxt }), el("td", { class: "ini", text: "0" }),
+        inp("pide", "col.pide"), inp("oferta", "col.oferta"), inp("sorteo", "col.sorteo"),
+        el("td", { class: "err" })));
+    });
+    $("bids").replaceChildren(el("thead", {}, head), body);
+  }
+
+  function renderArroz() {
+    const all = playAll(bids), o = all[round];
+    o.rows.forEach(x => {
+      const tr = $("bids").querySelector(`tr[data-team="${x.t.id}"]`); if (!tr) return;
+      tr.querySelector(".ini").textContent = String(x.inicial);
+      tr.querySelector(".err").textContent = x.err ? T(x.err[0], x.err[1]) : "";
+      ["pide", "oferta"].forEach(f => { const i = $(`b-${round}-${x.t.id}-${f}`); if (i) i.classList.toggle("bad", !!x.err); });
+    });
+    const tie = $("tie-note");
+    tie.hidden = !o.ties.length;
+    if (o.ties.length) tie.replaceChildren(el("span", {}, el("strong", { text: T("tie") + " " }), T("tie.text", { pairs: o.ties.map(p => p.map(teamName).join(T("and"))).join("; ") })));
+
+    const hungry = o.hungry.length;
+    $("stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: fmt(o.R.supply) }), el("span", { text: T(round === 2 ? "st.rice3" : "st.rice") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.sold) + (round === 2 ? " + 6" : "") }), el("span", { text: T("st.sold") })),
+      el("div", { class: "stat" }, el("b", { text: isFinite(o.avg) ? fmt(o.avg, 1) : "—" }), el("span", { text: T("st.avg") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.reserves) }), el("span", { text: T("st.res") })),
+      el("div", { class: "stat" }, el("b", { class: o.entered ? (hungry ? "neg" : "pos") : "", text: o.entered ? fmt(hungry) : "—" }), el("span", { text: T("st.hungry") })));
+
+    $("plates").replaceChildren(...o.rows.map(x => {
+      const sq = [];
+      for (let i = 0; i < x.consumed; i++) sq.push(el("i", { title: T("pl.t.cons") }));
+      if (!x.come) { for (let i = 0; i < x.total; i++) sq.push(el("i", { title: T("pl.t.back") })); for (let i = 0; i < x.missing; i++) sq.push(el("i", { class: "miss", title: T("pl.t.miss") })); }
+      for (let i = 0; i < x.final; i++) sq.push(el("i", { class: "res", title: T("pl.t.res") }));
+      const detail = (x.pre ? T("pl.gov") : "") + (x.recibe ? T("pl.gets", { n: x.recibe, o: x.oferta, x: x.recibe * x.oferta }) : (x.pide ? T("pl.none") : T("pl.nobid")));
+      return el("div", { class: "plate" + (o.entered && !x.come ? " out" : "") },
+        el("span", { class: "n", text: teamName(x.t.id) }),
+        o.entered ? el("span", { class: "chip " + (x.come ? "ok" : "bad"), text: T(x.come ? "pl.eats" : "pl.out") }) : null,
+        el("div", { class: "rations", role: "img", "aria-label": x.come ? T("pl.aria.ok", { n: x.final }) : T("pl.aria.out", { n: x.missing }) }, sq),
+        el("span", { class: "s", text: detail + (x.inicial ? T("pl.had", { n: x.inicial }) : "") }));
+    }));
+
+    const head = el("tr", {}, ["col.team", "col.ini", "col.pide", "col.oferta2", "col.orden", "col.recibe", "col.paga", "col.total", "col.tres", "col.final"].map(k => el("th", { text: T(k) })));
+    $("result").replaceChildren(el("thead", {}, head), el("tbody", {}, o.rows.map(x => el("tr", {},
+      el("td", { class: "team", text: teamName(x.t.id) }), el("td", { text: x.inicial }), el("td", { text: x.pide || "—" }), el("td", { text: x.pide ? x.oferta : "—" }),
+      el("td", { text: x.orden ?? "—" }), el("td", { text: x.recibe + (x.pre ? " + 3" : "") }), el("td", { text: x.paga }), el("td", { text: x.total }),
+      el("td", { class: x.come ? "pos" : "neg", text: T(x.come ? "yes" : "no") }), el("td", { text: x.final })))));
+
+    const sh = el("tr", {}, ["", ...ROUNDS.map((R, i) => T("round.k" + (i + 1)) + " · " + T("round.t" + (i + 1)))].map(t => el("th", { text: t })));
+    const line = (key, fn) => el("tr", {}, el("td", { class: "team", text: T(key) }), ...all.map((x, i) => el("td", { text: x.entered ? fn(x, i) : "—" })));
+    $("summary").replaceChildren(el("thead", {}, sh), el("tbody", {},
+      el("tr", {}, el("td", { class: "team", text: T("sum.rice") }), ...all.map(x => el("td", { text: x.R.supply }))),
+      el("tr", {}, el("td", { class: "team", text: T("sum.need") }), ...all.map(() => el("td", { text: "15" }))),
+      line("sum.avg", x => isFinite(x.avg) ? fmt(x.avg, 1) : "—"),
+      line("sum.res", x => fmt(x.reserves)),
+      line("sum.com", x => fmt(x.endRes.com)),
+      line("sum.hungry", x => x.hungry.length ? x.hungry.map(h => T("team.short." + h.t.id)).join(", ") : T("sum.nobody"))));
+    const played = all.filter(x => x.entered);
+    $("summary-note").replaceChildren(!played.length
+      ? el("span", { class: "small", text: T("sum.empty") })
+      : played.some(x => x.hungry.length)
+        ? el("span", {}, el("strong", { text: T("sum.hungryB") }), T("sum.hungryT"))
+        : el("span", {}, el("strong", { text: T("sum.okB") }), T("sum.okT")));
+    $("ex-flag").textContent = exampleKey ? T("ex.flag", { t: T("ex.tag." + exampleKey) }) : "";
+  }
+
+  // Pujas de ejemplo que reproducen la simulación de referencia del material
+  const EXAMPLES = {
+    hoard: [
+      { jor: [3, 4], pes: [3, 4], cam: [3, 4], com: [4, 4], ind: [3, 4] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 6], com: [5, 5], ind: [3, 7] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 7], com: [5, 6], ind: [0, 0] }
+    ],
+    fair: [
+      { jor: [3, 4], pes: [3, 4], cam: [3, 4], com: [3, 6], ind: [3, 4] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 6], com: [3, 8], ind: [3, 7] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 7], com: [3, 11], ind: [0, 0] }
+    ]
+  };
+  const toBids = ex => ex.map(rr => Object.fromEntries(TEAMS.map(t => [t.id, { pide: rr[t.id][0] ? String(rr[t.id][0]) : "", oferta: rr[t.id][0] ? String(rr[t.id][1]) : "", sorteo: "" }])));
+  function loadExample(key) { bids = toBids(EXAMPLES[key]); exampleKey = key; save(); buildBids(); renderArroz(); }
+  $("ex-hoard").addEventListener("click", () => loadExample("hoard"));
+  $("ex-fair").addEventListener("click", () => loadExample("fair"));
+
+  function twoStep(btn, action) {
+    let armed = false, timer = null;
+    btn.addEventListener("click", () => {
+      if (!armed) { armed = true; btn.textContent = T("bids.again"); timer = setTimeout(() => { armed = false; btn.textContent = T(btn.dataset.i18n); }, 3000); return; }
+      clearTimeout(timer); armed = false; btn.textContent = T(btn.dataset.i18n); action();
+    });
+  }
+  twoStep($("clear-round"), () => { bids[round] = blank()[round]; exampleKey = ""; save(); buildBids(); renderArroz(); });
+  twoStep($("clear-all"), () => { bids = blank(); exampleKey = ""; save(); goRound(0); });
+
+  // ---- Votaciones ----
+  const QKEYS = [{ p: "q1", key: 2 }, { p: "q2", key: 2 }, { p: "q3", key: 3 }];
+  const LET = ["A", "B", "C", "D"], LK = ["a", "b", "c", "d"];
+  let votes = store.get("arroz-votos");
+  if (!Array.isArray(votes) || votes.length !== 3) votes = QKEYS.map(() => ["", "", "", ""]);
+  const counts = qi => votes[qi].map(v => { const n = toInt(v); return Number.isFinite(n) && n > 0 ? n : 0; });
+  function buildVotes() {
+    $("qcards").replaceChildren(...QKEYS.map((Q, qi) => {
+      const out = el("div", { class: "bars" });
+      const card = el("div", { class: "qcard" },
+        el("span", { class: "k", text: T("vote.q", { n: qi + 1, k: T(Q.p + ".k") }) }),
+        el("span", { class: "q", text: T(Q.p + ".q") }),
+        ...LK.map((lk, oi) => {
+          const i = el("input", { type: "text", inputmode: "numeric", id: `v-${qi}-${oi}`, value: votes[qi][oi], placeholder: "0", "aria-label": T("vote.aria", { l: LET[oi] }) });
+          i.addEventListener("input", () => { votes[qi][oi] = i.value; store.set("arroz-votos", votes); fillBars(qi, out); renderVoteNote(); });
+          return el("label", { class: "opt", for: `v-${qi}-${oi}` }, el("span", { class: "l", text: LET[oi] }), el("span", { text: T(Q.p + "." + lk) }), i);
+        }),
+        out);
+      fillBars(qi, out);
+      return card;
+    }));
+    renderVoteNote();
+  }
+  function fillBars(qi, out) {
+    const c = counts(qi), tot = c.reduce((a, b) => a + b, 0);
+    if (!tot) { out.replaceChildren(el("p", { class: "small", text: T("vote.none") })); return; }
+    const max = Math.max(...c);
+    out.replaceChildren(...c.map((n, i) => el("div", { class: "bar" },
+      el("span", { class: "l", text: LET[i] }),
+      el("span", { class: "track", "aria-hidden": "true" }, el("span", { class: "fill" + (i === QKEYS[qi].key ? " key" : ""), style: "width:" + (100 * n / max).toFixed(1) + "%" })),
+      el("span", { class: "val", text: Math.round(100 * n / tot) + " %" }))));
+  }
+  function renderVoteNote() {
+    const c1 = counts(0), c3 = counts(2), t1 = c1.reduce((a, b) => a + b, 0), t3 = c3.reduce((a, b) => a + b, 0);
+    const note = $("vote-note");
+    if (!t1) { note.replaceChildren(el("span", {}, T("vn.start"), el("strong", { text: T("vn.startB") }))); return; }
+    const parts = [el("strong", { text: T("vn.p1", { p: Math.round(100 * c1[1] / t1) }) })];
+    parts.push(t3 ? T("vn.p3", { a: Math.round(100 * c3[0] / t3), b: Math.round(100 * (c3[1] + c3[2] + c3[3]) / t3) }) : T("vn.wait"));
+    note.replaceChildren(el("span", {}, ...parts));
+  }
+  twoStep($("clear-votes"), () => { votes = QKEYS.map(() => ["", "", "", ""]); store.set("arroz-votos", votes); buildVotes(); });
+
+  // =====================================================================
+  // FLUJO DE LA RENTA · motor (funciones puras, sin dibujo)
+  // Por debajo: esquemas de reproducción simple y ampliada de Marx (El capital, libro II).
+  // c = «materiales y desgaste», v = «salarios», s = «excedente»; sector I = maquinaria y materiales; sector II = bienes de consumo.
+  // Ejemplos clásicos: simple I 4000c+1000v+1000s, II 2000c+500v+500s; ampliada I 4000c+1000v+1000s, II 1500c+750v+750s.
+  // =====================================================================
+  const FLOW = {
+    start: {
+      simple: { e: 1, I: { c: 4000, v: 1000 }, II: { c: 2000, v: 500 } },
+      ampliado: { e: 1, I: { c: 4000, v: 1000 }, II: { c: 1500, v: 750 } }
+    },
+    // Una vuelta: a = parte del excedente del sector I que se reinvierte (composición constante en cada sector)
+    vuelta(st, a) {
+      const I = st.I, II = st.II, e = st.e;
+      const s1 = e * I.v, s2 = e * II.v, kI = I.c / I.v, kII = II.c / II.v;
+      const acc1 = a * s1, dc1 = acc1 * kI / (1 + kI), dv1 = acc1 / (1 + kI), cons1 = s1 - acc1;
+      const ventaI = I.v + dv1 + cons1;               // lo que el sector I vende al II: I(v + Δv + consumo)
+      let dc2 = ventaI - II.c, dv2 = dc2 / kII, cons2 = s2 - dc2 - dv2, sobra = 0, falta = 0;
+      if (cons2 < 0) { dc2 = s2 * kII / (1 + kII); dv2 = s2 / (1 + kII); cons2 = 0; sobra = ventaI - (II.c + dc2); }
+      if (dc2 < 0) { falta = -dc2; cons2 = s2; }
+      return {
+        I: { c: I.c, v: I.v, s: s1, p: I.c + I.v + s1, dc: dc1, dv: dv1, acc: acc1, cons: cons1 },
+        II: { c: II.c, v: II.v, s: s2, p: II.c + II.v + s2, dc: dc2, dv: dv2, acc: dc2 + dv2, cons: cons2 },
+        ventaI, necesitaII: II.c + Math.max(dc2, -II.c), sobra, falta,
+        next: { e, I: { c: I.c + dc1, v: I.v + dv1 }, II: { c: Math.max(0, II.c + dc2), v: Math.max(0, II.v + dv2) } }
+      };
+    },
+    // Punto de partida: con 0 % de reinversión se parte de las cifras equilibradas del esquema simple,
+    // para que el circuito se repita igual desde la primera vuelta; con más de 0 %, del ejemplo clásico de la ampliada.
+    startFor(kind, a) { return kind === "ampliado" && a > 0 ? FLOW.start.ampliado : FLOW.start.simple; },
+    series(start, a, n) {
+      const out = []; let st = start;
+      for (let i = 0; i < n; i++) { const r = FLOW.vuelta(st, a); out.push(r); st = r.next; }
+      return out;
+    }
+  };
+
+  // =====================================================================
+  // FLUJO DE LA RENTA · interfaz (circuito animado tipo Loopy + tabla)
+  // =====================================================================
+  const NV = 10;   // vueltas
+  function makeFlowUI(kind) {
+    const root = $("view-flujo-" + kind);
+    const S = { k: 1, a: kind === "ampliado" ? (store.get("sa1-a") ?? 0.5) : 0, playing: null, raf: null, tokens: [], last: 0, acc: {} };
+    const ids = p => "f" + kind[0] + "-" + p;
+    root.innerHTML = `
+      <div class="prose"><h2 id="${ids("h")}"></h2><p id="${ids("p")}"></p></div>
+      ${kind === "ampliado" ? `<div class="slider"><div class="lab"><label for="${ids("a")}" id="${ids("al")}"></label><output id="${ids("ao")}" for="${ids("a")}"></output></div><input type="range" id="${ids("a")}" min="0" max="100" step="5"></div>` : ""}
+      <div class="vbar">
+        <span class="vk" id="${ids("vk")}"></span>
+        <div class="slider"><div class="lab"><label for="${ids("v")}" id="${ids("vl")}"></label><output id="${ids("vo")}" for="${ids("v")}"></output></div><input type="range" id="${ids("v")}" min="1" max="${NV}" step="1" value="1"></div>
+        <button type="button" class="btn" id="${ids("play")}"></button>
+        <button type="button" class="btn quiet small" id="${ids("reset")}"></button>
+      </div>
+      <div class="legend"><span><i class="dot"></i><span id="${ids("lm")}"></span></span><span><i class="dot goods"></i><span id="${ids("lg")}"></span></span><span><i class="dot work"></i><span id="${ids("lw")}"></span></span>${kind === "ampliado" ? `<span><i class="dot reinv"></i><span id="${ids("lr")}"></span></span>` : ""}</div>
+      <div class="circuit"><svg id="${ids("svg")}" viewBox="0 0 640 430" role="img"></svg></div>
+      <figure style="margin:0;display:flex;flex-direction:column;gap:8px">
+        <figcaption><h3 id="${ids("gh")}"></h3></figcaption>
+        <div class="legend"><span><i class="c-mat"></i><span id="${ids("g1")}"></span></span><span><i class="c-sal"></i><span id="${ids("g2")}"></span></span>${kind === "ampliado" ? `<span><i class="reinv"></i><span id="${ids("g3")}"></span></span>` : ""}<span><i class="c-cons"></i><span id="${ids("g4")}"></span></span></div>
+        <div class="growth"><svg id="${ids("grow")}" viewBox="0 0 640 240" role="img"></svg></div>
+        <p class="small" id="${ids("gp")}"></p>
+      </figure>
+      <div class="check" id="${ids("check")}"></div>
+      <div class="notice" id="${ids("note")}" aria-live="polite"></div>
+      <div><h3 id="${ids("flh")}" style="margin-bottom:6px"></h3><ul class="flows" id="${ids("flows")}"></ul></div>
+      <div class="block" style="gap:10px">
+        <div class="actions" style="justify-content:space-between"><h3 id="${ids("th")}"></h3><button type="button" class="btn ghost small" id="${ids("dl")}"></button></div>
+        <p class="small" id="${ids("units")}"></p>
+        <div class="scroll"><table class="flow" id="${ids("tbl")}"></table></div>
+        <p class="small" id="${ids("dlmsg")}" aria-live="polite"></p>
+      </div>`;
+    const q = p => $(ids(p));
+    if (kind === "ampliado") {
+      q("a").value = Math.round(S.a * 100);
+      q("a").addEventListener("input", () => { S.a = +q("a").value / 100; store.set("sa1-a", S.a); render(); });
+    }
+    q("v").addEventListener("input", () => { stop(); S.k = +q("v").value; render(); });
+    q("play").addEventListener("click", () => { if (S.playing) stop(); else play(); });
+    q("reset").addEventListener("click", () => { stop(); S.k = 1; q("v").value = 1; render(); });
+    q("dl").addEventListener("click", async () => {
+      const ser = FLOW.series(FLOW.startFor(kind, S.a), S.a, NV);
+      const head = [T("f.col.v"), T("f.csv.I") + " · " + T("f.mat"), T("f.csv.I") + " · " + T("f.sal"), T("f.csv.I") + " · " + T("f.exc"), T("f.csv.I") + " · " + T("f.prod"), T("f.csv.I") + " · " + T("f.reinv"),
+        T("f.csv.II") + " · " + T("f.mat"), T("f.csv.II") + " · " + T("f.sal"), T("f.csv.II") + " · " + T("f.exc"), T("f.csv.II") + " · " + T("f.prod"), T("f.csv.II") + " · " + T("f.reinv"), T("f.col.tot")];
+      const n2 = v => String(Math.round(v * 100) / 100).replace(".", ",");
+      const rows = ser.map((r, i) => [i + 1, n2(r.I.c), n2(r.I.v), n2(r.I.s), n2(r.I.p), n2(r.I.acc), n2(r.II.c), n2(r.II.v), n2(r.II.s), n2(r.II.p), n2(r.II.acc), n2(r.I.p + r.II.p)]);
+      q("dlmsg").textContent = await OBS.download("flujo-renta-" + kind + ".csv", OBS.csv([head, ...rows]), "text/csv;charset=utf-8");
+    });
+
+    // Geometría del circuito
+    const POS = { I: [170, 105], II: [490, 105], F: [170, 335], O: [490, 335] };
+    function radius(val, max) { return 30 + 34 * Math.sqrt(Math.max(0, val) / max); }
+    function streamsOf(r) {
+      // [desde, hasta, tipo, cantidad]
+      const st = [
+        ["I", "II", "goods", r.ventaI], ["II", "I", "money", r.ventaI],
+        ["I", "F", "money", r.I.v], ["F", "I", "work", r.I.v],
+        ["II", "F", "money", r.II.v], ["F", "II", "work", r.II.v],
+        ["F", "II", "money", r.I.v + r.II.v], ["II", "F", "goods", r.I.v + r.II.v],
+        ["I", "O", "money", r.I.s], ["II", "O", "money", r.II.s],
+        ["O", "II", "money", r.I.cons + r.II.cons], ["II", "O", "goods", r.I.cons + r.II.cons]
+      ];
+      if (r.I.acc > 0.5) st.push(["O", "I", "reinv", r.I.acc]);
+      if (r.II.acc > 0.5) st.push(["O", "II", "reinv", r.II.acc]);
+      return st.filter(s => s[3] > 0.5);
+    }
+    function lineFor(a, b, rad) {
+      const [x1, y1] = POS[a], [x2, y2] = POS[b];
+      const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+      const off = 7, nx = -uy * off, ny = ux * off;         // cada sentido va por su carril
+      return { x1: x1 + ux * rad[a] + nx, y1: y1 + uy * rad[a] + ny, x2: x2 - ux * rad[b] + nx, y2: y2 - uy * rad[b] + ny };
+    }
+    let current = null;
+    function draw(r, maxP) {
+      const svg = q("svg"); svg.replaceChildren();
+      svg.setAttribute("aria-label", T("f.flowsH"));
+      const rad = { I: radius(r.I.p, maxP), II: radius(r.II.p, maxP), F: radius((r.I.v + r.II.v) * 3, maxP), O: radius((r.I.s + r.II.s) * 3, maxP) };
+      const gL = sv("g"), gT = sv("g"), gN = sv("g");
+      // enlaces (grosor según lo que circula)
+      const pairs = [["I", "II"], ["I", "F"], ["II", "F"], ["I", "O"], ["II", "O"]];
+      const tot = {}; streamsOf(r).forEach(([a, b, , v]) => { const k = [a, b].sort().join(""); tot[k] = (tot[k] || 0) + v; });
+      pairs.forEach(([a, b]) => {
+        const k = [a, b].sort().join(""); if (!tot[k]) return;
+        const [x1, y1] = POS[a], [x2, y2] = POS[b];
+        gL.append(sv("line", { x1, y1, x2, y2, class: "link", "stroke-width": (4 + 18 * Math.sqrt(tot[k] / maxP)).toFixed(1) }));
+      });
+      // reinversión: el excedente que vuelve a los sectores, en verde y con su rótulo
+      streamsOf(r).filter(s => s[2] === "reinv").forEach(([a, b, , v]) => {
+        const g = lineFor(a, b, { I: 0, II: 0, F: 0, O: 0 });
+        gL.append(sv("line", { x1: g.x1, y1: g.y1, x2: g.x2, y2: g.y2, class: "link reinv", "stroke-width": (3 + 14 * Math.sqrt(v / maxP)).toFixed(1) }));
+        // rótulo: hacia el sector I, en la diagonal cerca de los propietarios; hacia el II, a la derecha de la vertical
+        const lx = b === "I" ? POS.O[0] + (POS.I[0] - POS.O[0]) * 0.3 - 10 : POS.II[0] + 18;
+        const ly = b === "I" ? POS.O[1] + (POS.I[1] - POS.O[1]) * 0.3 - 8 : (POS.II[1] + POS.O[1]) / 2;
+        gL.append(sv("text", { x: lx, y: ly, "text-anchor": b === "I" ? "end" : "start", class: "rlabel" }, T("f.reinv").toLowerCase() + " " + fmt(v)));
+      });
+      // autoconsumo del sector I (materiales que se repone a sí mismo) y, en verde, la maquinaria nueva que se queda
+      const [ix, iy] = POS.I;
+      gL.append(sv("circle", { cx: ix - rad.I - 16, cy: iy, r: 18, class: "loop", "stroke-width": (3 + 12 * Math.sqrt((r.I.c + r.I.dc) / maxP)).toFixed(1) }));
+      if (r.I.dc > 0.5) {
+        const lb = sv("text", { x: 8, y: iy + 40, class: "rlabel", style: "font-size:12px" });
+        lb.append(sv("tspan", { x: 8 }, "+" + fmt(r.I.dc)), sv("tspan", { x: 8, dy: 15 }, T("f.selfnew")));
+        gL.append(lb);
+      }
+      // nodos
+      const node = (key, cls, name, val, sub) => {
+        const [x, y] = POS[key];
+        gN.append(sv("circle", { cx: x, cy: y, r: rad[key], class: "node " + cls }));
+        gN.append(sv("text", { x, y: y - 4, "text-anchor": "middle", class: "nval" }, fmt(val)));
+        gN.append(sv("text", { x, y: y + 13, "text-anchor": "middle", class: "nsub" }, sub));
+        const below = key === "F" || key === "O";
+        gN.append(sv("text", { x, y: below ? y + rad[key] + 20 : y - rad[key] - 12, "text-anchor": "middle", class: "nname" }, name));
+      };
+      node("I", "sec", T("f.secI"), r.I.p, T("f.prod").toLowerCase());
+      node("II", "sec", T("f.secII"), r.II.p, T("f.prod").toLowerCase());
+      node("F", "fam", T("f.fam"), r.I.v + r.II.v, T("f.sal").toLowerCase());
+      node("O", "own", T("f.own"), r.I.s + r.II.s, T("f.exc").toLowerCase());
+      svg.append(gL, gT, gN);
+      current = { r, rad, gT, streams: streamsOf(r).map(([a, b, kind2, v]) => ({ a, b, kind: kind2, v, geo: lineFor(a, b, rad) })), self: { cx: ix - rad.I - 16, cy: iy, v: r.I.c + r.I.dc, nuevo: r.I.dc / (r.I.c + r.I.dc) } };
+      S.tokens = []; S.acc = {};
+      if (reduced()) drawStaticTokens(maxP);
+    }
+    function drawStaticTokens(maxP) {
+      // Sin animación: un punto fijo por sentido, en la mitad de cada carril
+      current.streams.forEach(s => {
+        const g = s.geo, t = s.kind === "work" ? 0.35 : s.kind === "goods" ? 0.5 : 0.65;
+        current.gT.append(sv("circle", { cx: g.x1 + (g.x2 - g.x1) * t, cy: g.y1 + (g.y2 - g.y1) * t, r: 4.5, class: "tk-" + s.kind }));
+      });
+    }
+    function frame(ts) {
+      S.raf = requestAnimationFrame(frame);
+      if (!current || root.hidden || document.hidden) { S.last = ts; return; }
+      const dt = Math.min(0.1, (ts - (S.last || ts)) / 1000); S.last = ts;
+      const maxV = 8000;
+      current.streams.forEach((s, i) => {
+        S.acc[i] = (S.acc[i] || 0) + dt * (0.6 + 4.5 * s.v / maxV);
+        while (S.acc[i] >= 1) { S.acc[i] -= 1; S.tokens.push({ i, t: 0 }); }
+      });
+      S.acc.self = (S.acc.self || 0) + dt * (0.5 + 3 * current.self.v / maxV);
+      // de cada diez fichas del bucle, las que corresponden a maquinaria nueva van en verde
+      while (S.acc.self >= 1) { S.acc.self -= 1; S.selfN = (S.selfN || 0) + 1; S.tokens.push({ i: "self", t: 0, nuevo: S.selfN % 10 < Math.round(current.self.nuevo * 10) }); }
+      const speed = 0.38;
+      S.tokens.forEach(k => { k.t += dt * speed; });
+      S.tokens = S.tokens.filter(k => k.t < 1).slice(-160);
+      const g = current.gT; g.replaceChildren();
+      S.tokens.forEach(k => {
+        if (k.i === "self") {
+          const ang = -Math.PI / 2 + k.t * 2 * Math.PI, c = current.self;
+          g.append(sv("circle", { cx: c.cx + 18 * Math.cos(ang), cy: c.cy + 18 * Math.sin(ang), r: 4, class: k.nuevo ? "tk-reinv" : "tk-goods" }));
+          return;
+        }
+        const s = current.streams[k.i]; if (!s) return; const G = s.geo;
+        g.append(sv("circle", { cx: G.x1 + (G.x2 - G.x1) * k.t, cy: G.y1 + (G.y2 - G.y1) * k.t, r: s.kind === "money" ? 4 : 4.5, class: "tk-" + s.kind }));
+      });
+    }
+    // Barras de lo producido en cada vuelta (las dos ramas juntas), con escala fija desde 0 para que se vea crecer
+    function drawGrowth(ser) {
+      const svg = q("grow"); svg.replaceChildren();
+      svg.setAttribute("aria-label", T("f.g.h"));
+      const L = 56, R = 12, Tp = 22, B = 30, W = 640, H = 240, pw = W - L - R, ph = H - Tp - B;
+      const parts = x => {
+        const s = x.I.s + x.II.s, cons = Math.min(s, x.I.cons + x.II.cons);
+        return [["bar-c", x.I.c + x.II.c], ["bar-v", x.I.v + x.II.v], ["bar-r", s - cons], ["bar-k", cons]];
+      };
+      const max = Math.max(...ser.map(x => x.I.p + x.II.p));
+      const step = max > 20000 ? 10000 : 5000, top = Math.ceil(max / step) * step;
+      const sy = v => Tp + ph - v / top * ph;
+      for (let v = 0; v <= top; v += step) {
+        svg.append(sv("line", { x1: L, x2: W - R, y1: sy(v), y2: sy(v), stroke: "var(--rule)", "stroke-width": 1 }));
+        svg.append(sv("text", { x: L - 6, y: sy(v) + 4, "text-anchor": "end" }, fmt(v)));
+      }
+      const bw = pw / ser.length;
+      ser.forEach((x, i) => {
+        const g = sv("g", { class: i === S.k - 1 ? "" : "other" });
+        let acc = 0;
+        parts(x).forEach(([cls, v]) => {
+          if (v <= 0.5) return;
+          g.append(sv("rect", { x: L + i * bw + bw * 0.18, y: sy(acc + v), width: bw * 0.64, height: Math.max(0, sy(acc) - sy(acc + v)), class: cls }));
+          acc += v;
+        });
+        svg.append(g);
+        svg.append(sv("text", { x: L + i * bw + bw / 2, y: H - B + 18, "text-anchor": "middle" }, i + 1));
+        if (i === S.k - 1) svg.append(sv("text", { x: L + i * bw + bw / 2, y: sy(acc) - 6, "text-anchor": "middle", class: "tot" }, fmt(acc)));
+      });
+    }
+    function startAnim() { if (!S.raf && !reduced()) S.raf = requestAnimationFrame(frame); }
+    function stopAnim() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = null; }
+    function play() {
+      if (S.k >= NV) S.k = 1;
+      q("play").textContent = T("f.pause");
+      render();
+      S.playing = setInterval(() => { if (S.k >= NV) { stop(); return; } S.k++; q("v").value = S.k; render(); }, 1600);
+    }
+    function stop() { if (S.playing) clearInterval(S.playing); S.playing = null; q("play").textContent = T("f.play"); }
+
+    function render() {
+      const ser = FLOW.series(FLOW.startFor(kind, S.a), S.a, NV);
+      const r = ser[S.k - 1];
+      const maxP = Math.max(...ser.map(x => Math.max(x.I.p, x.II.p, (x.I.v + x.II.v) * 3, (x.I.s + x.II.s) * 3)));
+      q("h").textContent = T(kind === "simple" ? "f.simple.h" : "f.amp.h");
+      q("p").textContent = T(kind === "simple" ? "f.simple.p" : "f.amp.p");
+      if (kind === "ampliado") { q("al").textContent = T("f.a"); q("ao").textContent = Math.round(S.a * 100) + " %"; }
+      q("vk").textContent = T("f.vuelta", { n: S.k }); q("vl").textContent = T("f.vueltas"); q("vo").textContent = S.k + " / " + NV;
+      q("play").textContent = T(S.playing ? "f.pause" : "f.play"); q("reset").textContent = T("f.reset");
+      q("lm").textContent = T("f.leg.money"); q("lg").textContent = T("f.leg.goods"); q("lw").textContent = T("f.leg.work");
+      if (kind === "ampliado") { q("lr").textContent = T("f.leg.reinv"); q("g3").textContent = T("f.reinv"); }
+      q("gh").textContent = T("f.g.h"); q("g1").textContent = T("f.mat"); q("g2").textContent = T("f.sal"); q("g4").textContent = T("f.cons");
+      q("gp").textContent = T(kind === "simple" ? "f.g.p.simple" : S.a === 0 ? "f.g.p.zero" : "f.g.p.amp");
+      draw(r, maxP);
+      drawGrowth(ser);
+      // Condición de equilibrio
+      const okc = Math.abs(r.ventaI - r.necesitaII) < 0.5 && !r.sobra && !r.falta;
+      q("check").replaceChildren(el("span", { class: "mark " + (okc ? "ok" : "bad"), text: T(okc ? "f.ok" : "f.bad") }),
+        el("div", {}, el("strong", { text: T("f.check.h") + ". " }),
+          T(kind === "simple" ? "f.check.simple" : "f.check.amp", { a: fmt(r.ventaI), b: fmt(kind === "simple" ? r.II.c : r.II.c + Math.max(0, r.II.dc)) })));
+      const notes = [];
+      if (r.falta) notes.push(T("f.falta", { x: fmt(r.falta) }));
+      if (r.sobra) notes.push(T("f.sobra", { x: fmt(r.sobra) }));
+      if (kind === "ampliado") {
+        if (S.a === 0) notes.push(T("f.zero"));
+        else { const L = ser[NV - 1], P = ser[NV - 2]; const g = ((L.I.p + L.II.p) / (P.I.p + P.II.p) - 1) * 100; notes.push(T("f.grow", { a: Math.round(S.a * 100), g: fmt(g, 1) })); }
+      } else notes.push(T("f.simple.note"));
+      q("note").replaceChildren(...notes.map(n => el("span", { text: n })));
+      // Flujos de la vuelta (texto accesible)
+      q("flh").textContent = T("f.flowsH");
+      const fl = [T("f.fl.matI", { x: fmt(r.I.c) }), T("f.fl.ItoII", { x: fmt(r.ventaI) }), T("f.fl.wages", { x: fmt(r.I.v + r.II.v) }), T("f.fl.exc", { x: fmt(r.I.s + r.II.s) }), T("f.fl.cons", { x: fmt(r.I.cons + r.II.cons) })];
+      if (r.I.acc + r.II.acc > 0.5) fl.push(T("f.fl.reinv", { x: fmt(r.I.acc + r.II.acc) }));
+      q("flows").replaceChildren(...fl.map(t => el("li", { text: t })));
+      // Tabla
+      q("th").textContent = T("f.table"); q("dl").textContent = T("f.download"); q("units").textContent = T("f.units");
+      const head = el("tr", {}, ["f.col.v", "f.col.Ip", "f.col.Im", "f.col.Is", "f.col.Ie", "f.col.Ir", "f.col.IIp", "f.col.IIm", "f.col.IIs", "f.col.IIe", "f.col.IIr", "f.col.tot", "f.col.g"].map(k => el("th", { text: T(k) })));
+      const rows = ser.map((x, i) => {
+        const tot = x.I.p + x.II.p, prev = i ? ser[i - 1].I.p + ser[i - 1].II.p : NaN;
+        return el("tr", { class: i === S.k - 1 ? "cur" : null },
+          el("td", { text: i + 1 }), el("td", { text: fmt(x.I.p) }), el("td", { text: fmt(x.I.c) }), el("td", { text: fmt(x.I.v) }), el("td", { text: fmt(x.I.s) }), el("td", { text: fmt(x.I.acc) }),
+          el("td", { text: fmt(x.II.p) }), el("td", { text: fmt(x.II.c) }), el("td", { text: fmt(x.II.v) }), el("td", { text: fmt(x.II.s) }), el("td", { text: fmt(x.II.acc) }),
+          el("td", { text: fmt(tot) }), el("td", { text: i ? fmt((tot / prev - 1) * 100, 1) + " %" : "—" }));
+      });
+      q("tbl").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
+    }
+    return { show() { render(); startAnim(); }, stop() { stop(); stopAnim(); }, render };
+  }
+  const FLOWUI = { simple: makeFlowUI("simple"), ampliado: makeFlowUI("ampliado") };
+  function stopAllFlows() { FLOWUI.simple.stop(); FLOWUI.ampliado.stop(); }
+
+  // =====================================================================
+  // ARRANQUE
+  // =====================================================================
+  const bar = $("obs-bar");
+  OBS.mountBar(bar, {});
+  bar.after(fichaBox);
+  OBS.onLang(() => {
+    renderRoundBar(); buildBids(); renderArroz(); buildVotes(); renderTabs(); renderHead(); renderFicha();
+    if (tool === "flujo" && (tab === "simple" || tab === "ampliado")) FLOWUI[tab].render();
+  });
+  OBS.apply();
+  renderRoundBar(); buildBids(); renderArroz(); buildVotes();
+  route();
+  // Para comprobar el motor desde la consola o en pruebas
+  window.SA1 = { playAll, toBids, EXAMPLES, FLOW };
+})();
+</script>
+<script>
+// Pizarra del flujo de la renta: usa el motor común (Pizarra) en modo «flow»
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id), t = OBS.t, h = OBS.h;
+  OBS.register({
+    es: {
+      "fp.h": "Dibuja el circuito", "fp.p": "Pon los agentes y los fondos, únelos con flechas y escribe qué circula por cada una. Después, pulsa «Jugar» y mira cómo da vueltas.",
+      "fp.mode": "Modo", "fp.draw": "Dibujar", "fp.play": "Jugar", "fp.preset": "Ejemplo", "fp.load": "Cargar",
+      "fp.p.dos": "Dos agentes", "fp.p.sect": "Con Estado, bancos y exterior", "fp.p.exc": "Con excedente", "fp.p.blanco": "En blanco",
+      "fp.agents": "Agentes", "fp.funds": "Fondos", "fp.own": "+ Otro",
+      "fp.help.draw": "<b>Dibujar.</b> Pulsa un agente o un fondo de la lista para añadirlo, o haz doble clic en un hueco. Arrastra desde el «+» azul de un elemento hasta otro para crear una flecha y escribe qué circula: elige si es <b>dinero</b> o <b>bienes o trabajo</b>. Toca una flecha o un elemento para cambiarlo o borrarlo.",
+      "fp.help.play": "<b>Jugar.</b> Las fichas recorren el circuito: los círculos son dinero y los cuadrados, bienes o trabajo. Toca un elemento para lanzar una tanda desde él.",
+      "fp.l.money": "dinero", "fp.l.real": "bienes o trabajo (flecha discontinua)", "fp.l.agent": "agente", "fp.l.fund": "fondo: lo que se acumula o se reparte",
+      "fp.try": "Prueba esto", "fp.k1": "Reto 1", "fp.q1": "Con «Dos agentes», sigue el dinero y luego los bienes y el trabajo.", "fp.a1": "¿Van en el mismo sentido? ¿Por qué el circuito podría repetirse siempre igual?",
+      "fp.k2": "Reto 2", "fp.q2": "Carga «Con Estado, bancos y exterior».", "fp.a2": "¿Qué flechas sacan dinero del circuito entre familias y empresas, y cuáles lo devuelven?",
+      "fp.k3": "Reto 3", "fp.q3": "Carga «Con excedente» y borra la flecha de reinversión.", "fp.a3": "¿Qué le pasa a la producción de la vuelta siguiente? ¿Y si todo el excedente se reinvierte?",
+      "fp.s.title": "Guardar o compartir el dibujo", "fp.s.help": "El dibujo se guarda solo en este navegador. Para pasarlo a otro ordenador, copia este texto o descárgalo, y pégalo allí con «Cargar el texto».",
+      "fp.s.copy": "Copiar", "fp.s.down": "Descargar", "fp.s.in": "Cargar el texto", "fp.s.copied": "Copiado.", "fp.s.nocopy": "No se ha podido copiar: selecciona el texto y cópialo a mano.", "fp.s.bad": "Ese texto no es un dibujo de la pizarra.", "fp.s.loaded": "Dibujo cargado.",
+      "a.fam": "Familias", "a.emp": "Empresas", "a.est": "Estado", "a.ban": "Bancos", "a.ext": "Sector exterior", "a.prop": "Propietarios",
+      "f.exc": "Excedente", "f.aho": "Ahorro", "f.rei": "Reinversión", "f.inv": "Inversión", "f.nec": "Lo necesario para repetir",
+      "e.sal": "Salarios", "e.bie": "Bienes y servicios", "e.tra": "Trabajo", "e.gas": "Gasto", "e.imp": "Impuestos", "e.gpub": "Gasto público", "e.impo": "Importaciones", "e.expo": "Exportaciones",
+      "e.inv": "Inversión", "e.aho": "Ahorro", "e.rei": "Reinversión", "e.exc": "Excedente", "e.mat": "Materiales y desgaste", "e.rep": "Se repone", "e.sobra": "Lo que sobra", "e.cons": "Consumo de los propietarios", "e.mas": "Más máquinas y materiales"
+    },
+    va: {
+      "fp.h": "Dibuixa el circuit", "fp.p": "Posa els agents i els fons, uneix-los amb fletxes i escriu què circula per cada una. Després, prem «Jugar» i mira com fa voltes.",
+      "fp.mode": "Mode", "fp.draw": "Dibuixar", "fp.play": "Jugar", "fp.preset": "Exemple", "fp.load": "Carregar",
+      "fp.p.dos": "Dos agents", "fp.p.sect": "Amb Estat, bancs i exterior", "fp.p.exc": "Amb excedent", "fp.p.blanco": "En blanc",
+      "fp.agents": "Agents", "fp.funds": "Fons", "fp.own": "+ Un altre",
+      "fp.help.draw": "<b>Dibuixar.</b> Prem un agent o un fons de la llista per a afegir-lo, o fes doble clic en un buit. Arrossega des del «+» blau d'un element fins a un altre per a crear una fletxa i escriu què circula: tria si són <b>diners</b> o <b>béns o treball</b>. Toca una fletxa o un element per a canviar-lo o esborrar-lo.",
+      "fp.help.play": "<b>Jugar.</b> Les fitxes recorren el circuit: els cercles són diners i els quadrats, béns o treball. Toca un element per a llançar una tanda des d'ell.",
+      "fp.l.money": "diners", "fp.l.real": "béns o treball (fletxa discontínua)", "fp.l.agent": "agent", "fp.l.fund": "fons: el que s'acumula o es reparteix",
+      "fp.try": "Prova açò", "fp.k1": "Repte 1", "fp.q1": "Amb «Dos agents», seguix els diners i després els béns i el treball.", "fp.a1": "Van en el mateix sentit? Per què el circuit podria repetir-se sempre igual?",
+      "fp.k2": "Repte 2", "fp.q2": "Carrega «Amb Estat, bancs i exterior».", "fp.a2": "Quines fletxes trauen diners del circuit entre famílies i empreses, i quines els tornen?",
+      "fp.k3": "Repte 3", "fp.q3": "Carrega «Amb excedent» i esborra la fletxa de reinversió.", "fp.a3": "Què li passa a la producció de la volta següent? I si tot l'excedent es reinvertix?",
+      "fp.s.title": "Guardar o compartir el dibuix", "fp.s.help": "El dibuix només es guarda en este navegador. Per a passar-lo a un altre ordinador, copia este text o descarrega'l, i apega'l allí amb «Carregar el text».",
+      "fp.s.copy": "Copiar", "fp.s.down": "Descarregar", "fp.s.in": "Carregar el text", "fp.s.copied": "Copiat.", "fp.s.nocopy": "No s'ha pogut copiar: selecciona el text i copia'l a mà.", "fp.s.bad": "Eixe text no és un dibuix de la pissarra.", "fp.s.loaded": "Dibuix carregat.",
+      "a.fam": "Famílies", "a.emp": "Empreses", "a.est": "Estat", "a.ban": "Bancs", "a.ext": "Sector exterior", "a.prop": "Propietaris",
+      "f.exc": "Excedent", "f.aho": "Estalvi", "f.rei": "Reinversió", "f.inv": "Inversió", "f.nec": "El necessari per a repetir",
+      "e.sal": "Salaris", "e.bie": "Béns i servicis", "e.tra": "Treball", "e.gas": "Despesa", "e.imp": "Impostos", "e.gpub": "Despesa pública", "e.impo": "Importacions", "e.expo": "Exportacions",
+      "e.inv": "Inversió", "e.aho": "Estalvi", "e.rei": "Reinversió", "e.exc": "Excedent", "e.mat": "Materials i desgast", "e.rep": "Es reposa", "e.sobra": "El que sobra", "e.cons": "Consum dels propietaris", "e.mas": "Més màquines i materials"
+    }
+  });
+  const AGENTS = ["a.fam", "a.emp", "a.est", "a.ban", "a.ext", "a.prop"];
+  const FUNDS = ["f.exc", "f.aho", "f.rei", "f.inv", "f.nec"];
+  const EDGES = [["e.sal", "dinero"], ["e.bie", "real"], ["e.tra", "real"], ["e.gas", "dinero"], ["e.imp", "dinero"], ["e.gpub", "dinero"], ["e.impo", "dinero"], ["e.expo", "dinero"],
+    ["e.inv", "dinero"], ["e.aho", "dinero"], ["e.rei", "dinero"], ["e.exc", "dinero"]];
+  // Tipos de elemento y sugerencias de flechas; sus textos (es/va) se rellenan con el idioma activo en syncPalette()
+  const palette = [
+    ...AGENTS.map(k => ({ type: k, kind: "agente" })),
+    ...FUNDS.map(k => ({ type: k, kind: "fondo", color: "var(--s2)" }))
+  ];
+  const edgeLabels = EDGES.map(([k, kind]) => ({ key: k, kind }));
+  const PRE = {
+    dos: () => ({ nodes: [
+      { id: "fam", label: t("a.fam"), x: 230, y: 280, type: "a.fam" }, { id: "emp", label: t("a.emp"), x: 730, y: 280, type: "a.emp" } ],
+      edges: [
+        { id: "e1", from: "fam", to: "emp", label: t("e.tra"), kind: "real" }, { id: "e2", from: "fam", to: "emp", label: t("e.gas"), kind: "dinero" },
+        { id: "e3", from: "emp", to: "fam", label: t("e.sal"), kind: "dinero" }, { id: "e4", from: "emp", to: "fam", label: t("e.bie"), kind: "real" } ] }),
+    sectores: () => ({ nodes: [
+      { id: "fam", label: t("a.fam"), x: 200, y: 290, type: "a.fam" }, { id: "emp", label: t("a.emp"), x: 760, y: 290, type: "a.emp" },
+      { id: "est", label: t("a.est"), x: 480, y: 80, type: "a.est" }, { id: "ban", label: t("a.ban"), x: 480, y: 290, type: "a.ban" },
+      { id: "ext", label: t("a.ext"), x: 480, y: 490, type: "a.ext" } ],
+      edges: [
+        { id: "e1", from: "fam", to: "emp", label: t("e.gas"), kind: "dinero" }, { id: "e2", from: "emp", to: "fam", label: t("e.sal"), kind: "dinero" },
+        { id: "e3", from: "fam", to: "est", label: t("e.imp"), kind: "dinero" }, { id: "e4", from: "est", to: "emp", label: t("e.gpub"), kind: "dinero" },
+        { id: "e5", from: "fam", to: "ban", label: t("e.aho"), kind: "dinero" }, { id: "e6", from: "ban", to: "emp", label: t("e.inv"), kind: "dinero" },
+        { id: "e7", from: "fam", to: "ext", label: t("e.impo"), kind: "dinero" }, { id: "e8", from: "ext", to: "emp", label: t("e.expo"), kind: "dinero" } ] }),
+    excedente: () => ({ nodes: [
+      { id: "emp", label: t("a.emp"), x: 480, y: 250, type: "a.emp" }, { id: "fam", label: t("a.fam"), x: 150, y: 250, type: "a.fam" },
+      { id: "nec", label: t("f.nec"), x: 480, y: 75, type: "f.nec" }, { id: "exc", label: t("f.exc"), x: 790, y: 250, type: "f.exc" },
+      { id: "prop", label: t("a.prop"), x: 790, y: 475, type: "a.prop" }, { id: "rei", label: t("f.rei"), x: 480, y: 475, type: "f.rei" } ],
+      edges: [
+        { id: "e1", from: "emp", to: "nec", label: t("e.mat"), kind: "real" }, { id: "e2", from: "nec", to: "emp", label: t("e.rep"), kind: "real" },
+        { id: "e3", from: "emp", to: "fam", label: t("e.sal"), kind: "dinero" }, { id: "e4", from: "fam", to: "emp", label: t("e.tra"), kind: "real" },
+        { id: "e5", from: "emp", to: "exc", label: t("e.sobra"), kind: "real" }, { id: "e6", from: "exc", to: "prop", label: t("e.cons"), kind: "dinero" },
+        { id: "e7", from: "exc", to: "rei", label: t("e.rei"), kind: "dinero" }, { id: "e8", from: "rei", to: "emp", label: t("e.mas"), kind: "real" } ] }),
+    blanco: () => ({ nodes: [], edges: [] })
+  };
+  function syncPalette() {
+    for (const p of palette) { p[OBS.lang()] = t(p.type); if (!p.es) p.es = t(p.type); }
+    for (const e of edgeLabels) { e[OBS.lang()] = t(e.key); if (!e.es) e.es = t(e.key); }
+  }
+  syncPalette();
+  const KEY = "obs-sa1-pizarra";
+  const board = Pizarra.create($("fp-board"), {
+    mode: "flow", palette, edgeLabels,
+    onChange: m => { OBS.store.set(KEY, JSON.stringify(m)); $("fp-json").value = JSON.stringify(m, null, 1); }
+  });
+  let saved = null; try { saved = JSON.parse(OBS.store.get(KEY) || "null"); } catch { saved = null; }
+  board.load(saved && Array.isArray(saved.nodes) ? saved : PRE.dos());
+  $("fp-json").value = JSON.stringify(board.toJSON(), null, 1);
+  function renderPalette() {
+    const row = (title, keys, kind) => h("div", { class: "fp-row" }, h("span", { class: "k", text: t(title) }),
+      keys.map(k => { const b = h("button", { type: "button", class: "fp-chip " + kind, text: t(k) }); b.addEventListener("click", () => board.addNode(t(k), k)); b.disabled = board.getMode() === "jugar"; return b; }),
+      kind === "fondo" ? (() => { const b = h("button", { type: "button", class: "fp-chip", text: t("fp.own") }); b.addEventListener("click", () => board.addNode()); b.disabled = board.getMode() === "jugar"; return b; })() : null);
+    $("fp-pal").replaceChildren(row("fp.agents", AGENTS, "agente"), row("fp.funds", FUNDS, "fondo"));
+  }
+  function setPlay(m) {
+    board.setMode(m);
+    $("fp-draw").setAttribute("aria-pressed", String(m === "dibujar"));
+    $("fp-play").setAttribute("aria-pressed", String(m === "jugar"));
+    $("fp-help").innerHTML = t(m === "jugar" ? "fp.help.play" : "fp.help.draw");
+    renderPalette();
+  }
+  $("fp-draw").addEventListener("click", () => setPlay("dibujar"));
+  $("fp-play").addEventListener("click", () => setPlay("jugar"));
+  $("fp-load").addEventListener("click", () => {
+    board.load(PRE[$("fp-preset").value]()); OBS.store.set(KEY, JSON.stringify(board.toJSON())); $("fp-json").value = JSON.stringify(board.toJSON(), null, 1); setPlay("dibujar");
+  });
+  Pizarra.bindClear($("fp-clear"), board, () => setPlay("dibujar"));
+  const status = (msg, bad) => { $("fp-status").textContent = msg; $("fp-status").className = "fp-status" + (bad ? " bad" : ""); };
+  $("fp-copy").addEventListener("click", async () => { try { await navigator.clipboard.writeText($("fp-json").value); status(t("fp.s.copied")); } catch { $("fp-json").select(); status(t("fp.s.nocopy"), true); } });
+  $("fp-down").addEventListener("click", async () => status(await OBS.download("pizarra-flujo-sa1.json", $("fp-json").value, "application/json")));
+  $("fp-in").addEventListener("click", () => {
+    let m = null; try { m = JSON.parse($("fp-json").value); } catch {}
+    if (!m || !Array.isArray(m.nodes)) { status(t("fp.s.bad"), true); return; }
+    board.load(m); OBS.store.set(KEY, JSON.stringify(board.toJSON())); status(t("fp.s.loaded"));
+  });
+  OBS.onLang(() => { syncPalette(); board.relabel(); setPlay(board.getMode()); });
+  OBS.apply();
+  setPlay("dibujar");
+})();
+</script>
+

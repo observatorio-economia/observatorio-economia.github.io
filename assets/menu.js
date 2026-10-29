@@ -35,15 +35,26 @@
     { n: 10, t: { es: "Las finanzas", va: "Les finances" } },
   ];
   // Páginas comunes a todo el curso (fuera de la lista de SA)
-  const DATOS = { ruta: "datos/", t: { es: "Base de datos", va: "Base de dades" },
-    corto: { es: "Datos", va: "Dades" },
-    d: { es: "Series oficiales ya limpias para trabajar en Excel, con su fuente, lo que miden y sus unidades.", va: "Sèries oficials ja netes per a treballar en Excel, amb la seua font, el que mesuren i les seues unitats." } };
+  const EXTRA = [
+    { ruta: "libro/", num: "¶", t: { es: "Libro del alumnado", va: "Llibre de l'alumnat" }, corto: { es: "Libro", va: "Llibre" },
+      d: { es: "Los apuntes de todas las situaciones de aprendizaje, seguidos, para leer o imprimir.", va: "Els apunts de totes les situacions d'aprenentatge, seguits, per a llegir o imprimir." } },
+    { ruta: "datos/", num: "∑", t: { es: "Base de datos", va: "Base de dades" }, corto: { es: "Datos", va: "Dades" },
+      d: { es: "Series oficiales ya limpias para trabajar en Excel, con su fuente, lo que miden y sus unidades.", va: "Sèries oficials ja netes per a treballar en Excel, amb la seua font, el que mesuren i les seues unitats." } },
+  ];
+
+  // Autoría y licencia: aparecen al pie de todas las páginas, con la forma de citarlas
+  const AUTOR = { nombre: "Jordi Vila Canals", cita: "Vila Canals, J." }, ANYO = 2026;
+  const LICENCIA = { nombre: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/deed.es" };
 
   const TXT = {
     es: { home: "Observatorio", sub: "Economía · 1.º Bach.", nav: "Situaciones de aprendizaje", soon: "próximamente",
-      open: "abrir", proto: "prototipo", tema: "Tema", auto: "automático", light: "claro", dark: "oscuro", cambiar: "Cambiar el tema; ahora {v}" },
+      open: "abrir", proto: "prototipo", tema: "Tema", auto: "automático", light: "claro", dark: "oscuro", cambiar: "Cambiar el tema; ahora {v}",
+      lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
+      cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el" },
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
-      open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}" },
+      open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
+      lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
+      cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el" },
   };
   const idioma = () => (window.OBS && OBS.lang && OBS.lang() === "va") ? "va" : "es";
   const tx = k => TXT[idioma()][k];
@@ -82,7 +93,7 @@
     const lista = el("ol", { class: "obs-menu__sa", "aria-label": tx("nav") }, ...SA.map(s => el("li", {},
       s.ruta
         ? el("a", { href: enlace(s.ruta), title: "SA " + s.n + " · " + L(s.t), "aria-label": "SA " + s.n + ": " + L(s.t), text: s.n,
-            "aria-current": normaliza(enlace(s.ruta)) === aqui() ? "page" : null })
+            "aria-current": aqui().startsWith(normaliza(enlace(s.ruta))) ? "page" : null })
         : el("span", { title: "SA " + s.n + " · " + L(s.t) + " (" + tx("soon") + ")", "aria-label": "SA " + s.n + ": " + L(s.t) + ", " + tx("soon"), "aria-disabled": "true", text: s.n })
     )));
     const boton = el("button", { type: "button", class: "obs-menu__tema", text: tx("tema") + ": " + tx(tema), "aria-label": tx("cambiar").replace("{v}", tx(tema)) });
@@ -93,9 +104,22 @@
     });
     const home = el("a", { class: "obs-menu__home", href: enlace(""), "aria-current": normaliza(enlace("")) === aqui() ? "page" : null },
       el("b", { text: tx("home") }), el("span", { text: tx("sub") }));
-    const datos = el("a", { class: "obs-menu__datos", href: enlace(DATOS.ruta), title: L(DATOS.t), text: L(DATOS.corto),
-      "aria-current": normaliza(enlace(DATOS.ruta)) === aqui() ? "page" : null });
-    return el("nav", { class: "obs-menu", "aria-label": tx("home") }, el("div", { class: "obs-menu__in" }, home, lista, datos, boton));
+    const extra = EXTRA.map(x => el("a", { class: "obs-menu__datos", href: enlace(x.ruta), title: L(x.t), text: L(x.corto),
+      "aria-current": aqui().startsWith(normaliza(enlace(x.ruta))) ? "page" : null }));
+    return el("nav", { class: "obs-menu", "aria-label": tx("home") }, el("div", { class: "obs-menu__in" }, home, lista, ...extra, boton));
+  }
+
+  // Pie: autoría, licencia y cómo citar la página que se está viendo
+  let pieEl = null;
+  function pie() {
+    const titulo = document.title, hoy = new Date().toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES");
+    const nuevo = el("footer", { class: "obs-pie" },
+      el("span", {}, "© " + ANYO + " " + AUTOR.nombre + " · " + tx("lic") + " ",
+        el("a", { href: LICENCIA.url, rel: "license", target: "_blank" }, LICENCIA.nombre), ". " + tx("licd")),
+      el("span", {}, el("b", { text: tx("cita") + ": " }),
+        AUTOR.cita + " (" + ANYO + "). " + titulo + (/[.?!]$/.test(titulo) ? " " : ". ") + tx("sitio") + ". " + normaliza(location.href) + " (" + tx("consulta") + " " + hoy + ")."));
+    if (pieEl && pieEl.isConnected) pieEl.replaceWith(nuevo); else document.body.append(nuevo);
+    pieEl = nuevo;
   }
   function pintarMenu() {
     const nueva = menu();
@@ -105,10 +129,10 @@
 
   function panel() {
     const extra = document.getElementById("panel-datos");
-    if (extra) extra.replaceChildren(el("li", {}, el("a", { class: "row", href: enlace(DATOS.ruta) },
-      el("span", { class: "num", "aria-hidden": "true", text: "∑" }),
-      el("span", {}, el("span", { class: "t", text: L(DATOS.t) }), el("br"), el("span", { class: "d", text: L(DATOS.d) })),
-      el("span", { class: "state", text: tx("open") }))));
+    if (extra) extra.replaceChildren(...EXTRA.map(x => el("li", {}, el("a", { class: "row", href: enlace(x.ruta) },
+      el("span", { class: "num", "aria-hidden": "true", text: x.num }),
+      el("span", {}, el("span", { class: "t", text: L(x.t) }), el("br"), el("span", { class: "d", text: L(x.d) })),
+      el("span", { class: "state", text: tx("open") })))));
     const ol = document.getElementById("panel-sa");
     if (!ol) return;
     ol.replaceChildren(...SA.map(s => {
@@ -123,7 +147,9 @@
 
   function arrancar() {
     pintarMenu(); panel();
-    if (window.OBS && OBS.onLang) OBS.onLang(() => { pintarMenu(); panel(); });
+    // el pie espera a que la página ponga su título definitivo (las piezas comunes lo traducen al cargar)
+    setTimeout(pie, 0);
+    if (window.OBS && OBS.onLang) OBS.onLang(() => { pintarMenu(); panel(); pie(); });
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", arrancar);
   else arrancar();
