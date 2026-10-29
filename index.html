@@ -3,20 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Panel del Observatorio</title>
+<title data-i18n="p.title">Panel del Observatorio</title>
 <meta name="description" content="Herramientas digitales de Economía de 1.º de Bachillerato, una por situación de aprendizaje.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/observatorio.css">
+<!-- Piezas comunes del vault (línea gráfica, idioma, modo proyector), copiadas por actualizar.sh -->
+<link rel="stylesheet" href="assets/comun/observatorio-common.css">
+<script src="assets/comun/observatorio-common.js"></script>
 <script src="assets/menu.js"></script>
 </head>
 <body class="obs-page">
 <div class="wrap">
+  <div id="obs-bar" style="padding-top:16px"></div>
   <header class="top">
-    <span class="eyebrow">Economía · 1.º de Bachillerato</span>
-    <h1>Panel del Observatorio</h1>
-    <p class="lede">Las herramientas digitales del curso, una por situación de aprendizaje. Entra en la de la situación que estéis trabajando.</p>
+    <span class="eyebrow" data-i18n="p.eyebrow">Economía · 1.º de Bachillerato</span>
+    <h1 data-i18n="p.title">Panel del Observatorio</h1>
+    <p class="lede" data-i18n="p.lede">Las herramientas digitales del curso, una por situación de aprendizaje. Entra en la de la situación que estéis trabajando.</p>
   </header>
 
   <!-- La lista de SA la rellena assets/menu.js (es la misma que la del menú) -->
@@ -24,9 +28,31 @@
   <noscript><p class="small">Para usar las herramientas hay que activar JavaScript en el navegador.</p></noscript>
 
   <div class="note">
-    <span>Para votar en clase se usa <a href="https://www.plickers.com/" target="_blank" rel="noopener">Plickers</a>, con tarjetas impresas y sin móviles.</span>
-    <span>Las herramientas funcionan en el navegador: no piden cuenta ni envían datos a ningún servidor. Lo que se guarda (por ejemplo, los códigos de las encuestas de la SA 2) se queda en el navegador del ordenador donde se introduce.</span>
+    <span data-i18n-html="p.note">Para votar en clase se usa <a href="https://www.plickers.com/" target="_blank" rel="noopener">Plickers</a>, con tarjetas impresas y sin móviles.</span>
+    <span data-i18n="p.datos">Las herramientas funcionan en el navegador: no piden cuenta ni envían datos a ningún servidor. Lo que se guarda (por ejemplo, los grupos de las encuestas de la SA 2) se queda en el navegador del ordenador donde se introduce.</span>
   </div>
 </div>
+
+<script>
+(() => {
+  "use strict";
+  OBS.register({
+    es: {
+      "p.title": "Panel del Observatorio", "p.eyebrow": "Economía · 1.º de Bachillerato",
+      "p.lede": "Las herramientas digitales del curso, una por situación de aprendizaje. Entra en la de la situación que estéis trabajando.",
+      "p.note": "Para votar en clase se usa <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\">Plickers</a>, con tarjetas impresas y sin móviles.",
+      "p.datos": "Las herramientas funcionan en el navegador: no piden cuenta ni envían datos a ningún servidor. Lo que se guarda (por ejemplo, los grupos de las encuestas de la SA 2) se queda en el navegador del ordenador donde se introduce."
+    },
+    va: {
+      "p.title": "Tauler de l'Observatori", "p.eyebrow": "Economia · 1r de Batxillerat",
+      "p.lede": "Les ferramentes digitals del curs, una per situació d'aprenentatge. Entreu en la de la situació que estigueu treballant.",
+      "p.note": "Per a votar en classe s'utilitza <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\">Plickers</a>, amb targetes impreses i sense mòbils.",
+      "p.datos": "Les ferramentes funcionen en el navegador: no demanen compte ni envien dades a cap servidor. El que es guarda (per exemple, els grups de les enquestes de la SA 2) es queda en el navegador de l'ordinador on s'introduïx."
+    }
+  });
+  OBS.mountBar(document.getElementById("obs-bar"), { noBack: true });
+  OBS.apply();
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<title data-i18n="doc.title">Observatorio · SA 6</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 1040px); línea de tiempo fija arriba y dos mundos lado a lado (neoclásico | Goodwin), cada uno con su diagrama y su serie de paro; debajo, la tabla de supuestos. Curvas: grafito = demanda, azul = oferta y trayectoria, ocre = parte salarial, acento rojo = salario mínimo */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+header.top { padding-block: 20px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 8px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 46px); line-height: 1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; margin: 0; line-height: 1.1; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 700; font-size: 22px; margin: 0; line-height: 1.15; text-transform: uppercase; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 66ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 70ch; display: flex; flex-direction: column; gap: 8px; }
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 0; border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* Línea de tiempo común */
+.timeline { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border: 2px solid var(--ink); padding: 12px 14px; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 3; }
+.timeline .slider { flex: 1 1 240px; }
+.timeline .yr { font-family: var(--font-display); font-weight: 700; font-size: 28px; font-variant-numeric: tabular-nums; min-width: 4.8em; text-transform: uppercase; }
+.slider { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.slider .lab { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--muted); }
+.slider output { font-family: var(--font-mono); font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
+
+/* Choques */
+.shocks { display: flex; flex-direction: column; gap: 10px; }
+.shocks .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.log { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+
+/* Dos mundos */
+.duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.world { display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--rule); border-top: 4px solid var(--ink); background: var(--paper); padding: 16px; min-width: 0; }
+.world .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.notice { border-left: 3px solid var(--accent); background: var(--bg); padding: 10px 12px; font-size: 15px; min-height: 4.6em; }
+.notice strong { font-weight: 600; }
+.stats { display: flex; gap: 8px 22px; flex-wrap: wrap; padding: 10px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 26px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.ctrls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 18px; }
+
+/* Gráficos */
+figure { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; position: relative; }
+figcaption { font-family: var(--font-display); font-weight: 700; font-size: 16px; text-transform: uppercase; letter-spacing: .02em; }
+.legend { display: flex; gap: 4px 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
+.legend i.dash { border-top-style: dashed; }
+.legend i.box { height: 10px; border: 0; }
+.plot { position: relative; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+svg .grid line { stroke: var(--grid); stroke-width: 1; }
+svg .axis line { stroke: var(--muted); stroke-width: 1; }
+svg text { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+svg text.axl { font-family: var(--font-body); font-size: 13px; }
+svg text.lbl { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+.curve { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.c-s1 { stroke: var(--s1); } .c-s2 { stroke: var(--s2); } .c-s3 { stroke: var(--s3); } .c-ink { stroke: var(--ink); } .c-acc { stroke: var(--accent); }
+.dashl { stroke-dasharray: 6 4; }
+.trail { fill: none; stroke: var(--s1); stroke-width: 2; stroke-opacity: .85; stroke-linejoin: round; }
+.trail.old { stroke-opacity: .25; }
+.guide { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.gap { fill: var(--accent); fill-opacity: .16; stroke: none; }
+.dot { stroke: var(--paper); stroke-width: 2; }
+.dot.ink { fill: var(--ink); } .dot.s1 { fill: var(--s1); } .dot.acc { fill: var(--accent); }
+.centre { stroke: var(--ink); stroke-width: 2; }
+.hover-line { stroke: var(--muted); stroke-width: 1; }
+.tip { position: absolute; pointer-events: none; background: var(--paper); border: 1px solid var(--rule); padding: 6px 9px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,.12); min-width: 140px; z-index: 2; display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums; }
+.tip .h { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; }
+.tip .r i { display: inline-block; width: 10px; height: 2px; vertical-align: 4px; margin-right: 6px; }
+
+/* Supuestos */
+.scroll { overflow-x: auto; }
+table.cmp { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+table.cmp th, table.cmp td { border: 1px solid var(--rule); padding: 10px 12px; text-align: left; vertical-align: top; }
+table.cmp thead th { background: var(--ink); color: var(--bg); font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; }
+table.cmp tbody th { background: var(--paper); font-weight: 600; width: 22%; }
+table.cmp td { background: var(--paper); font-family: var(--font-read); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+body.obs-proj svg text { font-size: 15px; }
+body.obs-proj svg text.lbl, body.obs-proj svg text.axl { font-size: 16px; }
+body.obs-proj .stat b { font-size: 34px; }
+body.obs-proj .notice { font-size: 18px; }
+body.obs-proj .timeline .yr { font-size: 36px; }
+@media (max-width: 640px) { .timeline .yr { font-size: 22px; min-width: 0; } }
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div id="obs-bar"></div>
+    <span class="eyebrow" data-i18n="hdr.eyebrow">Observatorio · SA 6 · El mercado laboral</span>
+    <h1 data-i18n="hdr.title">Dos modelos del mercado de trabajo</h1>
+    <p class="lede" data-i18n-html="hdr.lede"></p>
+  </header>
+
+  <div class="timeline">
+    <span class="yr" id="yr-label"></span>
+    <div class="slider">
+      <div class="lab"><label for="yr" data-i18n="tl.years">Años</label><output id="yr-out" for="yr"></output></div>
+      <input type="range" id="yr" min="0" max="60" step="1" value="0">
+    </div>
+    <button type="button" class="btn" id="play" data-i18n="tl.play">Reproducir</button>
+  </div>
+
+  <div class="shocks">
+    <div class="prose">
+      <h2 data-i18n="sh.title">Mismo cambio, dos respuestas</h2>
+      <p class="small" data-i18n="sh.help">Cada botón aplica el cambio en los dos mundos a la vez, a partir del año en que estáis. Seguid avanzando los años para ver qué pasa después.</p>
+    </div>
+    <div class="row">
+      <button type="button" class="btn ghost" id="sh-wage" data-i18n="sh.wage">Subir el salario mínimo / más fuerza negociadora</button>
+      <button type="button" class="btn ghost" id="sh-crisis" data-i18n="sh.crisis">Crisis que hunde la inversión</button>
+      <button type="button" class="btn quiet" id="sh-reset" data-i18n="sh.reset">Volver a empezar</button>
+    </div>
+    <span class="log" id="sh-log" aria-live="polite"></span>
+  </div>
+
+  <div class="duo">
+    <section class="world" id="w-neo" aria-labelledby="neo-h">
+      <span class="k" data-i18n="neo.k">Mundo 1</span>
+      <h3 id="neo-h" data-i18n="neo.h">El salario como precio</h3>
+      <p class="small" data-i18n="neo.d">Modelo neoclásico: la demanda de trabajo sale de la productividad del último trabajador contratado y la oferta, de cuántas personas quieren trabajar a cada salario.</p>
+      <div class="notice" id="neo-note" aria-live="polite"></div>
+      <div class="stats" id="neo-stats"></div>
+      <figure>
+        <figcaption data-i18n="neo.fig1">Oferta y demanda de trabajo</figcaption>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i><span data-i18n="neo.lgD">Demanda (productividad marginal)</span></span>
+          <span><i style="border-color:var(--s1)"></i><span data-i18n="neo.lgS">Oferta</span></span>
+          <span><i class="dash" style="border-color:var(--accent)"></i><span data-i18n="neo.lgMin">Salario mínimo</span></span>
+          <span><i class="box" style="background:var(--accent);opacity:.3"></i><span data-i18n="neo.lgGap">Paro</span></span>
+        </div>
+        <div class="plot"><svg class="chart" id="neo-chart" role="img" data-i18n-attr="aria-label:neo.aria1"></svg><div class="tip" id="neo-tip" hidden></div></div>
+      </figure>
+      <figure>
+        <figcaption data-i18n="fig.unemp">Paro a lo largo de los años</figcaption>
+        <div class="plot"><svg class="chart" id="neo-time" role="img" data-i18n-attr="aria-label:neo.aria2"></svg><div class="tip" id="neo-time-tip" hidden></div></div>
+      </figure>
+      <div class="ctrls">
+        <div class="slider">
+          <div class="lab"><label for="neo-min" data-i18n="neo.min">Salario mínimo</label><output id="neo-min-out" for="neo-min"></output></div>
+          <input type="range" id="neo-min" min="0" max="24" step="0.5" value="0">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="neo-A" data-i18n="neo.A">Productividad</label><output id="neo-A-out" for="neo-A"></output></div>
+          <input type="range" id="neo-A" min="80" max="130" step="1" value="100">
+        </div>
+      </div>
+    </section>
+
+    <section class="world" id="w-gw" aria-labelledby="gw-h">
+      <span class="k" data-i18n="gw.k">Mundo 2</span>
+      <h3 id="gw-h" data-i18n="gw.h">El salario como negociación</h3>
+      <p class="small" data-i18n="gw.d">Modelo de Goodwin (1967): el salario depende de la fuerza de los trabajadores, que crece cuando hay poco paro; los beneficios que quedan financian la inversión y el empleo.</p>
+      <div class="notice" id="gw-note" aria-live="polite"></div>
+      <div class="stats" id="gw-stats"></div>
+      <figure>
+        <figcaption data-i18n="gw.fig1">Paro y parte de los salarios en la renta</figcaption>
+        <div class="legend">
+          <span><i style="border-color:var(--s1)"></i><span data-i18n="gw.lgPath">Camino de la economía, año a año</span></span>
+          <span><i class="box" style="background:var(--ink);width:10px"></i><span data-i18n="gw.lgCentre">Centro del ciclo</span></span>
+        </div>
+        <div class="plot"><svg class="chart" id="gw-chart" role="img" data-i18n-attr="aria-label:gw.aria1"></svg><div class="tip" id="gw-tip" hidden></div></div>
+      </figure>
+      <figure>
+        <figcaption data-i18n="fig.unemp">Paro a lo largo de los años</figcaption>
+        <div class="legend">
+          <span><i style="border-color:var(--s1)"></i><span data-i18n="gw.lgU">Paro</span></span>
+          <span><i style="border-color:var(--s2)"></i><span data-i18n="gw.lgW">Parte de los salarios</span></span>
+        </div>
+        <div class="plot"><svg class="chart" id="gw-time" role="img" data-i18n-attr="aria-label:gw.aria2"></svg><div class="tip" id="gw-time-tip" hidden></div></div>
+      </figure>
+      <div class="ctrls">
+        <div class="slider">
+          <div class="lab"><label for="gw-b" data-i18n="gw.b">Fuerza negociadora de los trabajadores</label><output id="gw-b-out" for="gw-b"></output></div>
+          <input type="range" id="gw-b" min="0.98" max="1.15" step="0.01" value="1">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="gw-s" data-i18n="gw.s">Parte de los beneficios que se invierte</label><output id="gw-s-out" for="gw-s"></output></div>
+          <input type="range" id="gw-s" min="18" max="35" step="1" value="25">
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="prose" style="max-width:none;gap:12px">
+    <h2 data-i18n="tb.title">Los supuestos de cada mundo</h2>
+    <div class="scroll">
+      <table class="cmp">
+        <thead><tr><th></th><th data-i18n="tb.c1">Mundo 1 · El salario como precio</th><th data-i18n="tb.c2">Mundo 2 · El salario como negociación</th></tr></thead>
+        <tbody>
+          <tr><th data-i18n="tb.r1">¿Qué es el salario?</th><td data-i18n="tb.r1a"></td><td data-i18n="tb.r1b"></td></tr>
+          <tr><th data-i18n="tb.r2">¿Qué es el paro?</th><td data-i18n="tb.r2a"></td><td data-i18n="tb.r2b"></td></tr>
+          <tr><th data-i18n="tb.r3">¿Hay equilibrio?</th><td data-i18n="tb.r3a"></td><td data-i18n="tb.r3b"></td></tr>
+          <tr><th data-i18n="tb.r4">¿Qué política se deduce?</th><td data-i18n="tb.r4a"></td><td data-i18n="tb.r4b"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small" data-i18n="tb.q">Pregunta para cerrar: ¿qué mundo se parece más a lo que pasó en España en los años ochenta?</p>
+  </section>
+
+  <footer>
+    <span data-i18n="ft.src1">Goodwin, R. M. (1967): «A growth cycle», en C. H. Feinstein (ed.), Socialism, Capitalism and Economic Growth, Cambridge University Press.</span>
+    <span data-i18n="ft.src2">Shaikh, A. (2023): Capitalismo: competencia, conflicto y crisis, FCE, cap. 14 (pp. 903-909) y apéndice 14.1 (p. 1228), donde retoma el modelo de Goodwin.</span>
+    <span data-i18n="ft.note">Cifras del ejemplo inventadas para el aula: los dos mundos muestran el mecanismo, no predicen el paro de España.</span>
+  </footer>
+</div>
+
+<script>
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
+  "use strict";
+  const PANEL_URL = "../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
+    }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+</script>
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const t = (k, v) => OBS.t(k, v);
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const pc = (v, d = 1) => fmt(v * 100, d) + " %";
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "html") n.innerHTML = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const sv = (tag, attrs = {}, text) => { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
+
+  // ---------------- Textos ----------------
+  OBS.register({
+    es: {
+      "doc.title": "Observatorio · SA 6",
+      "hdr.eyebrow": "Observatorio · SA 6 · El mercado laboral",
+      "hdr.title": "Dos modelos del mercado de trabajo",
+      "hdr.lede": "El mismo mercado visto desde dos supuestos. <strong>Mundo 1:</strong> el salario es un precio que se ajusta hasta que el mercado se vacía. <strong>Mundo 2:</strong> el salario sale de una negociación, y el paro y los beneficios se empujan el uno al otro en un ciclo que no se para.",
+      "tl.years": "Años", "tl.play": "Reproducir", "tl.pause": "Pausa", "tl.year": "Año {n}", "tl.of": "{n} de {m}",
+      "sh.title": "Mismo cambio, dos respuestas",
+      "sh.help": "Cada botón aplica el cambio en los dos mundos a la vez, a partir del año en que estáis. Seguid avanzando los años para ver qué pasa después.",
+      "sh.wage": "Subir el salario mínimo / más fuerza negociadora", "sh.crisis": "Crisis que hunde la inversión", "sh.reset": "Volver a empezar",
+      "sh.logWage": "Año {n}: suben el salario mínimo y la fuerza negociadora.", "sh.logCrisis": "Año {n}: crisis de la inversión.", "sh.logSlider": "Año {n}: cambio en los controles.",
+      "neo.k": "Mundo 1", "neo.h": "El salario como precio",
+      "neo.d": "Modelo neoclásico: la demanda de trabajo sale de la productividad del último trabajador contratado y la oferta, de cuántas personas quieren trabajar a cada salario.",
+      "neo.fig1": "Oferta y demanda de trabajo", "neo.lgD": "Demanda (productividad marginal)", "neo.lgS": "Oferta", "neo.lgMin": "Salario mínimo", "neo.lgGap": "Paro",
+      "neo.aria1": "Oferta y demanda de trabajo con el salario mínimo y el paro que genera", "neo.aria2": "Paro involuntario del mundo neoclásico año a año",
+      "neo.min": "Salario mínimo", "neo.A": "Productividad", "neo.none": "sin mínimo",
+      "neo.xl": "Millones de personas", "neo.yl": "€ por hora",
+      "neo.sW": "Salario", "neo.sL": "Empleo", "neo.sU": "Paro involuntario", "neo.mill": "{v} mill.",
+      "neo.ok": "<strong>El mercado se vacía.</strong> Con un salario de {w} € por hora, trabaja todo el que quiere trabajar a ese salario. Si nada cambia, el punto se queda quieto año tras año.",
+      "neo.gap": "<strong>Sobran {g} millones de personas.</strong> El salario mínimo ({m} €) está por encima del de equilibrio ({w} €): más gente quiere trabajar y las empresas contratan menos. Este paro no se mueve mientras no cambie el salario.",
+      "neo.D": "D", "neo.S": "O", "neo.eq": "equilibrio",
+      "gw.k": "Mundo 2", "gw.h": "El salario como negociación",
+      "gw.d": "Modelo de Goodwin (1967): el salario depende de la fuerza de los trabajadores, que crece cuando hay poco paro; los beneficios que quedan financian la inversión y el empleo.",
+      "gw.fig1": "Paro y parte de los salarios en la renta", "gw.lgPath": "Camino de la economía, año a año", "gw.lgCentre": "Centro del ciclo",
+      "gw.lgU": "Paro", "gw.lgW": "Parte de los salarios",
+      "gw.aria1": "Diagrama del ciclo: tasa de paro frente a la parte de la renta que va a salarios", "gw.aria2": "Paro y parte de los salarios del mundo de Goodwin año a año",
+      "gw.b": "Fuerza negociadora de los trabajadores", "gw.s": "Parte de los beneficios que se invierte",
+      "gw.xl": "Tasa de paro (%)", "gw.yl": "Salarios, % de la renta",
+      "gw.sW": "Parte de los salarios", "gw.sU": "Paro", "gw.sC": "Centro del ciclo", "gw.centre": "{u} paro · {w} salarios",
+      "gw.q1": "<strong>Mucho paro, salarios frenados.</strong> Los trabajadores negocian con poca fuerza, suben los beneficios y las empresas invierten y contratan: el paro empieza a bajar.",
+      "gw.q2": "<strong>Baja el paro y ganan fuerza los trabajadores.</strong> Los salarios empiezan a crecer más que la productividad y su parte en la renta sube.",
+      "gw.q3": "<strong>Salarios altos, beneficios bajos.</strong> Las empresas invierten menos de lo que necesita el empleo para seguir creciendo: el paro vuelve a subir.",
+      "gw.q4": "<strong>Vuelve el paro y se debilita la negociación.</strong> Los salarios se frenan y los beneficios se recuperan poco a poco. El ciclo vuelve a empezar.",
+      "fig.unemp": "Paro a lo largo de los años", "time.xl": "Años", "time.yl": "%",
+      "tip.year": "Año {n}", "tip.u": "Paro", "tip.w": "Salarios", "tip.wage": "Salario", "tip.dem": "Demanda", "tip.sup": "Oferta",
+      "tb.title": "Los supuestos de cada mundo",
+      "tb.c1": "Mundo 1 · El salario como precio", "tb.c2": "Mundo 2 · El salario como negociación",
+      "tb.r1": "¿Qué es el salario?", "tb.r2": "¿Qué es el paro?", "tb.r3": "¿Hay equilibrio?", "tb.r4": "¿Qué política se deduce?",
+      "tb.r1a": "Un precio: paga lo que aporta el último trabajador contratado (su productividad marginal).",
+      "tb.r1b": "El resultado de una negociación entre trabajadores y empresas, que depende de la fuerza de cada parte.",
+      "tb.r2a": "Aparece cuando algo impide que el salario baje, como un salario mínimo por encima del de equilibrio.",
+      "tb.r2b": "Una parte normal del sistema: cuando crece, debilita a los trabajadores y frena los salarios.",
+      "tb.r3a": "Sí: si el salario es flexible, el mercado se vacía y el punto se queda quieto.",
+      "tb.r3b": "No hay un punto de reposo: la economía gira alrededor de un centro, en ciclos de años buenos y malos.",
+      "tb.r4a": "Hacer más flexible el salario para que el paro desaparezca.",
+      "tb.r4b": "El pleno empleo duradero choca con los beneficios: es una cuestión de poder y de decisión política (Kalecki).",
+      "tb.q": "Pregunta para cerrar: ¿qué mundo se parece más a lo que pasó en España en los años ochenta?",
+      "ft.src1": "Goodwin, R. M. (1967): «A growth cycle», en C. H. Feinstein (ed.), Socialism, Capitalism and Economic Growth, Cambridge University Press.",
+      "ft.src2": "Shaikh, A. (2023): Capitalismo: competencia, conflicto y crisis, FCE, cap. 14 (pp. 903-909) y apéndice 14.1 (p. 1228), donde retoma el modelo de Goodwin.",
+      "ft.note": "Cifras del ejemplo inventadas para el aula: los dos mundos muestran el mecanismo, no predicen el paro de España.",
+      "f.ses": "Por definir.",
+      "f.uso": "Proyectar en la fase de herramientas para comparar los dos modelos con los mismos cambios; el juego de negociación entre sindicato y patronal llegará después."
+    },
+    va: {
+      "doc.title": "Observatori · SA 6",
+      "hdr.eyebrow": "Observatori · SA 6 · El mercat laboral",
+      "hdr.title": "Dos models del mercat de treball",
+      "hdr.lede": "El mateix mercat vist des de dos supòsits. <strong>Món 1:</strong> el salari és un preu que s'ajusta fins que el mercat es buida. <strong>Món 2:</strong> el salari ix d'una negociació, i la desocupació i els beneficis s'empenyen l'un a l'altre en un cicle que no s'atura.",
+      "tl.years": "Anys", "tl.play": "Reproduir", "tl.pause": "Pausa", "tl.year": "Any {n}", "tl.of": "{n} de {m}",
+      "sh.title": "El mateix canvi, dues respostes",
+      "sh.help": "Cada botó aplica el canvi en els dos mons alhora, a partir de l'any en què esteu. Continueu avançant els anys per a veure què passa després.",
+      "sh.wage": "Pujar el salari mínim / més força negociadora", "sh.crisis": "Crisi que enfonsa la inversió", "sh.reset": "Tornar a començar",
+      "sh.logWage": "Any {n}: pugen el salari mínim i la força negociadora.", "sh.logCrisis": "Any {n}: crisi de la inversió.", "sh.logSlider": "Any {n}: canvi en els controls.",
+      "neo.k": "Món 1", "neo.h": "El salari com a preu",
+      "neo.d": "Model neoclàssic: la demanda de treball ix de la productivitat de l'últim treballador contractat i l'oferta, de quantes persones volen treballar a cada salari.",
+      "neo.fig1": "Oferta i demanda de treball", "neo.lgD": "Demanda (productivitat marginal)", "neo.lgS": "Oferta", "neo.lgMin": "Salari mínim", "neo.lgGap": "Desocupació",
+      "neo.aria1": "Oferta i demanda de treball amb el salari mínim i la desocupació que genera", "neo.aria2": "Desocupació involuntària del món neoclàssic any a any",
+      "neo.min": "Salari mínim", "neo.A": "Productivitat", "neo.none": "sense mínim",
+      "neo.xl": "Milions de persones", "neo.yl": "€ per hora",
+      "neo.sW": "Salari", "neo.sL": "Ocupació", "neo.sU": "Desocupació involuntària", "neo.mill": "{v} mil.",
+      "neo.ok": "<strong>El mercat es buida.</strong> Amb un salari de {w} € per hora, treballa tot el que vol treballar a eixe salari. Si res no canvia, el punt es queda quiet any rere any.",
+      "neo.gap": "<strong>Sobren {g} milions de persones.</strong> El salari mínim ({m} €) està per damunt del d'equilibri ({w} €): més gent vol treballar i les empreses contracten menys. Esta desocupació no es mou mentre no canvie el salari.",
+      "neo.D": "D", "neo.S": "O", "neo.eq": "equilibri",
+      "gw.k": "Món 2", "gw.h": "El salari com a negociació",
+      "gw.d": "Model de Goodwin (1967): el salari depén de la força dels treballadors, que creix quan hi ha poca desocupació; els beneficis que queden financen la inversió i l'ocupació.",
+      "gw.fig1": "Desocupació i part dels salaris en la renda", "gw.lgPath": "Camí de l'economia, any a any", "gw.lgCentre": "Centre del cicle",
+      "gw.lgU": "Desocupació", "gw.lgW": "Part dels salaris",
+      "gw.aria1": "Diagrama del cicle: taxa de desocupació enfront de la part de la renda que va a salaris", "gw.aria2": "Desocupació i part dels salaris del món de Goodwin any a any",
+      "gw.b": "Força negociadora dels treballadors", "gw.s": "Part dels beneficis que s'inverteix",
+      "gw.xl": "Taxa de desocupació (%)", "gw.yl": "Salaris, % de la renda",
+      "gw.sW": "Part dels salaris", "gw.sU": "Desocupació", "gw.sC": "Centre del cicle", "gw.centre": "{u} desocupació · {w} salaris",
+      "gw.q1": "<strong>Molta desocupació, salaris frenats.</strong> Els treballadors negocien amb poca força, pugen els beneficis i les empreses inverteixen i contracten: la desocupació comença a baixar.",
+      "gw.q2": "<strong>Baixa la desocupació i guanyen força els treballadors.</strong> Els salaris comencen a créixer més que la productivitat i la seua part en la renda puja.",
+      "gw.q3": "<strong>Salaris alts, beneficis baixos.</strong> Les empreses inverteixen menys del que necessita l'ocupació per a continuar creixent: la desocupació torna a pujar.",
+      "gw.q4": "<strong>Torna la desocupació i s'afebleix la negociació.</strong> Els salaris es frenen i els beneficis es recuperen a poc a poc. El cicle torna a començar.",
+      "fig.unemp": "Desocupació al llarg dels anys", "time.xl": "Anys", "time.yl": "%",
+      "tip.year": "Any {n}", "tip.u": "Desocupació", "tip.w": "Salaris", "tip.wage": "Salari", "tip.dem": "Demanda", "tip.sup": "Oferta",
+      "tb.title": "Els supòsits de cada món",
+      "tb.c1": "Món 1 · El salari com a preu", "tb.c2": "Món 2 · El salari com a negociació",
+      "tb.r1": "Què és el salari?", "tb.r2": "Què és la desocupació?", "tb.r3": "Hi ha equilibri?", "tb.r4": "Quina política se'n deduïx?",
+      "tb.r1a": "Un preu: paga el que aporta l'últim treballador contractat (la seua productivitat marginal).",
+      "tb.r1b": "El resultat d'una negociació entre treballadors i empreses, que depén de la força de cada part.",
+      "tb.r2a": "Apareix quan alguna cosa impedix que el salari baixe, com ara un salari mínim per damunt del d'equilibri.",
+      "tb.r2b": "Una part normal del sistema: quan creix, afebleix els treballadors i frena els salaris.",
+      "tb.r3a": "Sí: si el salari és flexible, el mercat es buida i el punt es queda quiet.",
+      "tb.r3b": "No hi ha un punt de repòs: l'economia gira al voltant d'un centre, en cicles d'anys bons i roïns.",
+      "tb.r4a": "Fer més flexible el salari perquè la desocupació desaparega.",
+      "tb.r4b": "La plena ocupació duradora xoca amb els beneficis: és una qüestió de poder i de decisió política (Kalecki).",
+      "tb.q": "Pregunta per a tancar: quin món s'assembla més al que va passar a Espanya en els anys huitanta?",
+      "ft.src1": "Goodwin, R. M. (1967): «A growth cycle», en C. H. Feinstein (ed.), Socialism, Capitalism and Economic Growth, Cambridge University Press.",
+      "ft.src2": "Shaikh, A. (2023): Capitalismo: competencia, conflicto y crisis, FCE, cap. 14 (pp. 903-909) i apèndix 14.1 (p. 1228), on reprén el model de Goodwin.",
+      "ft.note": "Xifres de l'exemple inventades per a l'aula: els dos mons mostren el mecanisme, no prediuen la desocupació d'Espanya.",
+      "f.ses": "Per definir.",
+      "f.uso": "Projectar en la fase de ferramentes per a comparar els dos models amb els mateixos canvis; el joc de negociació entre sindicat i patronal arribarà després."
+    }
+  });
+
+  const FICHA = {
+    sesiones: { es: "Por definir.", va: "Per definir." },
+    saberes: [
+      { code: "C5", es: "La distribución de la renta y la acumulación de capital: relación entre eficiencia y equidad.", va: "La distribució de la renda i l'acumulació de capital: relació entre eficiència i equitat." },
+      { code: "C7", es: "Economía laboral. El funcionamiento y las tendencias de los mercados de trabajo. Tipos de desempleo.", va: "Economia laboral. El funcionament i les tendències dels mercats de treball. Tipus de desocupació." },
+      { code: "C8", es: "Efectos y medidas correctoras. Políticas de empleo.", va: "Efectes i mesures correctores. Polítiques d'ocupació." },
+      { code: "C9", es: "La segmentación y tendencias del mercado de trabajo. La brecha salarial.", va: "La segmentació i tendències del mercat de treball. La bretxa salarial." },
+      { code: "E7", es: "El impacto de la revolución digital sobre el empleo y la distribución de la renta.", va: "L'impacte de la revolució digital sobre l'ocupació i la distribució de la renda." },
+      { code: "E8", es: "La adaptación de la población activa ante los retos de la revolución digital.", va: "L'adaptació de la població activa davant els reptes de la revolució digital." }
+    ],
+    criterios: [
+      { code: "3.2", es: "Diferenciar los costes y beneficios que se generan en el flujo circular de la renta para cada uno de los agentes económicos, estableciendo relaciones entre ellos y determinando su repercusión en el desarrollo económico y bienestar social.", va: "Diferenciar els costos i beneficis que es generen en el flux circular de la renda per a cada un dels agents econòmics, establint relacions entre estos i determinant-ne la repercussió en el desenrotllament econòmic i benestar social." },
+      { code: "5.1", es: "Proponer iniciativas que fomenten la equidad, la justicia y la sostenibilidad a partir de la identificación de los retos y desafíos que plantea la economía actual, analizando, con sentido crítico, el impacto que provocan la globalización, la nueva economía y la revolución digital en el bienestar económico y social de los ciudadanos y ciudadanas.", va: "Proposar iniciatives que fomenten l'equitat, la justícia i la sostenibilitat a partir de la identificació dels reptes i desafiaments que planteja l'economia actual, analitzant, amb sentit crític, l'impacte que provoquen la globalització, la nova economia i la revolució digital en el benestar econòmic i social dels ciutadans i ciutadanes." },
+      { code: "5.2", es: "Comprender los retos económicos actuales analizando, de forma crítica y constructiva, el entorno, identificando aquellos elementos que condicionan y transforman la economía y fomentando iniciativas que respondan a las necesidades que plantean estos retos.", va: "Comprendre els reptes econòmics actuals, analitzant l'entorn de manera crítica i constructiva, identificant aquells elements que condicionen i transformen l'economia, i fomentant iniciatives que responguen a les necessitats que plantegen estos reptes." },
+      { code: "2.2 (◐)", es: "Entender el funcionamiento del mercado y la naturaleza de las transacciones que tienen lugar en él, analizando elementos como la oferta, la demanda, los precios, los tipos de mercado y los agentes implicados y reflexionado sobre su importancia como fuente de mejora económica y social.", va: "Entendre el funcionament del mercat i la naturalesa de les transaccions que tenen lloc en este, analitzant elements com l'oferta, la demanda, els preus, els tipus de mercat i els agents implicats, i reflexionant sobre la seua importància com a font de millora econòmica i social." }
+    ],
+    uso: { es: "Proyectar en la fase de herramientas para comparar los dos modelos con los mismos cambios; el juego de negociación entre sindicato y patronal llegará después.", va: "Projectar en la fase de ferramentes per a comparar els dos models amb els mateixos canvis; el joc de negociació entre sindicat i patronal arribarà després." }
+  };
+
+  // ---------------- Motor de gráficos ----------------
+  const M = { l: 58, r: 18, t: 14, b: 50 };
+  let clipN = 0;
+  function frame(svg, o) {
+    svg.replaceChildren();
+    const W = o.w || 480, H = o.h || 340;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const pw = W - M.l - M.r, ph = H - M.t - M.b;
+    const x0 = o.xMin || 0, y0 = o.yMin || 0;
+    const sx = x => M.l + ((x - x0) / (o.xMax - x0)) * pw;
+    const sy = y => M.t + ph - ((y - y0) / (o.yMax - y0)) * ph;
+    const cid = "clip6-" + (++clipN);
+    const defs = sv("defs"); const cp = sv("clipPath", { id: cid }); cp.append(sv("rect", { x: M.l, y: M.t, width: pw, height: ph })); defs.append(cp); svg.append(defs);
+    const grid = sv("g", { class: "grid" }), axis = sv("g", { class: "axis" });
+    o.yTicks.forEach(v => { grid.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(v), y2: sy(v) })); svg.append(sv("text", { x: M.l - 8, y: sy(v) + 4, "text-anchor": "end" }, fmt(v))); });
+    o.xTicks.forEach(v => svg.append(sv("text", { x: sx(v), y: H - M.b + 18, "text-anchor": "middle" }, fmt(v))));
+    axis.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(y0), y2: sy(y0) }));
+    axis.append(sv("line", { x1: M.l, x2: M.l, y1: M.t, y2: sy(y0) }));
+    svg.append(grid, axis);
+    svg.append(sv("text", { x: (M.l + W - M.r) / 2, y: H - 8, "text-anchor": "middle", class: "axl" }, o.xLabel));
+    svg.append(sv("text", { x: 14, y: M.t + ph / 2, "text-anchor": "middle", class: "axl", transform: `rotate(-90 14 ${M.t + ph / 2})` }, o.yLabel));
+    const plot = sv("g", { "clip-path": `url(#${cid})` }), top = sv("g");
+    svg.append(plot, top);
+    return { sx, sy, plot, top, o, pw, ph, W, H, x0, y0 };
+  }
+  const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  function line(F, pts, cls) { F.plot.append(sv("path", { d: path(pts.map(p => [F.sx(p[0]), F.sy(p[1])])), class: cls })); }
+  function hover(svg, tip, F, rows) {
+    const ln = sv("line", { class: "hover-line", y1: M.t, y2: F.sy(F.y0), visibility: "hidden" });
+    const hit = sv("rect", { x: M.l, y: M.t, width: F.pw, height: F.ph, fill: "transparent" });
+    svg.append(ln, hit);
+    hit.addEventListener("pointermove", e => {
+      const r = svg.getBoundingClientRect();
+      const vx = (e.clientX - r.left) * F.W / r.width;
+      const x = clamp(F.x0 + (vx - M.l) / F.pw * (F.o.xMax - F.x0), F.x0, F.o.xMax);
+      ln.setAttribute("x1", F.sx(x)); ln.setAttribute("x2", F.sx(x)); ln.setAttribute("visibility", "visible");
+      const d = rows(x);
+      tip.replaceChildren(el("span", { class: "h", text: d.head }), ...d.rows.map(([c, k, v]) => el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
+      tip.hidden = false;
+      const px = e.clientX - r.left, tw = tip.offsetWidth;
+      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px";
+      tip.style.top = Math.max(0, e.clientY - r.top - 20) + "px";
+    });
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; ln.setAttribute("visibility", "hidden"); });
+  }
+
+  // ---------------- Modelo 1: neoclásico ----------------
+  // Demanda (productividad marginal): w = A·(30 − 1,2·L); oferta: w = 2 + 0,8·L. L en millones, w en € por hora.
+  const NEO = {
+    Ld: (w, A) => Math.max(0, (30 - w / A) / 1.2),
+    Ls: w => Math.max(0, (w - 2) / 0.8),
+    eq(A) { const L = (30 * A - 2) / (1.2 * A + 0.8); return { L, w: 2 + 0.8 * L }; },
+    state(p) {
+      const A = p.A / 100, e = this.eq(A);
+      if (p.wmin > e.w) { const L = this.Ld(p.wmin, A), S = this.Ls(p.wmin); return { w: p.wmin, L, S, eqw: e.w, eqL: e.L, gap: S - L, u: (S - L) / S, A }; }
+      return { w: e.w, L: e.L, S: e.L, eqw: e.w, eqL: e.L, gap: 0, u: 0, A };
+    }
+  };
+
+  // ---------------- Modelo 2: Goodwin ----------------
+  // u = parte de los salarios en la renta; v = tasa de empleo.
+  // du/dt = u·(β·v − γ − α)   (curva de Phillips lineal del salario real: crece γ menos que β·v; la productividad crece α)
+  // dv/dt = v·(s·(1 − u)/σ − α − n)   (la acumulación sale de los beneficios invertidos; la población activa crece n)
+  // Centro: v* = (α + γ)/β ; u* = 1 − σ(α + n)/s
+  const G = { alpha: 0.02, n: 0.01, sigma: 2.5, gamma: 0.88 };
+  const centre = p => ({ v: (G.alpha + G.gamma) / p.beta, u: 1 - G.sigma * (G.alpha + G.n) / p.s });
+  function deriv(st, p) {
+    return { u: st.u * (p.beta * st.v - G.gamma - G.alpha), v: st.v * (p.s * (1 - st.u) / G.sigma - G.alpha - G.n) };
+  }
+  function rk4(st, p, h) {
+    const k1 = deriv(st, p);
+    const k2 = deriv({ u: st.u + h / 2 * k1.u, v: st.v + h / 2 * k1.v }, p);
+    const k3 = deriv({ u: st.u + h / 2 * k2.u, v: st.v + h / 2 * k2.v }, p);
+    const k4 = deriv({ u: st.u + h * k3.u, v: st.v + h * k3.v }, p);
+    return { u: st.u + h / 6 * (k1.u + 2 * k2.u + 2 * k3.u + k4.u), v: clamp(st.v + h / 6 * (k1.v + 2 * k2.v + 2 * k3.v + k4.v), 0.5, 0.995) };
+  }
+
+  // ---------------- Línea de tiempo con cambios ----------------
+  const YEARS = 60, SUB = 40;
+  const BASE = { wmin: 0, A: 100, beta: 1, s: 0.25 };
+  let changes = [{ year: 0, p: { ...BASE } }];
+  let log = [];
+  let path6 = null;
+  const paramsAt = y => { let p = changes[0].p; for (const c of changes) if (c.year <= y) p = c.p; return p; };
+  function recompute() {
+    const c0 = centre(paramsAt(0));
+    let st = { u: c0.u, v: c0.v - 0.035 };
+    const out = [];
+    for (let y = 0; y <= YEARS; y++) {
+      const p = paramsAt(y);
+      out.push({ y, p, neo: NEO.state(p), gw: { ...st }, c: centre(p) });
+      for (let k = 0; k < SUB; k++) st = rk4(st, paramsAt(y), 1 / SUB);
+    }
+    path6 = out;
+  }
+  function setFrom(year, patch, kind) {
+    const p = { ...paramsAt(year), ...patch };
+    changes = changes.filter(c => c.year < year);
+    changes.push({ year, p });
+    if (year === 0) changes[0] = { year: 0, p };
+    log = log.filter(l => l.year < year).concat(kind ? [{ year, kind }] : []);
+    recompute(); syncSliders(); render();
+  }
+
+  // ---------------- Dibujo ----------------
+  const yr = () => +$("yr").value;
+  function syncSliders() {
+    const p = paramsAt(yr());
+    $("neo-min").value = p.wmin; $("neo-A").value = p.A; $("gw-b").value = p.beta; $("gw-s").value = Math.round(p.s * 100);
+    outs(p);
+  }
+  function outs(p) {
+    $("neo-min-out").textContent = p.wmin > 0 ? fmt(p.wmin, 1) + " €/h" : t("neo.none");
+    $("neo-A-out").textContent = fmt(p.A) + " %";
+    $("gw-b-out").textContent = "× " + fmt(p.beta, 2);
+    $("gw-s-out").textContent = fmt(p.s * 100) + " %";
+  }
+  function render() {
+    const Y = yr(), cur = path6[Y];
+    $("yr-label").textContent = t("tl.year", { n: Y });
+    $("yr-out").textContent = t("tl.of", { n: Y, m: YEARS });
+    $("sh-log").textContent = log.map(l => t(l.kind === "wage" ? "sh.logWage" : l.kind === "crisis" ? "sh.logCrisis" : "sh.logSlider", { n: l.year })).join("  ·  ");
+    outs(cur.p);
+
+    // --- Mundo 1 ---
+    const nz = cur.neo;
+    $("neo-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: fmt(nz.w, 1) + " €" }), el("span", { text: t("neo.sW") })),
+      el("div", { class: "stat" }, el("b", { text: t("neo.mill", { v: fmt(nz.L, 1) }) }), el("span", { text: t("neo.sL") })),
+      el("div", { class: "stat" }, el("b", { text: pc(nz.u) }), el("span", { text: t("neo.sU") })));
+    $("neo-note").innerHTML = nz.gap > 0.01 ? t("neo.gap", { g: fmt(nz.gap, 1), m: fmt(nz.w, 1), w: fmt(nz.eqw, 1) }) : t("neo.ok", { w: fmt(nz.w, 1) });
+    const F = frame($("neo-chart"), { xMax: 25, yMax: 36, xTicks: [0, 5, 10, 15, 20, 25], yTicks: [0, 6, 12, 18, 24, 30, 36], xLabel: t("neo.xl"), yLabel: t("neo.yl") });
+    const A = nz.A;
+    if (nz.gap > 0.01) F.plot.append(sv("rect", { x: F.sx(nz.L), y: F.sy(nz.w) - 7, width: F.sx(nz.S) - F.sx(nz.L), height: 14, class: "gap" }));
+    line(F, [[0, A * 30], [25, A * (30 - 30)]], "curve c-ink");
+    line(F, [[0, 2], [25, 22]], "curve c-s1");
+    F.top.append(sv("text", { x: F.sx(22) + 4, y: F.sy(A * (30 - 1.2 * 22)) - 8, class: "lbl" }, t("neo.D")));
+    F.top.append(sv("text", { x: F.sx(24) - 4, y: F.sy(2 + 0.8 * 24) - 8, "text-anchor": "end", class: "lbl" }, t("neo.S")));
+    if (cur.p.wmin > 0) {
+      line(F, [[0, cur.p.wmin], [25, cur.p.wmin]], "curve c-acc dashl");
+      F.top.append(sv("text", { x: F.sx(0) + 6, y: F.sy(cur.p.wmin) - 7, class: "lbl" }, fmt(cur.p.wmin, 1) + " €"));
+    }
+    if (nz.gap > 0.01) {
+      F.top.append(sv("text", { x: (F.sx(nz.L) + F.sx(nz.S)) / 2, y: F.sy(nz.w) - 14, "text-anchor": "middle", class: "lbl" }, t("neo.lgGap")));
+      F.top.append(sv("circle", { cx: F.sx(nz.eqL), cy: F.sy(nz.eqw), r: 4, class: "dot", style: "fill:var(--ref)" }));
+    }
+    line(F, [[nz.L, 0], [nz.L, nz.w]], "guide");
+    F.top.append(sv("circle", { cx: F.sx(nz.L), cy: F.sy(nz.w), r: 7, class: "dot acc" }));
+    hover($("neo-chart"), $("neo-tip"), F, L => ({ head: t("neo.mill", { v: fmt(L, 1) }), rows: [["var(--ink)", t("tip.dem"), fmt(A * (30 - 1.2 * L), 1) + " €"], ["var(--s1)", t("tip.sup"), fmt(2 + 0.8 * L, 1) + " €"]] }));
+    timeChart($("neo-time"), $("neo-time-tip"), Y, [{ key: "neo", cls: "c-s1", col: "var(--s1)", label: t("tip.u"), get: r => r.neo.u * 100 }], Math.max(30, Math.ceil(Math.max(...path6.map(r => r.neo.u * 100)) / 10) * 10));
+
+    // --- Mundo 2 ---
+    const g = cur.gw, c = cur.c;
+    $("gw-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: pc(g.u) }), el("span", { text: t("gw.sW") })),
+      el("div", { class: "stat" }, el("b", { text: pc(1 - g.v) }), el("span", { text: t("gw.sU") })),
+      el("div", { class: "stat" }, el("b", { style: "font-size:18px", text: t("gw.centre", { u: pc(1 - c.v, 0), w: pc(c.u, 0) }) }), el("span", { text: t("gw.sC") })));
+    const lowEmp = g.v < c.v, lowWage = g.u < c.u;
+    $("gw-note").innerHTML = t(lowEmp && lowWage ? "gw.q1" : !lowEmp && lowWage ? "gw.q2" : !lowEmp && !lowWage ? "gw.q3" : "gw.q4");
+    const G1 = frame($("gw-chart"), { xMin: 0, xMax: 30, yMin: 40, yMax: 90, xTicks: [0, 5, 10, 15, 20, 25, 30], yTicks: [40, 50, 60, 70, 80, 90], xLabel: t("gw.xl"), yLabel: t("gw.yl") });
+    const pts = path6.slice(0, Y + 1).map(r => [(1 - r.gw.v) * 100, r.gw.u * 100]);
+    const recent = Math.max(0, pts.length - 26);
+    if (recent > 0) line(G1, pts.slice(0, recent + 1), "trail old");
+    line(G1, pts.slice(recent), "trail");
+    const cx = G1.sx((1 - c.v) * 100), cy = G1.sy(c.u * 100);
+    G1.top.append(sv("line", { x1: cx - 7, x2: cx + 7, y1: cy, y2: cy, class: "centre" }));
+    G1.top.append(sv("line", { x1: cx, x2: cx, y1: cy - 7, y2: cy + 7, class: "centre" }));
+    G1.top.append(sv("circle", { cx: G1.sx((1 - g.v) * 100), cy: G1.sy(g.u * 100), r: 7, class: "dot acc" }));
+    G1.top.append(sv("text", { x: G1.sx((1 - g.v) * 100) + 10, y: G1.sy(g.u * 100) - 8, class: "lbl" }, t("tl.year", { n: Y })));
+    timeChart($("gw-time"), $("gw-time-tip"), Y, [
+      { key: "u", cls: "c-s1", col: "var(--s1)", label: t("tip.u"), get: r => (1 - r.gw.v) * 100 },
+      { key: "w", cls: "c-s2", col: "var(--s2)", label: t("tip.w"), get: r => r.gw.u * 100 }], 90);
+  }
+  function timeChart(svg, tip, Y, series, yMax) {
+    const ticks = yMax > 60 ? [0, 15, 30, 45, 60, 75, 90] : Array.from({ length: yMax / 10 + 1 }, (_, i) => i * 10);
+    const F = frame(svg, { h: 230, xMax: YEARS, yMax, xTicks: [0, 10, 20, 30, 40, 50, 60], yTicks: ticks, xLabel: t("time.xl"), yLabel: t("time.yl") });
+    for (const c of changes) if (c.year > 0) F.plot.append(sv("line", { x1: F.sx(c.year), x2: F.sx(c.year), y1: F.sy(0), y2: F.sy(yMax), class: "guide" }));
+    for (const s of series) {
+      line(F, path6.slice(0, Y + 1).map(r => [r.y, s.get(r)]), "curve " + s.cls);
+      F.plot.append(sv("circle", { cx: F.sx(Y), cy: F.sy(s.get(path6[Y])), r: 4, class: "dot", style: "fill:" + s.col }));
+    }
+    hover(svg, tip, F, x => { const r = path6[Math.round(clamp(x, 0, YEARS))]; return { head: t("tip.year", { n: r.y }), rows: series.map(s => [s.col, s.label, r.y <= Y ? fmt(s.get(r), 1) + " %" : "—"]) }; });
+  }
+
+  // ---------------- Controles ----------------
+  let timer = null;
+  function stop() { if (timer) { clearInterval(timer); timer = null; } $("play").textContent = t("tl.play"); }
+  $("play").addEventListener("click", () => {
+    if (timer) { stop(); return; }
+    if (yr() >= YEARS) $("yr").value = 0;
+    $("play").textContent = t("tl.pause");
+    const step = matchMedia("(prefers-reduced-motion: reduce)").matches ? 900 : 380;
+    timer = setInterval(() => { const v = yr(); if (v >= YEARS) { stop(); return; } $("yr").value = v + 1; render(); }, step);
+  });
+  $("yr").addEventListener("input", () => { stop(); syncSliders(); render(); });
+  $("sh-wage").addEventListener("click", () => {
+    const Y = yr(), p = paramsAt(Y), e = NEO.eq(p.A / 100);
+    setFrom(Y, { wmin: Math.min(24, +(Math.max(p.wmin, e.w) + 1.2).toFixed(1)), beta: Math.min(1.15, +(p.beta + 0.05).toFixed(2)) }, "wage");
+  });
+  $("sh-crisis").addEventListener("click", () => {
+    const Y = yr(), p = paramsAt(Y);
+    setFrom(Y, { A: Math.max(80, p.A - 15), s: Math.max(0.18, +(p.s - 0.05).toFixed(2)) }, "crisis");
+  });
+  $("sh-reset").addEventListener("click", () => { stop(); changes = [{ year: 0, p: { ...BASE } }]; log = []; $("yr").value = 0; recompute(); syncSliders(); render(); });
+  $("neo-min").addEventListener("change", () => setFrom(yr(), { wmin: +$("neo-min").value }, "slider"));
+  $("neo-A").addEventListener("change", () => setFrom(yr(), { A: +$("neo-A").value }, "slider"));
+  $("gw-b").addEventListener("change", () => setFrom(yr(), { beta: +$("gw-b").value }, "slider"));
+  $("gw-s").addEventListener("change", () => setFrom(yr(), { s: +$("gw-s").value / 100 }, "slider"));
+  ["neo-min", "neo-A", "gw-b", "gw-s"].forEach(id => $(id).addEventListener("input", () => {
+    const p = { ...paramsAt(yr()) };
+    p.wmin = +$("neo-min").value; p.A = +$("neo-A").value; p.beta = +$("gw-b").value; p.s = +$("gw-s").value / 100; outs(p);
+  }));
+
+  // ---------------- Arranque ----------------
+  OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
+  OBS.apply();
+  OBS.onLang(() => { $("play").textContent = timer ? t("tl.pause") : t("tl.play"); render(); });
+  recompute(); syncSliders(); render();
+})();
+</script>

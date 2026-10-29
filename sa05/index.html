@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Añadido por actualizar.sh: hoja y menú comunes del Observatorio. El resto es la herramienta tal como está en el vault. -->
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
 <link rel="stylesheet" href="../assets/observatorio.css">
 <script src="../assets/menu.js"></script>
 <title>Observatorio · SA 5</title>
@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: una columna de trabajo (máx. 920px): diagrama de reservas y flujos arriba, mandos, tres gráficos pequeños y experimentos; línea gráfica del Observatorio: papel blanco, grafito y azul tinta. Azul = peces, ocre = captura, verde = reproducción, grafito = flota */
+/* Layout: una columna de trabajo (máx. 960px) con dos pestañas: la pizarra de sistemas (lienzo editable a todo el ancho) y el simulador de emisiones. Azul = producción, ocre = daños y temperatura, grafito = CO₂ acumulado */
 :root {
   --bg: #ffffff;
   --paper: #f6f7f9;
@@ -56,10 +56,7 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: 0 48px;
 }
-.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
-.back { padding-top: 18px; font-size: 14px; }
-.back a { color: var(--accent); text-decoration: none; font-weight: 500; }
-.back a:hover { text-decoration: underline; }
+.wrap { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
 header.top { padding-block: 8px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; }
 .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
@@ -85,6 +82,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
 .btn.ghost { background: transparent; color: var(--accent); }
 .btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
 .btn.small { padding: 5px 10px; font-size: 14px; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
 .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .timebar { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px 14px; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; }
 .timebar .slider { gap: 2px; }
@@ -107,8 +105,15 @@ svg.sfd text.num { font-family: var(--font-mono); font-size: 14px; font-weight: 
 svg.sfd text.mut { fill: var(--muted); font-size: 12px; }
 svg.sfd text.loop { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
 svg.sfd .stockbox { fill: var(--bg); stroke: var(--ink); stroke-width: 2; }
-svg.sfd .lvl-fish { fill: var(--s1); fill-opacity: .25; }
-svg.sfd .lvl-fleet { fill: var(--ink); fill-opacity: .12; }
+svg.sfd .lvl-co2 { fill: var(--ink); fill-opacity: .16; }
+svg.sfd .lvl-prod { fill: var(--s1); fill-opacity: .25; }
+svg.sfd .aux { fill: var(--bg); stroke: var(--s2); stroke-width: 2; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 15px; cursor: pointer; }
+.check input { width: 16px; height: 16px; }
+ul.lessons { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 6px; }
+.flood { fill: var(--s2); }
+.thr { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; }
+svg.chart text.thr-l { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
 svg.sfd .pipe { stroke: var(--ink); stroke-width: 6; fill: none; }
 svg.sfd .pipe-in { stroke: var(--bg); stroke-width: 2; fill: none; }
 svg.sfd .valve { fill: var(--bg); stroke: var(--ink); stroke-width: 2; }
@@ -163,363 +168,1274 @@ footer a { color: var(--accent); }
   .stat b { font-size: 24px; }
   .timebar { grid-template-columns: 1fr; }
 }
-</style>
 
+/* Pestañas y pizarra */
+header.top { padding-top: 18px; }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button { font: 500 15px var(--font-body); color: var(--muted); background: none; border: 0; padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.view { display: flex; flex-direction: column; gap: 26px; }
+.boardbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.modeseg { display: inline-flex; border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; }
+.modeseg button { font: 600 15px var(--font-body); padding: 8px 16px; border: 0; background: var(--bg); color: var(--ink); cursor: pointer; min-height: 40px; }
+.modeseg button + button { border-left: 2px solid var(--ink); }
+.modeseg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.modeseg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+.boardbar select { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 8px; min-width: 0; max-width: 100%; }
+.boardbar .grow { flex: 1 1 auto; }
+.help { font-size: 15px; color: var(--muted); max-width: 72ch; }
+.help b { color: var(--ink); font-weight: 600; }
+.loops { display: flex; flex-direction: column; gap: 8px; }
+.loops ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.loops li { display: flex; gap: 10px; align-items: baseline; font-size: 15px; flex-wrap: wrap; }
+.loops .tag { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+.loops .tag.r { color: var(--s2); } .loops .tag.b { color: var(--s1); }
+details.share { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; }
+details.share > summary { cursor: pointer; font-weight: 600; }
+details.share[open] > summary { margin-bottom: 10px; }
+details.share textarea { width: 100%; min-height: 120px; font: 13px var(--font-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 8px; resize: vertical; }
+.status { font-size: 14px; min-height: 1.4em; color: var(--muted); }
+.status.bad { color: var(--bad); }
+body.obs-proj .modeseg button { font-size: 19px; padding: 12px 22px; }
+body.obs-proj .help, body.obs-proj .loops li { font-size: 19px; }
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
+</style>
 <div class="wrap">
-  <nav class="back"><a href="../index.html">← Panel del Observatorio</a></nav>
   <header class="top">
-    <span class="eyebrow">Observatorio · SA 5 · Crecimiento económico y desarrollo</span>
-    <h1>El caladero</h1>
-    <p class="lede">Un simulador de <strong>reservas, flujos y bucles</strong> para la economía ecológica. Los peces se reproducen solos, pero no a cualquier ritmo; la flota pesca, gana dinero y compra más barcos. Mueve los mandos y mira qué pasa en 50 años.</p>
+    <div id="obs-bar"></div>
+    <span class="eyebrow" data-i18n="h.eyebrow">Observatorio · SA 5 · Crecimiento económico y desarrollo</span>
+    <h1 data-i18n="h.title">Pizarra de sistemas</h1>
+    <p class="lede" data-i18n-html="h.lede">Dibuja qué hace crecer y qué hace menguar a cada cosa, busca los <strong>bucles</strong> y ponlos en marcha. Después, el <strong>simulador de emisiones</strong> hace las cuentas año a año, de 2025 a 2100.</p>
   </header>
 
-  <!-- ===================== DIAGRAMA ===================== -->
-  <section class="block" aria-labelledby="h-diag">
-    <div class="prose">
-      <h2 id="h-diag">Cómo funciona el sistema</h2>
-      <p>Hay dos <strong>reservas</strong>: los peces que hay en el mar y los barcos de la flota. Cada reserva sube con lo que entra y baja con lo que sale, como una bañera. Las flechas finas dicen qué influye en qué.</p>
+  <nav class="tabs" role="tablist" data-i18n-attr="aria-label:tabs.label" aria-label="Herramientas">
+    <button role="tab" id="tab-pizarra" aria-selected="true" data-view="pizarra" data-i18n="tabs.board">Pizarra</button>
+    <button role="tab" id="tab-simulador" aria-selected="false" data-view="simulador" data-i18n="tabs.sim">Simulador de emisiones</button>
+  </nav>
+
+  <!-- ===================== PIZARRA ===================== -->
+  <section class="view" id="view-pizarra" role="tabpanel" aria-labelledby="tab-pizarra">
+    <div class="boardbar">
+      <div class="modeseg" role="group" data-i18n-attr="aria-label:b.mode" aria-label="Modo">
+        <button type="button" id="m-draw" aria-pressed="true" data-i18n="b.draw">Dibujar</button>
+        <button type="button" id="m-play" aria-pressed="false" data-i18n="b.play">Jugar</button>
+      </div>
+      <button type="button" class="btn ghost" id="b-new" data-i18n="pz.new">Nuevo elemento</button>
+      <span class="grow"></span>
+      <label class="small" for="b-preset" data-i18n="b.preset">Ejemplo</label>
+      <select id="b-preset">
+        <option value="emisiones" data-i18n="p.emisiones">Emisiones y daños</option>
+        <option value="poblacion" data-i18n="p.poblacion">Población y alimentos</option>
+        <option value="blanco" data-i18n="p.blanco">En blanco</option>
+      </select>
+      <button type="button" class="btn quiet small" id="b-load" data-i18n="b.load">Cargar</button>
     </div>
-    <div class="diagram"><svg class="sfd" id="sfd" viewBox="0 0 760 420" role="img" aria-label="Diagrama de reservas y flujos del caladero: la reserva de peces crece con la reproducción y baja con la captura; la reserva de barcos crece con la compra de barcos y baja con el desguace; un bucle reforzador une captura, beneficio y compra de barcos, y un bucle compensador une captura y peces"></svg></div>
-    <div class="charts" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
-      <div class="notice" style="border-left-color:var(--s2)"><strong>R · Bucle reforzador</strong><span>Más barcos → más captura → más beneficio → más barcos. Se alimenta a sí mismo: hace crecer la flota cada vez más deprisa.</span></div>
-      <div class="notice" style="border-left-color:var(--s1)"><strong>B · Bucle compensador</strong><span>Más captura → menos peces en el mar → menos captura. Frena al otro bucle, pero llega tarde: los barcos ya están comprados.</span></div>
+    <p class="help" id="b-help"></p>
+    <div id="board"></div>
+    <div class="loops">
+      <h3 data-i18n="l.title">Bucles de tu dibujo</h3>
+      <ul id="loops"></ul>
     </div>
+
+    <div class="block">
+      <h2 data-i18n="try.title">Prueba esto</h2>
+      <p class="help" data-i18n="try.case">Un caso cercano: la DANA del 29 de octubre de 2024 en la provincia de Valencia. ¿En qué elementos del dibujo la colocarías?</p>
+      <ol class="tries">
+        <li><span class="k" data-i18n="try.k1">Reto 1</span><span class="q" data-i18n="try.q1">Pasa a «Jugar» y pulsa ▲ en Producción.</span><span class="a" data-i18n="try.a1">¿Qué les pasa a las emisiones y al CO₂ acumulado? ¿Y a la producción unos segundos después?</span></li>
+        <li><span class="k" data-i18n="try.k2">Reto 2</span><span class="q" data-i18n="try.q2">Lee la lista de bucles.</span><span class="a" data-i18n="try.a2">¿Cuál empuja la producción hacia arriba y cuál la frena? ¿Por qué el freno llega tarde?</span></li>
+        <li><span class="k" data-i18n="try.k3">Reto 3</span><span class="q" data-i18n="try.q3">Pulsa ▲ en «Inversión en renovables». Después añade «Prevención» (diques, cauces limpios, alertas) y únela a Daños con una flecha que haga menguar.</span><span class="a" data-i18n="try.a3">¿Qué bucle se debilita en cada caso? ¿Quién debería pagar cada cosa?</span></li>
+      </ol>
+    </div>
+
+    <details class="share">
+      <summary data-i18n="s.title">Guardar o compartir el dibujo</summary>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p class="small" data-i18n="s.help">El dibujo se guarda solo en este navegador. Para pasarlo a otro ordenador, copia este texto o descárgalo, y pégalo allí con «Cargar el texto».</p>
+        <textarea id="s-json" spellcheck="false" data-i18n-attr="aria-label:s.title"></textarea>
+        <div class="actions">
+          <button type="button" class="btn ghost small" id="s-copy" data-i18n="s.copy">Copiar</button>
+          <button type="button" class="btn ghost small" id="s-down" data-i18n="s.down">Descargar</button>
+          <button type="button" class="btn quiet small" id="s-in" data-i18n="s.in">Cargar el texto</button>
+          <span class="status" id="s-status" aria-live="polite"></span>
+        </div>
+      </div>
+    </details>
   </section>
 
   <!-- ===================== SIMULADOR ===================== -->
-  <section class="block" aria-labelledby="h-sim">
-    <div class="prose">
-      <h2 id="h-sim">Simula 50 años</h2>
-      <p class="small">Cifras inventadas para el aula: peces en miles de toneladas, beneficio en millones de euros.</p>
-    </div>
-    <div class="controls">
-      <div class="slider">
-        <div class="lab"><label for="c-f0">Barcos al empezar</label><output id="c-f0-out" for="c-f0"></output></div>
-        <input type="range" id="c-f0" min="5" max="60" step="1" value="20">
+  <section class="view" id="view-simulador" role="tabpanel" aria-labelledby="tab-simulador" hidden>
+    <section class="block" aria-labelledby="h-diag">
+      <div class="prose">
+        <h2 id="h-diag" data-i18n="d.title">Cómo funciona el sistema</h2>
+        <p data-i18n-html="d.p"></p>
       </div>
-      <div class="slider">
-        <div class="lab"><label for="c-re">Beneficio que se gasta en barcos nuevos</label><output id="c-re-out" for="c-re"></output></div>
-        <input type="range" id="c-re" min="0" max="100" step="5" value="50">
+      <div class="diagram"><svg class="sfd" id="sfd" viewBox="0 0 760 420" role="img" data-i18n-attr="aria-label:d.aria"></svg></div>
+      <div class="charts" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        <div class="notice" style="border-left-color:var(--s1)"><strong data-i18n="d.rt"></strong><span data-i18n="d.r"></span></div>
+        <div class="notice" style="border-left-color:var(--s2)"><strong data-i18n="d.bt"></strong><span data-i18n="d.b"></span></div>
       </div>
-      <div class="slider">
-        <div class="lab"><label for="c-quota">Cuota máxima de captura al año</label><output id="c-quota-out" for="c-quota"></output></div>
-        <input type="range" id="c-quota" min="0" max="200" step="10" value="0">
-        <span class="hint">0 = sin cuota</span>
-      </div>
-      <div class="slider">
-        <div class="lab"><label for="c-g">Velocidad de reproducción de los peces</label><output id="c-g-out" for="c-g"></output></div>
-        <input type="range" id="c-g" min="30" max="80" step="5" value="50">
-      </div>
-    </div>
-    <div class="actions">
-      <button type="button" class="btn quiet small" id="c-reset">Volver a los valores iniciales</button>
-    </div>
+    </section>
 
-    <div class="timebar">
-      <button type="button" class="btn" id="t-play">Reproducir</button>
-      <div class="slider">
-        <div class="lab"><label for="t-year">Año</label><output id="t-year-out" for="t-year"></output></div>
-        <input type="range" id="t-year" min="0" max="50" step="1" value="50">
+    <section class="block" aria-labelledby="h-sim">
+      <div class="prose">
+        <h2 id="h-sim" data-i18n="s5.title">Simula de 2025 a 2100</h2>
+        <p class="small" data-i18n="s5.units"></p>
       </div>
-    </div>
+      <div class="controls">
+        <div class="slider">
+          <div class="lab"><label for="c-inv" data-i18n="c.inv"></label><output id="c-inv-out" for="c-inv"></output></div>
+          <input type="range" id="c-inv" min="0" max="100" step="5" value="50">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="c-ren" data-i18n="c.ren"></label><output id="c-ren-out" for="c-ren"></output></div>
+          <input type="range" id="c-ren" min="0" max="5" step="0.5" value="0">
+          <span class="hint" data-i18n="c.renHint"></span>
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="c-start" data-i18n="c.start"></label><output id="c-start-out" for="c-start"></output></div>
+          <input type="range" id="c-start" min="2025" max="2070" step="1" value="2030">
+        </div>
+        <label class="check" style="align-self:end"><input type="checkbox" id="c-flood" checked> <span data-i18n="c.flood"></span></label>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn quiet small" id="c-reset" data-i18n="c.reset"></button>
+      </div>
+      <div class="timebar">
+        <button type="button" class="btn" id="t-play"></button>
+        <div class="slider">
+          <div class="lab"><label for="t-year" data-i18n="t.year"></label><output id="t-year-out" for="t-year"></output></div>
+          <input type="range" id="t-year" min="2025" max="2100" step="1" value="2100">
+        </div>
+      </div>
+      <div class="state" id="state" aria-live="polite"></div>
+      <div class="stats" id="stats"></div>
+      <div class="notice" id="lessons"></div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="g.prod"></figcaption>
+          <div class="legend"><span><i style="border-color:var(--s1)"></i><span data-i18n="g.prodL"></span></span><span><i style="border-color:var(--s2)"></i><span data-i18n="g.dam"></span></span><span><svg width="10" height="10" aria-hidden="true"><path d="M5 1 L9 9 L1 9 Z" class="flood"/></svg><span data-i18n="g.floodL"></span></span></div>
+          <div class="plot"><svg class="chart" id="ch-prod" role="img" data-i18n-attr="aria-label:g.prod"></svg><div class="tip" id="tip-prod" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="g.co2"></figcaption>
+          <div class="legend"><span><i style="border-color:var(--ink)"></i><span data-i18n="g.co2L"></span></span><span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="g.pre"></span></span></div>
+          <div class="plot"><svg class="chart" id="ch-co2" role="img" data-i18n-attr="aria-label:g.co2"></svg><div class="tip" id="tip-co2" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="g.temp"></figcaption>
+          <div class="legend"><span><i style="border-color:var(--s2)"></i><span data-i18n="g.tempL"></span></span><span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="g.thr"></span></span></div>
+          <div class="plot"><svg class="chart" id="ch-temp" role="img" data-i18n-attr="aria-label:g.temp"></svg><div class="tip" id="tip-temp" hidden></div></div>
+        </figure>
+      </div>
+    </section>
 
-    <div class="state" id="state" aria-live="polite"></div>
-    <div class="stats" id="stats"></div>
-
-    <div class="charts">
-      <figure>
-        <figcaption>Peces en el mar</figcaption>
-        <div class="legend"><span><i style="border-color:var(--s1)"></i>Peces</span><span><i class="dash" style="border-color:var(--ink)"></i>Capacidad del mar</span></div>
-        <div class="plot"><svg class="chart" id="ch-fish" role="img" aria-label="Peces en el mar año a año"></svg><div class="tip" id="tip-fish" hidden></div></div>
-      </figure>
-      <figure>
-        <figcaption>Captura y reproducción al año</figcaption>
-        <div class="legend"><span><i style="border-color:var(--s2)"></i>Captura</span><span><i style="border-color:var(--s3)"></i>Reproducción</span></div>
-        <div class="plot"><svg class="chart" id="ch-flow" role="img" aria-label="Captura anual frente a reproducción anual de los peces"></svg><div class="tip" id="tip-flow" hidden></div></div>
-      </figure>
-      <figure>
-        <figcaption>Barcos de la flota</figcaption>
-        <div class="legend"><span><i style="border-color:var(--ink)"></i>Barcos</span></div>
-        <div class="plot"><svg class="chart" id="ch-fleet" role="img" aria-label="Número de barcos de la flota año a año"></svg><div class="tip" id="tip-fleet" hidden></div></div>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ===================== EXPERIMENTOS ===================== -->
-  <section class="block" aria-labelledby="h-try">
-    <h2 id="h-try">Prueba esto</h2>
-    <ol class="tries">
-      <li>
-        <span class="k">Experimento 1</span>
-        <span class="q">Deja los valores iniciales, sin cuota, y pulsa «Reproducir».</span>
-        <span class="a">¿En qué año se pesca más? ¿Y qué pasa con los peces y los barcos después?</span>
-        <button type="button" class="btn ghost small" data-try="1">Cargar el experimento</button>
-      </li>
-      <li>
-        <span class="k">Experimento 2</span>
-        <span class="q">Pon una cuota de 100 al año.</span>
-        <span class="a">¿Se pesca menos que en el experimento 1 en el año 10? ¿Y en el año 40? ¿Quién gana con la cuota?</span>
-        <button type="button" class="btn ghost small" data-try="2">Cargar el experimento</button>
-      </li>
-      <li>
-        <span class="k">Experimento 3</span>
-        <span class="q">Sin cuota, gasta solo el 15 % del beneficio en barcos nuevos.</span>
-        <span class="a">¿Desaparece el problema o solo llega más tarde? Mira la flota en el año 50.</span>
-        <button type="button" class="btn ghost small" data-try="3">Cargar el experimento</button>
-      </li>
-    </ol>
+    <section class="block" aria-labelledby="h-try">
+      <h2 id="h-try" data-i18n="try.title">Prueba esto</h2>
+      <ol class="tries">
+        <li><span class="k" data-i18n="x.k1"></span><span class="q" data-i18n="x.q1"></span><span class="a" data-i18n="x.a1"></span><button type="button" class="btn ghost small" data-try="1" data-i18n="x.load"></button></li>
+        <li><span class="k" data-i18n="x.k2"></span><span class="q" data-i18n="x.q2"></span><span class="a" data-i18n="x.a2"></span><button type="button" class="btn ghost small" data-try="2" data-i18n="x.load"></button></li>
+        <li><span class="k" data-i18n="x.k3"></span><span class="q" data-i18n="x.q3"></span><span class="a" data-i18n="x.a3"></span><button type="button" class="btn ghost small" data-try="3" data-i18n="x.load"></button></li>
+      </ol>
+    </section>
   </section>
 
   <footer>
-    <span>Modelo simplificado para el aula. Reproducción: logística, más lenta cuando quedan pocos peces. Captura: barcos × peces × capturabilidad, con el límite de la cuota. Barcos: se compran con parte del beneficio y se desguazan un 3 % al año, un 7 % si hay pérdidas.</span>
-    <span>Inspirado en Donella Meadows, <em>Pensar en sistemas</em> (Capitán Swing, 2022), que llama «reservas» a las existencias y distingue bucles reforzadores y compensadores.</span>
+    <span data-i18n="f.1"></span>
+    <span data-i18n-html="f.2">Inspirado en Donella Meadows, <em>Pensar en sistemas</em> (Capitán Swing, 2022), que llama «reservas» a las existencias y distingue bucles reforzadores y compensadores. La pizarra toma la idea de los diagramas de bucles que se dibujan y se ponen en marcha; su código es propio.</span>
   </footer>
 </div>
 
 <script>
-(() => {
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
   "use strict";
-  const $ = id => document.getElementById(id);
-  const NS = "http://www.w3.org/2000/svg";
-  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const el = (tag, attrs = {}, ...kids) => {
-    const n = document.createElement(tag);
-    for (const [k, v] of Object.entries(attrs)) {
-      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
-      else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+  const PANEL_URL = "../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
     }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
     for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
     return n;
   };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+// PIZARRA-ENGINE:BEGIN
+/* Pizarra del Observatorio: motor propio para dibujar sistemas (elementos y flechas) y ponerlos en marcha.
+   Idea de interacción inspirada en las «explorable explanations»; el código es original.
+   Pizarra.create(contenedor, opciones) → api
+     opciones: { mode: "causal" | "flow", palette: [{ type, es, va, kind: "agente" | "fondo", color }],
+                 edgeLabels: [{ es, va, kind: "dinero" | "real" }], labels: t, onChange(modelo), onLoops(bucles) }
+     api: load(modelo), toJSON(), clear(), setMode("dibujar" | "jugar"), getMode(), addNode(texto?, tipo?), loops(), relabel(), destroy()
+   Modelo: { nodes: [{ id, label, x, y, type? }], edges: [{ id, from, to, sign: 1 | -1, label?, kind?: "dinero" | "real" }] }
+   En modo «flow», los elementos de tipo «fondo» se dibujan como rectángulos y los «agentes» como círculos;
+   las fichas de dinero son círculos y las de bienes o trabajo, cuadrados (y la flecha, discontinua).
+   Modo «causal»: cada flecha hace crecer (+) o menguar (−) al elemento al que llega; al jugar, los empujones viajan por las flechas.
+   Modo «flow»: cada flecha lleva una etiqueta (salarios, bienes…) y, al jugar, circulan fichas por el circuito. */
+window.Pizarra = (() => {
+  "use strict";
+  const NS = "http://www.w3.org/2000/svg";
+  const W = 960, H = 560, R0 = 34;
+  const DICT = {
+    es: { "pz.new": "Nuevo elemento", "pz.rename": "Renombrar", "pz.delete": "Borrar", "pz.flip": "Cambiar signo",
+      "pz.grow": "hace crecer", "pz.shrink": "hace menguar", "pz.up": "Más", "pz.down": "Menos", "pz.label": "Qué circula",
+      "pz.type": "Tipo", "pz.empty": "Haz doble clic en un hueco para crear un elemento", "pz.R": "bucle reforzador (R)",
+      "pz.B": "bucle compensador (B)", "pz.board": "Pizarra de sistemas", "pz.done": "Hecho", "pz.flowLoop": "circuito",
+      "pz.money": "Dinero", "pz.real": "Bienes o trabajo", "pz.kind": "Qué circula por la flecha" },
+    va: { "pz.new": "Element nou", "pz.rename": "Canviar el nom", "pz.delete": "Esborrar", "pz.flip": "Canviar el signe",
+      "pz.grow": "fa créixer", "pz.shrink": "fa minvar", "pz.up": "Més", "pz.down": "Menys", "pz.label": "Què circula",
+      "pz.type": "Tipus", "pz.empty": "Fes doble clic en un buit per a crear un element", "pz.R": "bucle reforçador (R)",
+      "pz.B": "bucle compensador (B)", "pz.board": "Pissarra de sistemes", "pz.done": "Fet", "pz.flowLoop": "circuit",
+      "pz.money": "Diners", "pz.real": "Béns o treball", "pz.kind": "Què circula per la fletxa" }
+  };
+  if (window.OBS) window.OBS.register(DICT);
   const sv = (tag, attrs = {}, text) => {
     const n = document.createElementNS(NS, tag);
     for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v);
     if (text != null) n.textContent = text;
     return n;
   };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const uid = p => p + Math.random().toString(36).slice(2, 8);
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const CSS = `
+.pz { position: relative; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+.pz svg { display: block; width: 100%; height: auto; }
+.pz .pz-edge { fill: none; stroke: var(--muted); stroke-width: 2.5; }
+.pz .pz-edge.pos { stroke: var(--s1); } .pz .pz-edge.neg { stroke: var(--s2); } .pz .pz-edge.flow { stroke: var(--ink); stroke-opacity: .55; }
+.pz .pz-edge.flow.real { stroke-dasharray: 9 6; }
+.pz .pz-edge.sel { stroke-width: 4.5; }
+.pz .pz-hit { fill: none; stroke: transparent; stroke-width: 22; cursor: pointer; }
+.pz .pz-head.pos { fill: var(--s1); } .pz .pz-head.neg { fill: var(--s2); } .pz .pz-head.flow { fill: var(--ink); fill-opacity: .55; }
+.pz .pz-sign { font: 700 17px var(--font-body); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.pz .pz-sign-bg { stroke-width: 2; fill: var(--bg); }
+.pz .pz-sign-bg.pos { stroke: var(--s1); } .pz .pz-sign-bg.neg { stroke: var(--s2); }
+.pz .pz-sign.pos { fill: var(--s1); } .pz .pz-sign.neg { fill: var(--s2); }
+.pz .pz-elabel { font: 500 13px var(--font-body); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; pointer-events: none; }
+.pz .pz-node .body { fill: var(--bg); stroke: var(--ink); stroke-width: 2.5; cursor: grab; }
+.pz .pz-node.sel .body { stroke: var(--accent); stroke-width: 4; }
+.pz .pz-node .lvl { pointer-events: none; }
+.pz .pz-node text { font: 600 15px var(--font-body); fill: var(--ink); text-anchor: middle; paint-order: stroke; stroke: var(--paper); stroke-width: 5px; pointer-events: none; }
+.pz .pz-handle { fill: var(--accent); stroke: var(--bg); stroke-width: 2; cursor: crosshair; }
+.pz .pz-handle-t { fill: var(--bg); font: 700 16px var(--font-body); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.pz .pz-btn { cursor: pointer; }
+.pz .pz-btn circle { fill: var(--bg); stroke: var(--ink); stroke-width: 1.5; }
+.pz .pz-btn path { fill: var(--ink); }
+.pz .pz-btn:hover circle { fill: var(--accent-soft); }
+.pz .pz-temp { stroke: var(--accent); stroke-width: 2.5; stroke-dasharray: 6 5; fill: none; pointer-events: none; }
+.pz .pz-pulse circle { stroke: var(--bg); stroke-width: 2; }
+.pz .pz-pulse.pos circle { fill: var(--s1); } .pz .pz-pulse.neg circle { fill: var(--s2); }
+.pz .pz-pulse text { fill: #fff; font: 700 13px var(--font-body); text-anchor: middle; dominant-baseline: central; }
+.pz .pz-token { fill: var(--accent); stroke: var(--bg); stroke-width: 1.5; pointer-events: none; }
+.pz .pz-token.real { fill: var(--s2); }
+.pz .pz-loop circle { fill: var(--bg); stroke-width: 2; }
+.pz .pz-loop.r circle { stroke: var(--s2); } .pz .pz-loop.b circle { stroke: var(--s1); }
+.pz .pz-loop text { font: 700 16px var(--font-display); text-anchor: middle; dominant-baseline: central; }
+.pz .pz-loop.r text { fill: var(--s2); } .pz .pz-loop.b text { fill: var(--s1); }
+.pz .pz-empty { font: 500 16px var(--font-body); fill: var(--muted); text-anchor: middle; }
+.pz .pz-pop { position: absolute; z-index: 5; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.14); max-width: calc(100% - 12px); }
+.pz .pz-pop button { font: 500 14px var(--font-body); padding: 6px 10px; border-radius: 4px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; min-height: 36px; }
+.pz .pz-pop button.danger { color: var(--bad); }
+.pz .pz-pop input, .pz .pz-pop select { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--accent); border-radius: 4px; padding: 6px 8px; min-width: 0; width: 14em; max-width: 100%; }
+.pz .pz-pop .k { font-size: 13px; color: var(--muted); }
+.pz .pz-pop .pz-kind { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.pz .pz-pop .pz-kind button { border: 0; border-radius: 0; min-height: 34px; }
+.pz .pz-pop .pz-kind button + button { border-left: 1px solid var(--rule); }
+.pz .pz-pop .pz-kind button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+body.obs-proj .pz .pz-node text { font-size: 19px; }
+body.obs-proj .pz .pz-elabel { font-size: 16px; }
+@media (max-width: 560px) { .pz .pz-node text { font-size: 20px; } .pz .pz-elabel { font-size: 17px; } }`;
+  let cssDone = false;
+  function injectCSS() { if (cssDone) return; cssDone = true; const s = document.createElement("style"); s.textContent = CSS; document.head.append(s); }
 
-  // ---------- Modelo ----------
-  // Peces S (miles de t), barcos F. Paso anual.
-  // Reproducción R = g·S·(1 − S/K)·S/(S + A)·(1 + A/K)   (logística, más lenta con pocos peces)
-  // Captura C = min(q·F·S, 95 % de S, cuota)
-  // Beneficio B = precio·C − coste·F;  barcos nuevos = reinversión·B / precio del barco (si B > 0)
-  // Desguace = 3 % de la flota, 7 % si hay pérdidas
-  const K = 1000, A = 250, Q = 0.003, PRICE = 10, COST = 8, BOAT = 30, DEP = 0.03, DEP_LOSS = 0.04, YEARS = 50;
-  const DEF = { f0: 20, re: 50, quota: 0, g: 50 };
-  function simulate(p) {
-    const g = p.g / 100, re = p.re / 100;
-    let S = 0.9 * K, F = p.f0;
-    const out = [];
-    for (let t = 0; t <= YEARS; t++) {
-      const R = g * S * (1 - S / K) * (S / (S + A)) * (1 + A / K);
-      let C = Math.min(Q * F * S, 0.95 * S);
-      if (p.quota > 0) C = Math.min(C, p.quota);
-      const B = PRICE * C - COST * F;
-      const buy = B > 0 ? re * B / BOAT : 0;
-      const scrap = DEP * F + (B < 0 ? DEP_LOSS * F : 0);
-      out.push({ t, S, F, R, C, B, buy, scrap });
-      S = Math.max(0, S + R - C);
-      F = Math.max(0, F + buy - scrap);
+  function create(container, opts = {}) {
+    injectCSS();
+    const mode = opts.mode === "flow" ? "flow" : "causal";
+    const L = (k) => (opts.labels || (window.OBS ? window.OBS.t : (x => (DICT.es[x] || x))))(k);
+    const lang = () => (window.OBS ? window.OBS.lang() : "es");
+    const palette = opts.palette || [];
+    let model = { nodes: [], edges: [] };
+    let play = "dibujar";
+    let sel = null; // { kind: "node"|"edge", id }
+    const lvl = new Map(); // nivel de cada elemento al jugar (−1…1)
+    let pulses = [];
+    let raf = null, last = 0, tokenPhase = 0;
+
+    container.classList.add("pz");
+    container.replaceChildren();
+    const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": L("pz.board") });
+    const defs = sv("defs");
+    svg.append(defs);
+    const gLoops = sv("g"), gEdges = sv("g"), gNodes = sv("g"), gFx = sv("g"), gTemp = sv("g");
+    svg.append(gLoops, gEdges, gNodes, gFx, gTemp);
+    container.append(svg);
+    let pop = null;
+
+    const byId = id => model.nodes.find(n => n.id === id);
+    const typeOf = n => palette.find(p => p.type === n.type);
+    const changed = () => { if (opts.onChange) opts.onChange(toJSON()); if (opts.onLoops) opts.onLoops(loops()); };
+    function pt(e) {
+      const m = svg.getScreenCTM(); if (!m) return { x: 0, y: 0 };
+      const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+      return { x: p.x, y: p.y };
     }
+    const radius = n => R0 * (1 + 0.5 * (lvl.get(n.id) || 0));
+
+    // ---------- Geometría de las flechas (curva cuadrática, siempre hacia la izquierda del sentido) ----------
+    function geom(e) {
+      const a = byId(e.from), b = byId(e.to); if (!a || !b) return null;
+      const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+      const twins = model.edges.filter(x => x.from === e.from && x.to === e.to), k = Math.max(0, twins.indexOf(e));
+      const nx = -dy / d, ny = dx / d, bend = Math.min(60, 26 + d * 0.08) + k * 46;
+      const cx = (a.x + b.x) / 2 + nx * bend, cy = (a.y + b.y) / 2 + ny * bend;
+      const ra = radius(a) + 4, rb = radius(b) + 10;
+      const ua = Math.hypot(cx - a.x, cy - a.y) || 1, ub = Math.hypot(cx - b.x, cy - b.y) || 1;
+      const p0 = { x: a.x + (cx - a.x) / ua * ra, y: a.y + (cy - a.y) / ua * ra };
+      const p2 = { x: b.x + (cx - b.x) / ub * rb, y: b.y + (cy - b.y) / ub * rb };
+      const at = t => ({ x: (1 - t) ** 2 * p0.x + 2 * (1 - t) * t * cx + t * t * p2.x, y: (1 - t) ** 2 * p0.y + 2 * (1 - t) * t * cy + t * t * p2.y });
+      const ang = Math.atan2(p2.y - cy, p2.x - cx);
+      return { p0, p2, c: { x: cx, y: cy }, n: { x: nx, y: ny }, at, ang, d: `M${p0.x.toFixed(1)} ${p0.y.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}` };
+    }
+
+    // ---------- Pintar ----------
+    function draw() {
+      gEdges.replaceChildren(); gNodes.replaceChildren(); gLoops.replaceChildren();
+      for (const e of model.edges) {
+        const g = geom(e); if (!g) continue;
+        const cls = mode === "flow" ? "flow" + (e.kind === "real" ? " real" : "") : e.sign < 0 ? "neg" : "pos";
+        const isSel = sel && sel.kind === "edge" && sel.id === e.id;
+        const grp = sv("g", { "data-edge": e.id });
+        grp.append(sv("path", { d: g.d, class: "pz-edge " + cls + (isSel ? " sel" : "") }));
+        const s = 12, a1 = g.ang + Math.PI * 0.84, a2 = g.ang - Math.PI * 0.84, tip = { x: g.p2.x + Math.cos(g.ang) * 6, y: g.p2.y + Math.sin(g.ang) * 6 };
+        grp.append(sv("path", { d: `M${tip.x} ${tip.y} L${tip.x + s * Math.cos(a1)} ${tip.y + s * Math.sin(a1)} L${tip.x + s * Math.cos(a2)} ${tip.y + s * Math.sin(a2)} Z`, class: "pz-head " + cls }));
+        const m = g.at(0.5);
+        if (mode === "causal") {
+          grp.append(sv("circle", { cx: m.x, cy: m.y, r: 12, class: "pz-sign-bg " + cls }));
+          grp.append(sv("text", { x: m.x, y: m.y, class: "pz-sign " + cls }, e.sign < 0 ? "−" : "+"));
+        } else if (e.label) {
+          // etiqueta hacia fuera de la curva, para que dos flechas paralelas no se pisen
+          const anchor = g.n.x > 0.55 ? "start" : g.n.x < -0.55 ? "end" : "middle";
+          const lx = m.x + g.n.x * 12, ly = anchor === "middle" ? m.y + (g.n.y < 0 ? -10 : 20) : m.y + g.n.y * 12 + 5;
+          grp.append(sv("text", { x: lx, y: ly, class: "pz-elabel", "text-anchor": anchor }, e.label));
+        }
+        const hit = sv("path", { d: g.d, class: "pz-hit" });
+        hit.addEventListener("pointerdown", ev => { ev.stopPropagation(); });
+        hit.addEventListener("click", ev => { ev.stopPropagation(); if (play === "dibujar") selectEdge(e.id, m); });
+        grp.append(hit);
+        gEdges.append(grp);
+      }
+      for (const n of model.nodes) {
+        const lv = lvl.get(n.id) || 0, r = radius(n), ty = typeOf(n);
+        const isSel = sel && sel.kind === "node" && sel.id === n.id;
+        const grp = sv("g", { class: "pz-node" + (isSel ? " sel" : ""), "data-node": n.id, transform: `translate(${n.x} ${n.y})` });
+        const fund = mode === "flow" && ty && ty.kind === "fondo";
+        const body = fund ? sv("rect", { x: -r * 1.15, y: -r * 0.8, width: r * 2.3, height: r * 1.6, rx: 10, class: "body" }) : sv("circle", { r, class: "body" });
+        if (ty && ty.color) body.setAttribute("style", `stroke:${ty.color}`);
+        grp.append(body);
+        if (lv !== 0) grp.append(sv("circle", { r: Math.max(2, r - 5), class: "lvl", style: `fill:${lv > 0 ? "var(--s1)" : "var(--s2)"};fill-opacity:${(0.12 + 0.4 * Math.abs(lv)).toFixed(2)}` }));
+        else if (ty && ty.color) grp.append(fund ? sv("rect", { x: -r * 1.15 + 5, y: -r * 0.8 + 5, width: r * 2.3 - 10, height: r * 1.6 - 10, rx: 7, class: "lvl", style: `fill:${ty.color};fill-opacity:.15` }) : sv("circle", { r: r - 5, class: "lvl", style: `fill:${ty.color};fill-opacity:.15` }));
+        const label = String(n.label || "").length > 30 ? String(n.label).slice(0, 29) + "…" : String(n.label || "");
+        grp.append(sv("text", { y: r + 20 }, label));
+        const tyName = ty && (ty[lang()] || ty.es);
+        if (ty && mode === "flow" && tyName && tyName !== n.label) grp.append(sv("text", { y: -r - 10, style: "font-size:12px;font-weight:500;fill:var(--muted)" }, tyName));
+        if (play === "dibujar") {
+          const h = sv("g", { class: "pz-h", transform: `translate(${r * 0.72} ${-r * 0.72})` });
+          h.append(sv("circle", { r: 13, class: "pz-handle" }), sv("text", { class: "pz-handle-t" }, "+"));
+          h.addEventListener("pointerdown", ev => startLink(ev, n));
+          grp.append(h);
+          body.addEventListener("pointerdown", ev => startDrag(ev, n));
+          body.addEventListener("dblclick", ev => { ev.stopPropagation(); rename(n); });
+        } else if (mode === "causal") {
+          const up = btn(r + 22, -16, true, () => push(n, 1)), dn = btn(r + 22, 18, false, () => push(n, -1));
+          grp.append(up, dn);
+          body.addEventListener("pointerdown", ev => { ev.stopPropagation(); const p = pt(ev); push(n, p.y < n.y ? 1 : -1); });
+        } else {
+          body.addEventListener("pointerdown", ev => { ev.stopPropagation(); burst(n); });
+        }
+        gNodes.append(grp);
+      }
+      if (!model.nodes.length) gNodes.append(sv("text", { x: W / 2, y: H / 2, class: "pz-empty" }, L("pz.empty")));
+      if (mode === "causal") drawLoops();
+    }
+    function btn(x, y, up, fn) {
+      const g = sv("g", { class: "pz-btn", transform: `translate(${x} ${y})`, role: "button", "aria-label": up ? L("pz.up") : L("pz.down") });
+      g.append(sv("circle", { r: 15 }), sv("path", { d: up ? "M-7 4 L0 -6 L7 4 Z" : "M-7 -4 L0 6 L7 -4 Z" }));
+      g.addEventListener("pointerdown", ev => { ev.stopPropagation(); fn(); });
+      return g;
+    }
+    function drawLoops() {
+      for (const lp of loops()) {
+        const ns = lp.ids.map(byId).filter(Boolean); if (ns.length < 2) continue;
+        let cx = ns.reduce((a, n) => a + n.x, 0) / ns.length, cy = ns.reduce((a, n) => a + n.y, 0) / ns.length;
+        for (let k = 0; k < 3; k++) for (const n of model.nodes) { const dx = cx - n.x, dy = cy - n.y, d = Math.hypot(dx, dy) || 1, min = radius(n) + 24; if (d < min) { cx = n.x + dx / d * min; cy = n.y + dy / d * min; } }
+        cx = clamp(cx, 20, W - 20); cy = clamp(cy, 20, H - 20);
+        const g = sv("g", { class: "pz-loop " + (lp.type === "R" ? "r" : "b"), transform: `translate(${cx} ${cy})` });
+        g.append(sv("circle", { r: 15 }), sv("text", {}, lp.type));
+        gLoops.append(g);
+      }
+    }
+
+    // ---------- Bucles: ciclos simples del grafo (pocos elementos, búsqueda directa) ----------
+    function loops() {
+      const ids = model.nodes.map(n => n.id), idx = new Map(ids.map((id, i) => [id, i]));
+      const out = [], seen = new Set();
+      const adj = new Map(ids.map(id => [id, model.edges.filter(e => e.from === id && idx.has(e.to))]));
+      for (let s = 0; s < ids.length && out.length < 40; s++) {
+        const start = ids[s];
+        const stack = [[start, [start], [], 1]];
+        while (stack.length && out.length < 40) {
+          const [cur, path, epath, sign] = stack.pop();
+          for (const e of adj.get(cur)) {
+            if (e.to === start) {
+              const key = [...path].sort().join("|") + "#" + epath.concat(e.id).sort().join("|");
+              if (!seen.has(key)) { seen.add(key); out.push({ ids: path.slice(), type: sign * (e.sign || 1) > 0 ? "R" : "B", labels: path.map(id => (byId(id) || {}).label) }); }
+            } else if (idx.get(e.to) > s && !path.includes(e.to) && path.length < 8) {
+              stack.push([e.to, path.concat(e.to), epath.concat(e.id), sign * (e.sign || 1)]);
+            }
+          }
+        }
+      }
+      return out;
+    }
+
+    // ---------- Edición ----------
+    function closePop() { if (pop) { pop.remove(); pop = null; } }
+    function place(el, x, y) {
+      const r = svg.getBoundingClientRect(), k = r.width / W;
+      container.append(el);
+      const w = el.offsetWidth, h = el.offsetHeight;
+      el.style.left = clamp(x * k - w / 2, 6, Math.max(6, r.width - w - 6)) + "px";
+      el.style.top = clamp(y * k + 10, 6, Math.max(6, r.height - h - 6)) + "px";
+    }
+    function mk(tag, attrs = {}, text) { const n = document.createElement(tag); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; }
+    function select(s) { sel = s; draw(); }
+    function selectNode(n) {
+      closePop(); select({ kind: "node", id: n.id });
+      pop = mk("div", { class: "pz-pop" });
+      const bR = mk("button", { type: "button" }, L("pz.rename")); bR.onclick = () => rename(n);
+      const bD = mk("button", { type: "button", class: "danger" }, L("pz.delete")); bD.onclick = () => removeNode(n.id);
+      pop.append(bR);
+      if (mode === "flow" && palette.length) {
+        const s = mk("select", { "aria-label": L("pz.type") });
+        s.append(mk("option", { value: "" }, "—"));
+        palette.forEach(p => { const o = mk("option", { value: p.type }, p[lang()] || p.es); if (n.type === p.type) o.selected = true; s.append(o); });
+        s.onchange = () => { n.type = s.value || undefined; changed(); draw(); };
+        pop.append(s);
+      }
+      pop.append(bD);
+      place(pop, n.x, n.y + radius(n) + 24);
+    }
+    function selectEdge(id, m) {
+      closePop(); select({ kind: "edge", id });
+      const e = model.edges.find(x => x.id === id); if (!e) return;
+      pop = mk("div", { class: "pz-pop" });
+      if (mode === "causal") {
+        pop.append(mk("span", { class: "k" }, e.sign < 0 ? L("pz.shrink") : L("pz.grow")));
+        const bF = mk("button", { type: "button" }, L("pz.flip")); bF.onclick = () => { e.sign = e.sign < 0 ? 1 : -1; changed(); selectEdge(id, m); };
+        pop.append(bF);
+      } else {
+        const sugg = opts.edgeLabels || [];
+        const dl = mk("datalist", { id: "pz-dl-" + uid("") });
+        sugg.forEach(x => dl.append(mk("option", { value: x[lang()] || x.es })));
+        const inp = mk("input", { type: "text", value: e.label || "", "aria-label": L("pz.label"), placeholder: L("pz.label"), list: dl.id });
+        const seg = mk("div", { class: "pz-kind", role: "group", "aria-label": L("pz.kind") });
+        const bM = mk("button", { type: "button", "aria-pressed": String(e.kind !== "real") }, "● " + L("pz.money"));
+        const bR = mk("button", { type: "button", "aria-pressed": String(e.kind === "real") }, "■ " + L("pz.real"));
+        const setKind = k => { e.kind = k; bM.setAttribute("aria-pressed", String(k !== "real")); bR.setAttribute("aria-pressed", String(k === "real")); changed(); draw(); };
+        bM.onclick = () => setKind("dinero"); bR.onclick = () => setKind("real");
+        inp.oninput = () => {
+          e.label = inp.value.slice(0, 40);
+          const hit = sugg.find(x => [x.es, x.va].some(v => v && v.toLowerCase() === inp.value.trim().toLowerCase()));
+          if (hit && hit.kind) setKind(hit.kind); else { changed(); draw(); }
+        };
+        seg.append(bM, bR);
+        pop.append(dl, inp, seg);
+      }
+      const bD = mk("button", { type: "button", class: "danger" }, L("pz.delete")); bD.onclick = () => { model.edges = model.edges.filter(x => x.id !== id); closePop(); sel = null; changed(); draw(); };
+      pop.append(bD);
+      place(pop, m.x, m.y);
+    }
+    function rename(n, isNew) {
+      closePop(); select({ kind: "node", id: n.id });
+      pop = mk("div", { class: "pz-pop" });
+      const inp = mk("input", { type: "text", value: isNew ? "" : n.label, "aria-label": L("pz.rename"), placeholder: L("pz.new") });
+      const ok = mk("button", { type: "button" }, L("pz.done"));
+      const commit = () => { const v = inp.value.trim(); if (v) n.label = v.slice(0, 40); else if (!n.label) n.label = L("pz.new"); closePop(); changed(); draw(); };
+      ok.onclick = commit;
+      inp.onkeydown = ev => { if (ev.key === "Enter") commit(); if (ev.key === "Escape") { closePop(); } };
+      pop.append(inp, ok);
+      place(pop, n.x, n.y + radius(n) + 24);
+      setTimeout(() => { try { inp.focus(); inp.select(); } catch {} }, 0);
+    }
+    function removeNode(id) {
+      model.nodes = model.nodes.filter(n => n.id !== id);
+      model.edges = model.edges.filter(e => e.from !== id && e.to !== id);
+      lvl.delete(id); closePop(); sel = null; changed(); draw();
+    }
+    function addNode(label, at, type) {
+      let x = at ? at.x : W / 2 + ((model.nodes.length * 97) % 300) - 150, y = at ? at.y : H / 2 + ((model.nodes.length * 61) % 200) - 100;
+      x = clamp(x, R0 + 30, W - R0 - 60); y = clamp(y, R0 + 30, H - R0 - 40);
+      const n = { id: uid("n"), label: label || "", x, y, type: type || undefined };
+      model.nodes.push(n); changed(); draw();
+      if (!label) rename(n, true);
+      return n;
+    }
+
+    // Arrastrar un elemento
+    function startDrag(ev, n) {
+      ev.stopPropagation(); ev.preventDefault();
+      const p0 = pt(ev), ox = n.x, oy = n.y; let moved = false;
+      const mv = e => { const p = pt(e); if (Math.hypot(p.x - p0.x, p.y - p0.y) > 4) { moved = true; closePop(); } n.x = clamp(ox + p.x - p0.x, R0, W - R0); n.y = clamp(oy + p.y - p0.y, R0, H - R0 - 20); draw(); };
+      const up = () => { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", up); if (moved) changed(); else selectNode(n); };
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+    }
+    // Unir dos elementos arrastrando desde el «+»
+    function startLink(ev, a) {
+      ev.stopPropagation(); ev.preventDefault(); closePop();
+      const line = sv("path", { class: "pz-temp" }); gTemp.append(line);
+      const mv = e => { const p = pt(e); line.setAttribute("d", `M${a.x} ${a.y} L${p.x} ${p.y}`); };
+      const up = e => {
+        window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", up);
+        line.remove();
+        const p = pt(e);
+        const b = model.nodes.find(n => n !== a && Math.hypot(n.x - p.x, n.y - p.y) <= radius(n) + 14);
+        if (b && (mode === "flow" ? model.edges.filter(x => x.from === a.id && x.to === b.id).length < 3 : !model.edges.some(x => x.from === a.id && x.to === b.id))) {
+          const ed = { id: uid("e"), from: a.id, to: b.id, sign: 1 };
+          if (mode === "flow") { ed.label = ""; ed.kind = "dinero"; }
+          model.edges.push(ed); changed(); draw();
+          const g = geom(ed); if (g) selectEdge(ed.id, g.at(0.5));
+        }
+      };
+      mv(ev);
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+    }
+    // Fondo: doble clic o doble toque crea un elemento; un toque cierra menús
+    let lastTap = 0;
+    svg.addEventListener("pointerdown", ev => {
+      if (ev.target.closest && (ev.target.closest(".pz-node") || ev.target.closest("[data-edge]"))) return;
+      closePop(); if (sel) { sel = null; draw(); }
+      const now = Date.now();
+      if (play === "dibujar" && now - lastTap < 350) { addNode("", pt(ev)); lastTap = 0; } else lastTap = now;
+    });
+    container.addEventListener("keydown", ev => {
+      if (ev.key === "Escape") { closePop(); sel = null; draw(); }
+      if ((ev.key === "Delete" || ev.key === "Backspace") && sel && !(ev.target.tagName === "INPUT")) {
+        if (sel.kind === "node") removeNode(sel.id); else { model.edges = model.edges.filter(x => x.id !== sel.id); sel = null; closePop(); changed(); draw(); }
+      }
+    });
+    container.tabIndex = 0;
+
+    // ---------- Jugar ----------
+    const SPEED = () => reduced() ? 0.25 : 0.7;   // fracción de flecha por segundo
+    const DECAY = () => reduced() ? 0.55 : 0.78;  // cuánto llega al siguiente salto
+    const MAXP = () => reduced() ? 24 : 90;
+    function push(n, dir) {
+      lvl.set(n.id, clamp((lvl.get(n.id) || 0) + 0.35 * dir, -1, 1));
+      emit(n.id, dir * 0.9);
+      tick();
+    }
+    function emit(id, v) {
+      if (Math.abs(v) < 0.12) return;
+      for (const e of model.edges.filter(x => x.from === id)) if (pulses.length < MAXP()) pulses.push({ e: e.id, t: 0, v: v * (e.sign || 1) });
+    }
+    function burst(n) {
+      for (const e of model.edges.filter(x => x.from === n.id)) for (let k = 0; k < 3 && pulses.length < MAXP(); k++) pulses.push({ e: e.id, t: -k * 0.18, v: 1, flow: true });
+      tick();
+    }
+    function frame(ts) {
+      raf = null;
+      const dt = Math.min(0.05, last ? (ts - last) / 1000 : 0.016); last = ts;
+      const next = [];
+      for (const p of pulses) {
+        p.t += dt * SPEED();
+        if (p.t >= 1) {
+          const e = model.edges.find(x => x.id === p.e); if (!e) continue;
+          if (!p.flow) { lvl.set(e.to, clamp((lvl.get(e.to) || 0) + 0.3 * p.v, -1, 1)); const before = pulses.length; emit(e.to, p.v * DECAY()); next.push(...pulses.splice(before)); }
+        } else next.push(p);
+      }
+      pulses = next;
+      // los niveles vuelven poco a poco a cero
+      let active = pulses.length > 0;
+      for (const [k, v] of lvl) { const nv = v * Math.exp(-dt / 5); if (Math.abs(nv) < 0.01) lvl.delete(k); else { lvl.set(k, nv); active = true; } }
+      if (mode === "flow" && play === "jugar") { tokenPhase = (tokenPhase + dt * SPEED() * 0.6) % 1; active = true; }
+      drawFx(); if (pulses.length || [...lvl.values()].some(v => Math.abs(v) > 0.02)) draw();
+      if (active) tick(); else last = 0;
+    }
+    function tick() { if (!raf) raf = requestAnimationFrame(frame); }
+    function token(q, kind, r) {
+      return kind === "real" ? sv("rect", { x: q.x - r, y: q.y - r, width: 2 * r, height: 2 * r, rx: 1.5, class: "pz-token real" }) : sv("circle", { cx: q.x, cy: q.y, r, class: "pz-token" });
+    }
+    function drawFx() {
+      gFx.replaceChildren();
+      for (const p of pulses) {
+        if (p.t < 0) continue;
+        const e = model.edges.find(x => x.id === p.e); const g = e && geom(e); if (!g) continue;
+        const q = g.at(clamp(p.t, 0, 1));
+        if (p.flow) { gFx.append(token(q, e.kind, 7)); continue; }
+        const grp = sv("g", { class: "pz-pulse " + (p.v < 0 ? "neg" : "pos"), transform: `translate(${q.x} ${q.y})` });
+        grp.append(sv("circle", { r: 10 + 4 * Math.min(1, Math.abs(p.v)) }), sv("text", {}, p.v < 0 ? "−" : "+"));
+        gFx.append(grp);
+      }
+      if (mode === "flow" && play === "jugar" && !reduced()) {
+        for (const e of model.edges) {
+          const g = geom(e); if (!g) continue;
+          for (let k = 0; k < 3; k++) { const q = g.at((tokenPhase + k / 3) % 1); gFx.append(token(q, e.kind, 6)); }
+        }
+      }
+    }
+
+    // ---------- API ----------
+    function load(m) {
+      closePop(); sel = null; pulses = []; lvl.clear();
+      const nodes = Array.isArray(m && m.nodes) ? m.nodes.filter(n => n && n.id).map(n => ({ id: String(n.id), label: String(n.label || ""), x: clamp(+n.x || W / 2, R0, W - R0), y: clamp(+n.y || H / 2, R0, H - R0), type: n.type || undefined })) : [];
+      const ids = new Set(nodes.map(n => n.id));
+      const edges = Array.isArray(m && m.edges) ? m.edges.filter(e => e && ids.has(String(e.from)) && ids.has(String(e.to)) && e.from !== e.to).map(e => ({ id: String(e.id || uid("e")), from: String(e.from), to: String(e.to), sign: e.sign < 0 ? -1 : 1, label: e.label != null ? String(e.label) : undefined, kind: e.kind === "real" ? "real" : e.kind === "dinero" ? "dinero" : undefined })) : [];
+      model = { nodes, edges };
+      draw(); if (opts.onLoops) opts.onLoops(loops());
+    }
+    function toJSON() { return JSON.parse(JSON.stringify({ mode, nodes: model.nodes, edges: model.edges })); }
+    function clear() { load({ nodes: [], edges: [] }); changed(); }
+    function setMode(m) { play = m === "jugar" ? "jugar" : "dibujar"; closePop(); sel = null; if (play === "dibujar") { pulses = []; } draw(); drawFx(); tick(); }
+    function relabel() { svg.setAttribute("aria-label", L("pz.board")); closePop(); draw(); }
+    function destroy() { if (raf) cancelAnimationFrame(raf); container.replaceChildren(); }
+    draw();
+    return { load, toJSON, clear, setMode, getMode: () => play, addNode: (l, type) => addNode(l, null, type), loops, relabel, destroy };
+  }
+  return { create, W, H };
+})();
+
+// PIZARRA-ENGINE:END
+</script>
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const t = OBS.t;
+  OBS.register({
+    es: {
+      "h.eyebrow": "Observatorio · SA 5 · Crecimiento económico y desarrollo", "h.title": "Pizarra de sistemas",
+      "h.lede": "Dibuja qué hace crecer y qué hace menguar a cada cosa, busca los <strong>bucles</strong> y ponlos en marcha. Después, el <strong>simulador de emisiones</strong> hace las cuentas año a año, de 2025 a 2100.",
+      "tabs.label": "Herramientas", "tabs.board": "Pizarra", "tabs.sim": "Simulador de emisiones",
+      "b.mode": "Modo", "b.draw": "Dibujar", "b.play": "Jugar", "b.preset": "Ejemplo", "b.load": "Cargar",
+      "p.emisiones": "Emisiones y daños", "p.poblacion": "Población y alimentos", "p.blanco": "En blanco",
+      "help.draw": "<b>Dibujar.</b> Doble clic (o doble toque) en un hueco: nuevo elemento. Arrastra un elemento para moverlo; tócalo para renombrarlo o borrarlo. Arrastra desde su «+» azul hasta otro elemento para unirlos. Toca una flecha para cambiar su signo: <b>+</b> hace crecer, <b>−</b> hace menguar.",
+      "help.play": "<b>Jugar.</b> Pulsa ▲ o ▼ junto a un elemento para darle un empujón hacia arriba o hacia abajo, y mira cómo viaja por las flechas. Los elementos crecen o encogen; con el tiempo vuelven a su tamaño.",
+      "l.title": "Bucles de tu dibujo", "l.none": "Todavía no hay bucles: un bucle aparece cuando las flechas vuelven al elemento de partida.",
+      "l.R": "Reforzador (R): se alimenta a sí mismo", "l.B": "Compensador (B): se frena a sí mismo",
+      "try.title": "Prueba esto", "try.case": "Un caso cercano: la DANA del 29 de octubre de 2024 en la provincia de Valencia. ¿En qué elementos del dibujo la colocarías?",
+      "try.k1": "Reto 1", "try.q1": "Pasa a «Jugar» y pulsa ▲ en Producción.", "try.a1": "¿Qué les pasa a las emisiones y al CO₂ acumulado? ¿Y a la producción unos segundos después?",
+      "try.k2": "Reto 2", "try.q2": "Lee la lista de bucles.", "try.a2": "¿Cuál empuja la producción hacia arriba y cuál la frena? ¿Por qué el freno llega tarde?",
+      "try.k3": "Reto 3", "try.q3": "Pulsa ▲ en «Inversión en renovables». Después añade «Prevención» (diques, cauces limpios, alertas) y únela a Daños con una flecha que haga menguar.", "try.a3": "¿Qué bucle se debilita en cada caso? ¿Quién debería pagar cada cosa?",
+      "s.title": "Guardar o compartir el dibujo", "s.help": "El dibujo se guarda solo en este navegador. Para pasarlo a otro ordenador, copia este texto o descárgalo, y pégalo allí con «Cargar el texto».",
+      "s.copy": "Copiar", "s.down": "Descargar", "s.in": "Cargar el texto", "s.copied": "Copiado.", "s.bad": "Ese texto no es un dibujo de la pizarra.", "s.loaded": "Dibujo cargado.", "s.nocopy": "No se ha podido copiar: selecciona el texto y cópialo a mano.",
+      "n.prod": "Producción", "n.emis": "Emisiones", "n.co2": "CO₂ acumulado", "n.temp": "Temperatura", "n.ext": "Fenómenos extremos", "n.dan": "Daños",
+      "n.ben": "Beneficios", "n.inv": "Inversión", "n.ren": "Inversión en renovables",
+      "n.pob": "Población", "n.nac": "Nacimientos", "n.ali": "Alimentos por persona", "n.mue": "Muertes",
+      "d.title": "Cómo funciona el sistema",
+      "d.p": "Hay dos <strong>reservas</strong>: la capacidad de producir de la economía y el CO₂ acumulado en la atmósfera. Cada reserva sube con lo que entra y baja con lo que sale, como una bañera. El CO₂ entra deprisa con las emisiones y sale muy despacio. Las flechas finas dicen qué influye en qué.",
+      "d.aria": "Diagrama de reservas y flujos: la producción crece con la inversión y baja con los daños; el CO₂ acumulado crece con las emisiones y baja muy despacio con la absorción natural; la producción genera emisiones; el CO₂ sube la temperatura y la temperatura aumenta los daños; la inversión en renovables reduce las emisiones",
+      "d.rt": "R · Bucle reforzador", "d.r": "Más producción → más beneficios → más inversión → más producción. Hace crecer la economía cada vez más deprisa.",
+      "d.bt": "B · Bucle compensador", "d.b": "Más producción → más emisiones → más CO₂ → más temperatura → más fenómenos extremos → más daños → menos producción. Frena el crecimiento, pero con años de retraso.",
+      "d.inv": "Inversión", "d.emis": "Emisiones", "d.abs": "Absorción natural (lenta)", "d.dam": "Daños", "d.temp": "Temperatura", "d.ren": "Renovables",
+      "d.prod": "Producción", "d.co2": "CO₂ acumulado", "d.peryear": "{v} al año", "d.year": "Año {v}", "d.ppm": "{v} ppm", "d.deg": "+{v} °C", "d.idx": "índice {v}",
+      "s5.title": "Simula de 2025 a 2100", "s5.units": "Modelo didáctico, no una previsión. Producción y daños en índice (producción de 2025 = 100); CO₂ en partes por millón y temperatura en grados sobre la era preindustrial, con valores de partida aproximados.",
+      "c.inv": "Beneficio que se reinvierte", "c.ren": "Inversión en renovables (% de la producción)", "c.renHint": "0 = sin transición", "c.start": "Año en que empieza la transición",
+      "c.flood": "Incluir años de riada (al azar, pero siempre los mismos)", "c.reset": "Volver a los valores iniciales", "c.none": "sin transición",
+      "t.year": "Año", "t.of": "{v}", "t.play": "Reproducir", "t.pause": "Pausa",
+      "st.ok": "por debajo de 1,5 °C", "st.okT": "La temperatura está por debajo del límite de 1,5 °C que menciona el Acuerdo de París.",
+      "st.warn": "entre 1,5 y 2 °C", "st.warnT": "La temperatura ha pasado de 1,5 °C: los fenómenos extremos y los daños crecen cada año.",
+      "st.bad": "por encima de 2 °C", "st.badT": "La temperatura supera los 2 °C, el límite máximo del Acuerdo de París: los daños se comen buena parte del crecimiento.",
+      "k.prod": "Producción (índice)", "k.emis": "Emisiones (2025 = 100)", "k.co2": "CO₂ acumulado (ppm)", "k.temp": "Temperatura (°C)", "k.dam": "Daños este año", "k.damTot": "Daños acumulados desde 2025",
+      "les.title": "Lo que enseña este año",
+      "les.co2": "<b>El CO₂ no vuelve atrás.</b> Las emisiones tocaron techo en {ye} y en {y} son {e} (2025 = 100), pero el CO₂ acumulado sigue en {c} ppm: baja muy despacio.",
+      "les.co2no": "<b>El CO₂ no vuelve atrás.</b> Sin transición, las emisiones siguen creciendo y el CO₂ acumulado sube cada año: en {y} está en {c} ppm.",
+      "les.lag": "<b>Los daños llegan con retraso.</b> La temperatura sigue subiendo {n} años después de que bajen las emisiones, y con ella los daños.", "les.lagmin": "<b>Los daños llegan con retraso.</b> Las emisiones bajan desde {ye}, pero en 2100 la temperatura todavía sube: al menos {n} años de retraso, y con ella siguen creciendo los daños.",
+      "les.lagno": "<b>Los daños llegan con retraso.</b> La producción crece varias décadas antes de que los daños empiecen a frenarla: en {y} los daños ya se llevan el {d} de la producción.",
+      "les.delay": "<b>Retrasar la transición sale más caro.</b> Con la misma inversión en renovables desde 2030, los daños acumulados hasta {y} serían {a}; empezando en {s}, son {b}.",
+      "les.delayno": "<b>Retrasar la transición sale más caro.</b> Sin transición, los daños acumulados hasta {y} son {b}; con un 2 % en renovables desde 2030 serían {a}.",
+      "les.same": "<b>Empezar pronto compensa.</b> Ya empiezas en 2030: prueba a retrasarlo hasta 2055 y compara los daños acumulados ({b}).",
+      "g.prod": "Producción y daños", "g.prodL": "Producción", "g.dam": "Daños del año", "g.floodL": "año de riada",
+      "g.co2": "CO₂ acumulado en la atmósfera", "g.co2L": "CO₂ acumulado", "g.pre": "Era preindustrial (280 ppm)",
+      "g.temp": "Temperatura sobre la era preindustrial", "g.tempL": "Temperatura", "g.thr": "1,5 °C y 2 °C",
+      "g.years": "Años", "g.flood": "año de riada",
+      "x.k1": "Experimento 1", "x.q1": "Sin transición: deja los valores iniciales y pulsa «Reproducir».", "x.a1": "¿Hasta qué año crece la producción? ¿Qué pasa después con los daños y la temperatura?",
+      "x.k2": "Experimento 2", "x.q2": "Un 2 % de la producción en renovables desde 2030.", "x.a2": "¿Crece menos la producción al principio? ¿Y en 2100? ¿Qué le pasa al CO₂ acumulado cuando bajan las emisiones?",
+      "x.k3": "Experimento 3", "x.q3": "La misma transición, pero empezando en 2055.", "x.a3": "Compara los daños acumulados con el experimento 2. ¿Quién paga el retraso?",
+      "x.load": "Cargar el experimento",
+      "f.1": "Modelo didáctico, no una previsión. Producción: crece con el beneficio reinvertido y la destruyen en parte los daños. Emisiones = producción × emisiones por unidad, que bajan con la inversión en renovables. CO₂ acumulado: suben con las emisiones y bajan muy despacio por la absorción natural. Temperatura: se acerca con retraso al nivel que corresponde al CO₂ (3 °C por cada vez que se duplica). Daños: crecen con el cuadrado de la temperatura; en los años de riada, más.",
+      "f.2": "Inspirado en Donella Meadows, <em>Pensar en sistemas</em> (Capitán Swing, 2022), que llama «reservas» a las existencias y distingue bucles reforzadores y compensadores. La pizarra toma la idea de los diagramas de bucles que se dibujan y se ponen en marcha; su código es propio."
+    },
+    va: {
+      "h.eyebrow": "Observatori · SA 5 · Creixement econòmic i desenrotllament", "h.title": "Pissarra de sistemes",
+      "h.lede": "Dibuixa què fa créixer i què fa minvar cada cosa, busca els <strong>bucles</strong> i posa'ls en marxa. Després, el <strong>simulador d'emissions</strong> fa els comptes any a any, de 2025 a 2100.",
+      "tabs.label": "Ferramentes", "tabs.board": "Pissarra", "tabs.sim": "Simulador d'emissions",
+      "b.mode": "Mode", "b.draw": "Dibuixar", "b.play": "Jugar", "b.preset": "Exemple", "b.load": "Carregar",
+      "p.emisiones": "Emissions i danys", "p.poblacion": "Població i aliments", "p.blanco": "En blanc",
+      "help.draw": "<b>Dibuixar.</b> Doble clic (o doble toc) en un buit: element nou. Arrossega un element per a moure'l; toca'l per a canviar-li el nom o esborrar-lo. Arrossega des del seu «+» blau fins a un altre element per a unir-los. Toca una fletxa per a canviar el signe: <b>+</b> fa créixer, <b>−</b> fa minvar.",
+      "help.play": "<b>Jugar.</b> Prem ▲ o ▼ al costat d'un element per a donar-li una empenta cap amunt o cap avall, i mira com viatja per les fletxes. Els elements creixen o s'encongixen; amb el temps tornen a la seua mida.",
+      "l.title": "Bucles del teu dibuix", "l.none": "Encara no hi ha bucles: un bucle apareix quan les fletxes tornen a l'element de partida.",
+      "l.R": "Reforçador (R): s'alimenta a si mateix", "l.B": "Compensador (B): es frena a si mateix",
+      "try.title": "Prova açò", "try.case": "Un cas pròxim: la DANA del 29 d'octubre de 2024 a la província de València. En quins elements del dibuix la col·locaries?",
+      "try.k1": "Repte 1", "try.q1": "Passa a «Jugar» i prem ▲ en Producció.", "try.a1": "Què els passa a les emissions i al CO₂ acumulat? I a la producció uns segons després?",
+      "try.k2": "Repte 2", "try.q2": "Llig la llista de bucles.", "try.a2": "Quin empeny la producció cap amunt i quin la frena? Per què el fre arriba tard?",
+      "try.k3": "Repte 3", "try.q3": "Prem ▲ en «Inversió en renovables». Després afig «Prevenció» (dics, llits nets, alertes) i uneix-la a Danys amb una fletxa que faça minvar.", "try.a3": "Quin bucle es debilita en cada cas? Qui hauria de pagar cada cosa?",
+      "s.title": "Guardar o compartir el dibuix", "s.help": "El dibuix només es guarda en este navegador. Per a passar-lo a un altre ordinador, copia este text o descarrega'l, i apega'l allí amb «Carregar el text».",
+      "s.copy": "Copiar", "s.down": "Descarregar", "s.in": "Carregar el text", "s.copied": "Copiat.", "s.bad": "Eixe text no és un dibuix de la pissarra.", "s.loaded": "Dibuix carregat.", "s.nocopy": "No s'ha pogut copiar: selecciona el text i copia'l a mà.",
+      "n.prod": "Producció", "n.emis": "Emissions", "n.co2": "CO₂ acumulat", "n.temp": "Temperatura", "n.ext": "Fenòmens extrems", "n.dan": "Danys",
+      "n.ben": "Beneficis", "n.inv": "Inversió", "n.ren": "Inversió en renovables",
+      "n.pob": "Població", "n.nac": "Naixements", "n.ali": "Aliments per persona", "n.mue": "Morts",
+      "d.title": "Com funciona el sistema",
+      "d.p": "Hi ha dues <strong>reserves</strong>: la capacitat de produir de l'economia i el CO₂ acumulat en l'atmosfera. Cada reserva puja amb el que entra i baixa amb el que ix, com una banyera. El CO₂ entra de pressa amb les emissions i ix molt a poc a poc. Les fletxes fines diuen què influïx en què.",
+      "d.aria": "Diagrama de reserves i fluxos: la producció creix amb la inversió i baixa amb els danys; el CO₂ acumulat creix amb les emissions i baixa molt a poc a poc amb l'absorció natural; la producció genera emissions; el CO₂ puja la temperatura i la temperatura augmenta els danys; la inversió en renovables reduïx les emissions",
+      "d.rt": "R · Bucle reforçador", "d.r": "Més producció → més beneficis → més inversió → més producció. Fa créixer l'economia cada vegada més de pressa.",
+      "d.bt": "B · Bucle compensador", "d.b": "Més producció → més emissions → més CO₂ → més temperatura → més fenòmens extrems → més danys → menys producció. Frena el creixement, però amb anys de retard.",
+      "d.inv": "Inversió", "d.emis": "Emissions", "d.abs": "Absorció natural (lenta)", "d.dam": "Danys", "d.temp": "Temperatura", "d.ren": "Renovables",
+      "d.prod": "Producció", "d.co2": "CO₂ acumulat", "d.peryear": "{v} a l'any", "d.year": "Any {v}", "d.ppm": "{v} ppm", "d.deg": "+{v} °C", "d.idx": "índex {v}",
+      "s5.title": "Simula de 2025 a 2100", "s5.units": "Model didàctic, no una previsió. Producció i danys en índex (producció de 2025 = 100); CO₂ en parts per milió i temperatura en graus sobre l'era preindustrial, amb valors de partida aproximats.",
+      "c.inv": "Benefici que es reinvertix", "c.ren": "Inversió en renovables (% de la producció)", "c.renHint": "0 = sense transició", "c.start": "Any en què comença la transició",
+      "c.flood": "Incloure anys de riuada (a l'atzar, però sempre els mateixos)", "c.reset": "Tornar als valors inicials", "c.none": "sense transició",
+      "t.year": "Any", "t.of": "{v}", "t.play": "Reproduir", "t.pause": "Pausa",
+      "st.ok": "per davall d'1,5 °C", "st.okT": "La temperatura està per davall del límit d'1,5 °C que menciona l'Acord de París.",
+      "st.warn": "entre 1,5 i 2 °C", "st.warnT": "La temperatura ha passat d'1,5 °C: els fenòmens extrems i els danys creixen cada any.",
+      "st.bad": "per damunt de 2 °C", "st.badT": "La temperatura supera els 2 °C, el límit màxim de l'Acord de París: els danys es mengen bona part del creixement.",
+      "k.prod": "Producció (índex)", "k.emis": "Emissions (2025 = 100)", "k.co2": "CO₂ acumulat (ppm)", "k.temp": "Temperatura (°C)", "k.dam": "Danys d'enguany", "k.damTot": "Danys acumulats des de 2025",
+      "les.title": "El que ensenya este any",
+      "les.co2": "<b>El CO₂ no torna arrere.</b> Les emissions van tocar sostre en {ye} i en {y} són {e} (2025 = 100), però el CO₂ acumulat continua en {c} ppm: baixa molt a poc a poc.",
+      "les.co2no": "<b>El CO₂ no torna arrere.</b> Sense transició, les emissions continuen creixent i el CO₂ acumulat puja cada any: en {y} està en {c} ppm.",
+      "les.lag": "<b>Els danys arriben amb retard.</b> La temperatura continua pujant {n} anys després que baixen les emissions, i amb ella els danys.", "les.lagmin": "<b>Els danys arriben amb retard.</b> Les emissions baixen des de {ye}, però en 2100 la temperatura encara puja: almenys {n} anys de retard, i amb ella continuen creixent els danys.",
+      "les.lagno": "<b>Els danys arriben amb retard.</b> La producció creix diverses dècades abans que els danys comencen a frenar-la: en {y} els danys ja s'emporten el {d} de la producció.",
+      "les.delay": "<b>Retardar la transició ix més car.</b> Amb la mateixa inversió en renovables des de 2030, els danys acumulats fins a {y} serien {a}; si comença en {s}, són {b}.",
+      "les.delayno": "<b>Retardar la transició ix més car.</b> Sense transició, els danys acumulats fins a {y} són {b}; amb un 2 % en renovables des de 2030 serien {a}.",
+      "les.same": "<b>Començar prompte compensa.</b> Ja comences en 2030: prova a retardar-ho fins a 2055 i compara els danys acumulats ({b}).",
+      "g.prod": "Producció i danys", "g.prodL": "Producció", "g.dam": "Danys de l'any", "g.floodL": "any de riuada",
+      "g.co2": "CO₂ acumulat en l'atmosfera", "g.co2L": "CO₂ acumulat", "g.pre": "Era preindustrial (280 ppm)",
+      "g.temp": "Temperatura sobre l'era preindustrial", "g.tempL": "Temperatura", "g.thr": "1,5 °C i 2 °C",
+      "g.years": "Anys", "g.flood": "any de riuada",
+      "x.k1": "Experiment 1", "x.q1": "Sense transició: deixa els valors inicials i prem «Reproduir».", "x.a1": "Fins a quin any creix la producció? Què passa després amb els danys i la temperatura?",
+      "x.k2": "Experiment 2", "x.q2": "Un 2 % de la producció en renovables des de 2030.", "x.a2": "Creix menys la producció al principi? I en 2100? Què li passa al CO₂ acumulat quan baixen les emissions?",
+      "x.k3": "Experiment 3", "x.q3": "La mateixa transició, però començant en 2055.", "x.a3": "Compara els danys acumulats amb l'experiment 2. Qui paga el retard?",
+      "x.load": "Carregar l'experiment",
+      "f.1": "Model didàctic, no una previsió. Producció: creix amb el benefici reinvertit i la destruïxen en part els danys. Emissions = producció × emissions per unitat, que baixen amb la inversió en renovables. CO₂ acumulat: puja amb les emissions i baixa molt a poc a poc per l'absorció natural. Temperatura: s'acosta amb retard al nivell que correspon al CO₂ (3 °C cada vegada que es duplica). Danys: creixen amb el quadrat de la temperatura; en els anys de riuada, més.",
+      "f.2": "Inspirat en Donella Meadows, <em>Pensar en sistemas</em> (Capitán Swing, 2022), que anomena «reserves» les existències i distingix bucles reforçadors i compensadors. La pissarra pren la idea dels diagrames de bucles que es dibuixen i es posen en marxa; el seu codi és propi."
+    }
+  });
+
+  // ---------- Ficha docente ----------
+  const ficha = {
+    sesiones: { es: "Por definir: fase de herramientas o de aplicación de la SA 5.", va: "Per definir: fase de ferramentes o d'aplicació de la SA 5." },
+    saberes: [
+      { code: "E6", es: "La economía ecológica y la economía circular.", va: "L'economia ecològica i l'economia circular." },
+      { code: "E14", es: "Teorías sobre el decrecimiento económico.", va: "Teories sobre el decreixement econòmic." }
+    ],
+    criterios: [
+      { code: "5.1", es: "Proponer iniciativas que fomenten la equidad, la justicia y la sostenibilidad a partir de la identificación de los retos y desafíos que plantea la economía actual, analizando, con sentido crítico, el impacto que provocan la globalización, la nueva economía y la revolución digital en el bienestar económico y social de los ciudadanos y ciudadanas.",
+        va: "Proposar iniciatives que fomenten l'equitat, la justícia i la sostenibilitat a partir de la identificació dels reptes i desafiaments que planteja l'economia actual, analitzant, amb sentit crític, l'impacte que provoquen la globalització, la nova economia i la revolució digital en el benestar econòmic i social dels ciutadans i ciutadanes." },
+      { code: "5.2", es: "Comprender los retos económicos actuales analizando, de forma crítica y constructiva, el entorno, identificando aquellos elementos que condicionan y transforman la economía y fomentando iniciativas que respondan a las necesidades que plantean estos retos.",
+        va: "Comprendre els reptes econòmics actuals, analitzant l'entorn de manera crítica i constructiva, identificant aquells elements que condicionen i transformen l'economia, i fomentant iniciatives que responguen a les necessitats que plantegen estos reptes." }
+    ],
+    uso: { es: "Pizarra: el alumnado dibuja las relaciones entre producción, emisiones, clima y daños (u otro sistema), identifica los bucles reforzadores y compensadores y los pone en marcha. Simulador de emisiones: compara 2025-2100 sin transición, con transición pronto y con transición tardía.",
+      va: "Pissarra: l'alumnat dibuixa les relacions entre producció, emissions, clima i danys (o un altre sistema), identifica els bucles reforçadors i compensadors i els posa en marxa. Simulador d'emissions: compara 2025-2100 sense transició, amb transició prompte i amb transició tardana." }
+  };
+  OBS.mountBar($("obs-bar"), { ficha, fichaContainer: document.querySelector("header.top") });
+
+  // ---------- Pestañas ----------
+  const VIEWS = ["pizarra", "simulador"];
+  function show(view) {
+    if (!VIEWS.includes(view)) view = "pizarra";
+    for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
+    if (view === "simulador") render();
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+  // =====================================================================
+  // PIZARRA
+  // =====================================================================
+  const PRESETS = {
+    // Bucle compensador: producción → emisiones → CO₂ → temperatura → fenómenos extremos → daños −→ producción
+    // Bucle reforzador: producción → beneficios → inversión → producción. Palanca: renovables −→ emisiones
+    emisiones: () => ({ nodes: [
+      { id: "prod", label: t("n.prod"), x: 300, y: 290 }, { id: "emis", label: t("n.emis"), x: 430, y: 110 },
+      { id: "co2", label: t("n.co2"), x: 680, y: 110 }, { id: "temp", label: t("n.temp"), x: 860, y: 260 },
+      { id: "ext", label: t("n.ext"), x: 780, y: 450 }, { id: "dan", label: t("n.dan"), x: 520, y: 470 },
+      { id: "ben", label: t("n.ben"), x: 110, y: 140 }, { id: "inv", label: t("n.inv"), x: 110, y: 430 },
+      { id: "ren", label: t("n.ren"), x: 560, y: 280 } ],
+      edges: [
+        { id: "e1", from: "prod", to: "emis", sign: 1 }, { id: "e2", from: "emis", to: "co2", sign: 1 },
+        { id: "e3", from: "co2", to: "temp", sign: 1 }, { id: "e4", from: "temp", to: "ext", sign: 1 },
+        { id: "e5", from: "ext", to: "dan", sign: 1 }, { id: "e6", from: "dan", to: "prod", sign: -1 },
+        { id: "e7", from: "prod", to: "ben", sign: 1 }, { id: "e8", from: "ben", to: "inv", sign: 1 }, { id: "e9", from: "inv", to: "prod", sign: 1 },
+        { id: "e10", from: "ren", to: "emis", sign: -1 } ] }),
+    poblacion: () => ({ nodes: [
+      { id: "pob", label: t("n.pob"), x: 420, y: 270 }, { id: "nac", label: t("n.nac"), x: 160, y: 140 },
+      { id: "ali", label: t("n.ali"), x: 720, y: 140 }, { id: "mue", label: t("n.mue"), x: 720, y: 420 } ],
+      edges: [
+        { id: "e1", from: "pob", to: "nac", sign: 1 }, { id: "e2", from: "nac", to: "pob", sign: 1 },
+        { id: "e3", from: "pob", to: "ali", sign: -1 }, { id: "e4", from: "ali", to: "mue", sign: -1 }, { id: "e5", from: "mue", to: "pob", sign: -1 } ] }),
+    blanco: () => ({ nodes: [], edges: [] })
+  };
+  const KEY = "obs-sa5-pizarra-v2"; // clave nueva: no recupera dibujos del caladero guardados antes
+  function renderLoops(list) {
+    const ul = $("loops");
+    if (!list.length) { ul.replaceChildren(OBS.h("li", { class: "small", text: t("l.none") })); return; }
+    ul.replaceChildren(...list.map(lp => OBS.h("li", {},
+      OBS.h("span", { class: "tag " + (lp.type === "R" ? "r" : "b"), text: lp.type }),
+      OBS.h("span", { text: lp.labels.concat(lp.labels[0]).join(" → ") }),
+      OBS.h("span", { class: "small", text: lp.type === "R" ? t("l.R") : t("l.B") }))));
+  }
+  const board = Pizarra.create($("board"), {
+    mode: "causal",
+    onChange: m => { OBS.store.set(KEY, JSON.stringify(m)); $("s-json").value = JSON.stringify(m, null, 1); },
+    onLoops: renderLoops
+  });
+  let saved = null;
+  try { saved = JSON.parse(OBS.store.get(KEY) || "null"); } catch { saved = null; }
+  board.load(saved && saved.nodes ? saved : PRESETS.emisiones());
+  $("s-json").value = JSON.stringify(board.toJSON(), null, 1);
+  function setPlay(m) {
+    board.setMode(m);
+    $("m-draw").setAttribute("aria-pressed", String(m === "dibujar"));
+    $("m-play").setAttribute("aria-pressed", String(m === "jugar"));
+    $("b-new").disabled = m === "jugar";
+    $("b-help").innerHTML = t(m === "jugar" ? "help.play" : "help.draw");
+  }
+  $("m-draw").addEventListener("click", () => setPlay("dibujar"));
+  $("m-play").addEventListener("click", () => setPlay("jugar"));
+  $("b-new").addEventListener("click", () => board.addNode());
+  $("b-load").addEventListener("click", () => {
+    const m = PRESETS[$("b-preset").value](); board.load(m);
+    OBS.store.set(KEY, JSON.stringify(board.toJSON())); $("s-json").value = JSON.stringify(board.toJSON(), null, 1);
+    setPlay("dibujar");
+  });
+  const status = (msg, bad) => { $("s-status").textContent = msg; $("s-status").className = "status" + (bad ? " bad" : ""); };
+  $("s-copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText($("s-json").value); status(t("s.copied")); }
+    catch { $("s-json").select(); status(t("s.nocopy"), true); }
+  });
+  $("s-down").addEventListener("click", async () => status(await OBS.download("pizarra-sa5.json", $("s-json").value, "application/json")));
+  $("s-in").addEventListener("click", () => {
+    let m = null; try { m = JSON.parse($("s-json").value); } catch {}
+    if (!m || !Array.isArray(m.nodes)) { status(t("s.bad"), true); return; }
+    board.load(m); OBS.store.set(KEY, JSON.stringify(board.toJSON())); status(t("s.loaded"));
+  });
+
+  // =====================================================================
+  // SIMULADOR DE EMISIONES (modelo didáctico, paso anual 2025-2100)
+  // =====================================================================
+  // Y producción (índice 2025 = 100); I emisiones por unidad (2025 = 1); C CO₂ acumulado (ppm); T temperatura (°C sobre la era preindustrial)
+  // E = Y·I · daños D = min(0,5; 0,007·T²) (+0,02·T en un año de riada; probabilidad 4 %·T, semilla fija)
+  // Y(t+1) = Y·(1 + g − 0,6·D), g = 1 % + 4 %·reinversión − 0,25·renovables · I(t+1) = I·(1 − 2·renovables)
+  // C(t+1) = C + 0,03·E − 0,004·(C − 280) · T(t+1) = T + 0,04·(3·log2(C/280) − T)
+  const Y0 = 2025, Y1 = 2100, PRE = 280, SEED = 20241029;
+  const DEF = { inv: 50, ren: 0, start: 2030, flood: true };
+  function simulate(p) {
+    let Y = 100, I = 1, C = 425, T = 1.3, seed = SEED;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const out = [];
+    for (let yr = Y0; yr <= Y1; yr++) {
+      const rv = yr >= p.start ? p.ren / 100 : 0;
+      const E = Y * I;
+      let D = Math.min(0.5, 0.007 * T * T);
+      const flood = rnd() < 0.04 * T && p.flood;
+      if (flood) D = Math.min(0.6, D + 0.02 * T);
+      const g = 0.01 + 0.04 * p.inv / 100 - 0.25 * rv;
+      out.push({ yr, Y, E, C, T, D, dam: Y * D, flood });
+      Y = Y * (1 + g - 0.6 * D); I = I * (1 - 2 * rv);
+      C = C + 0.03 * E - 0.004 * (C - PRE);
+      T = T + 0.04 * (3 * Math.log2(C / PRE) - T);
+    }
+    let cum = 0; out.forEach(o => { cum += o.dam; o.cum = cum; });
     return out;
   }
-  function status(o) {
-    if (o.S < 0.15 * K) return { cls: "bad", chip: "colapso", text: "Quedan tan pocos peces que casi no se reproducen. Aunque se deje de pescar, el mar tardará años en recuperarse." };
-    if (o.C > o.R + 1) return { cls: "warn", chip: "sobreexplotación", text: "Se pescan más peces de los que nacen: la reserva de peces está bajando." };
-    return { cls: "ok", chip: "sostenible", text: "Se pescan como mucho los peces que nacen: la reserva de peces se mantiene o crece." };
-  }
-
-  // ---------- Mandos ----------
-  const ids = ["f0", "re", "quota", "g"];
-  const params = () => ({ f0: +$("c-f0").value, re: +$("c-re").value, quota: +$("c-quota").value, g: +$("c-g").value });
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const el = OBS.h;
+  const sv = (tag, attrs = {}, text) => { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const params = () => ({ inv: +$("c-inv").value, ren: +$("c-ren").value, start: +$("c-start").value, flood: $("c-flood").checked });
   function labels(p) {
-    $("c-f0-out").textContent = fmt(p.f0) + " barcos";
-    $("c-re-out").textContent = fmt(p.re) + " %";
-    $("c-quota-out").textContent = p.quota > 0 ? fmt(p.quota) + " mil t" : "sin cuota";
-    $("c-g-out").textContent = p.g <= 40 ? "lenta" : p.g >= 65 ? "rápida" : "media";
+    $("c-inv-out").textContent = fmt(p.inv) + " %";
+    $("c-ren-out").textContent = p.ren > 0 ? fmt(p.ren, 1) + " %" : t("c.none");
+    $("c-start-out").textContent = String(p.start);
+    $("c-start").disabled = p.ren === 0;
   }
   let run = simulate(DEF);
+  const idx = yr => clamp(yr - Y0, 0, Y1 - Y0);
   function recompute() { const p = params(); labels(p); run = simulate(p); render(); }
-  ids.forEach(k => $("c-" + k).addEventListener("input", () => { stop(); recompute(); }));
-  function setParams(p) { ids.forEach(k => { $("c-" + k).value = p[k]; }); recompute(); }
-  $("c-reset").addEventListener("click", () => { stop(); setParams(DEF); $("t-year").value = YEARS; render(); });
+  ["c-inv", "c-ren", "c-start"].forEach(id => $(id).addEventListener("input", () => { stop(); recompute(); }));
+  $("c-flood").addEventListener("change", () => { stop(); recompute(); });
+  function setParams(p) { $("c-inv").value = p.inv; $("c-ren").value = p.ren; $("c-start").value = p.start; $("c-flood").checked = p.flood; recompute(); }
+  $("c-reset").addEventListener("click", () => { stop(); setParams(DEF); $("t-year").value = Y1; render(); });
   document.querySelectorAll("[data-try]").forEach(b => b.addEventListener("click", () => {
-    stop();
-    const n = b.dataset.try;
-    setParams(n === "1" ? DEF : n === "2" ? { ...DEF, quota: 100 } : { ...DEF, re: 15 });
-    $("t-year").value = 0; render();
+    stop(); const n = b.dataset.try;
+    setParams(n === "1" ? DEF : n === "2" ? { ...DEF, ren: 2, start: 2030 } : { ...DEF, ren: 2, start: 2055 });
+    $("t-year").value = Y0; render();
     $("h-sim").scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
     play();
   }));
-
-  // ---------- Tiempo ----------
   let timer = null;
-  function stop() { if (timer) { clearInterval(timer); timer = null; } $("t-play").textContent = "Reproducir"; }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } $("t-play").textContent = t("t.play"); }
   function play() {
     if (timer) { stop(); return; }
-    if (+$("t-year").value >= YEARS) $("t-year").value = 0;
-    $("t-play").textContent = "Pausa";
-    const step = () => {
-      const y = +$("t-year").value;
-      if (y >= YEARS) { stop(); return; }
-      $("t-year").value = y + 1; render();
-    };
-    if (reduced()) { $("t-year").value = YEARS; render(); stop(); return; }
-    timer = setInterval(step, 260);
+    if (+$("t-year").value >= Y1) $("t-year").value = Y0;
+    if (reduced()) { $("t-year").value = Y1; render(); stop(); return; }
+    $("t-play").textContent = t("t.pause");
+    timer = setInterval(() => { const y = +$("t-year").value; if (y >= Y1) { stop(); return; } $("t-year").value = y + 1; render(); }, 160);
   }
   $("t-play").addEventListener("click", play);
   $("t-year").addEventListener("input", () => { stop(); render(); });
 
-  // ---------- Motor de gráficos ----------
+  // ---------- Gráficos (una escala por gráfico, eje y con mínimo propio) ----------
   const M = { l: 52, r: 16, t: 12, b: 40 };
   function frame(svg, o) {
     svg.replaceChildren();
-    const W = o.w || 360, H = o.h || 250;
-    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-    const pw = W - M.l - M.r, ph = H - M.t - M.b;
-    const sx = x => M.l + (x / o.xMax) * pw;
-    const sy = y => M.t + ph - (y / o.yMax) * ph;
+    const W = o.w || 360, H = o.h || 250; svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const y0 = o.yMin || 0;
+    const pw = W - M.l - M.r, ph = H - M.t - M.b, sx = x => M.l + ((x - Y0) / (Y1 - Y0)) * pw, sy = y => M.t + ph - ((y - y0) / (o.yMax - y0)) * ph;
     const grid = sv("g", { class: "grid" }), axis = sv("g", { class: "axis" });
-    o.yTicks.forEach(t => { grid.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(t), y2: sy(t) })); svg.append(sv("text", { x: M.l - 8, y: sy(t) + 4, "text-anchor": "end" }, fmt(t))); });
-    o.xTicks.forEach(t => svg.append(sv("text", { x: sx(t), y: H - M.b + 18, "text-anchor": "middle" }, fmt(t))));
-    axis.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(0), y2: sy(0) }), sv("line", { x1: M.l, x2: M.l, y1: M.t, y2: sy(0) }));
-    svg.append(grid, axis, sv("text", { x: (M.l + W - M.r) / 2, y: H - 6, "text-anchor": "middle", class: "axl" }, o.xLabel));
-    const plot = sv("g"), top = sv("g");
-    svg.append(plot, top);
-    return { sx, sy, plot, top, o, pw, ph, W, H };
+    o.yTicks.forEach(v => { grid.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(v), y2: sy(v) })); svg.append(sv("text", { x: M.l - 8, y: sy(v) + 4, "text-anchor": "end" }, (o.yFmt || fmt)(v))); });
+    [2025, 2050, 2075, 2100].forEach(v => svg.append(sv("text", { x: sx(v), y: H - M.b + 18, "text-anchor": "middle" }, String(v))));
+    axis.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(y0), y2: sy(y0) }), sv("line", { x1: M.l, x2: M.l, y1: M.t, y2: sy(y0) }));
+    svg.append(grid, axis, sv("text", { x: (M.l + W - M.r) / 2, y: H - 6, "text-anchor": "middle", class: "axl" }, t("g.years")));
+    const plot = sv("g"), top = sv("g"); svg.append(plot, top);
+    return { sx, sy, plot, top, o, pw, ph, W, H, y0 };
   }
   const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
-  function series(F, key, upto, cls) {
-    const all = run.map(o => [F.sx(o.t), F.sy(clamp(o[key], 0, F.o.yMax))]);
+  function series(F, key, upto, cls, color) {
+    const all = run.map(o => [F.sx(o.yr), F.sy(clamp(o[key], F.y0, F.o.yMax))]);
     F.plot.append(sv("path", { d: path(all), class: "ghost" }));
     F.plot.append(sv("path", { d: path(all.slice(0, upto + 1)), class: "curve " + cls }));
     const last = all[upto];
-    F.top.append(sv("circle", { cx: last[0], cy: last[1], r: 5, class: "dot", style: "fill:var(" + (cls === "c-ink" ? "--ink" : "--" + cls.slice(2)) + ")" }));
+    F.top.append(sv("circle", { cx: last[0], cy: last[1], r: 5, class: "dot", style: "fill:" + color }));
   }
+  function nowLine(F, yr) { F.plot.append(sv("line", { x1: F.sx(yr), x2: F.sx(yr), y1: F.sy(F.y0), y2: F.sy(F.o.yMax), class: "now" })); }
   function hover(svg, tip, F, rows) {
-    const line = sv("line", { class: "hover-line", y1: M.t, y2: F.sy(0), visibility: "hidden" });
+    const line = sv("line", { class: "hover-line", y1: M.t, y2: F.sy(F.y0), visibility: "hidden" });
     const hit = sv("rect", { x: M.l, y: M.t, width: F.pw, height: F.ph, fill: "transparent" });
     svg.append(line, hit);
     hit.addEventListener("pointermove", e => {
       const r = svg.getBoundingClientRect();
-      const t = Math.round(clamp(((e.clientX - r.left) * F.W / r.width - M.l) / F.pw * YEARS, 0, YEARS));
-      line.setAttribute("x1", F.sx(t)); line.setAttribute("x2", F.sx(t)); line.setAttribute("visibility", "visible");
-      const d = rows(run[t]);
-      tip.replaceChildren(el("span", { class: "h", text: "Año " + t }), ...d.map(([c, k, v]) => el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
+      const yr = Math.round(clamp(Y0 + ((e.clientX - r.left) * F.W / r.width - M.l) / F.pw * (Y1 - Y0), Y0, Y1));
+      line.setAttribute("x1", F.sx(yr)); line.setAttribute("x2", F.sx(yr)); line.setAttribute("visibility", "visible");
+      const o = run[idx(yr)];
+      tip.replaceChildren(el("span", { class: "h", text: t("d.year", { v: yr }) + (o.flood ? " · " + t("g.flood") : "") }), ...rows(o).map(([c, k, v]) => el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
       tip.hidden = false;
       const px = e.clientX - r.left, tw = tip.offsetWidth;
-      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px";
-      tip.style.top = Math.max(0, e.clientY - r.top - 20) + "px";
+      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px"; tip.style.top = Math.max(0, e.clientY - r.top - 20) + "px";
     });
     hit.addEventListener("pointerleave", () => { tip.hidden = true; line.setAttribute("visibility", "hidden"); });
   }
   const niceMax = (v, steps) => { const raw = v / steps; const mag = 10 ** Math.floor(Math.log10(raw)); const n = [1, 2, 2.5, 5, 10].find(m => m * mag >= raw) * mag; return { max: n * steps, step: n }; };
-  const ticks = (max, step) => Array.from({ length: Math.round(max / step) + 1 }, (_, i) => i * step);
-  const XT = [0, 10, 20, 30, 40, 50];
+  const ticks = (min, max, step) => Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + i * step);
 
   // ---------- Diagrama de reservas y flujos ----------
-  function arrowHead(g, x, y, ang, cls) {
-    const s = 7, a1 = ang + Math.PI * 0.82, a2 = ang - Math.PI * 0.82;
-    g.append(sv("path", { d: `M${x} ${y} L${x + s * Math.cos(a1)} ${y + s * Math.sin(a1)} L${x + s * Math.cos(a2)} ${y + s * Math.sin(a2)} Z`, class: "ah " + (cls || "") }));
-  }
-  function link(g, d, x, y, ang, cls, sign, sx, sy) {
-    g.append(sv("path", { d, class: "link " + (cls || "") }));
-    arrowHead(g, x, y, ang, cls);
-    if (sign) g.append(sv("text", { x: sx, y: sy, class: "mut", "text-anchor": "middle" }, sign));
-  }
-  function pipe(g, x1, y, x2) {
-    g.append(sv("line", { x1, y1: y, x2, y2: y, class: "pipe" }), sv("line", { x1, y1: y, x2: x2 - 2, y2: y, class: "pipe-in" }));
-    arrowHead(g, x2 + 4, y, 0, "ink");
-  }
+  function arrowHead(g, x, y, ang, cls) { const s = 7, a1 = ang + Math.PI * 0.82, a2 = ang - Math.PI * 0.82; g.append(sv("path", { d: `M${x} ${y} L${x + s * Math.cos(a1)} ${y + s * Math.sin(a1)} L${x + s * Math.cos(a2)} ${y + s * Math.sin(a2)} Z`, class: "ah " + (cls || "") })); }
+  function link(g, d, x, y, ang, cls, sign, lx, ly) { g.append(sv("path", { d, class: "link " + (cls || "") })); arrowHead(g, x, y, ang, cls); if (sign) g.append(sv("text", { x: lx, y: ly, class: "mut", "text-anchor": "middle" }, sign)); }
+  function pipe(g, x1, y, x2) { g.append(sv("line", { x1, y1: y, x2, y2: y, class: "pipe" }), sv("line", { x1, y1: y, x2: x2 - 2, y2: y, class: "pipe-in" })); arrowHead(g, x2 + 4, y, 0, "ink"); }
   function valve(g, x, y) { g.append(sv("path", { d: `M${x - 11} ${y - 11} L${x + 11} ${y + 11} L${x + 11} ${y - 11} L${x - 11} ${y + 11} Z`, class: "valve" })); }
   function cloud(g, x, y) { g.append(sv("ellipse", { cx: x, cy: y, rx: 26, ry: 16, class: "cloud" })); }
   function stockBox(g, x, y, w, h, frac, lvlCls, title, value) {
-    g.append(sv("rect", { x, y, width: w, height: h, rx: 4, class: "stockbox" }));
+    g.append(sv("rect", { x, y, width: w, height: h, rx: 0, class: "stockbox" }));
     const fh = clamp(frac, 0, 1) * (h - 4);
-    g.append(sv("rect", { x: x + 2, y: y + h - 2 - fh, width: w - 4, height: fh, rx: 2, class: lvlCls }));
+    g.append(sv("rect", { x: x + 2, y: y + h - 2 - fh, width: w - 4, height: fh, class: lvlCls }));
     g.append(sv("text", { x: x + w / 2, y: y + 24, "text-anchor": "middle", "font-weight": "600" }, title));
     g.append(sv("text", { x: x + w / 2, y: y + h - 14, "text-anchor": "middle", class: "num" }, value));
   }
   function drawDiagram(o) {
-    const svg = $("sfd"); svg.replaceChildren();
-    const g = sv("g"); svg.append(g);
-    // Peces (arriba)
+    const svg = $("sfd"); svg.replaceChildren(); const g = sv("g"); svg.append(g);
+    // Arriba: emisiones → CO₂ acumulado → absorción natural
     const fy = 90;
     cloud(g, 50, fy); pipe(g, 76, fy, 236); valve(g, 150, fy);
-    g.append(sv("text", { x: 150, y: fy - 22, "text-anchor": "middle" }, "Reproducción"));
-    g.append(sv("text", { x: 150, y: fy + 34, "text-anchor": "middle", class: "num" }, fmt(o.R) + " al año"));
-    stockBox(g, 240, 40, 170, 100, o.S / K, "lvl-fish", "Peces en el mar", fmt(o.S) + " mil t");
+    g.append(sv("text", { x: 150, y: fy - 42, "text-anchor": "middle" }, t("d.emis")));
+    g.append(sv("text", { x: 150, y: fy - 22, "text-anchor": "middle", class: "num" }, t("d.peryear", { v: fmt(o.E) })));
+    stockBox(g, 240, 40, 170, 100, (o.C - PRE) / 500, "lvl-co2", t("d.co2"), t("d.ppm", { v: fmt(o.C) }));
     pipe(g, 410, fy, 600); valve(g, 500, fy); cloud(g, 632, fy);
-    g.append(sv("text", { x: 632, y: fy + 5, "text-anchor": "middle", class: "mut" }, "puerto"));
-    g.append(sv("text", { x: 500, y: fy - 42, "text-anchor": "middle" }, "Captura"));
-    g.append(sv("text", { x: 500, y: fy - 22, "text-anchor": "middle", class: "num" }, fmt(o.C) + " al año"));
-    // Flota (abajo)
+    g.append(sv("text", { x: 500, y: fy - 42, "text-anchor": "middle" }, t("d.abs")));
+    g.append(sv("text", { x: 500, y: fy - 22, "text-anchor": "middle", class: "num" }, t("d.peryear", { v: fmt(0.004 * (o.C - PRE), 1) + " ppm" })));
+    // Abajo: inversión → producción → daños
     const by = 330;
     cloud(g, 50, by); pipe(g, 76, by, 236); valve(g, 150, by);
-    g.append(sv("text", { x: 150, y: by + 34, "text-anchor": "middle" }, "Compra de barcos"));
-    g.append(sv("text", { x: 150, y: by - 20, "text-anchor": "middle", class: "num" }, "+" + fmt(o.buy, 1) + " al año"));
-    stockBox(g, 240, by - 50, 170, 100, o.F / 150, "lvl-fleet", "Barcos", fmt(o.F) + " barcos");
+    g.append(sv("text", { x: 150, y: by + 40, "text-anchor": "middle" }, t("d.inv")));
+    stockBox(g, 240, by - 50, 170, 100, o.Y / 250, "lvl-prod", t("d.prod"), t("d.idx", { v: fmt(o.Y) }));
     pipe(g, 410, by, 600); valve(g, 500, by); cloud(g, 632, by);
-    g.append(sv("text", { x: 500, y: by + 34, "text-anchor": "middle" }, "Desguace"));
-    g.append(sv("text", { x: 500, y: by - 20, "text-anchor": "middle", class: "num" }, "−" + fmt(o.scrap, 1) + " al año"));
-    // Beneficio (variable auxiliar)
-    g.append(sv("text", { x: 610, y: 216, "text-anchor": "middle", "font-weight": "600" }, "Beneficio"));
-    g.append(sv("text", { x: 610, y: 236, "text-anchor": "middle", class: "num", style: o.B < 0 ? "fill:var(--bad)" : null }, (o.B < 0 ? "−" : "") + fmt(Math.abs(o.B)) + " M€"));
+    g.append(sv("text", { x: 500, y: by + 40, "text-anchor": "middle" }, t("d.dam")));
+    g.append(sv("text", { x: 500, y: by - 20, "text-anchor": "middle", class: "num", style: o.flood ? "fill:var(--bad)" : null }, "−" + t("d.peryear", { v: fmt(o.dam, 1) })));
+    // Temperatura (variable auxiliar)
+    g.append(sv("circle", { cx: 640, cy: 215, r: 50, class: "aux" }));
+    g.append(sv("text", { x: 640, y: 210, "text-anchor": "middle", "font-weight": "600" }, t("d.temp")));
+    g.append(sv("text", { x: 640, y: 230, "text-anchor": "middle", class: "num" }, t("d.deg", { v: fmt(o.T, 1) })));
+    // Renovables (palanca)
+    g.append(sv("text", { x: 110, y: 205, "text-anchor": "middle", "font-weight": "600" }, t("d.ren")));
     // Enlaces
-    link(g, "M330 140 C 330 175, 470 150, 495 104", 495, 104, -Math.PI / 2.4, "b", "+", 420, 170);           // peces → captura
-    link(g, "M410 300 C 470 260, 505 180, 502 106", 502, 106, -Math.PI / 2, "r", "+", 492, 250);             // barcos → captura
-    link(g, "M515 102 C 580 120, 610 160, 610 200", 610, 200, Math.PI / 2, "r", "+", 618, 170);              // captura → beneficio
-    link(g, "M590 242 C 420 270, 230 250, 160 316", 160, 316, Math.PI * 0.62, "r", "+", 380, 276);           // beneficio → compra
-    link(g, "M268 140 C 240 175, 175 150, 152 104", 152, 104, -Math.PI * 0.62, "", "+ / −", 196, 168);         // peces → reproducción
-    // Bucles
-    g.append(sv("circle", { cx: 540, cy: 200, r: 18, class: "loopc r" }), sv("text", { x: 540, y: 206, "text-anchor": "middle", class: "loop", style: "fill:var(--s2)" }, "R"));
-    g.append(sv("circle", { cx: 420, cy: 120, r: 16, class: "loopc b" }), sv("text", { x: 420, y: 126, "text-anchor": "middle", class: "loop", style: "fill:var(--s1)" }, "B"));
-    g.append(sv("text", { x: 700, y: 30, "text-anchor": "end", class: "mut" }, "Año " + o.t));
+    link(g, "M300 280 C 260 220, 175 180, 152 104", 152, 104, -Math.PI * 0.62, "b", "+", 222, 196);
+    link(g, "M410 100 C 520 130, 600 150, 615 180", 615, 180, Math.PI * 0.35, "b", "+", 560, 150);
+    link(g, "M620 252 C 600 290, 540 300, 506 318", 506, 318, Math.PI * 0.8, "b", "+", 580, 300);
+    link(g, "M375 280 C 350 250, 215 260, 160 314", 160, 314, Math.PI * 0.72, "r", "+", 270, 262);
+    link(g, "M110 190 C 120 150, 138 120, 146 104", 146, 104, -Math.PI * 0.4, "", "−", 118, 150);
+    g.append(sv("circle", { cx: 222, cy: 240, r: 16, class: "loopc r" }), sv("text", { x: 222, y: 246, "text-anchor": "middle", class: "loop", style: "fill:var(--s2)" }, "R"));
+    g.append(sv("circle", { cx: 470, cy: 205, r: 16, class: "loopc b" }), sv("text", { x: 470, y: 211, "text-anchor": "middle", class: "loop", style: "fill:var(--s1)" }, "B"));
+    g.append(sv("text", { x: 740, y: 30, "text-anchor": "end", class: "mut" }, t("d.year", { v: o.yr })));
   }
 
-  // ---------- Pintar ----------
+  // ---------- Lecciones dinámicas ----------
+  function lessons(y) {
+    const p = params(), o = run[idx(y)];
+    const upto = run.slice(0, idx(y) + 1);
+    const peakE = upto.reduce((a, r) => r.E > a.E ? r : a, upto[0]);
+    const items = [];
+    if (p.ren > 0 && peakE.yr < y) items.push(t("les.co2", { ye: peakE.yr, y, e: fmt(o.E), c: fmt(o.C) }));
+    else items.push(t("les.co2no", { y, c: fmt(o.C) }));
+    const peakT = run.reduce((a, r) => r.T > a.T ? r : a, run[0]);
+    const peakEall = run.reduce((a, r) => r.E > a.E ? r : a, run[0]);
+    if (p.ren > 0 && peakEall.yr < Y1) items.push(t(peakT.yr >= Y1 ? "les.lagmin" : "les.lag", { n: Math.max(0, peakT.yr - peakEall.yr), ye: peakEall.yr }));
+    else items.push(t("les.lagno", { y, d: fmt(o.D * 100, 1) + " %" }));
+    const base = simulate({ ...p, ren: Math.max(p.ren, 2), start: 2030 });
+    const a = base[idx(y)].cum, b = o.cum;
+    if (p.ren === 0) items.push(t("les.delayno", { y, a: fmt(a), b: fmt(b) }));
+    else if (p.start <= 2030) items.push(t("les.same", { b: fmt(b) }));
+    else items.push(t("les.delay", { y, a: fmt(a), b: fmt(b), s: p.start }));
+    $("lessons").replaceChildren(el("strong", { text: t("les.title") }), el("ul", { class: "lessons" }, items.map(h => { const li = el("li"); li.innerHTML = h; return li; })));
+  }
+
   function render() {
-    const y = +$("t-year").value, o = run[y];
-    $("t-year-out").textContent = fmt(y) + " de 50";
-    const st = status(o);
+    const y = +$("t-year").value, i = idx(y), o = run[i];
+    $("t-year-out").textContent = t("t.of", { v: y });
+    const st = o.T < 1.5 ? { cls: "ok", chip: t("st.ok"), text: t("st.okT") } : o.T < 2 ? { cls: "warn", chip: t("st.warn"), text: t("st.warnT") } : { cls: "bad", chip: t("st.bad"), text: t("st.badT") };
     $("state").replaceChildren(el("span", { class: "chip " + st.cls, text: st.chip }), el("span", { text: st.text }));
-    const total = run.slice(0, y + 1).reduce((a, r) => a + r.C, 0);
-    const peak = run.reduce((a, r) => r.C > a.C ? r : a);
     $("stats").replaceChildren(
-      el("div", { class: "stat" }, el("b", { text: fmt(o.S) }), el("span", { text: "Peces (mil t)" })),
-      el("div", { class: "stat" }, el("b", { text: fmt(o.F) }), el("span", { text: "Barcos" })),
-      el("div", { class: "stat" }, el("b", { text: fmt(o.C) }), el("span", { text: "Captura este año (mil t)" })),
-      el("div", { class: "stat" }, el("b", { text: fmt(total) }), el("span", { text: "Captura acumulada (mil t)" })),
-      el("div", { class: "stat" }, el("b", { text: "Año " + peak.t }), el("span", { text: "Año de la mayor captura" })));
+      el("div", { class: "stat" }, el("b", { text: fmt(o.Y) }), el("span", { text: t("k.prod") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.E) }), el("span", { text: t("k.emis") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.C) }), el("span", { text: t("k.co2") })),
+      el("div", { class: "stat" }, el("b", { text: "+" + fmt(o.T, 1) }), el("span", { text: t("k.temp") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.D * 100, 1) + " %" }), el("span", { text: t("k.dam") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.cum) }), el("span", { text: t("k.damTot") })));
+    lessons(y);
     drawDiagram(o);
-
-    // Peces
-    let F = frame($("ch-fish"), { xMax: YEARS, yMax: 1000, xTicks: XT, yTicks: [0, 250, 500, 750, 1000], xLabel: "Años" });
-    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(YEARS), y1: F.sy(K), y2: F.sy(K), class: "pline" }));
-    F.plot.append(sv("line", { x1: F.sx(y), x2: F.sx(y), y1: F.sy(0), y2: F.sy(1000), class: "now" }));
-    series(F, "S", y, "c-s1");
-    hover($("ch-fish"), $("tip-fish"), F, r => [["var(--s1)", "Peces", fmt(r.S) + " mil t"]]);
-
-    // Captura y reproducción
-    const fm = niceMax(Math.max(60, ...run.map(r => Math.max(r.C, r.R))), 4);
-    F = frame($("ch-flow"), { xMax: YEARS, yMax: fm.max, xTicks: XT, yTicks: ticks(fm.max, fm.step), xLabel: "Años" });
-    F.plot.append(sv("line", { x1: F.sx(y), x2: F.sx(y), y1: F.sy(0), y2: F.sy(fm.max), class: "now" }));
-    series(F, "R", y, "c-s3");
-    series(F, "C", y, "c-s2");
-    hover($("ch-flow"), $("tip-flow"), F, r => [["var(--s2)", "Captura", fmt(r.C) + " mil t"], ["var(--s3)", "Reproducción", fmt(r.R) + " mil t"]]);
-
-    // Barcos
-    const bm = niceMax(Math.max(40, ...run.map(r => r.F)), 4);
-    F = frame($("ch-fleet"), { xMax: YEARS, yMax: bm.max, xTicks: XT, yTicks: ticks(bm.max, bm.step), xLabel: "Años" });
-    F.plot.append(sv("line", { x1: F.sx(y), x2: F.sx(y), y1: F.sy(0), y2: F.sy(bm.max), class: "now" }));
-    series(F, "F", y, "c-ink");
-    hover($("ch-fleet"), $("tip-fleet"), F, r => [["var(--ink)", "Barcos", fmt(r.F)], ["var(--muted)", "Beneficio", fmt(r.B) + " M€"]]);
+    // Producción y daños
+    const pm = niceMax(Math.max(200, ...run.map(r => r.Y)), 4);
+    let F = frame($("ch-prod"), { yMax: pm.max, yTicks: ticks(0, pm.max, pm.step) });
+    nowLine(F, y);
+    series(F, "Y", i, "c-s1", "var(--s1)"); series(F, "dam", i, "c-s2", "var(--s2)");
+    run.forEach((r, k) => { if (r.flood && k <= i) { const x = F.sx(r.yr), yy = F.sy(F.y0) - 2; F.top.append(sv("path", { d: `M${x} ${yy - 8} L${x + 4} ${yy} L${x - 4} ${yy} Z`, class: "flood" })); } });
+    hover($("ch-prod"), $("tip-prod"), F, r => [["var(--s1)", t("g.prodL"), fmt(r.Y)], ["var(--s2)", t("g.dam"), fmt(r.dam, 1) + " (" + fmt(r.D * 100, 1) + " %)"]]);
+    // CO₂ acumulado
+    const cm = Math.max(500, Math.ceil(Math.max(...run.map(r => r.C)) / 100) * 100);
+    F = frame($("ch-co2"), { yMin: 250, yMax: cm, yTicks: ticks(300, cm, 100) });
+    F.plot.append(sv("line", { x1: F.sx(Y0), x2: F.sx(Y1), y1: F.sy(PRE), y2: F.sy(PRE), class: "thr" }));
+    nowLine(F, y);
+    series(F, "C", i, "c-ink", "var(--ink)");
+    hover($("ch-co2"), $("tip-co2"), F, r => [["var(--ink)", t("g.co2L"), t("d.ppm", { v: fmt(r.C) })]]);
+    // Temperatura
+    const tm = Math.max(2.5, Math.ceil(Math.max(...run.map(r => r.T)) * 2) / 2);
+    F = frame($("ch-temp"), { yMin: 1, yMax: tm, yTicks: ticks(1, tm, 0.5), yFmt: v => fmt(v, 1) });
+    [1.5, 2].forEach(v => { F.plot.append(sv("line", { x1: F.sx(Y0), x2: F.sx(Y1), y1: F.sy(v), y2: F.sy(v), class: "thr" })); F.top.append(sv("text", { x: F.sx(Y0) + 4, y: F.sy(v) - 4, class: "thr-l" }, fmt(v, 1) + " °C")); });
+    nowLine(F, y);
+    series(F, "T", i, "c-s2", "var(--s2)");
+    hover($("ch-temp"), $("tip-temp"), F, r => [["var(--s2)", t("g.tempL"), t("d.deg", { v: fmt(r.T, 2) })]]);
   }
 
-  labels(params());
-  run = simulate(params());
-  render();
+  // ---------- Arranque ----------
+  OBS.apply();
+  setPlay("dibujar");
+  labels(params()); run = simulate(params()); stop();
+  OBS.onLang(() => { board.relabel(); setPlay(board.getMode()); labels(params()); if (!timer) $("t-play").textContent = t("t.play"); render(); renderLoops(board.loops()); });
+  show(location.hash.slice(1));
 })();
 </script>

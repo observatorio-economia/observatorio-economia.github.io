@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<!-- Añadido por actualizar.sh: hoja y menú comunes del Observatorio. El resto es la herramienta tal como está en el vault. -->
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
 <link rel="stylesheet" href="../assets/observatorio.css">
 <script src="../assets/menu.js"></script>
-<script src="../assets/almacen-local.js"></script>
 <title>Observatorio · SA 2</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,7 +119,7 @@ td.mono, .mono { font-family: var(--font-mono); }
 .stat span { font-size: 13px; color: var(--muted); }
 .qres { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-top: 1px solid var(--rule); }
 .bars { display: flex; flex-direction: column; gap: 5px; }
-.bar { display: grid; grid-template-columns: minmax(0, 15em) 1fr 4.5em; gap: 10px; align-items: center; font-size: 14px; }
+.bar { display: grid; grid-template-columns: minmax(0, 15em) 1fr 5.8em; gap: 10px; align-items: center; font-size: 14px; }
 .bar .lab { min-width: 0; }
 .track { height: 14px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
 .fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
@@ -158,38 +157,136 @@ table.payoff td.hl { background: var(--accent-soft); }
   .person { grid-template-columns: 1fr 1fr; }
   .person .rm { grid-column: 1 / -1; justify-self: start; }
   .opts, .help, .persons { padding-left: 0; }
-  .bar { grid-template-columns: minmax(0, 1fr) 4.5em; }
+  .bar { grid-template-columns: minmax(0, 1fr) 5.8em; }
   .bar .track { grid-column: 1 / -1; grid-row: 2; }
 }
 @media (prefers-reduced-motion: no-preference) { .fill { transition: width .4s ease; } }
+details.imp { border-top: 1px solid var(--rule); padding-top: 12px; }
+details.imp summary { cursor: pointer; color: var(--accent); font-weight: 500; font-size: 15px; }
+details.imp[open] summary { margin-bottom: 10px; }
+.imp-body { display: flex; flex-direction: column; gap: 10px; }
+input[type="file"] { font: 14px var(--font-body); color: var(--muted); max-width: 100%; }
+body.obs-proj .bar { grid-template-columns: minmax(0, 18em) 1fr 6em; font-size: 17px; }
+body.obs-proj .track { height: 20px; }
+body.obs-proj .bar .val { font-size: 16px; }
+body.obs-proj .shelf i { width: 18px; height: 18px; }
+body.obs-proj .rounds { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+body.obs-proj .round .q { font-size: 17px; }
+body.obs-proj .big { font-size: 38px; }
+body.obs-proj table.payoff { font-size: 18px; }
+body.obs-proj .stats .stat b { font-size: 40px; }
+@media (max-width: 640px) { body.obs-proj .bar { grid-template-columns: minmax(0, 1fr) 5em; } }
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
 </style>
 
 <div class="wrap">
   <header class="top">
-    <span class="eyebrow">Observatorio · SA 2 · El comportamiento humano en la actividad económica</span>
-    <h1>¿Se puede decidir bien cuando nadie sabe lo que va a pasar?</h1>
-    <p class="lede">Herramientas de la situación de aprendizaje 2. <strong>Encuestas:</strong> qué decidió vuestra familia en 2020 y cuánto tiempo dedica cada persona a los cuidados y al hogar; son anónimas, sin nombres, ingresos ni datos de salud. <strong>Matriz:</strong> qué pasa en la estantería cuando todos esperan lo mismo.</p>
+    <div id="obs-bar"></div>
+    <span class="eyebrow" data-i18n="h.eyebrow">Observatorio · SA 2 · El comportamiento humano en la actividad económica</span>
+    <h1 data-i18n="h.title">¿Se puede decidir bien cuando nadie sabe lo que va a pasar?</h1>
+    <p class="lede" data-i18n-html="h.lede">Herramientas de la situación de aprendizaje 2.</p>
   </header>
 
-  <nav class="tabs" role="tablist" aria-label="Secciones">
-    <button role="tab" id="tab-contestar" aria-selected="true" data-view="contestar">Contestar</button>
-    <button role="tab" id="tab-introducir" aria-selected="false" data-view="introducir">Introducir códigos</button>
-    <button role="tab" id="tab-resultados" aria-selected="false" data-view="resultados">Resultados</button>
-    <button role="tab" id="tab-matriz" aria-selected="false" data-view="matriz">Matriz</button>
+  <nav class="tabs" role="tablist" aria-label="Secciones" data-i18n-attr="aria-label:tabs.aria">
+    <button role="tab" id="tab-contestar" aria-selected="true" data-view="contestar" data-i18n="tab.contestar">Contestar</button>
+    <button role="tab" id="tab-introducir" aria-selected="false" data-view="introducir" data-i18n="tab.introducir">Introducir códigos</button>
+    <button role="tab" id="tab-resultados" aria-selected="false" data-view="resultados" data-i18n="tab.resultados">Resultados</button>
+    <button role="tab" id="tab-matriz" aria-selected="false" data-view="matriz" data-i18n="tab.matriz">Matriz</button>
   </nav>
 
   <!-- CONTESTAR -->
   <section class="view" id="view-contestar" role="tabpanel" aria-labelledby="tab-contestar">
-    <div class="seg" role="group" aria-label="Elige la encuesta">
+    <div class="seg" role="group" aria-label="Elige la encuesta" data-i18n-attr="aria-label:pick.aria">
       <button type="button" id="pick-A" aria-pressed="true" data-survey="A">
-        <span class="k">ENCUESTA A · UNA POR HOGAR</span>
-        <span class="t">Decisiones de la familia en 2020</span>
-        <span class="d">Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia.</span>
+        <span class="k" data-i18n="pick.A.k">ENCUESTA A · UNA POR HOGAR</span>
+        <span class="t" data-i18n="pick.A.t">Decisiones de la familia en 2020</span>
+        <span class="d" data-i18n="pick.A.d">Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia.</span>
       </button>
       <button type="button" id="pick-B" aria-pressed="false" data-survey="B">
-        <span class="k">ENCUESTA B · UNA FILA POR PERSONA</span>
-        <span class="t">Horas de cuidados y de hogar</span>
-        <span class="d">Cuánto tiempo dedicó ayer cada persona de casa a los cuidados, al hogar y al trabajo pagado.</span>
+        <span class="k" data-i18n="pick.B.k">ENCUESTA B · UNA FILA POR PERSONA</span>
+        <span class="t" data-i18n="pick.B.t">Horas de cuidados y de hogar</span>
+        <span class="d" data-i18n="pick.B.d">Cuánto tiempo dedicó ayer cada persona de casa a los cuidados, al hogar y al trabajo pagado.</span>
       </button>
     </div>
 
@@ -197,16 +294,16 @@ table.payoff td.hl { background: var(--accent-soft); }
     <form class="survey" id="form-B" novalidate hidden></form>
 
     <div class="codebox" id="code-out" hidden>
-      <span class="eyebrow">Tu código de respuesta</span>
+      <span class="eyebrow" data-i18n="code.title">Tu código de respuesta</span>
       <span class="code" id="code-text"></span>
-      <p class="small">Copia el código en tu hoja de la carpeta y entrégalo en clase. El código guarda tus respuestas, no tu nombre.</p>
+      <p class="small" data-i18n="code.help">Copia el código en tu hoja de la carpeta y entrégalo en clase. El código guarda tus respuestas, no tu nombre.</p>
       <div class="actions">
-        <button type="button" class="btn ghost small" id="copy-code">Copiar el código</button>
+        <button type="button" class="btn ghost small" id="copy-code" data-i18n="code.copy">Copiar el código</button>
         <span class="status" id="copy-status" aria-live="polite"></span>
       </div>
       <div class="actions" id="direct-save" hidden>
-        <div class="field"><label for="direct-group">Guardar directamente en el grupo</label><input type="text" id="direct-group" list="group-list" placeholder="Ej.: 1BAT-A 2026-27"></div>
-        <button type="button" class="btn small" id="direct-save-btn">Guardar</button>
+        <div class="field"><label for="direct-group" data-i18n="code.direct">Guardar directamente en el grupo</label><input type="text" id="direct-group" list="group-list" placeholder="Ej.: 1BAT-A 2026-27" data-i18n-attr="placeholder:group.ph"></div>
+        <button type="button" class="btn small" id="direct-save-btn" data-i18n="code.save">Guardar</button>
         <span class="status" id="direct-status" aria-live="polite"></span>
       </div>
     </div>
@@ -215,40 +312,53 @@ table.payoff td.hl { background: var(--accent-soft); }
   <!-- INTRODUCIR -->
   <section class="view" id="view-introducir" role="tabpanel" aria-labelledby="tab-introducir" hidden>
     <div>
-      <h2>Introducir los códigos de la clase</h2>
-      <p class="small">Pega los códigos que ha traído el alumnado, uno por línea. Se comprueban antes de guardarlos: un código mal copiado no pasa.</p>
+      <h2 data-i18n="in.title">Introducir los códigos de la clase</h2>
+      <p class="small" data-i18n="in.help">Pega los códigos que ha traído el alumnado, uno por línea. Se comprueban antes de guardarlos: un código mal copiado no pasa.</p>
     </div>
     <div class="notice" id="write-note" hidden></div>
     <div class="field">
-      <label for="group-name">Grupo</label>
-      <input type="text" id="group-name" list="group-list" placeholder="Ej.: 1BAT-A 2026-27">
+      <label for="group-name" data-i18n="in.group">Grupo</label>
+      <input type="text" id="group-name" list="group-list" placeholder="Ej.: 1BAT-A 2026-27" data-i18n-attr="placeholder:group.ph">
       <datalist id="group-list"></datalist>
     </div>
     <div class="field" style="max-width:none">
-      <label for="codes-in">Códigos</label>
+      <label for="codes-in" data-i18n="in.codes">Códigos</label>
       <textarea id="codes-in" spellcheck="false" placeholder="A-102013241-ABQ&#10;B0-0010401-1111608-K7M"></textarea>
     </div>
     <div class="actions">
-      <button type="button" class="btn ghost" id="check-codes">Comprobar</button>
-      <button type="button" class="btn" id="save-codes" disabled>Guardar en el grupo</button>
-      <button type="button" class="btn quiet" id="local-codes" disabled>Ver resultados sin guardar</button>
+      <button type="button" class="btn ghost" id="check-codes" data-i18n="in.check">Comprobar</button>
+      <button type="button" class="btn" id="save-codes" disabled data-i18n="in.save">Guardar en el grupo</button>
+      <button type="button" class="btn quiet" id="local-codes" disabled data-i18n="in.local">Ver resultados sin guardar</button>
       <span class="status" id="save-status" aria-live="polite"></span>
     </div>
     <div class="parsed" id="parsed"></div>
+    <details class="imp" id="imp-box">
+      <summary data-i18n="imp.title">Importar un grupo exportado</summary>
+      <div class="imp-body">
+        <p class="small" data-i18n="imp.help">Sirve para pasar los datos de un ordenador a otro. Elige el archivo que descargaste con «Exportar el grupo» o pega aquí su contenido. Se guarda en el grupo que tenía, o en el que escribas arriba.</p>
+        <input type="file" id="imp-file" accept=".json,application/json,text/plain" aria-label="Archivo exportado" data-i18n-attr="aria-label:imp.file">
+        <textarea id="imp-text" spellcheck="false" aria-label="Contenido exportado" data-i18n-attr="aria-label:imp.text"></textarea>
+        <div class="actions">
+          <button type="button" class="btn ghost" id="imp-go" data-i18n="imp.go">Importar</button>
+          <span class="status" id="imp-status" aria-live="polite"></span>
+        </div>
+      </div>
+    </details>
   </section>
 
   <!-- RESULTADOS -->
   <section class="view" id="view-resultados" role="tabpanel" aria-labelledby="tab-resultados" hidden>
     <div class="actions">
-      <div class="field"><label for="res-source">Datos</label><select id="res-source"></select></div>
-      <div class="field"><label for="res-day">Encuesta B: día</label>
-        <select id="res-day"><option value="all">Todos los días</option><option value="0">Solo días laborables</option><option value="1">Solo sábados y domingos</option></select>
+      <div class="field"><label for="res-source" data-i18n="res.source">Datos</label><select id="res-source"></select></div>
+      <div class="field"><label for="res-day" data-i18n="res.day">Encuesta B: día</label>
+        <select id="res-day"><option value="all" data-i18n="res.day.all">Todos los días</option><option value="0" data-i18n="res.day.0">Solo días laborables</option><option value="1" data-i18n="res.day.1">Solo sábados y domingos</option></select>
       </div>
     </div>
     <div id="results"></div>
     <div class="actions" id="export-row" hidden>
-      <button type="button" class="btn ghost small" id="csv-A">Descargar encuesta A (CSV)</button>
-      <button type="button" class="btn ghost small" id="csv-B">Descargar encuesta B (CSV)</button>
+      <button type="button" class="btn ghost small" id="csv-A" data-i18n="res.csvA">Descargar encuesta A (CSV)</button>
+      <button type="button" class="btn ghost small" id="csv-B" data-i18n="res.csvB">Descargar encuesta B (CSV)</button>
+      <button type="button" class="btn quiet small" id="json-group" hidden data-i18n="res.json">Exportar el grupo (para otro ordenador)</button>
       <span class="status" id="csv-status" aria-live="polite"></span>
     </div>
   </section>
@@ -256,27 +366,27 @@ table.payoff td.hl { background: var(--accent-soft); }
   <!-- MATRIZ -->
   <section class="view" id="view-matriz" role="tabpanel" aria-labelledby="tab-matriz" hidden>
     <div>
-      <h2>¿Compras lo normal o compras de más?</h2>
-      <p class="small">Para proyectar en la sesión 4. Se vota con <a href="https://www.plickers.com/" target="_blank" rel="noopener" style="color:var(--accent)">Plickers</a> (A = compro lo normal; B = compro de más) o, si falla, a mano alzada o en papel. Apunta aquí cuántas personas eligen «compro de más» en cada ronda y la herramienta calcula qué pasa en la estantería.</p>
+      <h2 data-i18n="m.title">¿Compras lo normal o compras de más?</h2>
+      <p class="small" data-i18n-html="m.help">Para proyectar en la sesión 4.</p>
     </div>
     <div class="params">
-      <div class="field"><label for="m-n">Hogares (alumnado que vota)</label><input type="text" id="m-n" inputmode="numeric" value="28"></div>
-      <div class="field"><label for="m-s">Paquetes en la tienda</label><input type="text" id="m-s" inputmode="numeric" value="34"></div>
-      <div class="field"><label for="m-a">Paquetes de quien compra de más</label><input type="text" id="m-a" inputmode="numeric" value="3"></div>
+      <div class="field"><label for="m-n" data-i18n="m.n">Hogares (alumnado que vota)</label><input type="text" id="m-n" inputmode="numeric" value="28"></div>
+      <div class="field"><label for="m-s" data-i18n="m.s">Paquetes en la tienda</label><input type="text" id="m-s" inputmode="numeric" value="34"></div>
+      <div class="field"><label for="m-a" data-i18n="m.a">Paquetes de quien compra de más</label><input type="text" id="m-a" inputmode="numeric" value="3"></div>
     </div>
     <p class="small" id="m-note"></p>
     <div class="rounds" id="m-rounds"></div>
-    <div class="actions"><button type="button" class="btn quiet small" id="m-reset">Borrar las rondas</button></div>
+    <div class="actions"><button type="button" class="btn quiet small" id="m-reset" data-i18n="m.reset">Borrar las rondas</button></div>
     <div class="qres">
-      <span class="eyebrow">Después de votar</span>
-      <h3>La matriz de pagos</h3>
-      <p class="small">Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.</p>
+      <span class="eyebrow" data-i18n="m.after">Después de votar</span>
+      <h3 data-i18n="m.payoff">La matriz de pagos</h3>
+      <p class="small" data-i18n="m.payoff.help">Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.</p>
       <div class="parsed">
         <table class="payoff">
-          <thead><tr><th></th><th>Los demás compran lo normal</th><th>Los demás compran de más</th></tr></thead>
+          <thead><tr><th></th><th data-i18n="m.col1">Los demás compran lo normal</th><th data-i18n="m.col2">Los demás compran de más</th></tr></thead>
           <tbody>
-            <tr><th>Yo compro lo normal</th><td>Hay para todos y gasto lo justo.</td><td class="hl">Llego tarde y me quedo sin papel.</td></tr>
-            <tr><th>Yo compro de más</th><td>Tengo de sobra, pero he gastado más y me ocupa la despensa.</td><td class="hl">Algo consigo, pero la estantería se vacía y otros se quedan sin nada.</td></tr>
+            <tr><th data-i18n="m.row1">Yo compro lo normal</th><td data-i18n="m.c11">Hay para todos y gasto lo justo.</td><td class="hl" data-i18n="m.c12">Llego tarde y me quedo sin papel.</td></tr>
+            <tr><th data-i18n="m.row2">Yo compro de más</th><td data-i18n="m.c21">Tengo de sobra, pero he gastado más y me ocupa la despensa.</td><td class="hl" data-i18n="m.c22">Algo consigo, pero la estantería se vacía y otros se quedan sin nada.</td></tr>
           </tbody>
         </table>
       </div>
@@ -284,45 +394,337 @@ table.payoff td.hl { background: var(--accent-soft); }
   </section>
 
   <footer>
-    <span>Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (población de 10 años o más). Es la última edición publicada que se ha podido consultar.</span>
-    <span>La encuesta B se inspira en la actividad <a href="https://ecosfron.org/repositorio-materiales-ies/mis-usos-del-tiempo/" target="_blank" rel="noopener">«Mis usos del tiempo»</a> de Economistas sin Fronteras.</span>
+    <span data-i18n="f.ine">Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (población de 10 años o más). Es la última edición publicada que se ha podido consultar.</span>
+    <span data-i18n-html="f.esf">La encuesta B se inspira en la actividad «Mis usos del tiempo» de Economistas sin Fronteras.</span>
   </footer>
 </div>
 
 <script>
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
+  "use strict";
+  const PANEL_URL = "../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
+    }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+</script>
+<script>
 (() => {
   "use strict";
+  const T = (k, v) => OBS.t(k, v);
 
-  // ---------- Encuestas ----------
+  // ---------- Encuestas (los índices de las respuestas no cambian: los códigos siguen valiendo) ----------
   const QA = [
-    { id: "a1", t: "Cuando se declaró el estado de alarma (marzo de 2020), ¿vuestra familia compró más de lo habitual?",
-      o: ["No, lo mismo de siempre", "Un poco más", "Mucho más", "No lo recordamos"] },
-    { id: "a2", t: "Si comprasteis más, ¿cuál fue la razón principal?",
-      o: ["No compramos más", "Por si cerraban las tiendas o faltaba algo", "Porque veíamos que los demás compraban", "Para salir menos de casa", "Por si subían los precios", "Otra razón"] },
-    { id: "a3", t: "¿Encontrasteis estanterías vacías de algún producto?",
-      o: ["Sí", "No", "No lo recordamos"] },
-    { id: "a4", t: "En 2020, ¿vuestra familia ahorró más, igual o menos que en un año normal?",
-      o: ["Más", "Igual", "Menos", "No lo sabemos o preferimos no contestar"] },
-    { id: "a5", t: "Si ahorrasteis más, ¿por qué, sobre todo?",
-      o: ["No ahorramos más", "No se podía gastar: estaba todo cerrado", "Por precaución, por si venían tiempos peores", "Por las dos cosas"] },
-    { id: "a6", t: "¿Teníais pagado algo que no pudisteis usar (un viaje, unas entradas, una actividad)? ¿Qué hicisteis?",
-      o: ["No teníamos nada pagado", "Pedimos que nos devolvieran el dinero", "Lo cambiamos por otra fecha o por un vale", "Lo dimos por perdido", "Lo usamos igualmente cuando se pudo"] },
-    { id: "a7", t: "Con las escuelas cerradas, ¿quién se ocupó principalmente de los niños y niñas de casa?",
-      o: ["Sobre todo la madre", "Sobre todo el padre", "Los dos por igual", "Abuelos u otros familiares", "Otra persona (cuidadora, vecina…)", "No había niños pequeños o se cuidaban solos"] },
-    { id: "a8", t: "En las primeras semanas, ¿hasta qué punto sabíais lo que iba a pasar?",
-      o: ["1 · Nada", "2", "3", "4", "5 · Completamente"], scale: true },
-    { id: "a9", t: "Para decidir qué hacer, ¿en qué os fijasteis más?",
-      o: ["En lo que decían las autoridades", "En lo que hacían familiares, amigos y vecinos", "En las noticias y las redes sociales", "En nuestra propia experiencia o intuición"] }
+    { id: "a1", n: 4 }, { id: "a2", n: 6 }, { id: "a3", n: 3 }, { id: "a4", n: 4 }, { id: "a5", n: 4 },
+    { id: "a6", n: 5 }, { id: "a7", n: 6 }, { id: "a8", n: 5, scale: true }, { id: "a9", n: 4 }
   ];
-  const DAY = ["Laborable (lunes a viernes)", "Sábado o domingo"];
-  const ROL = ["Yo (estudiante)", "Madre", "Padre", "Otra persona adulta", "Otro u otra menor de casa"];
-  const SEXO = ["Mujer", "Hombre", "Otro o prefiere no decirlo"];
-  const TRAB = ["Sí", "No"];
+  const QA_ES = [
+    ["Cuando se declaró el estado de alarma (marzo de 2020), ¿vuestra familia compró más de lo habitual?", ["No, lo mismo de siempre", "Un poco más", "Mucho más", "No lo recordamos"]],
+    ["Si comprasteis más, ¿cuál fue la razón principal?", ["No compramos más", "Por si cerraban las tiendas o faltaba algo", "Porque veíamos que los demás compraban", "Para salir menos de casa", "Por si subían los precios", "Otra razón"]],
+    ["¿Encontrasteis estanterías vacías de algún producto?", ["Sí", "No", "No lo recordamos"]],
+    ["En 2020, ¿vuestra familia ahorró más, igual o menos que en un año normal?", ["Más", "Igual", "Menos", "No lo sabemos o preferimos no contestar"]],
+    ["Si ahorrasteis más, ¿por qué, sobre todo?", ["No ahorramos más", "No se podía gastar: estaba todo cerrado", "Por precaución, por si venían tiempos peores", "Por las dos cosas"]],
+    ["¿Teníais pagado algo que no pudisteis usar (un viaje, unas entradas, una actividad)? ¿Qué hicisteis?", ["No teníamos nada pagado", "Pedimos que nos devolvieran el dinero", "Lo cambiamos por otra fecha o por un vale", "Lo dimos por perdido", "Lo usamos igualmente cuando se pudo"]],
+    ["Con las escuelas cerradas, ¿quién se ocupó principalmente de los niños y niñas de casa?", ["Sobre todo la madre", "Sobre todo el padre", "Los dos por igual", "Abuelos u otros familiares", "Otra persona (cuidadora, vecina…)", "No había niños pequeños o se cuidaban solos"]],
+    ["En las primeras semanas, ¿hasta qué punto sabíais lo que iba a pasar?", ["1 · Nada", "2", "3", "4", "5 · Completamente"]],
+    ["Para decidir qué hacer, ¿en qué os fijasteis más?", ["En lo que decían las autoridades", "En lo que hacían familiares, amigos y vecinos", "En las noticias y las redes sociales", "En nuestra propia experiencia o intuición"]]
+  ];
+  const QA_VA = [
+    ["Quan es va declarar l'estat d'alarma (març de 2020), la vostra família va comprar més del que era habitual?", ["No, el mateix de sempre", "Un poc més", "Molt més", "No ho recordem"]],
+    ["Si vau comprar més, quina en va ser la raó principal?", ["No vam comprar més", "Per si tancaven les botigues o faltava alguna cosa", "Perquè vèiem que els altres compraven", "Per a eixir menys de casa", "Per si pujaven els preus", "Una altra raó"]],
+    ["Vau trobar prestatges buits d'algun producte?", ["Sí", "No", "No ho recordem"]],
+    ["En 2020, la vostra família va estalviar més, igual o menys que en un any normal?", ["Més", "Igual", "Menys", "No ho sabem o preferim no contestar"]],
+    ["Si vau estalviar més, per què, sobretot?", ["No vam estalviar més", "No es podia gastar: estava tot tancat", "Per precaució, per si venien temps pitjors", "Per les dues coses"]],
+    ["Teníeu pagada alguna cosa que no vau poder utilitzar (un viatge, unes entrades, una activitat)? Què vau fer?", ["No teníem res pagat", "Vam demanar que ens tornaren els diners", "Ho vam canviar per una altra data o per un val", "Ho vam donar per perdut", "Ho vam utilitzar igualment quan es va poder"]],
+    ["Amb les escoles tancades, qui es va ocupar principalment dels xiquets i xiquetes de casa?", ["Sobretot la mare", "Sobretot el pare", "Els dos per igual", "Els avis o altres familiars", "Una altra persona (cuidadora, veïna…)", "No hi havia xiquets menuts o es cuidaven sols"]],
+    ["En les primeres setmanes, fins a quin punt sabíeu què passaria?", ["1 · Gens", "2", "3", "4", "5 · Completament"]],
+    ["Per a decidir què fer, en què vos vau fixar més?", ["En el que deien les autoritats", "En el que feien familiars, amics i veïns", "En les notícies i les xarxes socials", "En la nostra pròpia experiència o intuïció"]]
+  ];
+  const DAY_ES = ["Laborable (lunes a viernes)", "Sábado o domingo"], DAY_VA = ["Feiner (de dilluns a divendres)", "Dissabte o diumenge"];
+  const ROL_ES = ["Yo (estudiante)", "Madre", "Padre", "Otra persona adulta", "Otro u otra menor de casa"], ROL_VA = ["Jo (estudiant)", "Mare", "Pare", "Una altra persona adulta", "Un altre o una altra menor de casa"];
+  const SEXO_ES = ["Mujer", "Hombre", "Otro o prefiere no decirlo"], SEXO_VA = ["Dona", "Home", "Altre o prefereix no dir-ho"];
+  const TRAB_ES = ["Sí", "No"], TRAB_VA = ["Sí", "No"];
   const MAXP = 8;
   // INE, EET 2009-2010, día promedio por sexo (horas decimales)
   const INE = { hogar: { M: 4 + 4/60, H: 1 + 50/60 }, trabajo: { M: 1 + 53/60, H: 3 + 3/60 } };
 
-  // ---------- Códigos ----------
+  // ---------- Textos ----------
+  const ES = {
+    "tabs.aria": "Secciones", "pick.aria": "Elige la encuesta",
+    "h.eyebrow": "Observatorio · SA 2 · El comportamiento humano en la actividad económica",
+    "h.title": "¿Se puede decidir bien cuando nadie sabe lo que va a pasar?",
+    "h.lede": "Herramientas de la situación de aprendizaje 2. <strong>Encuestas:</strong> qué decidió vuestra familia en 2020 y cuánto tiempo dedica cada persona a los cuidados y al hogar; son anónimas, sin nombres, ingresos ni datos de salud. <strong>Matriz:</strong> qué pasa en la estantería cuando todos esperan lo mismo.",
+    "tab.contestar": "Contestar", "tab.introducir": "Introducir códigos", "tab.resultados": "Resultados", "tab.matriz": "Matriz",
+    "pick.A.k": "ENCUESTA A · UNA POR HOGAR", "pick.A.t": "Decisiones de la familia en 2020", "pick.A.d": "Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia.",
+    "pick.B.k": "ENCUESTA B · UNA FILA POR PERSONA", "pick.B.t": "Horas de cuidados y de hogar", "pick.B.d": "Cuánto tiempo dedicó ayer cada persona de casa a los cuidados, al hogar y al trabajo pagado.",
+    "b1": "¿Qué día fue ayer?", "b2": "Para cada persona de casa (tú incluida): ¿cuántas horas dedicó ayer al hogar y los cuidados, y cuántas al trabajo pagado?",
+    "b2.help": "Hogar y cuidados: cocinar, limpiar, lavar y planchar, hacer la compra, cuidar de niños o de personas mayores, gestiones de la casa. Trabajo pagado: horas de trabajo, sin contar los desplazamientos. Usa medias horas si hace falta (1,5 = una hora y media).",
+    "p.rol": "Quién", "p.sexo": "Sexo", "p.trab": "¿Trabajo pagado?", "p.hogar": "Horas hogar y cuidados", "p.trabajo": "Horas trabajo pagado", "p.rm": "Quitar", "p.add": "Añadir persona",
+    "form.submit": "Obtener el código", "err.missA": "Falta la pregunta A{n}.", "err.day": "Falta decir qué día fue ayer.",
+    "err.hnum": "Escribe las horas con números, por ejemplo 2 o 1,5.", "err.hrange": "Revisa las horas: cada dato entre 0 y 16, y que la suma tenga sentido en un día.",
+    "code.title": "Tu código de respuesta", "code.help": "Copia el código en tu hoja de la carpeta y entrégalo en clase. El código guarda tus respuestas, no tu nombre.",
+    "code.copy": "Copiar el código", "code.copied": "Copiado.", "code.copyfail": "No se ha podido copiar: selecciona el texto y cópialo a mano.",
+    "code.direct": "Guardar directamente en el grupo", "code.save": "Guardar", "group.ph": "Ej.: 1BAT-A 2026-27",
+    "in.title": "Introducir los códigos de la clase", "in.help": "Pega los códigos que ha traído el alumnado, uno por línea. Se comprueban antes de guardarlos: un código mal copiado no pasa.",
+    "in.group": "Grupo", "in.codes": "Códigos", "in.check": "Comprobar", "in.save": "Guardar en el grupo", "in.local": "Ver resultados sin guardar",
+    "in.th.code": "Código", "in.th.survey": "Encuesta", "in.th.state": "Estado", "in.A": "A · decisiones 2020", "in.B1": "B · {n} persona", "in.Bn": "B · {n} personas",
+    "in.ok": "correcto", "in.err": "error", "in.count": "{g} de {n} códigos correctos.",
+    "perr.ck": "El código no cuadra: revisa que esté bien copiado.", "perr.range": "Respuesta fuera de rango en la pregunta {n}.", "perr.brange": "Hay un dato fuera de rango.",
+    "perr.unknown": "No es un código de estas encuestas.", "perr.dup": "Repetido en la lista.",
+    "save.noname": "Escribe el nombre del grupo.", "save.saving": "Guardando…", "save.ok1": "1 respuesta guardada en «{g}».", "save.okn": "{n} respuestas guardadas en «{g}».",
+    "save.nowrite": "Esta cuenta no puede guardar datos en la aplicación.", "save.full": "El almacén está lleno: borra respuestas de grupos antiguos.", "save.fail": "No se ha podido guardar. Vuelve a intentarlo en un momento.",
+    "note.ro": "Esta cuenta solo puede consultar.", "note.ro2": "Mientras tanto, puedes comprobar los códigos y ver sus resultados sin guardarlos.",
+    "note.local": "Los grupos se guardan en este navegador.", "note.local2": "Fuera de Claude, los datos se quedan en este ordenador. Para llevarlos a otro, usa «Exportar el grupo» en Resultados e «Importar un grupo exportado» aquí abajo.",
+    "imp.title": "Importar un grupo exportado", "imp.help": "Sirve para pasar los datos de un ordenador a otro. Elige el archivo que descargaste con «Exportar el grupo» o pega aquí su contenido. Se guarda en el grupo que tenía, o en el que escribas arriba.",
+    "imp.file": "Archivo exportado", "imp.text": "Contenido exportado", "imp.go": "Importar", "imp.none": "No se reconoce el contenido: no hay ningún código válido.", "imp.ok": "Importados {n} códigos en «{g}».",
+    "res.source": "Datos", "res.day": "Encuesta B: día", "res.day.all": "Todos los días", "res.day.0": "Solo días laborables", "res.day.1": "Solo sábados y domingos",
+    "res.group": "Grupo · {g}", "res.pasted": "Códigos pegados (sin guardar)", "res.example": "Datos de ejemplo (inventados)",
+    "res.csvA": "Descargar encuesta A (CSV)", "res.csvB": "Descargar encuesta B (CSV)", "res.json": "Exportar el grupo (para otro ordenador)",
+    "res.empty": "Todavía no hay respuestas en este grupo", "res.empty2": "Cuando se guarden los códigos de la clase en «Introducir códigos», aquí aparecerán los recuentos de la encuesta A y la comparación de horas de la encuesta B con la media del INE.",
+    "res.goex": "Ver cómo queda con datos de ejemplo", "res.exflag": "Datos de ejemplo inventados: solo sirven para ver cómo funciona la aplicación.",
+    "res.hA": "hogares en la encuesta A", "res.hB": "hogares en la encuesta B", "res.pB": "personas en la encuesta B",
+    "res.B.eye": "Encuesta B · horas al día", "res.B.title": "¿Se parece la clase a la media del INE?", "res.leg.class": "Nuestra clase", "res.leg.ine": "INE, día promedio 2009-2010",
+    "res.hogar": "Hogar y cuidados", "res.trabajo": "Trabajo pagado",
+    "res.wc": "Mujeres adultas · clase (n={n})", "res.wi": "Mujeres · INE 2009-10", "res.mc": "Hombres adultos · clase (n={n})", "res.mi": "Hombres · INE 2009-10",
+    "res.gap.t": "Diferencia entre mujeres y hombres en hogar y cuidados",
+    "res.gap.a": "En la clase, las mujeres adultas dedican ", "res.gap.more": "{h} más", "res.gap.less": "{h} menos", "res.gap.b": " al día que los hombres adultos. En el INE (2009-2010), la diferencia es de ", "res.gap.c": ".",
+    "res.young": "Y el alumnado y otros menores de casa", "res.girls": "Chicas (n={n})", "res.boys": "Chicos (n={n})",
+    "res.lim": "Antes de sacar conclusiones", "res.lim1": "Unos pocos hogares de una clase no son una muestra representativa de España.",
+    "res.lim2": "El INE da la media de un día cualquiera (laborables y fines de semana) de toda la población de 10 años o más, y sus datos son de 2009-2010; nosotros preguntamos por «ayer».",
+    "res.lim3": "Las horas son las que recuerda y declara cada familia: la memoria y lo que nos parece bien decir también cuentan.",
+    "res.A.eye": "Encuesta A · {n} hogares", "res.A.title": "Qué decidieron nuestras familias en 2020",
+    "res.A.help": "Para cada respuesta, preguntaos con qué modelo se explica mejor: el cálculo, una desviación de la racionalidad o una respuesta razonable cuando nadie sabe lo que va a pasar.",
+    "m.title": "¿Compras lo normal o compras de más?",
+    "m.help": "Para proyectar en la sesión 4. Se vota con <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--accent)\">Plickers</a> (A = compro lo normal; B = compro de más) o, si falla, a mano alzada o en papel. Apunta aquí cuántas personas eligen «compro de más» en cada ronda y la herramienta calcula qué pasa en la estantería.",
+    "m.n": "Hogares (alumnado que vota)", "m.s": "Paquetes en la tienda", "m.a": "Paquetes de quien compra de más",
+    "m.note": "En un día normal cada hogar se lleva 1 paquete: hacen falta {n} y hay {s}. Se fabrica lo de siempre o más.",
+    "m.r1": "Ronda 1", "m.r1q": "A ciegas: nadie sabe qué votan los demás.", "m.r2": "Ronda 2", "m.r2q": "Ya habéis visto el resultado de la ronda 1.", "m.r3": "Ronda 3", "m.r3q": "El súper de al lado ya está vacío.",
+    "m.k": "¿Cuántos compran de más?", "m.pct": "compra de más", "m.shelf": "{o} hogares de {n} se quedan sin papel",
+    "m.s.a": "Se piden ", "m.s.b": " paquetes y hay ", "m.s.c": ". De media, ", "m.s.o1": "{o} hogar se queda", "m.s.on": "{o} hogares se quedan", "m.s.d": " sin papel.",
+    "m.reset": "Borrar las rondas", "m.after": "Después de votar", "m.payoff": "La matriz de pagos",
+    "m.payoff.help": "Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.",
+    "m.col1": "Los demás compran lo normal", "m.col2": "Los demás compran de más", "m.row1": "Yo compro lo normal", "m.row2": "Yo compro de más",
+    "m.c11": "Hay para todos y gasto lo justo.", "m.c12": "Llego tarde y me quedo sin papel.", "m.c21": "Tengo de sobra, pero he gastado más y me ocupa la despensa.", "m.c22": "Algo consigo, pero la estantería se vacía y otros se quedan sin nada.",
+    "f.ine": "Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (población de 10 años o más). Es la última edición publicada que se ha podido consultar.",
+    "f.esf": "La encuesta B se inspira en la actividad <a href=\"https://ecosfron.org/repositorio-materiales-ies/mis-usos-del-tiempo/\" target=\"_blank\" rel=\"noopener\">«Mis usos del tiempo»</a> de Economistas sin Fronteras."
+  };
+  const VA = {
+    "tabs.aria": "Seccions", "pick.aria": "Tria l'enquesta",
+    "h.eyebrow": "Observatori · SA 2 · El comportament humà en l'activitat econòmica",
+    "h.title": "Es pot decidir bé quan ningú sap què passarà?",
+    "h.lede": "Ferramentes de la situació d'aprenentatge 2. <strong>Enquestes:</strong> què va decidir la vostra família en 2020 i quant de temps dedica cada persona a les cures i a la llar; són anònimes, sense noms, ingressos ni dades de salut. <strong>Matriu:</strong> què passa en el prestatge quan tots esperen el mateix.",
+    "tab.contestar": "Contestar", "tab.introducir": "Introduir codis", "tab.resultados": "Resultats", "tab.matriz": "Matriu",
+    "pick.A.k": "ENQUESTA A · UNA PER LLAR", "pick.A.t": "Decisions de la família en 2020", "pick.A.d": "Nou preguntes sobre el que vau fer a casa quan va començar la pandèmia.",
+    "pick.B.k": "ENQUESTA B · UNA FILA PER PERSONA", "pick.B.t": "Hores de cures i de llar", "pick.B.d": "Quant de temps va dedicar ahir cada persona de casa a les cures, a la llar i al treball pagat.",
+    "b1": "Quin dia va ser ahir?", "b2": "Per a cada persona de casa (tu inclosa): quantes hores va dedicar ahir a la llar i les cures, i quantes al treball pagat?",
+    "b2.help": "Llar i cures: cuinar, netejar, llavar i planxar, fer la compra, cuidar xiquets o persones majors, gestions de la casa. Treball pagat: hores de treball, sense comptar els desplaçaments. Usa mitges hores si cal (1,5 = una hora i mitja).",
+    "p.rol": "Qui", "p.sexo": "Sexe", "p.trab": "Treball pagat?", "p.hogar": "Hores de llar i cures", "p.trabajo": "Hores de treball pagat", "p.rm": "Llevar", "p.add": "Afegir una persona",
+    "form.submit": "Obtindre el codi", "err.missA": "Falta la pregunta A{n}.", "err.day": "Falta dir quin dia va ser ahir.",
+    "err.hnum": "Escriu les hores amb números, per exemple 2 o 1,5.", "err.hrange": "Revisa les hores: cada dada entre 0 i 16, i que la suma tinga sentit en un dia.",
+    "code.title": "El teu codi de resposta", "code.help": "Copia el codi en el teu full de la carpeta i entrega'l a classe. El codi guarda les teues respostes, no el teu nom.",
+    "code.copy": "Copiar el codi", "code.copied": "Copiat.", "code.copyfail": "No s'ha pogut copiar: selecciona el text i copia'l a mà.",
+    "code.direct": "Guardar directament en el grup", "code.save": "Guardar", "group.ph": "Ex.: 1BAT-A 2026-27",
+    "in.title": "Introduir els codis de la classe", "in.help": "Apega els codis que ha portat l'alumnat, un per línia. Es comproven abans de guardar-los: un codi mal copiat no passa.",
+    "in.group": "Grup", "in.codes": "Codis", "in.check": "Comprovar", "in.save": "Guardar en el grup", "in.local": "Veure els resultats sense guardar",
+    "in.th.code": "Codi", "in.th.survey": "Enquesta", "in.th.state": "Estat", "in.A": "A · decisions 2020", "in.B1": "B · {n} persona", "in.Bn": "B · {n} persones",
+    "in.ok": "correcte", "in.err": "error", "in.count": "{g} de {n} codis correctes.",
+    "perr.ck": "El codi no quadra: revisa que estiga ben copiat.", "perr.range": "Resposta fora de rang en la pregunta {n}.", "perr.brange": "Hi ha una dada fora de rang.",
+    "perr.unknown": "No és un codi d'estes enquestes.", "perr.dup": "Repetit en la llista.",
+    "save.noname": "Escriu el nom del grup.", "save.saving": "S'està guardant…", "save.ok1": "1 resposta guardada en «{g}».", "save.okn": "{n} respostes guardades en «{g}».",
+    "save.nowrite": "Este compte no pot guardar dades en l'aplicació.", "save.full": "El magatzem està ple: esborra respostes de grups antics.", "save.fail": "No s'ha pogut guardar. Torna-ho a intentar d'ací a un moment.",
+    "note.ro": "Este compte només pot consultar.", "note.ro2": "Mentrestant, pots comprovar els codis i veure'n els resultats sense guardar-los.",
+    "note.local": "Els grups es guarden en este navegador.", "note.local2": "Fora de Claude, les dades es queden en este ordinador. Per a portar-les a un altre, usa «Exportar el grup» en Resultats i «Importar un grup exportat» ací baix.",
+    "imp.title": "Importar un grup exportat", "imp.help": "Servix per a passar les dades d'un ordinador a un altre. Tria l'arxiu que vas descarregar amb «Exportar el grup» o apega ací el contingut. Es guarda en el grup que tenia, o en el que escrigues dalt.",
+    "imp.file": "Arxiu exportat", "imp.text": "Contingut exportat", "imp.go": "Importar", "imp.none": "No es reconeix el contingut: no hi ha cap codi vàlid.", "imp.ok": "S'han importat {n} codis en «{g}».",
+    "res.source": "Dades", "res.day": "Enquesta B: dia", "res.day.all": "Tots els dies", "res.day.0": "Només dies feiners", "res.day.1": "Només dissabtes i diumenges",
+    "res.group": "Grup · {g}", "res.pasted": "Codis apegats (sense guardar)", "res.example": "Dades d'exemple (inventades)",
+    "res.csvA": "Descarregar l'enquesta A (CSV)", "res.csvB": "Descarregar l'enquesta B (CSV)", "res.json": "Exportar el grup (per a un altre ordinador)",
+    "res.empty": "Encara no hi ha respostes en este grup", "res.empty2": "Quan es guarden els codis de la classe en «Introduir codis», ací apareixeran els recomptes de l'enquesta A i la comparació d'hores de l'enquesta B amb la mitjana de l'INE.",
+    "res.goex": "Veure com queda amb dades d'exemple", "res.exflag": "Dades d'exemple inventades: només servixen per a veure com funciona l'aplicació.",
+    "res.hA": "llars en l'enquesta A", "res.hB": "llars en l'enquesta B", "res.pB": "persones en l'enquesta B",
+    "res.B.eye": "Enquesta B · hores al dia", "res.B.title": "S'assembla la classe a la mitjana de l'INE?", "res.leg.class": "La nostra classe", "res.leg.ine": "INE, dia mitjà 2009-2010",
+    "res.hogar": "Llar i cures", "res.trabajo": "Treball pagat",
+    "res.wc": "Dones adultes · classe (n={n})", "res.wi": "Dones · INE 2009-10", "res.mc": "Homes adults · classe (n={n})", "res.mi": "Homes · INE 2009-10",
+    "res.gap.t": "Diferència entre dones i homes en llar i cures",
+    "res.gap.a": "A la classe, les dones adultes dediquen ", "res.gap.more": "{h} més", "res.gap.less": "{h} menys", "res.gap.b": " al dia que els homes adults. En l'INE (2009-2010), la diferència és de ", "res.gap.c": ".",
+    "res.young": "I l'alumnat i altres menors de casa", "res.girls": "Xiques (n={n})", "res.boys": "Xics (n={n})",
+    "res.lim": "Abans de traure conclusions", "res.lim1": "Unes poques llars d'una classe no són una mostra representativa d'Espanya.",
+    "res.lim2": "L'INE dona la mitjana d'un dia qualsevol (feiners i caps de setmana) de tota la població de 10 anys o més, i les seues dades són de 2009-2010; nosaltres preguntem per «ahir».",
+    "res.lim3": "Les hores són les que recorda i declara cada família: la memòria i el que ens sembla bé dir també compten.",
+    "res.A.eye": "Enquesta A · {n} llars", "res.A.title": "Què van decidir les nostres famílies en 2020",
+    "res.A.help": "Per a cada resposta, pregunteu-vos amb quin model s'explica millor: el càlcul, una desviació de la racionalitat o una resposta raonable quan ningú sap què passarà.",
+    "m.title": "Compres el normal o compres de més?",
+    "m.help": "Per a projectar en la sessió 4. Es vota amb <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--accent)\">Plickers</a> (A = compre el normal; B = compre de més) o, si falla, a mà alçada o en paper. Apunta ací quantes persones trien «compre de més» en cada ronda i la ferramenta calcula què passa en el prestatge.",
+    "m.n": "Llars (alumnat que vota)", "m.s": "Paquets en la botiga", "m.a": "Paquets de qui compra de més",
+    "m.note": "En un dia normal cada llar s'emporta 1 paquet: en calen {n} i n'hi ha {s}. Es fabrica el mateix de sempre o més.",
+    "m.r1": "Ronda 1", "m.r1q": "A cegues: ningú sap què voten els altres.", "m.r2": "Ronda 2", "m.r2q": "Ja heu vist el resultat de la ronda 1.", "m.r3": "Ronda 3", "m.r3q": "El súper del costat ja està buit.",
+    "m.k": "Quants compren de més?", "m.pct": "compra de més", "m.shelf": "{o} llars de {n} es queden sense paper",
+    "m.s.a": "Es demanen ", "m.s.b": " paquets i n'hi ha ", "m.s.c": ". De mitjana, ", "m.s.o1": "{o} llar es queda", "m.s.on": "{o} llars es queden", "m.s.d": " sense paper.",
+    "m.reset": "Esborrar les rondes", "m.after": "Després de votar", "m.payoff": "La matriu de pagaments",
+    "m.payoff.help": "El que li passa a una llar segons el que faça i el que facen els altres. Si crec que els altres compraran de més, em convé comprar de més; si tots pensem igual, el prestatge es buida encara que es fabrique el mateix de sempre.",
+    "m.col1": "Els altres compren el normal", "m.col2": "Els altres compren de més", "m.row1": "Jo compre el normal", "m.row2": "Jo compre de més",
+    "m.c11": "N'hi ha per a tots i gaste el just.", "m.c12": "Arribe tard i em quede sense paper.", "m.c21": "En tinc de sobra, però he gastat més i m'ocupa el rebost.", "m.c22": "Alguna cosa aconseguisc, però el prestatge es buida i altres es queden sense res.",
+    "f.ine": "Dada de referència: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (població de 10 anys o més). És l'última edició publicada que s'ha pogut consultar.",
+    "f.esf": "L'enquesta B s'inspira en l'activitat <a href=\"https://ecosfron.org/repositorio-materiales-ies/mis-usos-del-tiempo/\" target=\"_blank\" rel=\"noopener\">«Mis usos del tiempo»</a> d'Economistas sin Fronteras."
+  };
+  // Preguntas y opciones como claves de traducción
+  QA_ES.forEach((q, i) => { ES["qa." + i + ".t"] = q[0]; q[1].forEach((o, j) => { ES["qa." + i + ".o." + j] = o; }); });
+  QA_VA.forEach((q, i) => { VA["qa." + i + ".t"] = q[0]; q[1].forEach((o, j) => { VA["qa." + i + ".o." + j] = o; }); });
+  [["day", DAY_ES, DAY_VA], ["rol", ROL_ES, ROL_VA], ["sexo", SEXO_ES, SEXO_VA], ["trab", TRAB_ES, TRAB_VA]].forEach(([k, es, va]) => {
+    es.forEach((o, j) => { ES[k + "." + j] = o; }); va.forEach((o, j) => { VA[k + "." + j] = o; });
+  });
+  OBS.register({ es: ES, va: VA });
+
+  const FICHA = {
+    sesiones: {
+      es: "Encuestas: se presentan en S2 y las familias contestan en casa (plazo recomendado, S5); el docente introduce los códigos y los resultados se trabajan en S7, el laboratorio de datos. Matriz: S4, el juego de la estantería con Plickers.",
+      va: "Enquestes: es presenten en S2 i les famílies contesten a casa (termini recomanat, S5); el docent introduïx els codis i els resultats es treballen en S7, el laboratori de dades. Matriu: S4, el joc del prestatge amb Plickers."
+    },
+    saberes: [
+      { code: "A7", es: "El proceso de toma de decisiones económicas. La racionalidad.", va: "El procés de presa de decisions econòmiques. La racionalitat." },
+      { code: "A8", es: "El coste de oportunidad.", va: "El cost d'oportunitat." },
+      { code: "A9", es: "Los costes irrecuperables.", va: "Els costos irrecuperables." },
+      { code: "A10", es: "El análisis marginal.", va: "L'anàlisi marginal." },
+      { code: "A11", es: "Los incentivos y las expectativas.", va: "Els incentius i les expectatives." },
+      { code: "A12", es: "Teoría de juegos.", va: "Teoria de jocs." },
+      { code: "A15", es: "Riesgo e incertidumbre.", va: "Risc i incertesa." },
+      { code: "A23", es: "Economía del comportamiento. Desviaciones de la racionalidad económica.", va: "Economia del comportament. Desviacions de la racionalitat econòmica." },
+      { code: "B3", es: "El análisis coste-beneficio.", va: "L'anàlisi cost-benefici." }
+    ],
+    criterios: [
+      { code: "1.2", es: "Comprender el problema de la escasez identificando los motivos y comparando, de manera justificada, diferentes estrategias económicas de resolución del mismo.", va: "Comprendre el problema de l'escassetat identificant els motius i comparant, de manera justificada, diferents estratègies econòmiques de resolució d'este." },
+      { code: "1.3", es: "Conocer los procesos que intervienen en la toma de las decisiones económicas de manera individual y colectiva, analizando el impacto que tienen en la sociedad.", va: "Conéixer els processos que intervenen en la presa de les decisions econòmiques de manera individual i col·lectiva, analitzant l'impacte que tenen en la societat." },
+      { code: "4.1", es: "Conocer y comprender el funcionamiento del sistema financiero valorando sus efectos sobre la economía real y analizando los elementos que intervienen en las decisiones financieras relacionadas con la inversión, el ahorro, los productos financieros y la búsqueda de fuentes de financiación.", va: "Conéixer i comprendre el funcionament del sistema financer valorant els seus efectes sobre l'economia real i analitzant els elements que intervenen en les decisions financeres relacionades amb la inversió, l'estalvi, els productes financers i la busca de fonts de finançament." },
+      { code: "6.1", es: "Plantear soluciones socioeconómicas que respondan a necesidades individuales y colectivas investigando y explorando la realidad económica teniendo en cuenta diversos factores y aplicando las herramientas propias del ámbito de la economía.", va: "Plantejar solucions socioeconòmiques que responguen a necessitats individuals i col·lectives, investigant i explorant la realitat econòmica, tenint en compte diversos factors i aplicant les ferramentes pròpies de l'àmbit de l'economia." }
+    ],
+    uso: {
+      es: "Cada alumno o alumna contesta en casa con su familia y entrega el código en papel. El docente pega los códigos en «Introducir códigos» y proyecta «Resultados». La matriz se proyecta en S4 y se apuntan los votos de cada ronda.",
+      va: "Cada alumne o alumna contesta a casa amb la seua família i entrega el codi en paper. El docent apega els codis en «Introduir codis» i projecta «Resultats». La matriu es projecta en S4 i s'apunten els vots de cada ronda."
+    }
+  };
+
+  // ---------- Códigos (formato sin cambios) ----------
   const ALPH = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const check = s => { let n = 0; for (let i = 0; i < s.length; i++) n = (n + (i + 1) * s.charCodeAt(i)) % 32; return ALPH[n]; };
   const nonce = () => { const a = new Uint32Array(2); crypto.getRandomValues(a); return ALPH[a[0] % 32] + ALPH[a[1] % 32]; };
@@ -334,18 +736,19 @@ table.payoff td.hl { background: var(--accent-soft); }
     const ps = people.map(p => "" + p.rol + p.sexo + p.trab + two(half(p.hogar)) + two(half(p.trabajo)));
     const body = "B" + day + "-" + ps.join("-") + "-" + nonce(); return body + check(body);
   }
+  // Los errores se guardan como clave + variables y se traducen al mostrarlos
   function parseCode(raw) {
     const c = String(raw).toUpperCase().replace(/\s+/g, "");
     if (!c) return null;
     const body = c.slice(0, -1), ck = c.slice(-1);
-    if (c.length < 6 || check(body) !== ck) return { ok: false, code: c, err: "El código no cuadra: revisa que esté bien copiado." };
+    if (c.length < 6 || check(body) !== ck) return { ok: false, code: c, err: "perr.ck" };
     let m = /^A-(\d{9})-([A-Z2-9]{2})$/.exec(body);
     if (m) {
       const ans = m[1].split("").map(Number);
       for (let i = 0; i < 9; i++) {
-        const max = QA[i].o.length - (QA[i].scale ? 0 : 1);
+        const max = QA[i].n - (QA[i].scale ? 0 : 1);
         const v = QA[i].scale ? ans[i] - 1 : ans[i];
-        if (v < 0 || v > (QA[i].scale ? 4 : max)) return { ok: false, code: c, err: "Respuesta fuera de rango en la pregunta " + (i + 1) + "." };
+        if (v < 0 || v > (QA[i].scale ? 4 : max)) return { ok: false, code: c, err: "perr.range", ev: { n: i + 1 } };
       }
       return { ok: true, code: c, tipo: "A", ans };
     }
@@ -355,12 +758,12 @@ table.payoff td.hl { background: var(--accent-soft); }
       const people = [];
       for (const p of parts) {
         const rol = +p[0], sexo = +p[1], trab = +p[2], hh = +p.slice(3, 5), ht = +p.slice(5, 7);
-        if (rol > 4 || sexo > 2 || trab > 1 || hh > 32 || ht > 32) return { ok: false, code: c, err: "Hay un dato fuera de rango." };
+        if (rol > 4 || sexo > 2 || trab > 1 || hh > 32 || ht > 32) return { ok: false, code: c, err: "perr.brange" };
         people.push({ rol, sexo, trab, hogar: hh / 2, trabajo: ht / 2 });
       }
       return { ok: true, code: c, tipo: "B", day: +m[1], people };
     }
-    return { ok: false, code: c, err: "No es un código de estas encuestas." };
+    return { ok: false, code: c, err: "perr.unknown" };
   }
 
   // ---------- Utilidades ----------
@@ -374,13 +777,19 @@ table.payoff td.hl { background: var(--accent-soft); }
     for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
     return n;
   };
+  // Nodo de texto que se traduce solo al cambiar de idioma
+  const tx = (tag, key, attrs = {}) => el(tag, { ...attrs, "data-i18n": key, text: T(key) });
   const fmtH = h => { if (!isFinite(h)) return "—"; const m = Math.round(h * 60); return Math.floor(m / 60) + " h " + two(m % 60); };
   const pct = (a, b) => b ? Math.round(100 * a / b) + " %" : "—";
   const groupId = name => name.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
-  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  const store = OBS.store;
+  function setStatus(node, key, vars, cls) { node.dataset.k = key || ""; node.dataset.v = vars ? JSON.stringify(vars) : ""; node.textContent = key ? T(key, vars) : ""; node.className = "status" + (cls ? " " + cls : ""); }
+  function retranslateStatuses() {
+    document.querySelectorAll(".status").forEach(n => { if (n.dataset.k) n.textContent = T(n.dataset.k, n.dataset.v ? JSON.parse(n.dataset.v) : undefined); });
+  }
   async function copyText(text, statusEl) {
-    try { await navigator.clipboard.writeText(text); statusEl.textContent = "Copiado."; statusEl.className = "status ok"; }
-    catch { statusEl.textContent = "No se ha podido copiar: selecciona el texto y cópialo a mano."; statusEl.className = "status bad"; }
+    try { await navigator.clipboard.writeText(text); setStatus(statusEl, "code.copied", null, "ok"); }
+    catch { setStatus(statusEl, "code.copyfail", null, "bad"); }
   }
 
   // ---------- Pestañas ----------
@@ -402,20 +811,20 @@ table.payoff td.hl { background: var(--accent-soft); }
     const f = $("form-A");
     QA.forEach((q, i) => {
       const fs = el("fieldset", { class: "q" },
-        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), el("span", { class: "qtext", text: q.t }))),
+        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), tx("span", "qa." + i + ".t", { class: "qtext" }))),
         el("div", { class: "opts" + (q.scale ? " row" : "") },
-          q.o.map((o, j) => el("label", {}, el("input", { type: "radio", name: q.id, id: q.id + "-" + j, value: q.scale ? j + 1 : j }), el("span", { text: o })))));
+          Array.from({ length: q.n }, (_, j) => el("label", {}, el("input", { type: "radio", name: q.id, id: q.id + "-" + j, value: q.scale ? j + 1 : j }), tx("span", "qa." + i + ".o." + j)))));
       f.append(fs);
     });
     f.append(el("div", { class: "actions", style: "padding-top:16px;border-top:1px solid var(--rule)" },
-      el("button", { type: "submit", class: "btn", text: "Obtener el código" }),
+      tx("button", "form.submit", { type: "submit", class: "btn" }),
       el("span", { class: "status", id: "statusA", "aria-live": "polite" })));
     f.addEventListener("submit", e => {
       e.preventDefault();
       const ans = QA.map(q => { const r = f.querySelector('input[name="' + q.id + '"]:checked'); return r ? +r.value : null; });
       const miss = ans.findIndex(a => a === null);
-      if (miss >= 0) { $("statusA").textContent = "Falta la pregunta A" + (miss + 1) + "."; $("statusA").className = "status bad"; return; }
-      $("statusA").textContent = "";
+      if (miss >= 0) { setStatus($("statusA"), "err.missA", { n: miss + 1 }, "bad"); return; }
+      setStatus($("statusA"), "");
       showCode(encodeA(ans));
     });
   }
@@ -423,14 +832,14 @@ table.payoff td.hl { background: var(--accent-soft); }
   // ---------- Formulario B ----------
   function personRow(idx, preset) {
     const p = preset || { rol: idx === 0 ? 0 : 1, sexo: 0, trab: 1, hogar: "", trabajo: "" };
-    const sel = (name, opts, val, label) => el("label", {}, label,
-      el("select", { id: name + "-" + idx, "data-f": name }, opts.map((o, j) => { const op = el("option", { value: j, text: o }); if (j === val) op.selected = true; return op; })));
-    const num = (name, val, label) => el("label", {}, label,
+    const sel = (name, count, val, labelKey) => el("label", {}, tx("span", labelKey),
+      el("select", { id: name + "-" + idx, "data-f": name }, Array.from({ length: count }, (_, j) => { const op = tx("option", name + "." + j, { value: j }); if (j === val) op.selected = true; return op; })));
+    const num = (name, val, labelKey) => el("label", {}, tx("span", labelKey),
       el("input", { type: "text", id: name + "-" + idx, "data-f": name, inputmode: "decimal", autocomplete: "off", value: val, placeholder: "0" }));
     const row = el("div", { class: "person" },
-      sel("rol", ROL, p.rol, "Quién"), sel("sexo", SEXO, p.sexo, "Sexo"), sel("trab", TRAB, p.trab, "¿Trabajo pagado?"),
-      num("hogar", p.hogar, "Horas hogar y cuidados"), num("trabajo", p.trabajo, "Horas trabajo pagado"),
-      el("button", { type: "button", class: "btn quiet small rm", text: "Quitar" }));
+      sel("rol", ROL_ES.length, p.rol, "p.rol"), sel("sexo", SEXO_ES.length, p.sexo, "p.sexo"), sel("trab", TRAB_ES.length, p.trab, "p.trab"),
+      num("hogar", p.hogar, "p.hogar"), num("trabajo", p.trabajo, "p.trabajo"),
+      tx("button", "p.rm", { type: "button", class: "btn quiet small rm" }));
     row.querySelector(".rm").addEventListener("click", () => { if ($("persons").children.length > 1) { row.remove(); syncAdd(); } });
     return row;
   }
@@ -439,15 +848,15 @@ table.payoff td.hl { background: var(--accent-soft); }
     const f = $("form-B");
     f.append(
       el("fieldset", { class: "q" },
-        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "B1" }), el("span", { class: "qtext", text: "¿Qué día fue ayer?" }))),
-        el("div", { class: "opts row" }, DAY.map((o, j) => el("label", {}, el("input", { type: "radio", name: "day", id: "day-" + j, value: j }), el("span", { text: o }))))),
+        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "B1" }), tx("span", "b1", { class: "qtext" }))),
+        el("div", { class: "opts row" }, DAY_ES.map((o, j) => el("label", {}, el("input", { type: "radio", name: "day", id: "day-" + j, value: j }), tx("span", "day." + j))))),
       el("fieldset", { class: "q" },
-        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "B2" }), el("span", { class: "qtext", text: "Para cada persona de casa (tú incluida): ¿cuántas horas dedicó ayer al hogar y los cuidados, y cuántas al trabajo pagado?" }))),
-        el("p", { class: "help", text: "Hogar y cuidados: cocinar, limpiar, lavar y planchar, hacer la compra, cuidar de niños o de personas mayores, gestiones de la casa. Trabajo pagado: horas de trabajo, sin contar los desplazamientos. Usa medias horas si hace falta (1,5 = una hora y media)." }),
+        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "B2" }), tx("span", "b2", { class: "qtext" }))),
+        tx("p", "b2.help", { class: "help" }),
         el("div", { class: "persons", id: "persons" }),
-        el("div", { class: "help" }, el("button", { type: "button", class: "btn ghost small", id: "add-person", text: "Añadir persona" }))),
+        el("div", { class: "help" }, tx("button", "p.add", { type: "button", class: "btn ghost small", id: "add-person" }))),
       el("div", { class: "actions", style: "padding-top:16px;border-top:1px solid var(--rule)" },
-        el("button", { type: "submit", class: "btn", text: "Obtener el código" }),
+        tx("button", "form.submit", { type: "submit", class: "btn" }),
         el("span", { class: "status", id: "statusB", "aria-live": "polite" })));
     $("persons").append(personRow(0), personRow(1, { rol: 1, sexo: 0, trab: 0, hogar: "", trabajo: "" }), personRow(2, { rol: 2, sexo: 1, trab: 0, hogar: "", trabajo: "" }));
     let next = 3;
@@ -456,18 +865,18 @@ table.payoff td.hl { background: var(--accent-soft); }
       e.preventDefault();
       const st = $("statusB");
       const d = f.querySelector('input[name="day"]:checked');
-      if (!d) { st.textContent = "Falta decir qué día fue ayer."; st.className = "status bad"; return; }
+      if (!d) { setStatus(st, "err.day", null, "bad"); return; }
       const people = [];
       for (const row of $("persons").children) {
         const g = k => row.querySelector('[data-f="' + k + '"]').value;
         const rawH = String(g("hogar")).trim().replace(",", "."), rawT = String(g("trabajo")).trim().replace(",", ".");
         const okNum = s => s === "" || /^\d{1,2}(\.\d+)?$/.test(s);
-        if (!okNum(rawH) || !okNum(rawT)) { st.textContent = "Escribe las horas con números, por ejemplo 2 o 1,5."; st.className = "status bad"; return; }
+        if (!okNum(rawH) || !okNum(rawT)) { setStatus(st, "err.hnum", null, "bad"); return; }
         const h = rawH === "" ? 0 : parseFloat(rawH), t = rawT === "" ? 0 : parseFloat(rawT);
-        if (h < 0 || h > 16 || t < 0 || t > 16 || h + t > 20) { st.textContent = "Revisa las horas: cada dato entre 0 y 16, y que la suma tenga sentido en un día."; st.className = "status bad"; return; }
+        if (h < 0 || h > 16 || t < 0 || t > 16 || h + t > 20) { setStatus(st, "err.hrange", null, "bad"); return; }
         people.push({ rol: +g("rol"), sexo: +g("sexo"), trab: +g("trab"), hogar: h, trabajo: t });
       }
-      st.textContent = "";
+      setStatus(st, "");
       showCode(encodeB(+d.value, people));
     });
   }
@@ -485,22 +894,51 @@ table.payoff td.hl { background: var(--accent-soft); }
   function showCode(code) {
     lastCode = code;
     $("code-text").textContent = code;
-    $("copy-status").textContent = ""; $("direct-status").textContent = "";
+    setStatus($("copy-status"), ""); setStatus($("direct-status"), "");
     $("code-out").hidden = false;
     $("code-out").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
   }
   $("copy-code").addEventListener("click", () => copyText(lastCode, $("copy-status")));
 
-  // ---------- Almacén compartido (db) ----------
-  let db = null, canWrite = false, groups = [], unsubGroups = null, unsubResp = null;
+  // ---------- Almacén: el de Claude (db) o, fuera de Claude, este navegador ----------
+  // El almacén local imita la parte de la interfaz de db que usa la página: mismas rutas y misma estructura.
+  function makeLocalDB() {
+    const KEY = "obs-sa2-db-v1";
+    const load = () => { try { const v = JSON.parse(store.get(KEY) || "null"); return v && v.clases ? v : { clases: {} }; } catch { return { clases: {} }; } };
+    let state = load();
+    const subs = new Set();
+    const emit = () => subs.forEach(f => f());
+    const save = () => { store.set(KEY, JSON.stringify(state)); emit(); };
+    window.addEventListener("storage", e => { if (e.key === KEY) { state = load(); emit(); } });
+    const docsOf = path => {
+      const parts = path.split("/");
+      if (parts.length === 1) return Object.entries(state.clases).map(([id, c]) => ({ id, data: () => ({ nombre: c.nombre || id }) }));
+      const c = state.clases[parts[1]];
+      return c ? Object.entries(c.respuestas || {}).map(([id, d]) => ({ id, data: () => d })) : [];
+    };
+    const grp = gid => state.clases[gid] || (state.clases[gid] = { nombre: gid, respuestas: {} });
+    return {
+      local: true,
+      doc(path) { const gid = path.split("/")[1]; return { async set(v) { grp(gid).nombre = v.nombre; save(); } }; },
+      collection(path) {
+        return {
+          doc(id) { return { async set(v) { const g = grp(path.split("/")[1]); (g.respuestas || (g.respuestas = {}))[id] = v; save(); } }; },
+          onSnapshot(cb) { const f = () => cb({ docs: docsOf(path) }); subs.add(f); f(); return () => subs.delete(f); }
+        };
+      }
+    };
+  }
+  let db = null, mode = null, canWrite = false, groups = [], unsubGroups = null, unsubResp = null, currentGid = null;
   let localSet = null; // códigos pegados sin guardar
+  let userPicked = false; // el docente ha elegido la fuente de datos a mano
   let exampleSet = null;
   let currentRows = [];
 
   async function saveCodes(gname, parsedList, statusEl) {
     const gid = groupId(gname);
-    if (!gid) { statusEl.textContent = "Escribe el nombre del grupo."; statusEl.className = "status bad"; return false; }
-    statusEl.textContent = "Guardando…"; statusEl.className = "status";
+    if (!gid) { setStatus(statusEl, "save.noname", null, "bad"); return false; }
+    if (!db) { setStatus(statusEl, "save.fail", null, "bad"); return false; }
+    setStatus(statusEl, "save.saving");
     try {
       await db.doc("clases/" + gid).set({ nombre: gname.trim() });
       let n = 0;
@@ -509,59 +947,72 @@ table.payoff td.hl { background: var(--accent-soft); }
         n++;
       }
       store.set("grupo", gname.trim());
-      statusEl.textContent = n + (n === 1 ? " respuesta guardada" : " respuestas guardadas") + " en «" + gname.trim() + "»."; statusEl.className = "status ok";
+      setStatus(statusEl, n === 1 ? "save.ok1" : "save.okn", { n, g: gname.trim() }, "ok");
       return true;
     } catch (e) {
-      if (e && e.code === "invalid_argument") { canWrite = false; applyWriteState(); statusEl.textContent = "Esta cuenta no puede guardar datos en la aplicación."; }
-      else if (e && e.code === "quota_exceeded") statusEl.textContent = "El almacén está lleno: borra respuestas de grupos antiguos.";
-      else statusEl.textContent = "No se ha podido guardar. Vuelve a intentarlo en un momento.";
-      statusEl.className = "status bad"; return false;
+      if (e && e.code === "invalid_argument") { canWrite = false; applyWriteState(); setStatus(statusEl, "save.nowrite", null, "bad"); }
+      else if (e && e.code === "quota_exceeded") setStatus(statusEl, "save.full", null, "bad");
+      else setStatus(statusEl, "save.fail", null, "bad");
+      return false;
     }
   }
 
   function applyWriteState() {
     const note = $("write-note");
-    $("direct-save").hidden = !(db && canWrite);
-    if (db && canWrite) { note.hidden = true; }
+    const writable = !!(db && canWrite);
+    $("direct-save").hidden = !writable;
+    $("save-codes").hidden = !writable;
+    $("imp-box").hidden = !writable;
+    if (!db) { note.hidden = true; return; }
+    if (mode === "local") {
+      note.hidden = false;
+      note.replaceChildren(tx("strong", "note.local"), tx("span", "note.local2"));
+    } else if (canWrite) { note.hidden = true; }
     else {
       note.hidden = false;
-      note.replaceChildren(
-        el("strong", { text: db ? "Esta cuenta solo puede consultar." : "Para guardar los códigos hay que abrir la aplicación con la cuenta del docente." }),
-        el("span", { text: "Mientras tanto, puedes comprobar los códigos y ver sus resultados sin guardarlos." }));
+      note.replaceChildren(tx("strong", "note.ro"), tx("span", "note.ro2"));
     }
-    $("save-codes").hidden = !(db && canWrite);
   }
 
   function refreshGroupOptions() {
     const dl = $("group-list"); dl.replaceChildren(...groups.map(g => el("option", { value: g.nombre })));
     const sel = $("res-source"); const prev = sel.value;
     const opts = [];
-    groups.forEach(g => opts.push(el("option", { value: "g:" + g.id, text: "Grupo · " + g.nombre })));
-    if (localSet) opts.push(el("option", { value: "local", text: "Códigos pegados (sin guardar)" }));
-    opts.push(el("option", { value: "ejemplo", text: "Datos de ejemplo (inventados)" }));
+    groups.forEach(g => opts.push(el("option", { value: "g:" + g.id, text: T("res.group", { g: g.nombre }) })));
+    if (localSet) opts.push(el("option", { value: "local", text: T("res.pasted") }));
+    opts.push(el("option", { value: "ejemplo", text: T("res.example") }));
     sel.replaceChildren(...opts);
-    const want = prev && [...sel.options].some(o => o.value === prev) ? prev
+    const keep = prev && [...sel.options].some(o => o.value === prev) && (userPicked || prev !== "ejemplo" || !groups.length);
+    const want = keep ? prev
       : (groups.length ? "g:" + (groups.find(g => g.nombre === store.get("grupo")) || groups[0]).id : (localSet ? "local" : "ejemplo"));
     sel.value = want;
   }
 
   // ---------- Introducir ----------
   let lastParsed = [];
-  $("check-codes").addEventListener("click", () => {
-    const lines = $("codes-in").value.split(/\n|,|;/).map(s => s.trim()).filter(Boolean);
+  function parseList(text) {
+    const lines = String(text).split(/\n|,|;/).map(s => s.trim()).filter(Boolean);
     const seen = new Set();
-    lastParsed = lines.map(parseCode).filter(Boolean).map(p => { if (p.ok && seen.has(p.code)) return { ok: false, code: p.code, err: "Repetido en la lista." }; seen.add(p.code); return p; });
+    return lines.map(parseCode).filter(Boolean).map(p => { if (p.ok && seen.has(p.code)) return { ok: false, code: p.code, err: "perr.dup" }; seen.add(p.code); return p; });
+  }
+  function renderParsed() {
+    if (!lastParsed.length) { $("parsed").replaceChildren(); return; }
     const good = lastParsed.filter(p => p.ok);
     const tbl = el("table", {},
-      el("thead", {}, el("tr", {}, el("th", { text: "Código" }), el("th", { text: "Encuesta" }), el("th", { text: "Estado" }))),
+      el("thead", {}, el("tr", {}, el("th", { text: T("in.th.code") }), el("th", { text: T("in.th.survey") }), el("th", { text: T("in.th.state") }))),
       el("tbody", {}, lastParsed.map(p => el("tr", {},
         el("td", { class: "mono", text: p.code }),
-        el("td", { text: p.ok ? (p.tipo === "A" ? "A · decisiones 2020" : "B · " + p.people.length + (p.people.length === 1 ? " persona" : " personas")) : "—" }),
-        el("td", {}, p.ok ? el("span", { class: "tag ok", text: "correcto" }) : el("span", {}, el("span", { class: "tag bad", text: "error" }), " ", p.err))))));
-    $("parsed").replaceChildren(el("p", { class: "small", text: good.length + " de " + lastParsed.length + " códigos correctos." }), tbl);
+        el("td", { text: p.ok ? (p.tipo === "A" ? T("in.A") : T(p.people.length === 1 ? "in.B1" : "in.Bn", { n: p.people.length })) : "—" }),
+        el("td", {}, p.ok ? el("span", { class: "tag ok", text: T("in.ok") }) : el("span", {}, el("span", { class: "tag bad", text: T("in.err") }), " ", T(p.err, p.ev)))))));
+    $("parsed").replaceChildren(el("p", { class: "small", text: T("in.count", { g: good.length, n: lastParsed.length }) }), tbl);
+  }
+  $("check-codes").addEventListener("click", () => {
+    lastParsed = parseList($("codes-in").value);
+    renderParsed();
+    const good = lastParsed.filter(p => p.ok);
     $("save-codes").disabled = !(good.length && db && canWrite);
     $("local-codes").disabled = !good.length;
-    $("save-status").textContent = "";
+    setStatus($("save-status"), "");
   });
   $("save-codes").addEventListener("click", async () => {
     const good = lastParsed.filter(p => p.ok); if (!good.length) return;
@@ -577,6 +1028,22 @@ table.payoff td.hl { background: var(--accent-soft); }
   $("direct-save-btn").addEventListener("click", async () => {
     const p = parseCode(lastCode); if (!p || !p.ok) return;
     await saveCodes($("direct-group").value, [p], $("direct-status"));
+  });
+
+  // ---------- Exportar e importar un grupo (para pasar los datos de un ordenador a otro) ----------
+  $("imp-file").addEventListener("change", () => {
+    const f = $("imp-file").files && $("imp-file").files[0]; if (!f) return;
+    const r = new FileReader(); r.onload = () => { $("imp-text").value = String(r.result || ""); }; r.readAsText(f);
+  });
+  $("imp-go").addEventListener("click", async () => {
+    const raw = $("imp-text").value.trim(), st = $("imp-status");
+    let name = $("group-name").value.trim(), codes = raw;
+    try { const j = JSON.parse(raw); if (j && Array.isArray(j.respuestas)) { codes = j.respuestas.join("\n"); if (!name && j.grupo && j.grupo.nombre) name = String(j.grupo.nombre); } } catch {}
+    const good = parseList(codes).filter(p => p.ok);
+    if (!good.length) { setStatus(st, "imp.none", null, "bad"); return; }
+    if (!name) { setStatus(st, "save.noname", null, "bad"); return; }
+    const ok = await saveCodes(name, good, st);
+    if (ok) setStatus(st, "imp.ok", { n: good.length, g: name }, "ok");
   });
 
   // ---------- Datos de ejemplo (inventados, solo para ver cómo funciona) ----------
@@ -616,21 +1083,22 @@ table.payoff td.hl { background: var(--accent-soft); }
     const dayF = $("res-day").value;
     const B = dayF === "all" ? Ball : Ball.filter(p => String(p.day) === dayF);
     $("export-row").hidden = !rows.length;
+    $("json-group").hidden = !(src && src.startsWith("g:") && rows.length);
     if (!rows.length) {
       out.replaceChildren(el("div", { class: "empty" },
-        el("h3", { text: "Todavía no hay respuestas en este grupo" }),
-        el("p", { class: "small", text: "Cuando se guarden los códigos de la clase en «Introducir códigos», aquí aparecerán los recuentos de la encuesta A y la comparación de horas de la encuesta B con la media del INE." }),
-        el("button", { type: "button", class: "btn ghost small", id: "go-example", text: "Ver cómo queda con datos de ejemplo" })));
-      $("go-example").addEventListener("click", () => { $("res-source").value = "ejemplo"; renderResults(); });
+        el("h3", { text: T("res.empty") }),
+        el("p", { class: "small", text: T("res.empty2") }),
+        el("button", { type: "button", class: "btn ghost small", id: "go-example", text: T("res.goex") })));
+      $("go-example").addEventListener("click", () => { userPicked = true; $("res-source").value = "ejemplo"; renderResults(); });
       return;
     }
     const persons = B.flatMap(p => p.people.map(x => ({ ...x, day: p.day })));
     const kids = [];
-    if (sourceLabel === "ejemplo") kids.push(el("p", { class: "example-flag", text: "Datos de ejemplo inventados: solo sirven para ver cómo funciona la aplicación." }));
+    if (sourceLabel === "ejemplo") kids.push(el("p", { class: "example-flag", text: T("res.exflag") }));
     kids.push(el("div", { class: "stats" },
-      el("div", { class: "stat" }, el("b", { text: A.length }), el("span", { text: "hogares en la encuesta A" })),
-      el("div", { class: "stat" }, el("b", { text: B.length }), el("span", { text: "hogares en la encuesta B" })),
-      el("div", { class: "stat" }, el("b", { text: persons.length }), el("span", { text: "personas en la encuesta B" }))));
+      el("div", { class: "stat" }, el("b", { text: A.length }), el("span", { text: T("res.hA") })),
+      el("div", { class: "stat" }, el("b", { text: B.length }), el("span", { text: T("res.hB") })),
+      el("div", { class: "stat" }, el("b", { text: persons.length }), el("span", { text: T("res.pB") }))));
 
     // Encuesta B: comparación con el INE
     const adults = persons.filter(x => x.rol >= 1 && x.rol <= 3);
@@ -638,59 +1106,56 @@ table.payoff td.hl { background: var(--accent-soft); }
     const mean = (arr, k) => arr.length ? arr.reduce((a, x) => a + x[k], 0) / arr.length : NaN;
     const by = (arr, s) => arr.filter(x => x.sexo === s);
     const aM = by(adults, 0), aH = by(adults, 1), yM = by(young, 0), yH = by(young, 1);
-    const cmp = (title, key) => {
+    const cmp = (titleKey, key) => {
       const r = [
-        { label: "Mujeres adultas · clase (n=" + aM.length + ")", v: mean(aM, key) || 0, text: fmtH(mean(aM, key)) },
-        { label: "Mujeres · INE 2009-10", v: INE[key].M, text: fmtH(INE[key].M), ref: true },
-        { label: "Hombres adultos · clase (n=" + aH.length + ")", v: mean(aH, key) || 0, text: fmtH(mean(aH, key)) },
-        { label: "Hombres · INE 2009-10", v: INE[key].H, text: fmtH(INE[key].H), ref: true }
+        { label: T("res.wc", { n: aM.length }), v: mean(aM, key) || 0, text: fmtH(mean(aM, key)) },
+        { label: T("res.wi"), v: INE[key].M, text: fmtH(INE[key].M), ref: true },
+        { label: T("res.mc", { n: aH.length }), v: mean(aH, key) || 0, text: fmtH(mean(aH, key)) },
+        { label: T("res.mi"), v: INE[key].H, text: fmtH(INE[key].H), ref: true }
       ];
-      return el("div", { class: "cgroup" }, el("h3", { text: title }), bars(r));
+      return el("div", { class: "cgroup" }, el("h3", { text: T(titleKey) }), bars(r));
     };
     const gapC = mean(aM, "hogar") - mean(aH, "hogar"), gapI = INE.hogar.M - INE.hogar.H;
     kids.push(el("div", { class: "qres" },
-      el("span", { class: "eyebrow", text: "Encuesta B · horas al día" }),
-      el("h2", { text: "¿Se parece la clase a la media del INE?" }),
-      el("div", { class: "legend" }, el("span", {}, el("i"), "Nuestra clase"), el("span", {}, el("i", { class: "ref" }), "INE, día promedio 2009-2010")),
+      el("span", { class: "eyebrow", text: T("res.B.eye") }),
+      el("h2", { text: T("res.B.title") }),
+      el("div", { class: "legend" }, el("span", {}, el("i"), T("res.leg.class")), el("span", {}, el("i", { class: "ref" }), T("res.leg.ine"))),
       el("div", { class: "compare" },
-        cmp("Hogar y cuidados", "hogar"),
-        cmp("Trabajo pagado", "trabajo"),
-        el("div", { class: "cgroup" }, el("h3", { text: "Diferencia entre mujeres y hombres en hogar y cuidados" }),
-          el("p", {}, "En la clase, las mujeres adultas dedican ", el("strong", { text: isFinite(gapC) ? (gapC >= 0 ? fmtH(gapC) + " más" : fmtH(-gapC) + " menos") : "—" }),
-            " al día que los hombres adultos. En el INE (2009-2010), la diferencia es de ", el("strong", { text: fmtH(gapI) }), ".")),
-        el("div", { class: "cgroup" }, el("h3", { text: "Y el alumnado y otros menores de casa" }),
+        cmp("res.hogar", "hogar"),
+        cmp("res.trabajo", "trabajo"),
+        el("div", { class: "cgroup" }, el("h3", { text: T("res.gap.t") }),
+          el("p", {}, T("res.gap.a"), el("strong", { text: isFinite(gapC) ? (gapC >= 0 ? T("res.gap.more", { h: fmtH(gapC) }) : T("res.gap.less", { h: fmtH(-gapC) })) : "—" }),
+            T("res.gap.b"), el("strong", { text: fmtH(gapI) }), T("res.gap.c"))),
+        el("div", { class: "cgroup" }, el("h3", { text: T("res.young") }),
           bars([
-            { label: "Chicas (n=" + yM.length + ")", v: mean(yM, "hogar") || 0, text: fmtH(mean(yM, "hogar")) },
-            { label: "Chicos (n=" + yH.length + ")", v: mean(yH, "hogar") || 0, text: fmtH(mean(yH, "hogar")) }
+            { label: T("res.girls", { n: yM.length }), v: mean(yM, "hogar") || 0, text: fmtH(mean(yM, "hogar")) },
+            { label: T("res.boys", { n: yH.length }), v: mean(yH, "hogar") || 0, text: fmtH(mean(yH, "hogar")) }
           ]))),
       el("div", { class: "limits" },
-        el("strong", { text: "Antes de sacar conclusiones" }),
-        el("ul", {},
-          el("li", { text: "Unos pocos hogares de una clase no son una muestra representativa de España." }),
-          el("li", { text: "El INE da la media de un día cualquiera (laborables y fines de semana) de toda la población de 10 años o más, y sus datos son de 2009-2010; nosotros preguntamos por «ayer»." }),
-          el("li", { text: "Las horas son las que recuerda y declara cada familia: la memoria y lo que nos parece bien decir también cuentan." })))));
+        el("strong", { text: T("res.lim") }),
+        el("ul", {}, el("li", { text: T("res.lim1") }), el("li", { text: T("res.lim2") }), el("li", { text: T("res.lim3") })))));
 
     // Encuesta A: recuentos
     const qblocks = QA.map((q, i) => {
-      const counts = q.o.map(() => 0);
+      const counts = Array.from({ length: q.n }, () => 0);
       A.forEach(p => { const v = q.scale ? p.ans[i] - 1 : p.ans[i]; if (counts[v] !== undefined) counts[v]++; });
       return el("div", { class: "qres" },
-        el("div", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), el("span", { class: "qtext", text: q.t })),
-        bars(q.o.map((o, j) => ({ label: o, v: counts[j], text: counts[j] + " · " + pct(counts[j], A.length) }))));
+        el("div", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), el("span", { class: "qtext", text: T("qa." + i + ".t") })),
+        bars(counts.map((c, j) => ({ label: T("qa." + i + ".o." + j), v: c, text: c + " · " + pct(c, A.length) }))));
     });
     kids.push(el("div", { class: "qres", style: "border-top:2px solid var(--ink)" },
-      el("span", { class: "eyebrow", text: "Encuesta A · " + A.length + " hogares" }),
-      el("h2", { text: "Qué decidieron nuestras familias en 2020" }),
-      el("p", { class: "small", text: "Para cada respuesta, preguntaos con qué modelo se explica mejor: el cálculo, una desviación de la racionalidad o una respuesta razonable cuando nadie sabe lo que va a pasar." })));
+      el("span", { class: "eyebrow", text: T("res.A.eye", { n: A.length }) }),
+      el("h2", { text: T("res.A.title") }),
+      el("p", { class: "small", text: T("res.A.help") })));
     kids.push(...qblocks);
     out.replaceChildren(...kids);
   }
-  $("res-source").addEventListener("change", () => { const v = $("res-source").value; if (v.startsWith("g:")) subscribeGroup(v.slice(2)); renderResults(); });
+  $("res-source").addEventListener("change", () => { userPicked = true; const v = $("res-source").value; if (v.startsWith("g:")) subscribeGroup(v.slice(2)); renderResults(); });
   $("res-day").addEventListener("change", renderResults);
 
   function subscribeGroup(gid) {
     if (unsubResp) { unsubResp(); unsubResp = null; }
-    currentRows = [];
+    currentRows = []; currentGid = gid;
     if (!db) return;
     unsubResp = db.collection("clases/" + gid + "/respuestas").onSnapshot(snap => {
       currentRows = snap.docs.map(d => parseCode((d.data() || {}).codigo || "")).filter(p => p && p.ok);
@@ -698,37 +1163,37 @@ table.payoff td.hl { background: var(--accent-soft); }
     }, () => { currentRows = []; });
   }
 
-  // ---------- CSV ----------
+  // ---------- Descargas: CSV (siempre en castellano, para comparar grupos) y grupo en JSON ----------
   function rowsForExport() {
     const src = $("res-source").value;
     return src === "ejemplo" ? (exampleSet || []) : src === "local" ? (localSet || []) : currentRows;
   }
-  const csvCell = v => { const s = String(v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   function csvA() {
     const head = ["codigo", ...QA.map((q, i) => "A" + (i + 1))];
-    const lines = rowsForExport().filter(p => p.tipo === "A").map(p => [p.code, ...QA.map((q, i) => q.scale ? p.ans[i] : q.o[p.ans[i]])]);
-    return [head, ...lines].map(r => r.map(csvCell).join(";")).join("\n");
+    const lines = rowsForExport().filter(p => p.tipo === "A").map(p => [p.code, ...QA.map((q, i) => q.scale ? p.ans[i] : QA_ES[i][1][p.ans[i]])]);
+    return OBS.csv([head, ...lines]);
   }
   function csvB() {
     const head = ["codigo_hogar", "dia", "quien", "sexo", "trabajo_pagado", "horas_hogar_cuidados", "horas_trabajo_pagado"];
-    const lines = rowsForExport().filter(p => p.tipo === "B").flatMap(p => p.people.map(x => [p.code, DAY[p.day], ROL[x.rol], SEXO[x.sexo], TRAB[x.trab], String(x.hogar).replace(".", ","), String(x.trabajo).replace(".", ",")]));
-    return [head, ...lines].map(r => r.map(csvCell).join(";")).join("\n");
+    const lines = rowsForExport().filter(p => p.tipo === "B").flatMap(p => p.people.map(x => [p.code, DAY_ES[p.day], ROL_ES[x.rol], SEXO_ES[x.sexo], TRAB_ES[x.trab], String(x.hogar).replace(".", ","), String(x.trabajo).replace(".", ",")]));
+    return OBS.csv([head, ...lines]);
   }
   let downloads = null;
-  async function offer(name, text) {
+  async function offer(name, text, type) {
     const st = $("csv-status");
-    if (downloads) {
-      try { await downloads.save({ filename: name, data: "﻿" + text }); st.textContent = "Descargado."; st.className = "status ok"; return; }
-      catch (e) { if (e && e.code === "declined") { st.textContent = ""; return; } }
-    }
-    copyText(text, st);
-    st.textContent = st.className.includes("ok") ? "La descarga no está disponible aquí: los datos se han copiado; pégalos en una hoja de cálculo." : st.textContent;
+    const msg = await OBS.download(name, text, type, { downloads });
+    st.dataset.k = ""; st.textContent = msg || ""; st.className = "status" + (msg ? " ok" : "");
   }
-  $("csv-A").addEventListener("click", () => offer("encuesta-A-decisiones-2020.csv", csvA()));
-  $("csv-B").addEventListener("click", () => offer("encuesta-B-horas-cuidados.csv", csvB()));
+  $("csv-A").addEventListener("click", () => offer("encuesta-A-decisiones-2020.csv", csvA(), "text/csv;charset=utf-8"));
+  $("csv-B").addEventListener("click", () => offer("encuesta-B-horas-cuidados.csv", csvB(), "text/csv;charset=utf-8"));
+  $("json-group").addEventListener("click", () => {
+    const g = groups.find(x => x.id === currentGid) || { id: currentGid, nombre: currentGid };
+    const data = { app: "observatorio-sa2", version: 1, exportado: new Date().toISOString(), grupo: { id: g.id, nombre: g.nombre }, respuestas: currentRows.map(p => p.code) };
+    offer("sa2-grupo-" + (g.id || "grupo") + ".json", JSON.stringify(data, null, 2), "application/json");
+  });
 
   // ---------- Matriz ----------
-  const RLAB = [["Ronda 1", "A ciegas: nadie sabe qué votan los demás."], ["Ronda 2", "Ya habéis visto el resultado de la ronda 1."], ["Ronda 3", "El súper de al lado ya está vacío."]];
+  const RLAB = [["m.r1", "m.r1q"], ["m.r2", "m.r2q"], ["m.r3", "m.r3q"]];
   let mRounds = [null, null, null];
   try { const st = JSON.parse(store.get("matriz") || "null"); if (Array.isArray(st) && st.length === 3) mRounds = st; } catch {}
   const intOr = (id, d) => { const v = parseInt(String($(id).value).trim(), 10); return isFinite(v) && v >= 0 ? v : d; };
@@ -749,7 +1214,7 @@ table.payoff td.hl { background: var(--accent-soft); }
   }
   function renderMatriz() {
     const n = Math.max(1, intOr("m-n", 28)), stock = intOr("m-s", 34), want = Math.max(2, intOr("m-a", 3));
-    $("m-note").textContent = "En un día normal cada hogar se lleva 1 paquete: hacen falta " + n + " y hay " + stock + ". Se fabrica lo de siempre o más.";
+    $("m-note").textContent = T("m.note", { n, s: stock });
     const cards = RLAB.map((lab, i) => {
       const k = mRounds[i];
       const input = el("input", { type: "text", id: "m-k" + i, inputmode: "numeric", value: k == null ? "" : k, placeholder: "—" });
@@ -760,15 +1225,16 @@ table.payoff td.hl { background: var(--accent-soft); }
         store.set("matriz", JSON.stringify(mRounds));
         renderMatriz();
       });
-      const kids = [el("span", { class: "k", text: lab[0] }), el("span", { class: "q", text: lab[1] }),
-        el("label", { class: "small", for: "m-k" + i, text: "¿Cuántos compran de más?" }), input];
+      const kids = [el("span", { class: "k", text: T(lab[0]) }), el("span", { class: "q", text: T(lab[1]) }),
+        el("label", { class: "small", for: "m-k" + i, text: T("m.k") }), input];
       if (k != null) {
         const out = simulate(n, k, stock, want);
         const outR = Math.round(out);
         const demand = (n - k) + k * want;
-        kids.push(el("div", { class: "stat" }, el("b", { class: "big", text: Math.round(100 * k / n) + " %" }), el("span", { text: "compra de más" })));
-        kids.push(el("div", { class: "shelf", "aria-label": outR + " hogares de " + n + " se quedan sin papel" }, Array.from({ length: n }, (_, j) => el("i", { class: j < n - outR ? "" : "out" }))));
-        kids.push(el("p", { class: "small" }, "Se piden ", el("strong", { text: String(demand) }), " paquetes y hay ", el("strong", { text: String(stock) }), ". De media, ", el("strong", { text: outR + (outR === 1 ? " hogar se queda" : " hogares se quedan") }), " sin papel."));
+        kids.push(el("div", { class: "stat" }, el("b", { class: "big", text: Math.round(100 * k / n) + " %" }), el("span", { text: T("m.pct") })));
+        kids.push(el("div", { class: "shelf", "aria-label": T("m.shelf", { o: outR, n }) }, Array.from({ length: n }, (_, j) => el("i", { class: j < n - outR ? "" : "out" }))));
+        kids.push(el("p", { class: "small" }, T("m.s.a"), el("strong", { text: String(demand) }), T("m.s.b"), el("strong", { text: String(stock) }), T("m.s.c"),
+          el("strong", { text: T(outR === 1 ? "m.s.o1" : "m.s.on", { o: outR }) }), T("m.s.d")));
       }
       return el("div", { class: "round" }, kids);
     });
@@ -777,32 +1243,54 @@ table.payoff td.hl { background: var(--accent-soft); }
   ["m-n", "m-s", "m-a"].forEach(id => $(id).addEventListener("change", renderMatriz));
   $("m-reset").addEventListener("click", () => { mRounds = [null, null, null]; store.set("matriz", JSON.stringify(mRounds)); renderMatriz(); });
 
+  // ---------- Idioma: lo generado con JavaScript se vuelve a dibujar ----------
+  OBS.onLang(() => {
+    refreshGroupOptions();
+    renderParsed();
+    applyWriteState();
+    retranslateStatuses();
+    if (!$("view-resultados").hidden) renderResults();
+    if (!$("view-matriz").hidden) renderMatriz();
+  });
+
   // ---------- Arranque ----------
+  OBS.mountBar($("obs-bar"), { ficha: FICHA });
   buildA(); buildB(); syncAdd();
+  OBS.apply();
   const g0 = store.get("grupo"); if (g0) { $("group-name").value = g0; $("direct-group").value = g0; }
   refreshGroupOptions();
   applyWriteState();
   show(location.hash.slice(1));
 
-  (async () => {
-    const C = window.claude;
-    if (!C || !C.use) return;
-    const [dbNs, userNs, dl] = await Promise.all([C.use("db"), C.use("user"), C.use("downloads")]);
-    downloads = dl;
-    db = dbNs;
-    if (!db) { applyWriteState(); return; }
-    let w = null;
-    try { w = userNs ? await userNs.can("data.write") : null; } catch { w = null; }
-    canWrite = w !== false;
-    applyWriteState();
+  function startGroups() {
+    if (unsubGroups) unsubGroups();
     unsubGroups = db.collection("clases").onSnapshot(snap => {
       groups = snap.docs.map(d => ({ id: d.id, nombre: (d.data() || {}).nombre || d.id })).sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
       const before = $("res-source").value;
       refreshGroupOptions();
       const now = $("res-source").value;
-      if (now.startsWith("g:") && (now !== before || !unsubResp)) subscribeGroup(now.slice(2));
+      if (now.startsWith("g:") && (now !== before || !unsubResp || currentGid !== now.slice(2))) subscribeGroup(now.slice(2));
       if (!$("view-resultados").hidden) renderResults();
     }, () => {});
+  }
+  (async () => {
+    const C = window.claude;
+    let dbNs = null, userNs = null, dl = null;
+    if (C && C.use) {
+      try { [dbNs, userNs, dl] = await Promise.all([C.use("db"), C.use("user"), C.use("downloads")]); } catch { dbNs = null; }
+    }
+    downloads = dl;
+    if (dbNs) {
+      db = dbNs; mode = "claude";
+      let w = null;
+      try { w = userNs ? await userNs.can("data.write") : null; } catch { w = null; }
+      canWrite = w !== false;
+    } else {
+      // Fuera de Claude (archivo suelto u otra web): los datos se guardan en este navegador
+      db = makeLocalDB(); mode = "local"; canWrite = true;
+    }
+    applyWriteState();
+    startGroups();
   })();
 })();
 </script>

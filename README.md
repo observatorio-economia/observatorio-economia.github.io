@@ -5,12 +5,12 @@ Web estática con las herramientas digitales del curso, una por situación de ap
 ## Qué hay aquí
 
 ```
-index.html               Panel del Observatorio (portada con las 10 SA)
-assets/observatorio.css  Hoja de estilo común: colores, fuentes, modo oscuro, portada y menú
+index.html               Panel del Observatorio (portada con las 10 SA, en castellano y valenciano)
+assets/observatorio.css  Hoja de estilo de la web: portada y menú común
 assets/menu.js           Menú común + lista de las 10 SA (la única lista que hay que mantener)
-assets/almacen-local.js  Solo SA 2: guarda los códigos de las encuestas en el navegador
-sa01/ sa02/ sa04/ sa05/  Las herramientas (copias generadas desde el vault, no editar a mano)
-actualizar.sh            Vuelve a copiar las herramientas desde el vault
+assets/comun/            Piezas comunes del vault (línea gráfica, idioma, modo proyector), copiadas por actualizar.sh
+sa01/ … sa06/            Las herramientas (copias generadas desde el vault, no editar a mano)
+actualizar.sh            Vuelve a copiar las herramientas y las piezas comunes desde el vault
 .nojekyll                Para que GitHub Pages sirva los archivos tal cual
 ```
 
@@ -22,24 +22,26 @@ Las herramientas se editan **en el vault** (`05-SA/<SA>/material/…html`). Desp
 sh ~/Documents/observatorio-economia/actualizar.sh
 ```
 
-El script copia cada herramienta y solo le añade el esqueleto de página, la hoja de estilo y el menú comunes, y cambia el enlace «← Panel del Observatorio» para que lleve a la portada. En la SA 2 carga, además, el almacén local. No modifica nada del vault.
+El script copia cada herramienta y solo le añade el esqueleto de página, la hoja de estilo y el menú de la web, y cambia el enlace «← Panel del Observatorio» (la constante `PANEL_URL` de las piezas comunes) para que lleve a la portada. También copia `05-SA/_observatorio-comun/observatorio-common.css` y `.js` a `assets/comun/` para la portada. No modifica nada del vault.
+
+La portada de la web no se copia de `05-SA/panel-observatorio.html`: se genera con la lista de `assets/menu.js`.
 
 ## Añadir la herramienta de una SA nueva
 
 1. En `actualizar.sh`, añade una línea a `HERRAMIENTAS`, por ejemplo:
-   `("sa03", "SA03-la-produccion/material/observatorio-sa3.html", []),`
-2. En `assets/menu.js`, en la entrada de esa SA, pon `ruta: "sa03/"`, el `estado` ("abrir" o "prototipo") y una descripción corta `d`.
+   `("sa03", "SA03-la-produccion/material/observatorio-sa3.html"),`
+2. En `assets/menu.js`, en la entrada de esa SA, pon `ruta: "sa03/"`, el `estado` (`"open"` = abrir o `"proto"` = prototipo) y una descripción corta `d` en castellano y valenciano.
 3. Ejecuta `actualizar.sh`.
 
 La portada y el menú se actualizan solos a partir de `menu.js`.
 
 ## SA 2: dónde se guardan los códigos
 
-Fuera de Claude, los códigos que se guardan en «Introducir códigos» se quedan **en el navegador del ordenador donde se introducen** (localStorage). No se envían a ningún sitio.
+Fuera de Claude, la propia herramienta guarda los grupos **en el navegador del ordenador donde se introducen** (localStorage). No se envían a ningún sitio.
 
 - Se pierden si se borran los datos del navegador o si se cambia de ordenador o de navegador.
-- Por eso, en «Introducir códigos» hay un bloque **Copia de seguridad**: *Exportar copia* descarga un archivo `.json` e *Importar copia* lo recupera (se suma a lo que ya haya y no borra nada).
-- Dentro de Claude, la herramienta sigue usando el almacén de Claude, como antes.
+- Para pasarlos a otro ordenador o guardar una copia: *Exportar el grupo* en «Resultados» e *Importar un grupo exportado* en «Introducir códigos».
+- Dentro de Claude, la herramienta sigue usando el almacén de Claude.
 
 ## Probar en local
 
