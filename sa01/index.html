@@ -177,6 +177,19 @@ svg .nsub { font-family: var(--font-body); font-size: 12px; fill: var(--muted); 
 svg .tk-money { fill: var(--accent); }
 svg .tk-goods { fill: var(--s2); }
 svg .tk-work { fill: var(--ref); }
+/* Reinversión (acumulación): verde, para distinguirla del resto del dinero */
+svg .tk-reinv { fill: var(--s3); }
+svg .link.reinv { stroke: var(--s3); stroke-opacity: .6; }
+svg .rlabel { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--s3); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; }
+.legend i.reinv { background: var(--s3); }
+/* Barras de lo producido en cada vuelta */
+.growth { border: 1px solid var(--rule); background: var(--paper); }
+.growth svg { width: 100%; height: auto; display: block; }
+.growth .bar-c { fill: var(--s2); } .growth .bar-v { fill: var(--ref); } .growth .bar-r { fill: var(--s3); } .growth .bar-k { fill: var(--accent); }
+.growth .other { opacity: .4; }
+.growth text { font-family: var(--font-mono); font-size: 12px; fill: var(--muted); }
+.growth text.tot { fill: var(--ink); font-weight: 500; }
+.legend i.c-mat { background: var(--s2); } .legend i.c-sal { background: var(--ref); } .legend i.c-cons { background: var(--accent); }
 svg .loop { fill: none; stroke: var(--rule); }
 .vbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
 .vbar .vk { font-family: var(--font-display); font-weight: 700; font-size: 24px; min-width: 5.5em; font-variant-numeric: tabular-nums; }
@@ -1173,7 +1186,12 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "f.amp.p": "Ahora los propietarios del sector de maquinaria reinvierten una parte del excedente: compran más materiales y contratan a más gente. El sector de bienes de consumo reinvierte lo necesario para usar la maquinaria nueva. El circuito crece vuelta a vuelta.",
       "f.vuelta": "Vuelta {n}", "f.vueltas": "Vueltas", "f.play": "Reproducir", "f.pause": "Pausa", "f.reset": "Volver a la vuelta 1",
       "f.a": "Parte del excedente del sector de maquinaria que se reinvierte",
-      "f.leg.money": "Dinero", "f.leg.goods": "Maquinaria y bienes", "f.leg.work": "Trabajo",
+      "f.leg.money": "Dinero", "f.leg.goods": "Maquinaria y bienes", "f.leg.work": "Trabajo", "f.leg.reinv": "Reinversión (lo que se acumula)",
+      "f.g.h": "Lo que se produce en cada vuelta", "f.g.y": "Total producido",
+      "f.g.p.simple": "Todas las barras son iguales: los propietarios consumen todo el excedente y el circuito se repite igual vuelta tras vuelta.",
+      "f.g.p.amp": "La parte verde es el excedente que se reinvierte: en la vuelta siguiente se convierte en más materiales y más salarios, y la barra crece. Eso es la acumulación.",
+      "f.g.p.zero": "Con un 0 % no se reinvierte nada: no hay parte verde y todas las barras son iguales, como en el flujo simple.",
+      "f.selfnew": "maquinaria nueva",
       "f.flowsH": "Lo que circula en esta vuelta",
       "f.fl.matI": "Materiales que el sector de maquinaria se fabrica a sí mismo: {x}",
       "f.fl.ItoII": "Maquinaria y materiales del sector de maquinaria al de consumo: {x} (y el mismo dinero en sentido contrario)",
@@ -1268,7 +1286,12 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "f.amp.p": "Ara els propietaris del sector de maquinària reinvertixen una part de l'excedent: compren més materials i contracten més gent. El sector de béns de consum reinvertix el que cal per a utilitzar la maquinària nova. El circuit creix volta a volta.",
       "f.vuelta": "Volta {n}", "f.vueltas": "Voltes", "f.play": "Reproduir", "f.pause": "Pausa", "f.reset": "Tornar a la volta 1",
       "f.a": "Part de l'excedent del sector de maquinària que es reinvertix",
-      "f.leg.money": "Diners", "f.leg.goods": "Maquinària i béns", "f.leg.work": "Treball",
+      "f.leg.money": "Diners", "f.leg.goods": "Maquinària i béns", "f.leg.work": "Treball", "f.leg.reinv": "Reinversió (el que s'acumula)",
+      "f.g.h": "El que es produïx a cada volta", "f.g.y": "Total produït",
+      "f.g.p.simple": "Totes les barres són iguals: els propietaris consumixen tot l'excedent i el circuit es repetix igual volta rere volta.",
+      "f.g.p.amp": "La part verda és l'excedent que es reinvertix: en la volta següent es convertix en més materials i més salaris, i la barra creix. Això és l'acumulació.",
+      "f.g.p.zero": "Amb un 0 % no es reinvertix res: no hi ha part verda i totes les barres són iguals, com en el flux simple.",
+      "f.selfnew": "maquinària nova",
       "f.flowsH": "El que circula en esta volta",
       "f.fl.matI": "Materials que el sector de maquinària es fabrica a si mateix: {x}",
       "f.fl.ItoII": "Maquinària i materials del sector de maquinària al de consum: {x} (i els mateixos diners en sentit contrari)",
@@ -1662,8 +1685,14 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
         <button type="button" class="btn" id="${ids("play")}"></button>
         <button type="button" class="btn quiet small" id="${ids("reset")}"></button>
       </div>
-      <div class="legend"><span><i class="dot"></i><span id="${ids("lm")}"></span></span><span><i class="dot goods"></i><span id="${ids("lg")}"></span></span><span><i class="dot work"></i><span id="${ids("lw")}"></span></span></div>
+      <div class="legend"><span><i class="dot"></i><span id="${ids("lm")}"></span></span><span><i class="dot goods"></i><span id="${ids("lg")}"></span></span><span><i class="dot work"></i><span id="${ids("lw")}"></span></span>${kind === "ampliado" ? `<span><i class="dot reinv"></i><span id="${ids("lr")}"></span></span>` : ""}</div>
       <div class="circuit"><svg id="${ids("svg")}" viewBox="0 0 640 430" role="img"></svg></div>
+      <figure style="margin:0;display:flex;flex-direction:column;gap:8px">
+        <figcaption><h3 id="${ids("gh")}"></h3></figcaption>
+        <div class="legend"><span><i class="c-mat"></i><span id="${ids("g1")}"></span></span><span><i class="c-sal"></i><span id="${ids("g2")}"></span></span>${kind === "ampliado" ? `<span><i class="reinv"></i><span id="${ids("g3")}"></span></span>` : ""}<span><i class="c-cons"></i><span id="${ids("g4")}"></span></span></div>
+        <div class="growth"><svg id="${ids("grow")}" viewBox="0 0 640 240" role="img"></svg></div>
+        <p class="small" id="${ids("gp")}"></p>
+      </figure>
       <div class="check" id="${ids("check")}"></div>
       <div class="notice" id="${ids("note")}" aria-live="polite"></div>
       <div><h3 id="${ids("flh")}" style="margin-bottom:6px"></h3><ul class="flows" id="${ids("flows")}"></ul></div>
@@ -1703,8 +1732,8 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
         ["I", "O", "money", r.I.s], ["II", "O", "money", r.II.s],
         ["O", "II", "money", r.I.cons + r.II.cons], ["II", "O", "goods", r.I.cons + r.II.cons]
       ];
-      if (r.I.acc > 0.5) st.push(["O", "I", "money", r.I.acc]);
-      if (r.II.acc > 0.5) st.push(["O", "II", "money", r.II.acc]);
+      if (r.I.acc > 0.5) st.push(["O", "I", "reinv", r.I.acc]);
+      if (r.II.acc > 0.5) st.push(["O", "II", "reinv", r.II.acc]);
       return st.filter(s => s[3] > 0.5);
     }
     function lineFor(a, b, rad) {
@@ -1727,9 +1756,23 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
         const [x1, y1] = POS[a], [x2, y2] = POS[b];
         gL.append(sv("line", { x1, y1, x2, y2, class: "link", "stroke-width": (4 + 18 * Math.sqrt(tot[k] / maxP)).toFixed(1) }));
       });
-      // autoconsumo del sector I (materiales que se repone a sí mismo)
+      // reinversión: el excedente que vuelve a los sectores, en verde y con su rótulo
+      streamsOf(r).filter(s => s[2] === "reinv").forEach(([a, b, , v]) => {
+        const g = lineFor(a, b, { I: 0, II: 0, F: 0, O: 0 });
+        gL.append(sv("line", { x1: g.x1, y1: g.y1, x2: g.x2, y2: g.y2, class: "link reinv", "stroke-width": (3 + 14 * Math.sqrt(v / maxP)).toFixed(1) }));
+        // rótulo: hacia el sector I, en la diagonal cerca de los propietarios; hacia el II, a la derecha de la vertical
+        const lx = b === "I" ? POS.O[0] + (POS.I[0] - POS.O[0]) * 0.3 - 10 : POS.II[0] + 18;
+        const ly = b === "I" ? POS.O[1] + (POS.I[1] - POS.O[1]) * 0.3 - 8 : (POS.II[1] + POS.O[1]) / 2;
+        gL.append(sv("text", { x: lx, y: ly, "text-anchor": b === "I" ? "end" : "start", class: "rlabel" }, T("f.reinv").toLowerCase() + " " + fmt(v)));
+      });
+      // autoconsumo del sector I (materiales que se repone a sí mismo) y, en verde, la maquinaria nueva que se queda
       const [ix, iy] = POS.I;
-      gL.append(sv("circle", { cx: ix - rad.I - 16, cy: iy, r: 18, class: "loop", "stroke-width": (3 + 12 * Math.sqrt(r.I.c / maxP)).toFixed(1) }));
+      gL.append(sv("circle", { cx: ix - rad.I - 16, cy: iy, r: 18, class: "loop", "stroke-width": (3 + 12 * Math.sqrt((r.I.c + r.I.dc) / maxP)).toFixed(1) }));
+      if (r.I.dc > 0.5) {
+        const lb = sv("text", { x: 8, y: iy + 40, class: "rlabel", style: "font-size:12px" });
+        lb.append(sv("tspan", { x: 8 }, "+" + fmt(r.I.dc)), sv("tspan", { x: 8, dy: 15 }, T("f.selfnew")));
+        gL.append(lb);
+      }
       // nodos
       const node = (key, cls, name, val, sub) => {
         const [x, y] = POS[key];
@@ -1744,7 +1787,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       node("F", "fam", T("f.fam"), r.I.v + r.II.v, T("f.sal").toLowerCase());
       node("O", "own", T("f.own"), r.I.s + r.II.s, T("f.exc").toLowerCase());
       svg.append(gL, gT, gN);
-      current = { r, rad, gT, streams: streamsOf(r).map(([a, b, kind2, v]) => ({ a, b, kind: kind2, v, geo: lineFor(a, b, rad) })), self: { cx: ix - rad.I - 16, cy: iy, v: r.I.c } };
+      current = { r, rad, gT, streams: streamsOf(r).map(([a, b, kind2, v]) => ({ a, b, kind: kind2, v, geo: lineFor(a, b, rad) })), self: { cx: ix - rad.I - 16, cy: iy, v: r.I.c + r.I.dc, nuevo: r.I.dc / (r.I.c + r.I.dc) } };
       S.tokens = []; S.acc = {};
       if (reduced()) drawStaticTokens(maxP);
     }
@@ -1765,7 +1808,8 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
         while (S.acc[i] >= 1) { S.acc[i] -= 1; S.tokens.push({ i, t: 0 }); }
       });
       S.acc.self = (S.acc.self || 0) + dt * (0.5 + 3 * current.self.v / maxV);
-      while (S.acc.self >= 1) { S.acc.self -= 1; S.tokens.push({ i: "self", t: 0 }); }
+      // de cada diez fichas del bucle, las que corresponden a maquinaria nueva van en verde
+      while (S.acc.self >= 1) { S.acc.self -= 1; S.selfN = (S.selfN || 0) + 1; S.tokens.push({ i: "self", t: 0, nuevo: S.selfN % 10 < Math.round(current.self.nuevo * 10) }); }
       const speed = 0.38;
       S.tokens.forEach(k => { k.t += dt * speed; });
       S.tokens = S.tokens.filter(k => k.t < 1).slice(-160);
@@ -1773,11 +1817,41 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       S.tokens.forEach(k => {
         if (k.i === "self") {
           const ang = -Math.PI / 2 + k.t * 2 * Math.PI, c = current.self;
-          g.append(sv("circle", { cx: c.cx + 18 * Math.cos(ang), cy: c.cy + 18 * Math.sin(ang), r: 4, class: "tk-goods" }));
+          g.append(sv("circle", { cx: c.cx + 18 * Math.cos(ang), cy: c.cy + 18 * Math.sin(ang), r: 4, class: k.nuevo ? "tk-reinv" : "tk-goods" }));
           return;
         }
         const s = current.streams[k.i]; if (!s) return; const G = s.geo;
         g.append(sv("circle", { cx: G.x1 + (G.x2 - G.x1) * k.t, cy: G.y1 + (G.y2 - G.y1) * k.t, r: s.kind === "money" ? 4 : 4.5, class: "tk-" + s.kind }));
+      });
+    }
+    // Barras de lo producido en cada vuelta (las dos ramas juntas), con escala fija desde 0 para que se vea crecer
+    function drawGrowth(ser) {
+      const svg = q("grow"); svg.replaceChildren();
+      svg.setAttribute("aria-label", T("f.g.h"));
+      const L = 56, R = 12, Tp = 22, B = 30, W = 640, H = 240, pw = W - L - R, ph = H - Tp - B;
+      const parts = x => {
+        const s = x.I.s + x.II.s, cons = Math.min(s, x.I.cons + x.II.cons);
+        return [["bar-c", x.I.c + x.II.c], ["bar-v", x.I.v + x.II.v], ["bar-r", s - cons], ["bar-k", cons]];
+      };
+      const max = Math.max(...ser.map(x => x.I.p + x.II.p));
+      const step = max > 20000 ? 10000 : 5000, top = Math.ceil(max / step) * step;
+      const sy = v => Tp + ph - v / top * ph;
+      for (let v = 0; v <= top; v += step) {
+        svg.append(sv("line", { x1: L, x2: W - R, y1: sy(v), y2: sy(v), stroke: "var(--rule)", "stroke-width": 1 }));
+        svg.append(sv("text", { x: L - 6, y: sy(v) + 4, "text-anchor": "end" }, fmt(v)));
+      }
+      const bw = pw / ser.length;
+      ser.forEach((x, i) => {
+        const g = sv("g", { class: i === S.k - 1 ? "" : "other" });
+        let acc = 0;
+        parts(x).forEach(([cls, v]) => {
+          if (v <= 0.5) return;
+          g.append(sv("rect", { x: L + i * bw + bw * 0.18, y: sy(acc + v), width: bw * 0.64, height: Math.max(0, sy(acc) - sy(acc + v)), class: cls }));
+          acc += v;
+        });
+        svg.append(g);
+        svg.append(sv("text", { x: L + i * bw + bw / 2, y: H - B + 18, "text-anchor": "middle" }, i + 1));
+        if (i === S.k - 1) svg.append(sv("text", { x: L + i * bw + bw / 2, y: sy(acc) - 6, "text-anchor": "middle", class: "tot" }, fmt(acc)));
       });
     }
     function startAnim() { if (!S.raf && !reduced()) S.raf = requestAnimationFrame(frame); }
@@ -1800,7 +1874,11 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       q("vk").textContent = T("f.vuelta", { n: S.k }); q("vl").textContent = T("f.vueltas"); q("vo").textContent = S.k + " / " + NV;
       q("play").textContent = T(S.playing ? "f.pause" : "f.play"); q("reset").textContent = T("f.reset");
       q("lm").textContent = T("f.leg.money"); q("lg").textContent = T("f.leg.goods"); q("lw").textContent = T("f.leg.work");
+      if (kind === "ampliado") { q("lr").textContent = T("f.leg.reinv"); q("g3").textContent = T("f.reinv"); }
+      q("gh").textContent = T("f.g.h"); q("g1").textContent = T("f.mat"); q("g2").textContent = T("f.sal"); q("g4").textContent = T("f.cons");
+      q("gp").textContent = T(kind === "simple" ? "f.g.p.simple" : S.a === 0 ? "f.g.p.zero" : "f.g.p.amp");
       draw(r, maxP);
+      drawGrowth(ser);
       // Condición de equilibrio
       const okc = Math.abs(r.ventaI - r.necesitaII) < 0.5 && !r.sobra && !r.falta;
       q("check").replaceChildren(el("span", { class: "mark " + (okc ? "ok" : "bad"), text: T(okc ? "f.ok" : "f.bad") }),
