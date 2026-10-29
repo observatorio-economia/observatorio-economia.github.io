@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes del Observatorio. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<title>Observatorio · SA 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 920px) con dos vistas en pestañas; línea gráfica del Observatorio: papel blanco, grafito y azul tinta. Raciones: azul = consumidas, ocre = reserva, rojo = sin sus 3 raciones */
+:root {
+  --bg: #ffffff;
+  --paper: #f6f7f9;
+  --ink: #23262b;
+  --muted: #5d636c;
+  --rule: #d9dde3;
+  --accent: #2f4f8a;
+  --accent-soft: #edf1f8;
+  --ref: #9aa1ab;
+  --ok: #2d6a4f;
+  --bad: #a4372c;
+  --s2: #b35c1e;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c;
+    --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b; --s2: #cf7034;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c;
+  --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b; --s2: #cf7034;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+.back { padding-top: 18px; font-size: 14px; }
+.back a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.back a:hover { text-decoration: underline; }
+header.top { padding-block: 14px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.15; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 66ch; display: flex; flex-direction: column; gap: 8px; }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button {
+  font: 500 15px var(--font-body); color: var(--muted); background: none; border: 0;
+  padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer;
+}
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.view { display: flex; flex-direction: column; gap: 26px; }
+.block { display: flex; flex-direction: column; gap: 16px; }
+.block + .block { border-top: 2px solid var(--ink); padding-top: 24px; }
+
+.seg { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.seg button {
+  text-align: left; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px;
+  cursor: pointer; display: flex; flex-direction: column; gap: 2px; color: var(--ink); font: inherit;
+}
+.seg button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.seg .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.seg .t { font-family: var(--font-display); font-weight: 600; font-size: 19px; }
+.seg .d { font-size: 13px; color: var(--muted); }
+.notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+.notice.warn { border-left-color: var(--bad); }
+.notice strong { font-weight: 600; }
+
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 5px 10px; font-size: 14px; }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: middle; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.team { font-weight: 600; white-space: normal; min-width: 9em; }
+td.err { color: var(--bad); font-size: 13px; white-space: normal; text-align: left; }
+td.pos { color: var(--ok); font-weight: 600; } td.neg { color: var(--bad); font-weight: 600; }
+table.bids { min-width: 640px; }
+table.bids input { width: 4.2em; font: 15px var(--font-mono); text-align: right; color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 6px; }
+table.bids input.bad { border-color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
+table.result { min-width: 680px; }
+
+.stats { display: flex; gap: 14px 30px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat b.neg { color: var(--bad); } .stat b.pos { color: var(--ok); }
+.stat span { font-size: 13px; color: var(--muted); }
+
+.plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.plate { border: 1px solid var(--rule); border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.plate.out { border-color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
+.plate .n { font-family: var(--font-display); font-weight: 600; font-size: 17px; line-height: 1.15; }
+.plate .s { font-size: 13px; color: var(--muted); }
+.rations { display: flex; flex-wrap: wrap; gap: 4px; }
+.rations i { width: 16px; height: 16px; border-radius: 3px; background: var(--accent); }
+.rations i.res { background: var(--s2); }
+.rations i.miss { background: transparent; border: 1.5px dashed var(--bad); }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 1px 7px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; align-self: flex-start; }
+.chip.ok { color: var(--ok); } .chip.bad { color: var(--bad); }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; background: var(--accent); }
+.legend i.res { background: var(--s2); }
+.legend i.miss { background: transparent; border: 1.5px dashed var(--bad); }
+
+.qcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
+.qcard { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.qcard .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.qcard .q { font-weight: 600; }
+.opt { display: grid; grid-template-columns: 1.6em minmax(0, 1fr) 4.2em; gap: 8px; align-items: center; font-size: 14px; }
+.opt .l { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
+.opt input { width: 100%; font: 15px var(--font-mono); text-align: right; color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 6px; }
+.bars { display: flex; flex-direction: column; gap: 5px; }
+.bar { display: grid; grid-template-columns: 1.6em 1fr 4.2em; gap: 8px; align-items: center; font-size: 13px; }
+.track { height: 12px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+.fill.key { background: var(--s2); }
+.bar .val { font-family: var(--font-mono); text-align: right; }
+.bar .l { font-family: var(--font-mono); color: var(--muted); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a, .small a { color: var(--accent); }
+@media (max-width: 640px) { .stat b { font-size: 24px; } }
+</style>
+
+<div class="wrap">
+  <div class="back"><a href="../index.html">← Panel del Observatorio</a></div>
+  <header class="top">
+    <span class="eyebrow">Observatorio · SA 1 · ¿Qué es la economía?</span>
+    <h1>El juego del arroz</h1>
+    <p class="lede">Bengala, 1943: ¿faltó comida? <strong>Mercado:</strong> sustituye a la hoja de control; se escriben las pujas de cada equipo y la herramienta reparte, cobra y proyecta quién come. <strong>Votaciones:</strong> tres preguntas rápidas con Plickers para recoger lo que espera la clase antes y después de jugar. El arroz, las tarjetas y las pujas siguen en papel.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button role="tab" id="tab-mercado" aria-selected="true" data-view="mercado">Mercado</button>
+    <button role="tab" id="tab-votar" aria-selected="false" data-view="votar">Votaciones</button>
+  </nav>
+
+  <!-- ===================== MERCADO ===================== -->
+  <section class="view" id="view-mercado" role="tabpanel" aria-labelledby="tab-mercado">
+    <div class="seg" role="group" aria-label="Ronda" id="round-pick"></div>
+    <div class="notice" id="round-info"></div>
+
+    <div class="block">
+      <div class="prose">
+        <h2>Pujas de la ronda</h2>
+        <p class="small">Copia de cada tarjeta de puja las raciones que pide el equipo (como máximo 5) y lo que ofrece por cada una. La reserva inicial viene de la ronda anterior. Si dos equipos ofrecen lo mismo, sortéalo y escribe en «Sorteo» quién va antes (1 = primero).</p>
+      </div>
+      <div class="scroll"><table class="bids" id="bids"></table></div>
+      <div class="actions">
+        <button type="button" class="btn quiet small" id="clear-round">Borrar esta ronda</button>
+        <button type="button" class="btn quiet small" id="clear-all">Borrar el juego</button>
+        <span class="small" id="confirm-msg" aria-live="polite"></span>
+      </div>
+      <div class="notice warn" id="tie-note" hidden></div>
+    </div>
+
+    <div class="block">
+      <div class="prose"><h2>Qué ha pasado</h2></div>
+      <div class="stats" id="stats"></div>
+      <div class="legend">
+        <span><i></i>Ración consumida</span>
+        <span><i class="res"></i>Ración guardada como reserva</span>
+        <span><i class="miss"></i>Ración que le falta</span>
+      </div>
+      <div class="plates" id="plates"></div>
+      <details>
+        <summary class="small" style="cursor:pointer;color:var(--accent)">Ver la hoja de control completa</summary>
+        <div class="scroll" style="margin-top:10px"><table class="result" id="result"></table></div>
+      </details>
+    </div>
+
+    <div class="block">
+      <div class="prose">
+        <h2>Las tres rondas</h2>
+        <p class="small">Cada equipo necesita 3 raciones: los cinco juntos, 15 por ronda.</p>
+      </div>
+      <div class="scroll"><table id="summary"></table></div>
+      <p id="summary-note"></p>
+    </div>
+
+    <div class="block">
+      <div class="prose">
+        <h3>Para probar la herramienta antes de clase</h3>
+        <p class="small">Cargan pujas inventadas en las tres rondas. Borran lo que haya escrito.</p>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn ghost small" id="ex-hoard">Ejemplo: el comerciante acumula</button>
+        <button type="button" class="btn ghost small" id="ex-fair">Ejemplo: nadie acapara</button>
+      </div>
+      <p class="small" id="ex-flag"></p>
+    </div>
+  </section>
+
+  <!-- ===================== VOTACIONES ===================== -->
+  <section class="view" id="view-votar" role="tabpanel" aria-labelledby="tab-votar" hidden>
+    <div class="prose">
+      <h2>Lo que espera la clase</h2>
+      <p>Cada alumno o alumna vota con su tarjeta de <a href="https://www.plickers.com/" target="_blank" rel="noopener" style="color:var(--accent)">Plickers</a> (o a mano alzada). Escribe cuántas personas eligen cada letra. Es evaluación inicial: no puntúa.</p>
+      <p class="small">La primera pregunta va después de la explicación inicial y antes de las reglas; la segunda, justo después de leer la tarjeta de la ronda 3; la tercera, en el cierre.</p>
+    </div>
+    <div class="qcards" id="qcards"></div>
+    <div class="notice" id="vote-note"></div>
+    <div class="actions"><button type="button" class="btn quiet small" id="clear-votes">Borrar los votos</button></div>
+  </section>
+
+  <footer>
+    <span>Reglas, rentas y raciones: material del juego del arroz de la SA 1 (sesión 1). Las cifras son del juego, no datos históricos; reproducen el patrón que describe Amartya Sen en <em>Poverty and Famines</em> (1981), cap. 6.</span>
+    <span>Lo que se escribe aquí se guarda solo en este navegador, para no perderlo si se recarga la página.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+  };
+
+  // ---------- Datos del juego (material de la SA 1, sesión 1) ----------
+  const TEAMS = [
+    { id: "jor", name: "Jornalero agrícola", renta: [12, 13, 14] },
+    { id: "pes", name: "Pescador", renta: [12, 8, 6] },
+    { id: "cam", name: "Campesino propietario", renta: [14, 18, 22] },
+    { id: "com", name: "Comerciante de arroz", renta: [18, 26, 34] },
+    { id: "ind", name: "Industria de guerra (Calcuta)", renta: [14, 22, 30] }
+  ];
+  const ROUNDS = [
+    { k: "Ronda 1", t: "1942", supply: 16, auction: 16, info: "16 raciones en el mercado. Los cinco equipos necesitan 15." },
+    { k: "Ronda 2", t: "Primavera de 1943", supply: 15, auction: 15, info: "15 raciones en el mercado: llega justo para los cinco equipos." },
+    { k: "Ronda 3", t: "Verano de 1943", supply: 18, auction: 12, info: "18 raciones, un 13 % más que en la ronda 1. Antes de la subasta, el gobierno compra 3 a 3 monedas para la industria de guerra (que paga 9 de su renta y las recibe) y el ejército compra otras 3. Quedan 12 en subasta: justo las que necesitan los otros cuatro equipos." }
+  ];
+  const NEED = 3, MAXASK = 5;
+  const WAR = "ind";
+
+  // Estado: pujas[ronda][equipo] = { pide, oferta, sorteo } como texto
+  const blank = () => ROUNDS.map(() => Object.fromEntries(TEAMS.map(t => [t.id, { pide: "", oferta: "", sorteo: "" }])));
+  let bids = store.get("arroz-pujas") || blank();
+  let round = store.get("arroz-ronda") ?? 0;
+  let exampleTag = store.get("arroz-ejemplo") || "";
+  const save = () => { store.set("arroz-pujas", bids); store.set("arroz-ronda", round); store.set("arroz-ejemplo", exampleTag); };
+
+  const toInt = s => { const t = String(s ?? "").trim(); if (t === "") return null; const v = Number(t.replace(",", ".")); return Number.isInteger(v) ? v : NaN; };
+
+  // ---------- Reparto de una ronda ----------
+  function playRound(r, startRes) {
+    const R = ROUNDS[r];
+    const rows = TEAMS.map(t => {
+      const b = bids[r][t.id];
+      const pide = toInt(b.pide), oferta = toInt(b.oferta), sorteo = toInt(b.sorteo);
+      const pre = r === 2 && t.id === WAR ? 3 : 0;          // raciones del gobierno en la ronda 3
+      const prePaid = pre ? 9 : 0;
+      const renta = t.renta[r], disponible = renta - prePaid;
+      let err = "";
+      if (Number.isNaN(pide) || Number.isNaN(oferta)) err = "Escribe números enteros.";
+      else if (pide != null && (pide < 0 || pide > MAXASK)) err = "Puede pedir de 0 a " + MAXASK + " raciones.";
+      else if (oferta != null && oferta < 0) err = "La oferta no puede ser negativa.";
+      else if (pide && oferta != null && pide * oferta > disponible) err = "Pide " + pide + " × " + oferta + " = " + pide * oferta + " monedas y solo tiene " + disponible + ".";
+      else if (pide && oferta == null) err = "Falta la oferta.";
+      return { t, pide: err ? 0 : (pide || 0), oferta: err ? 0 : (oferta || 0), sorteo, pre, prePaid, renta, disponible, err, inicial: startRes[t.id] || 0, raw: b };
+    });
+    const valid = rows.filter(x => x.pide > 0);
+    valid.sort((a, b) => b.oferta - a.oferta || (a.sorteo ?? 99) - (b.sorteo ?? 99));
+    // Empates que afectan al reparto y sin sorteo
+    const ties = [];
+    let left = R.auction;
+    valid.forEach((x, i) => {
+      x.orden = i + 1;
+      x.recibe = Math.min(x.pide, Math.max(0, left));
+      left -= x.recibe;
+    });
+    for (let i = 0; i < valid.length; i++) for (let j = i + 1; j < valid.length; j++) {
+      const a = valid[i], b = valid[j];
+      if (a.oferta === b.oferta && (a.sorteo == null || b.sorteo == null || a.sorteo === b.sorteo) && (a.recibe < a.pide || b.recibe < b.pide)) ties.push([a.t.name, b.t.name]);
+    }
+    rows.forEach(x => {
+      if (x.recibe == null) { x.recibe = 0; x.orden = null; }
+      x.paga = x.recibe * x.oferta + x.prePaid;
+      x.total = x.inicial + x.recibe + x.pre;
+      x.come = x.total >= NEED;
+      x.final = x.come ? x.total - NEED : 0;
+      x.consumed = x.come ? NEED : 0;
+      x.missing = x.come ? 0 : NEED - x.total;
+      x.reservaUsada = Math.min(x.inicial, NEED);
+    });
+    const sold = rows.reduce((a, x) => a + x.recibe, 0);
+    const paid = rows.reduce((a, x) => a + x.recibe * x.oferta, 0);
+    const prices = rows.filter(x => x.recibe > 0).map(x => x.oferta);
+    const entered = rows.some(x => x.raw.pide !== "" || x.raw.oferta !== "");
+    return {
+      R, rows, ties, entered, sold, unsold: R.auction - sold, avg: sold ? paid / sold : NaN,
+      pmax: prices.length ? Math.max(...prices) : NaN, pmin: prices.length ? Math.min(...prices) : NaN,
+      hungry: rows.filter(x => !x.come), reserves: rows.reduce((a, x) => a + x.final, 0),
+      endRes: Object.fromEntries(rows.map(x => [x.t.id, x.final]))
+    };
+  }
+  function playAll() {
+    const out = []; let res = {};
+    for (let r = 0; r < ROUNDS.length; r++) { const o = playRound(r, res); out.push(o); res = o.endRes; }
+    return out;
+  }
+
+  // ---------- Pestañas ----------
+  const VIEWS = ["mercado", "votar"];
+  function show(view) {
+    if (!VIEWS.includes(view)) view = "mercado";
+    for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+  // ---------- Selector de ronda ----------
+  function buildPicker() {
+    $("round-pick").replaceChildren(...ROUNDS.map((R, i) => {
+      const b = el("button", { type: "button", "aria-pressed": String(i === round) },
+        el("span", { class: "k", text: R.k }), el("span", { class: "t", text: R.t }), el("span", { class: "d", text: R.supply + " raciones" + (i === 2 ? " · 12 en subasta" : "") }));
+      b.addEventListener("click", () => { round = i; save(); buildPicker(); buildBids(); render(); });
+      return b;
+    }));
+    $("round-info").replaceChildren(el("span", {}, el("strong", { text: ROUNDS[round].k + " · " + ROUNDS[round].t + ". " }), ROUNDS[round].info));
+  }
+
+  // ---------- Tabla de pujas (se reconstruye solo al cambiar de ronda) ----------
+  function buildBids() {
+    const r = round;
+    const head = el("tr", {}, ["Equipo", "Renta", "Reserva inicial", "Pide", "Oferta por ración", "Sorteo", ""].map(t => el("th", { text: t })));
+    const body = el("tbody");
+    TEAMS.forEach(t => {
+      const b = bids[r][t.id];
+      const inp = (field, label) => {
+        const i = el("input", { type: "text", inputmode: "numeric", id: `b-${r}-${t.id}-${field}`, "aria-label": label + " · " + t.name, value: b[field], autocomplete: "off" });
+        i.addEventListener("input", () => { bids[r][t.id][field] = i.value; exampleTag = ""; save(); render(); });
+        return el("td", {}, i);
+      };
+      const rentaTxt = r === 2 && t.id === WAR ? t.renta[r] + " − 9" : String(t.renta[r]);
+      body.append(el("tr", { "data-team": t.id },
+        el("td", { class: "team", text: t.name }), el("td", { text: rentaTxt }), el("td", { class: "ini", text: "0" }),
+        inp("pide", "Raciones que pide"), inp("oferta", "Oferta por ración"), inp("sorteo", "Orden de sorteo"),
+        el("td", { class: "err" })));
+    });
+    $("bids").replaceChildren(el("thead", {}, head), body);
+  }
+
+  // ---------- Pintar resultados ----------
+  function render() {
+    const all = playAll(), o = all[round];
+    // Reservas iniciales, errores y marcas en la tabla de pujas
+    o.rows.forEach(x => {
+      const tr = $("bids").querySelector(`tr[data-team="${x.t.id}"]`); if (!tr) return;
+      tr.querySelector(".ini").textContent = String(x.inicial);
+      tr.querySelector(".err").textContent = x.err;
+      ["pide", "oferta"].forEach(f => { const i = $(`b-${round}-${x.t.id}-${f}`); if (i) i.classList.toggle("bad", !!x.err); });
+    });
+    const tie = $("tie-note");
+    tie.hidden = !o.ties.length;
+    if (o.ties.length) tie.replaceChildren(el("span", {}, el("strong", { text: "Empate que decide el reparto. " }), o.ties.map(p => p.join(" y ")).join("; ") + " ofrecen lo mismo y no hay raciones para todos. Sortéalo y escribe 1 y 2 en «Sorteo»."));
+
+    // Cifras
+    const hungry = o.hungry.length;
+    $("stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: fmt(o.R.supply) }), el("span", { text: "Raciones de arroz" + (round === 2 ? " (12 en subasta)" : "") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.sold) + (round === 2 ? " + 6" : "") }), el("span", { text: "Raciones repartidas" })),
+      el("div", { class: "stat" }, el("b", { text: isFinite(o.avg) ? fmt(o.avg, 1) : "—" }), el("span", { text: "Precio medio pagado (monedas)" })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.reserves) }), el("span", { text: "Raciones guardadas en reserva" })),
+      el("div", { class: "stat" }, el("b", { class: o.entered ? (hungry ? "neg" : "pos") : "", text: o.entered ? fmt(hungry) : "—" }), el("span", { text: "Equipos sin sus 3 raciones" })));
+
+    // Platos
+    $("plates").replaceChildren(...o.rows.map(x => {
+      const sq = [];
+      for (let i = 0; i < x.consumed; i++) sq.push(el("i", { title: "Consumida" }));
+      if (!x.come) { for (let i = 0; i < x.total; i++) sq.push(el("i", { title: "Recibida y devuelta" })); for (let i = 0; i < x.missing; i++) sq.push(el("i", { class: "miss", title: "Le falta" })); }
+      for (let i = 0; i < x.final; i++) sq.push(el("i", { class: "res", title: "Reserva" }));
+      const detail = (x.pre ? "Gobierno: 3 por 9 monedas. " : "") + (x.recibe ? "Recibe " + x.recibe + " a " + x.oferta + " = " + x.recibe * x.oferta + " monedas." : (x.pide ? "No recibe nada." : "No puja."));
+      return el("div", { class: "plate" + (o.entered && !x.come ? " out" : "") },
+        el("span", { class: "n", text: x.t.name }),
+        o.entered ? el("span", { class: "chip " + (x.come ? "ok" : "bad"), text: x.come ? "come" : "sin sus 3 raciones" }) : null,
+        el("div", { class: "rations", "aria-label": x.come ? "Consigue sus 3 raciones y guarda " + x.final : "Le faltan " + x.missing + " raciones" }, sq),
+        el("span", { class: "s", text: detail + (x.inicial ? " Tenía " + x.inicial + " de reserva." : "") }));
+    }));
+
+    // Hoja de control
+    const head = el("tr", {}, ["Equipo", "Reserva inicial", "Pide", "Oferta", "Orden", "Recibe", "Paga", "Total", "¿3?", "Reserva final"].map(t => el("th", { text: t })));
+    $("result").replaceChildren(el("thead", {}, head), el("tbody", {}, o.rows.map(x => el("tr", {},
+      el("td", { class: "team", text: x.t.name }), el("td", { text: x.inicial }), el("td", { text: x.pide || "—" }), el("td", { text: x.pide ? x.oferta : "—" }),
+      el("td", { text: x.orden ?? "—" }), el("td", { text: x.recibe + (x.pre ? " + 3" : "") }), el("td", { text: x.paga }), el("td", { text: x.total }),
+      el("td", { class: x.come ? "pos" : "neg", text: x.come ? "Sí" : "No" }), el("td", { text: x.final })))));
+
+    // Resumen de las tres rondas
+    const sh = el("tr", {}, ["", ...ROUNDS.map(R => R.k + " · " + R.t)].map(t => el("th", { text: t })));
+    const line = (label, fn) => el("tr", {}, el("td", { class: "team", text: label }), ...all.map((x, i) => el("td", { text: x.entered ? fn(x, i) : "—" })));
+    $("summary").replaceChildren(el("thead", {}, sh), el("tbody", {},
+      el("tr", {}, el("td", { class: "team", text: "Arroz en el mercado" }), ...all.map(x => el("td", { text: x.R.supply }))),
+      el("tr", {}, el("td", { class: "team", text: "Lo que necesitan los cinco" }), ...all.map(() => el("td", { text: "15" }))),
+      line("Precio medio (monedas)", x => isFinite(x.avg) ? fmt(x.avg, 1) : "—"),
+      line("Reservas al acabar", x => fmt(x.reserves)),
+      line("Reserva del comerciante", x => fmt(x.endRes.com)),
+      line("Sin sus 3 raciones", x => x.hungry.length ? x.hungry.map(h => h.t.name.split(" ")[0]).join(", ") : "nadie")));
+    const played = all.filter(x => x.entered);
+    const anyHungry = played.some(x => x.hungry.length);
+    $("summary-note").replaceChildren(!played.length
+      ? el("span", { class: "small", text: "Cuando se escriban las pujas, aquí aparece la comparación de las tres rondas." })
+      : anyHungry
+        ? el("span", {}, el("strong", { text: "En ninguna ronda faltó arroz: " }), "siempre hubo al menos 15 raciones para los cinco equipos. ¿Adónde fue? ¿Qué decidió quién comía?")
+        : el("span", {}, el("strong", { text: "Por ahora nadie se ha quedado sin raciones. " }), "¿Qué cambió en 1943 que el juego no está recogiendo?"));
+    $("ex-flag").textContent = exampleTag ? "Ahora se ven pujas inventadas («" + exampleTag + "»). Bórralas antes de jugar con la clase." : "";
+  }
+
+  // ---------- Ejemplos (pujas inventadas que reproducen la simulación del material) ----------
+  const EXAMPLES = {
+    hoard: { tag: "el comerciante acumula", r: [
+      { jor: [3, 4], pes: [3, 4], cam: [3, 4], com: [4, 4], ind: [3, 4] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 6], com: [5, 5], ind: [3, 7] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 7], com: [5, 6], ind: [0, 0] }
+    ] },
+    fair: { tag: "nadie acapara", r: [
+      { jor: [3, 4], pes: [3, 4], cam: [3, 4], com: [3, 4], ind: [3, 4] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 4], com: [3, 4], ind: [3, 4] },
+      { jor: [3, 4], pes: [3, 2], cam: [3, 4], com: [3, 4], ind: [0, 0] }
+    ] }
+  };
+  function loadExample(key) {
+    const ex = EXAMPLES[key];
+    bids = ex.r.map(rr => Object.fromEntries(TEAMS.map(t => [t.id, { pide: rr[t.id][0] ? String(rr[t.id][0]) : "", oferta: rr[t.id][0] ? String(rr[t.id][1]) : "", sorteo: "" }])));
+    exampleTag = ex.tag; save(); buildBids(); render();
+  }
+  $("ex-hoard").addEventListener("click", () => loadExample("hoard"));
+  $("ex-fair").addEventListener("click", () => loadExample("fair"));
+
+  // Borrar con confirmación dentro de la página (dos pulsaciones)
+  function twoStep(btn, label, action) {
+    let armed = false, timer = null;
+    btn.addEventListener("click", () => {
+      if (!armed) { armed = true; btn.textContent = "Pulsa otra vez para " + label; timer = setTimeout(() => { armed = false; btn.textContent = btn.dataset.label; }, 3000); return; }
+      clearTimeout(timer); armed = false; btn.textContent = btn.dataset.label; action();
+    });
+    btn.dataset.label = btn.textContent;
+  }
+  twoStep($("clear-round"), "borrar", () => { bids[round] = blank()[round]; exampleTag = ""; save(); buildBids(); render(); });
+  twoStep($("clear-all"), "borrar todo", () => { bids = blank(); round = 0; exampleTag = ""; save(); buildPicker(); buildBids(); render(); });
+
+  // ---------- Votaciones con Plickers ----------
+  const QS = [
+    { k: "Antes de las reglas", q: "En el juego, ¿qué crees que pasará?", key: 2, o: [
+      "Habrá arroz para todos y todos los equipos comerán",
+      "Faltará arroz y algún equipo se quedará sin raciones",
+      "Habrá arroz, pero algún equipo se quedará sin raciones",
+      "No lo sé"] },
+    { k: "Antes de la ronda 3", q: "Este verano hay más arroz que nunca. ¿Qué pasará?", key: 2, o: [
+      "Comerán todos los equipos",
+      "Comerán más equipos que en la ronda 2",
+      "Algún equipo seguirá sin raciones",
+      "Bajará el precio del arroz"] },
+    { k: "En el cierre", q: "Si alguien se quedó sin raciones, ¿por qué fue sobre todo?", key: 3, o: [
+      "Porque faltaba arroz",
+      "Porque otros equipos tenían más renta y pujaron más alto",
+      "Porque alguien guardó reservas",
+      "Por las dos anteriores a la vez (B y C)"] }
+  ];
+  const L = ["A", "B", "C", "D"];
+  let votes = store.get("arroz-votos") || QS.map(() => ["", "", "", ""]);
+  function buildVotes() {
+    $("qcards").replaceChildren(...QS.map((Q, qi) => {
+      const out = el("div", { class: "bars" });
+      const card = el("div", { class: "qcard" },
+        el("span", { class: "k", text: "Pregunta " + (qi + 1) + " · " + Q.k }),
+        el("span", { class: "q", text: Q.q }),
+        ...Q.o.map((txt, oi) => {
+          const i = el("input", { type: "text", inputmode: "numeric", id: `v-${qi}-${oi}`, value: votes[qi][oi], placeholder: "0", "aria-label": "Votos " + L[oi] });
+          i.addEventListener("input", () => { votes[qi][oi] = i.value; store.set("arroz-votos", votes); fillBars(qi, out); renderVoteNote(); });
+          return el("label", { class: "opt", for: `v-${qi}-${oi}` }, el("span", { class: "l", text: L[oi] }), el("span", { text: txt }), i);
+        }),
+        out);
+      fillBars(qi, out);
+      return card;
+    }));
+    renderVoteNote();
+  }
+  const counts = qi => votes[qi].map(v => { const n = toInt(v); return Number.isFinite(n) && n > 0 ? n : 0; });
+  function fillBars(qi, out) {
+    const c = counts(qi), tot = c.reduce((a, b) => a + b, 0);
+    if (!tot) { out.replaceChildren(el("p", { class: "small", text: "Sin votos todavía." })); return; }
+    const max = Math.max(...c);
+    out.replaceChildren(...c.map((n, i) => el("div", { class: "bar" },
+      el("span", { class: "l", text: L[i] }),
+      el("span", { class: "track", "aria-hidden": "true" }, el("span", { class: "fill" + (i === QS[qi].key ? " key" : ""), style: "width:" + (100 * n / max).toFixed(1) + "%" })),
+      el("span", { class: "val", text: Math.round(100 * n / tot) + " %" }))));
+  }
+  function renderVoteNote() {
+    const c1 = counts(0), c3 = counts(2), t1 = c1.reduce((a, b) => a + b, 0), t3 = c3.reduce((a, b) => a + b, 0);
+    const note = $("vote-note");
+    if (!t1) { note.replaceChildren(el("span", {}, "En ocre, la respuesta que el juego pone sobre la mesa. Al acabar, compara la pregunta 1 con la 3: ", el("strong", { text: "¿cuántos pensaban al principio que faltaría arroz?" }))); return; }
+    const p1 = Math.round(100 * c1[1] / t1);
+    const parts = [el("strong", { text: "Antes de jugar, el " + p1 + " % esperaba que faltara arroz. " })];
+    if (t3) parts.push("En el cierre, el " + Math.round(100 * c3[0] / t3) + " % sigue diciendo que faltaba arroz y el " + Math.round(100 * (c3[1] + c3[2] + c3[3]) / t3) + " % lo explica por la renta o por las reservas. Es la idea que se pondrá a prueba con los datos reales en la sesión 3.");
+    else parts.push("En el cierre, la pregunta 3 dirá si el juego ha movido esa idea.");
+    note.replaceChildren(el("span", {}, ...parts));
+  }
+  twoStep($("clear-votes"), "borrar los votos", () => { votes = QS.map(() => ["", "", "", ""]); store.set("arroz-votos", votes); buildVotes(); });
+
+  // ---------- Arranque ----------
+  if (!Array.isArray(bids) || bids.length !== 3) bids = blank();
+  if (!(round >= 0 && round <= 2)) round = 0;
+  buildPicker(); buildBids(); render(); buildVotes();
+  show(location.hash.slice(1));
+})();
+</script>

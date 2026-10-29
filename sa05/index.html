@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes del Observatorio. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<title>Observatorio · SA 5</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 920px): diagrama de reservas y flujos arriba, mandos, tres gráficos pequeños y experimentos; línea gráfica del Observatorio: papel blanco, grafito y azul tinta. Azul = peces, ocre = captura, verde = reproducción, grafito = flota */
+:root {
+  --bg: #ffffff;
+  --paper: #f6f7f9;
+  --ink: #23262b;
+  --muted: #5d636c;
+  --rule: #d9dde3;
+  --grid: #eceef2;
+  --accent: #2f4f8a;
+  --accent-soft: #edf1f8;
+  --ref: #9aa1ab;
+  --ok: #2d6a4f;
+  --bad: #a4372c;
+  --warn: #9a5b12;
+  --s1: #2f4f8a;
+  --s2: #b35c1e;
+  --s3: #0f8a6c;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c; --grid: #24282d;
+    --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b; --warn: #e0a35a;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c; --grid: #24282d;
+  --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b; --warn: #e0a35a;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+.back { padding-top: 18px; font-size: 14px; }
+.back a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.back a:hover { text-decoration: underline; }
+header.top { padding-block: 8px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.15; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 66ch; display: flex; flex-direction: column; gap: 8px; }
+.block { display: flex; flex-direction: column; gap: 18px; }
+.block + .block { border-top: 2px solid var(--ink); padding-top: 26px; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Controles */
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 24px; }
+.slider { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.slider .lab { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--muted); }
+.slider output { font-family: var(--font-mono); font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.slider .hint { font-size: 13px; color: var(--muted); }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+.btn.small { padding: 5px 10px; font-size: 14px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.timebar { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; align-items: center; padding: 12px 14px; background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; }
+.timebar .slider { gap: 2px; }
+
+/* Cifras y estado */
+.stats { display: flex; gap: 14px 30px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.state { display: flex; gap: 10px; align-items: baseline; font-size: 15px; flex-wrap: wrap; }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; letter-spacing: .03em; }
+.chip.ok { color: var(--ok); } .chip.bad { color: var(--bad); } .chip.warn { color: var(--warn); }
+.notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+
+/* Diagrama */
+.diagram { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
+svg.sfd { display: block; width: 100%; min-width: 600px; height: auto; }
+svg.sfd text { font-family: var(--font-body); font-size: 14px; fill: var(--ink); }
+svg.sfd text.num { font-family: var(--font-mono); font-size: 14px; font-weight: 500; }
+svg.sfd text.mut { fill: var(--muted); font-size: 12px; }
+svg.sfd text.loop { font-family: var(--font-display); font-weight: 700; font-size: 18px; }
+svg.sfd .stockbox { fill: var(--bg); stroke: var(--ink); stroke-width: 2; }
+svg.sfd .lvl-fish { fill: var(--s1); fill-opacity: .25; }
+svg.sfd .lvl-fleet { fill: var(--ink); fill-opacity: .12; }
+svg.sfd .pipe { stroke: var(--ink); stroke-width: 6; fill: none; }
+svg.sfd .pipe-in { stroke: var(--bg); stroke-width: 2; fill: none; }
+svg.sfd .valve { fill: var(--bg); stroke: var(--ink); stroke-width: 2; }
+svg.sfd .cloud { fill: var(--bg); stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 3; }
+svg.sfd .link { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+svg.sfd .link.r { stroke: var(--s2); }
+svg.sfd .link.b { stroke: var(--s1); }
+svg.sfd .loopc { fill: var(--bg); stroke-width: 2; }
+svg.sfd .loopc.r { stroke: var(--s2); } svg.sfd .loopc.b { stroke: var(--s1); }
+svg.sfd .ah { fill: var(--muted); } svg.sfd .ah.r { fill: var(--s2); } svg.sfd .ah.b { fill: var(--s1); } svg.sfd .ah.ink { fill: var(--ink); }
+
+/* Gráficos */
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 22px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; position: relative; }
+figcaption { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
+.legend i.dash { border-top-style: dashed; }
+.plot { position: relative; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+svg .grid line { stroke: var(--grid); stroke-width: 1; }
+svg .axis line { stroke: var(--muted); stroke-width: 1; }
+svg.chart text { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+svg.chart text.axl { font-family: var(--font-body); font-size: 13px; }
+svg.chart text.lbl { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+.c-s1 { stroke: var(--s1); } .c-s2 { stroke: var(--s2); } .c-s3 { stroke: var(--s3); } .c-ink { stroke: var(--ink); }
+.curve { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.ghost { fill: none; stroke: var(--ref); stroke-width: 1.5; stroke-dasharray: 2 3; }
+.pline { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.now { stroke: var(--muted); stroke-width: 1; }
+.hover-line { stroke: var(--muted); stroke-width: 1; }
+.dot { stroke: var(--bg); stroke-width: 2; }
+.tip {
+  position: absolute; pointer-events: none; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 6px 9px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,.12); min-width: 150px; z-index: 2;
+  display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums;
+}
+.tip .h { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; }
+.tip .r i { display: inline-block; width: 10px; height: 2px; vertical-align: 4px; margin-right: 6px; }
+
+/* Experimentos */
+ol.tries { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+ol.tries li { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+ol.tries .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+ol.tries .q { font-size: 15px; }
+ol.tries .a { font-size: 14px; color: var(--muted); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a { color: var(--accent); }
+@media (max-width: 640px) {
+  .stat b { font-size: 24px; }
+  .timebar { grid-template-columns: 1fr; }
+}
+</style>
+
+<div class="wrap">
+  <nav class="back"><a href="../index.html">← Panel del Observatorio</a></nav>
+  <header class="top">
+    <span class="eyebrow">Observatorio · SA 5 · Crecimiento económico y desarrollo</span>
+    <h1>El caladero</h1>
+    <p class="lede">Un simulador de <strong>reservas, flujos y bucles</strong> para la economía ecológica. Los peces se reproducen solos, pero no a cualquier ritmo; la flota pesca, gana dinero y compra más barcos. Mueve los mandos y mira qué pasa en 50 años.</p>
+  </header>
+
+  <!-- ===================== DIAGRAMA ===================== -->
+  <section class="block" aria-labelledby="h-diag">
+    <div class="prose">
+      <h2 id="h-diag">Cómo funciona el sistema</h2>
+      <p>Hay dos <strong>reservas</strong>: los peces que hay en el mar y los barcos de la flota. Cada reserva sube con lo que entra y baja con lo que sale, como una bañera. Las flechas finas dicen qué influye en qué.</p>
+    </div>
+    <div class="diagram"><svg class="sfd" id="sfd" viewBox="0 0 760 420" role="img" aria-label="Diagrama de reservas y flujos del caladero: la reserva de peces crece con la reproducción y baja con la captura; la reserva de barcos crece con la compra de barcos y baja con el desguace; un bucle reforzador une captura, beneficio y compra de barcos, y un bucle compensador une captura y peces"></svg></div>
+    <div class="charts" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+      <div class="notice" style="border-left-color:var(--s2)"><strong>R · Bucle reforzador</strong><span>Más barcos → más captura → más beneficio → más barcos. Se alimenta a sí mismo: hace crecer la flota cada vez más deprisa.</span></div>
+      <div class="notice" style="border-left-color:var(--s1)"><strong>B · Bucle compensador</strong><span>Más captura → menos peces en el mar → menos captura. Frena al otro bucle, pero llega tarde: los barcos ya están comprados.</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== SIMULADOR ===================== -->
+  <section class="block" aria-labelledby="h-sim">
+    <div class="prose">
+      <h2 id="h-sim">Simula 50 años</h2>
+      <p class="small">Cifras inventadas para el aula: peces en miles de toneladas, beneficio en millones de euros.</p>
+    </div>
+    <div class="controls">
+      <div class="slider">
+        <div class="lab"><label for="c-f0">Barcos al empezar</label><output id="c-f0-out" for="c-f0"></output></div>
+        <input type="range" id="c-f0" min="5" max="60" step="1" value="20">
+      </div>
+      <div class="slider">
+        <div class="lab"><label for="c-re">Beneficio que se gasta en barcos nuevos</label><output id="c-re-out" for="c-re"></output></div>
+        <input type="range" id="c-re" min="0" max="100" step="5" value="50">
+      </div>
+      <div class="slider">
+        <div class="lab"><label for="c-quota">Cuota máxima de captura al año</label><output id="c-quota-out" for="c-quota"></output></div>
+        <input type="range" id="c-quota" min="0" max="200" step="10" value="0">
+        <span class="hint">0 = sin cuota</span>
+      </div>
+      <div class="slider">
+        <div class="lab"><label for="c-g">Velocidad de reproducción de los peces</label><output id="c-g-out" for="c-g"></output></div>
+        <input type="range" id="c-g" min="30" max="80" step="5" value="50">
+      </div>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn quiet small" id="c-reset">Volver a los valores iniciales</button>
+    </div>
+
+    <div class="timebar">
+      <button type="button" class="btn" id="t-play">Reproducir</button>
+      <div class="slider">
+        <div class="lab"><label for="t-year">Año</label><output id="t-year-out" for="t-year"></output></div>
+        <input type="range" id="t-year" min="0" max="50" step="1" value="50">
+      </div>
+    </div>
+
+    <div class="state" id="state" aria-live="polite"></div>
+    <div class="stats" id="stats"></div>
+
+    <div class="charts">
+      <figure>
+        <figcaption>Peces en el mar</figcaption>
+        <div class="legend"><span><i style="border-color:var(--s1)"></i>Peces</span><span><i class="dash" style="border-color:var(--ink)"></i>Capacidad del mar</span></div>
+        <div class="plot"><svg class="chart" id="ch-fish" role="img" aria-label="Peces en el mar año a año"></svg><div class="tip" id="tip-fish" hidden></div></div>
+      </figure>
+      <figure>
+        <figcaption>Captura y reproducción al año</figcaption>
+        <div class="legend"><span><i style="border-color:var(--s2)"></i>Captura</span><span><i style="border-color:var(--s3)"></i>Reproducción</span></div>
+        <div class="plot"><svg class="chart" id="ch-flow" role="img" aria-label="Captura anual frente a reproducción anual de los peces"></svg><div class="tip" id="tip-flow" hidden></div></div>
+      </figure>
+      <figure>
+        <figcaption>Barcos de la flota</figcaption>
+        <div class="legend"><span><i style="border-color:var(--ink)"></i>Barcos</span></div>
+        <div class="plot"><svg class="chart" id="ch-fleet" role="img" aria-label="Número de barcos de la flota año a año"></svg><div class="tip" id="tip-fleet" hidden></div></div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===================== EXPERIMENTOS ===================== -->
+  <section class="block" aria-labelledby="h-try">
+    <h2 id="h-try">Prueba esto</h2>
+    <ol class="tries">
+      <li>
+        <span class="k">Experimento 1</span>
+        <span class="q">Deja los valores iniciales, sin cuota, y pulsa «Reproducir».</span>
+        <span class="a">¿En qué año se pesca más? ¿Y qué pasa con los peces y los barcos después?</span>
+        <button type="button" class="btn ghost small" data-try="1">Cargar el experimento</button>
+      </li>
+      <li>
+        <span class="k">Experimento 2</span>
+        <span class="q">Pon una cuota de 100 al año.</span>
+        <span class="a">¿Se pesca menos que en el experimento 1 en el año 10? ¿Y en el año 40? ¿Quién gana con la cuota?</span>
+        <button type="button" class="btn ghost small" data-try="2">Cargar el experimento</button>
+      </li>
+      <li>
+        <span class="k">Experimento 3</span>
+        <span class="q">Sin cuota, gasta solo el 15 % del beneficio en barcos nuevos.</span>
+        <span class="a">¿Desaparece el problema o solo llega más tarde? Mira la flota en el año 50.</span>
+        <button type="button" class="btn ghost small" data-try="3">Cargar el experimento</button>
+      </li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Modelo simplificado para el aula. Reproducción: logística, más lenta cuando quedan pocos peces. Captura: barcos × peces × capturabilidad, con el límite de la cuota. Barcos: se compran con parte del beneficio y se desguazan un 3 % al año, un 7 % si hay pérdidas.</span>
+    <span>Inspirado en Donella Meadows, <em>Pensar en sistemas</em> (Capitán Swing, 2022), que llama «reservas» a las existencias y distingue bucles reforzadores y compensadores.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const sv = (tag, attrs = {}, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v);
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- Modelo ----------
+  // Peces S (miles de t), barcos F. Paso anual.
+  // Reproducción R = g·S·(1 − S/K)·S/(S + A)·(1 + A/K)   (logística, más lenta con pocos peces)
+  // Captura C = min(q·F·S, 95 % de S, cuota)
+  // Beneficio B = precio·C − coste·F;  barcos nuevos = reinversión·B / precio del barco (si B > 0)
+  // Desguace = 3 % de la flota, 7 % si hay pérdidas
+  const K = 1000, A = 250, Q = 0.003, PRICE = 10, COST = 8, BOAT = 30, DEP = 0.03, DEP_LOSS = 0.04, YEARS = 50;
+  const DEF = { f0: 20, re: 50, quota: 0, g: 50 };
+  function simulate(p) {
+    const g = p.g / 100, re = p.re / 100;
+    let S = 0.9 * K, F = p.f0;
+    const out = [];
+    for (let t = 0; t <= YEARS; t++) {
+      const R = g * S * (1 - S / K) * (S / (S + A)) * (1 + A / K);
+      let C = Math.min(Q * F * S, 0.95 * S);
+      if (p.quota > 0) C = Math.min(C, p.quota);
+      const B = PRICE * C - COST * F;
+      const buy = B > 0 ? re * B / BOAT : 0;
+      const scrap = DEP * F + (B < 0 ? DEP_LOSS * F : 0);
+      out.push({ t, S, F, R, C, B, buy, scrap });
+      S = Math.max(0, S + R - C);
+      F = Math.max(0, F + buy - scrap);
+    }
+    return out;
+  }
+  function status(o) {
+    if (o.S < 0.15 * K) return { cls: "bad", chip: "colapso", text: "Quedan tan pocos peces que casi no se reproducen. Aunque se deje de pescar, el mar tardará años en recuperarse." };
+    if (o.C > o.R + 1) return { cls: "warn", chip: "sobreexplotación", text: "Se pescan más peces de los que nacen: la reserva de peces está bajando." };
+    return { cls: "ok", chip: "sostenible", text: "Se pescan como mucho los peces que nacen: la reserva de peces se mantiene o crece." };
+  }
+
+  // ---------- Mandos ----------
+  const ids = ["f0", "re", "quota", "g"];
+  const params = () => ({ f0: +$("c-f0").value, re: +$("c-re").value, quota: +$("c-quota").value, g: +$("c-g").value });
+  function labels(p) {
+    $("c-f0-out").textContent = fmt(p.f0) + " barcos";
+    $("c-re-out").textContent = fmt(p.re) + " %";
+    $("c-quota-out").textContent = p.quota > 0 ? fmt(p.quota) + " mil t" : "sin cuota";
+    $("c-g-out").textContent = p.g <= 40 ? "lenta" : p.g >= 65 ? "rápida" : "media";
+  }
+  let run = simulate(DEF);
+  function recompute() { const p = params(); labels(p); run = simulate(p); render(); }
+  ids.forEach(k => $("c-" + k).addEventListener("input", () => { stop(); recompute(); }));
+  function setParams(p) { ids.forEach(k => { $("c-" + k).value = p[k]; }); recompute(); }
+  $("c-reset").addEventListener("click", () => { stop(); setParams(DEF); $("t-year").value = YEARS; render(); });
+  document.querySelectorAll("[data-try]").forEach(b => b.addEventListener("click", () => {
+    stop();
+    const n = b.dataset.try;
+    setParams(n === "1" ? DEF : n === "2" ? { ...DEF, quota: 100 } : { ...DEF, re: 15 });
+    $("t-year").value = 0; render();
+    $("h-sim").scrollIntoView({ behavior: reduced() ? "auto" : "smooth", block: "start" });
+    play();
+  }));
+
+  // ---------- Tiempo ----------
+  let timer = null;
+  function stop() { if (timer) { clearInterval(timer); timer = null; } $("t-play").textContent = "Reproducir"; }
+  function play() {
+    if (timer) { stop(); return; }
+    if (+$("t-year").value >= YEARS) $("t-year").value = 0;
+    $("t-play").textContent = "Pausa";
+    const step = () => {
+      const y = +$("t-year").value;
+      if (y >= YEARS) { stop(); return; }
+      $("t-year").value = y + 1; render();
+    };
+    if (reduced()) { $("t-year").value = YEARS; render(); stop(); return; }
+    timer = setInterval(step, 260);
+  }
+  $("t-play").addEventListener("click", play);
+  $("t-year").addEventListener("input", () => { stop(); render(); });
+
+  // ---------- Motor de gráficos ----------
+  const M = { l: 52, r: 16, t: 12, b: 40 };
+  function frame(svg, o) {
+    svg.replaceChildren();
+    const W = o.w || 360, H = o.h || 250;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const pw = W - M.l - M.r, ph = H - M.t - M.b;
+    const sx = x => M.l + (x / o.xMax) * pw;
+    const sy = y => M.t + ph - (y / o.yMax) * ph;
+    const grid = sv("g", { class: "grid" }), axis = sv("g", { class: "axis" });
+    o.yTicks.forEach(t => { grid.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(t), y2: sy(t) })); svg.append(sv("text", { x: M.l - 8, y: sy(t) + 4, "text-anchor": "end" }, fmt(t))); });
+    o.xTicks.forEach(t => svg.append(sv("text", { x: sx(t), y: H - M.b + 18, "text-anchor": "middle" }, fmt(t))));
+    axis.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(0), y2: sy(0) }), sv("line", { x1: M.l, x2: M.l, y1: M.t, y2: sy(0) }));
+    svg.append(grid, axis, sv("text", { x: (M.l + W - M.r) / 2, y: H - 6, "text-anchor": "middle", class: "axl" }, o.xLabel));
+    const plot = sv("g"), top = sv("g");
+    svg.append(plot, top);
+    return { sx, sy, plot, top, o, pw, ph, W, H };
+  }
+  const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  function series(F, key, upto, cls) {
+    const all = run.map(o => [F.sx(o.t), F.sy(clamp(o[key], 0, F.o.yMax))]);
+    F.plot.append(sv("path", { d: path(all), class: "ghost" }));
+    F.plot.append(sv("path", { d: path(all.slice(0, upto + 1)), class: "curve " + cls }));
+    const last = all[upto];
+    F.top.append(sv("circle", { cx: last[0], cy: last[1], r: 5, class: "dot", style: "fill:var(" + (cls === "c-ink" ? "--ink" : "--" + cls.slice(2)) + ")" }));
+  }
+  function hover(svg, tip, F, rows) {
+    const line = sv("line", { class: "hover-line", y1: M.t, y2: F.sy(0), visibility: "hidden" });
+    const hit = sv("rect", { x: M.l, y: M.t, width: F.pw, height: F.ph, fill: "transparent" });
+    svg.append(line, hit);
+    hit.addEventListener("pointermove", e => {
+      const r = svg.getBoundingClientRect();
+      const t = Math.round(clamp(((e.clientX - r.left) * F.W / r.width - M.l) / F.pw * YEARS, 0, YEARS));
+      line.setAttribute("x1", F.sx(t)); line.setAttribute("x2", F.sx(t)); line.setAttribute("visibility", "visible");
+      const d = rows(run[t]);
+      tip.replaceChildren(el("span", { class: "h", text: "Año " + t }), ...d.map(([c, k, v]) => el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
+      tip.hidden = false;
+      const px = e.clientX - r.left, tw = tip.offsetWidth;
+      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px";
+      tip.style.top = Math.max(0, e.clientY - r.top - 20) + "px";
+    });
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; line.setAttribute("visibility", "hidden"); });
+  }
+  const niceMax = (v, steps) => { const raw = v / steps; const mag = 10 ** Math.floor(Math.log10(raw)); const n = [1, 2, 2.5, 5, 10].find(m => m * mag >= raw) * mag; return { max: n * steps, step: n }; };
+  const ticks = (max, step) => Array.from({ length: Math.round(max / step) + 1 }, (_, i) => i * step);
+  const XT = [0, 10, 20, 30, 40, 50];
+
+  // ---------- Diagrama de reservas y flujos ----------
+  function arrowHead(g, x, y, ang, cls) {
+    const s = 7, a1 = ang + Math.PI * 0.82, a2 = ang - Math.PI * 0.82;
+    g.append(sv("path", { d: `M${x} ${y} L${x + s * Math.cos(a1)} ${y + s * Math.sin(a1)} L${x + s * Math.cos(a2)} ${y + s * Math.sin(a2)} Z`, class: "ah " + (cls || "") }));
+  }
+  function link(g, d, x, y, ang, cls, sign, sx, sy) {
+    g.append(sv("path", { d, class: "link " + (cls || "") }));
+    arrowHead(g, x, y, ang, cls);
+    if (sign) g.append(sv("text", { x: sx, y: sy, class: "mut", "text-anchor": "middle" }, sign));
+  }
+  function pipe(g, x1, y, x2) {
+    g.append(sv("line", { x1, y1: y, x2, y2: y, class: "pipe" }), sv("line", { x1, y1: y, x2: x2 - 2, y2: y, class: "pipe-in" }));
+    arrowHead(g, x2 + 4, y, 0, "ink");
+  }
+  function valve(g, x, y) { g.append(sv("path", { d: `M${x - 11} ${y - 11} L${x + 11} ${y + 11} L${x + 11} ${y - 11} L${x - 11} ${y + 11} Z`, class: "valve" })); }
+  function cloud(g, x, y) { g.append(sv("ellipse", { cx: x, cy: y, rx: 26, ry: 16, class: "cloud" })); }
+  function stockBox(g, x, y, w, h, frac, lvlCls, title, value) {
+    g.append(sv("rect", { x, y, width: w, height: h, rx: 4, class: "stockbox" }));
+    const fh = clamp(frac, 0, 1) * (h - 4);
+    g.append(sv("rect", { x: x + 2, y: y + h - 2 - fh, width: w - 4, height: fh, rx: 2, class: lvlCls }));
+    g.append(sv("text", { x: x + w / 2, y: y + 24, "text-anchor": "middle", "font-weight": "600" }, title));
+    g.append(sv("text", { x: x + w / 2, y: y + h - 14, "text-anchor": "middle", class: "num" }, value));
+  }
+  function drawDiagram(o) {
+    const svg = $("sfd"); svg.replaceChildren();
+    const g = sv("g"); svg.append(g);
+    // Peces (arriba)
+    const fy = 90;
+    cloud(g, 50, fy); pipe(g, 76, fy, 236); valve(g, 150, fy);
+    g.append(sv("text", { x: 150, y: fy - 22, "text-anchor": "middle" }, "Reproducción"));
+    g.append(sv("text", { x: 150, y: fy + 34, "text-anchor": "middle", class: "num" }, fmt(o.R) + " al año"));
+    stockBox(g, 240, 40, 170, 100, o.S / K, "lvl-fish", "Peces en el mar", fmt(o.S) + " mil t");
+    pipe(g, 410, fy, 600); valve(g, 500, fy); cloud(g, 632, fy);
+    g.append(sv("text", { x: 632, y: fy + 5, "text-anchor": "middle", class: "mut" }, "puerto"));
+    g.append(sv("text", { x: 500, y: fy - 42, "text-anchor": "middle" }, "Captura"));
+    g.append(sv("text", { x: 500, y: fy - 22, "text-anchor": "middle", class: "num" }, fmt(o.C) + " al año"));
+    // Flota (abajo)
+    const by = 330;
+    cloud(g, 50, by); pipe(g, 76, by, 236); valve(g, 150, by);
+    g.append(sv("text", { x: 150, y: by + 34, "text-anchor": "middle" }, "Compra de barcos"));
+    g.append(sv("text", { x: 150, y: by - 20, "text-anchor": "middle", class: "num" }, "+" + fmt(o.buy, 1) + " al año"));
+    stockBox(g, 240, by - 50, 170, 100, o.F / 150, "lvl-fleet", "Barcos", fmt(o.F) + " barcos");
+    pipe(g, 410, by, 600); valve(g, 500, by); cloud(g, 632, by);
+    g.append(sv("text", { x: 500, y: by + 34, "text-anchor": "middle" }, "Desguace"));
+    g.append(sv("text", { x: 500, y: by - 20, "text-anchor": "middle", class: "num" }, "−" + fmt(o.scrap, 1) + " al año"));
+    // Beneficio (variable auxiliar)
+    g.append(sv("text", { x: 610, y: 216, "text-anchor": "middle", "font-weight": "600" }, "Beneficio"));
+    g.append(sv("text", { x: 610, y: 236, "text-anchor": "middle", class: "num", style: o.B < 0 ? "fill:var(--bad)" : null }, (o.B < 0 ? "−" : "") + fmt(Math.abs(o.B)) + " M€"));
+    // Enlaces
+    link(g, "M330 140 C 330 175, 470 150, 495 104", 495, 104, -Math.PI / 2.4, "b", "+", 420, 170);           // peces → captura
+    link(g, "M410 300 C 470 260, 505 180, 502 106", 502, 106, -Math.PI / 2, "r", "+", 492, 250);             // barcos → captura
+    link(g, "M515 102 C 580 120, 610 160, 610 200", 610, 200, Math.PI / 2, "r", "+", 618, 170);              // captura → beneficio
+    link(g, "M590 242 C 420 270, 230 250, 160 316", 160, 316, Math.PI * 0.62, "r", "+", 380, 276);           // beneficio → compra
+    link(g, "M268 140 C 240 175, 175 150, 152 104", 152, 104, -Math.PI * 0.62, "", "+ / −", 196, 168);         // peces → reproducción
+    // Bucles
+    g.append(sv("circle", { cx: 540, cy: 200, r: 18, class: "loopc r" }), sv("text", { x: 540, y: 206, "text-anchor": "middle", class: "loop", style: "fill:var(--s2)" }, "R"));
+    g.append(sv("circle", { cx: 420, cy: 120, r: 16, class: "loopc b" }), sv("text", { x: 420, y: 126, "text-anchor": "middle", class: "loop", style: "fill:var(--s1)" }, "B"));
+    g.append(sv("text", { x: 700, y: 30, "text-anchor": "end", class: "mut" }, "Año " + o.t));
+  }
+
+  // ---------- Pintar ----------
+  function render() {
+    const y = +$("t-year").value, o = run[y];
+    $("t-year-out").textContent = fmt(y) + " de 50";
+    const st = status(o);
+    $("state").replaceChildren(el("span", { class: "chip " + st.cls, text: st.chip }), el("span", { text: st.text }));
+    const total = run.slice(0, y + 1).reduce((a, r) => a + r.C, 0);
+    const peak = run.reduce((a, r) => r.C > a.C ? r : a);
+    $("stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: fmt(o.S) }), el("span", { text: "Peces (mil t)" })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.F) }), el("span", { text: "Barcos" })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.C) }), el("span", { text: "Captura este año (mil t)" })),
+      el("div", { class: "stat" }, el("b", { text: fmt(total) }), el("span", { text: "Captura acumulada (mil t)" })),
+      el("div", { class: "stat" }, el("b", { text: "Año " + peak.t }), el("span", { text: "Año de la mayor captura" })));
+    drawDiagram(o);
+
+    // Peces
+    let F = frame($("ch-fish"), { xMax: YEARS, yMax: 1000, xTicks: XT, yTicks: [0, 250, 500, 750, 1000], xLabel: "Años" });
+    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(YEARS), y1: F.sy(K), y2: F.sy(K), class: "pline" }));
+    F.plot.append(sv("line", { x1: F.sx(y), x2: F.sx(y), y1: F.sy(0), y2: F.sy(1000), class: "now" }));
+    series(F, "S", y, "c-s1");
+    hover($("ch-fish"), $("tip-fish"), F, r => [["var(--s1)", "Peces", fmt(r.S) + " mil t"]]);
+
+    // Captura y reproducción
+    const fm = niceMax(Math.max(60, ...run.map(r => Math.max(r.C, r.R))), 4);
+    F = frame($("ch-flow"), { xMax: YEARS, yMax: fm.max, xTicks: XT, yTicks: ticks(fm.max, fm.step), xLabel: "Años" });
+    F.plot.append(sv("line", { x1: F.sx(y), x2: F.sx(y), y1: F.sy(0), y2: F.sy(fm.max), class: "now" }));
+    series(F, "R", y, "c-s3");
+    series(F, "C", y, "c-s2");
+    hover($("ch-flow"), $("tip-flow"), F, r => [["var(--s2)", "Captura", fmt(r.C) + " mil t"], ["var(--s3)", "Reproducción", fmt(r.R) + " mil t"]]);
+
+    // Barcos
+    const bm = niceMax(Math.max(40, ...run.map(r => r.F)), 4);
+    F = frame($("ch-fleet"), { xMax: YEARS, yMax: bm.max, xTicks: XT, yTicks: ticks(bm.max, bm.step), xLabel: "Años" });
+    F.plot.append(sv("line", { x1: F.sx(y), x2: F.sx(y), y1: F.sy(0), y2: F.sy(bm.max), class: "now" }));
+    series(F, "F", y, "c-ink");
+    hover($("ch-fleet"), $("tip-fleet"), F, r => [["var(--ink)", "Barcos", fmt(r.F)], ["var(--muted)", "Beneficio", fmt(r.B) + " M€"]]);
+  }
+
+  labels(params());
+  run = simulate(params());
+  render();
+})();
+</script>

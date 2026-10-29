@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes del Observatorio. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<script src="../assets/almacen-local.js"></script>
+<title>Observatorio · SA 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 880px) con tres vistas en pestañas; línea gráfica del Observatorio: papel blanco, grafito y azul tinta */
+:root {
+  --bg: #ffffff;
+  --paper: #f6f7f9;
+  --ink: #23262b;
+  --muted: #5d636c;
+  --rule: #d9dde3;
+  --accent: #2f4f8a;
+  --accent-soft: #edf1f8;
+  --ref: #9aa1ab;
+  --ok: #2d6a4f;
+  --bad: #a4372c;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c;
+    --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c;
+  --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+header.top { padding-block: 32px 0; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; padding-bottom: 18px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.15; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.small { font-size: 14px; color: var(--muted); }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button {
+  font: 500 15px var(--font-body); color: var(--muted); background: none; border: 0;
+  padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer;
+}
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.view { display: flex; flex-direction: column; gap: 22px; }
+.seg { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.seg button {
+  text-align: left; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px;
+  cursor: pointer; display: flex; flex-direction: column; gap: 4px; color: var(--ink); font: inherit;
+}
+.seg button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent); }
+.seg .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; }
+.seg .t { font-family: var(--font-display); font-weight: 600; font-size: 19px; }
+.seg .d { font-size: 14px; color: var(--muted); }
+.notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+form.survey { display: flex; flex-direction: column; gap: 0; }
+fieldset.q { border: 0; border-top: 1px solid var(--rule); margin: 0; padding: 16px 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+fieldset.q legend { padding: 0; font-weight: 600; display: contents; }
+.qhead { display: flex; gap: 10px; align-items: baseline; }
+.qnum { font-family: var(--font-mono); font-size: 13px; color: var(--accent); min-width: 2.2em; }
+.qtext { font-weight: 500; }
+.opts { display: flex; flex-direction: column; gap: 6px; padding-left: calc(2.2em + 10px); }
+.opts.row { flex-direction: row; flex-wrap: wrap; gap: 8px 16px; }
+.opts label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; font-size: 15px; }
+.opts input { margin-top: 4px; accent-color: var(--accent); }
+.help { font-size: 14px; color: var(--muted); padding-left: calc(2.2em + 10px); }
+.persons { display: flex; flex-direction: column; gap: 10px; padding-left: calc(2.2em + 10px); }
+.person { display: grid; grid-template-columns: 1.3fr 1fr 1fr .8fr .8fr auto; gap: 8px; align-items: end; padding: 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
+.person label { display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: var(--muted); min-width: 0; }
+select, input[type="number"], input[type="text"], textarea {
+  font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule);
+  border-radius: 4px; padding: 7px 8px; width: 100%; min-width: 0;
+}
+textarea { font-family: var(--font-mono); font-size: 14px; min-height: 150px; resize: vertical; }
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 5px 10px; font-size: 14px; }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.codebox { border: 2px solid var(--ink); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.code { font-family: var(--font-mono); font-size: clamp(20px, 5vw, 28px); font-weight: 500; letter-spacing: .04em; word-break: break-all; user-select: all; }
+.field { display: flex; flex-direction: column; gap: 4px; max-width: 360px; }
+.field label { font-size: 14px; color: var(--muted); }
+.parsed { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.mono, .mono { font-family: var(--font-mono); }
+.tag { font-family: var(--font-mono); font-size: 12px; padding: 1px 6px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; }
+.tag.ok { color: var(--ok); } .tag.bad { color: var(--bad); }
+.stats { display: flex; gap: 28px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; }
+.stat b { font-family: var(--font-display); font-size: 30px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.qres { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-top: 1px solid var(--rule); }
+.bars { display: flex; flex-direction: column; gap: 5px; }
+.bar { display: grid; grid-template-columns: minmax(0, 15em) 1fr 4.5em; gap: 10px; align-items: center; font-size: 14px; }
+.bar .lab { min-width: 0; }
+.track { height: 14px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+.fill.ref { background: var(--ref); }
+.bar .val { font-family: var(--font-mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+.compare { display: flex; flex-direction: column; gap: 18px; }
+.cgroup { display: flex; flex-direction: column; gap: 6px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; margin-right: 5px; background: var(--accent); }
+.legend i.ref { background: var(--ref); }
+.limits { font-size: 14px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--rule); padding-top: 14px; }
+.limits ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+.empty { border: 1px dashed var(--rule); padding: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.example-flag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--bad); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a { color: var(--accent); }
+.status { font-size: 14px; min-height: 1.5em; }
+.status.ok { color: var(--ok); } .status.bad { color: var(--bad); }
+table.payoff { table-layout: fixed; min-width: 520px; }
+table.payoff th, table.payoff td { border: 1px solid var(--rule); padding: 10px; vertical-align: top; }
+table.payoff thead th { background: var(--paper); color: var(--ink); }
+table.payoff tbody th { background: var(--paper); color: var(--ink); width: 9.5em; }
+table.payoff td.hl { background: var(--accent-soft); }
+.rounds { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.round { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.round .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.round .q { font-size: 14px; color: var(--muted); }
+.shelf { display: flex; flex-wrap: wrap; gap: 3px; }
+.shelf i { width: 12px; height: 12px; border-radius: 2px; background: var(--accent); }
+.shelf i.out { background: transparent; border: 1.5px solid var(--bad); }
+.big { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+.params { display: flex; gap: 12px; flex-wrap: wrap; }
+.params .field { max-width: 180px; }
+@media (max-width: 640px) {
+  .person { grid-template-columns: 1fr 1fr; }
+  .person .rm { grid-column: 1 / -1; justify-self: start; }
+  .opts, .help, .persons { padding-left: 0; }
+  .bar { grid-template-columns: minmax(0, 1fr) 4.5em; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: no-preference) { .fill { transition: width .4s ease; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Observatorio · SA 2 · El comportamiento humano en la actividad económica</span>
+    <h1>¿Se puede decidir bien cuando nadie sabe lo que va a pasar?</h1>
+    <p class="lede">Herramientas de la situación de aprendizaje 2. <strong>Encuestas:</strong> qué decidió vuestra familia en 2020 y cuánto tiempo dedica cada persona a los cuidados y al hogar; son anónimas, sin nombres, ingresos ni datos de salud. <strong>Matriz:</strong> qué pasa en la estantería cuando todos esperan lo mismo.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Secciones">
+    <button role="tab" id="tab-contestar" aria-selected="true" data-view="contestar">Contestar</button>
+    <button role="tab" id="tab-introducir" aria-selected="false" data-view="introducir">Introducir códigos</button>
+    <button role="tab" id="tab-resultados" aria-selected="false" data-view="resultados">Resultados</button>
+    <button role="tab" id="tab-matriz" aria-selected="false" data-view="matriz">Matriz</button>
+  </nav>
+
+  <!-- CONTESTAR -->
+  <section class="view" id="view-contestar" role="tabpanel" aria-labelledby="tab-contestar">
+    <div class="seg" role="group" aria-label="Elige la encuesta">
+      <button type="button" id="pick-A" aria-pressed="true" data-survey="A">
+        <span class="k">ENCUESTA A · UNA POR HOGAR</span>
+        <span class="t">Decisiones de la familia en 2020</span>
+        <span class="d">Nueve preguntas sobre lo que hicisteis en casa cuando empezó la pandemia.</span>
+      </button>
+      <button type="button" id="pick-B" aria-pressed="false" data-survey="B">
+        <span class="k">ENCUESTA B · UNA FILA POR PERSONA</span>
+        <span class="t">Horas de cuidados y de hogar</span>
+        <span class="d">Cuánto tiempo dedicó ayer cada persona de casa a los cuidados, al hogar y al trabajo pagado.</span>
+      </button>
+    </div>
+
+    <form class="survey" id="form-A" novalidate></form>
+    <form class="survey" id="form-B" novalidate hidden></form>
+
+    <div class="codebox" id="code-out" hidden>
+      <span class="eyebrow">Tu código de respuesta</span>
+      <span class="code" id="code-text"></span>
+      <p class="small">Copia el código en tu hoja de la carpeta y entrégalo en clase. El código guarda tus respuestas, no tu nombre.</p>
+      <div class="actions">
+        <button type="button" class="btn ghost small" id="copy-code">Copiar el código</button>
+        <span class="status" id="copy-status" aria-live="polite"></span>
+      </div>
+      <div class="actions" id="direct-save" hidden>
+        <div class="field"><label for="direct-group">Guardar directamente en el grupo</label><input type="text" id="direct-group" list="group-list" placeholder="Ej.: 1BAT-A 2026-27"></div>
+        <button type="button" class="btn small" id="direct-save-btn">Guardar</button>
+        <span class="status" id="direct-status" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRODUCIR -->
+  <section class="view" id="view-introducir" role="tabpanel" aria-labelledby="tab-introducir" hidden>
+    <div>
+      <h2>Introducir los códigos de la clase</h2>
+      <p class="small">Pega los códigos que ha traído el alumnado, uno por línea. Se comprueban antes de guardarlos: un código mal copiado no pasa.</p>
+    </div>
+    <div class="notice" id="write-note" hidden></div>
+    <div class="field">
+      <label for="group-name">Grupo</label>
+      <input type="text" id="group-name" list="group-list" placeholder="Ej.: 1BAT-A 2026-27">
+      <datalist id="group-list"></datalist>
+    </div>
+    <div class="field" style="max-width:none">
+      <label for="codes-in">Códigos</label>
+      <textarea id="codes-in" spellcheck="false" placeholder="A-102013241-ABQ&#10;B0-0010401-1111608-K7M"></textarea>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn ghost" id="check-codes">Comprobar</button>
+      <button type="button" class="btn" id="save-codes" disabled>Guardar en el grupo</button>
+      <button type="button" class="btn quiet" id="local-codes" disabled>Ver resultados sin guardar</button>
+      <span class="status" id="save-status" aria-live="polite"></span>
+    </div>
+    <div class="parsed" id="parsed"></div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section class="view" id="view-resultados" role="tabpanel" aria-labelledby="tab-resultados" hidden>
+    <div class="actions">
+      <div class="field"><label for="res-source">Datos</label><select id="res-source"></select></div>
+      <div class="field"><label for="res-day">Encuesta B: día</label>
+        <select id="res-day"><option value="all">Todos los días</option><option value="0">Solo días laborables</option><option value="1">Solo sábados y domingos</option></select>
+      </div>
+    </div>
+    <div id="results"></div>
+    <div class="actions" id="export-row" hidden>
+      <button type="button" class="btn ghost small" id="csv-A">Descargar encuesta A (CSV)</button>
+      <button type="button" class="btn ghost small" id="csv-B">Descargar encuesta B (CSV)</button>
+      <span class="status" id="csv-status" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- MATRIZ -->
+  <section class="view" id="view-matriz" role="tabpanel" aria-labelledby="tab-matriz" hidden>
+    <div>
+      <h2>¿Compras lo normal o compras de más?</h2>
+      <p class="small">Para proyectar en la sesión 4. Se vota con <a href="https://www.plickers.com/" target="_blank" rel="noopener" style="color:var(--accent)">Plickers</a> (A = compro lo normal; B = compro de más) o, si falla, a mano alzada o en papel. Apunta aquí cuántas personas eligen «compro de más» en cada ronda y la herramienta calcula qué pasa en la estantería.</p>
+    </div>
+    <div class="params">
+      <div class="field"><label for="m-n">Hogares (alumnado que vota)</label><input type="text" id="m-n" inputmode="numeric" value="28"></div>
+      <div class="field"><label for="m-s">Paquetes en la tienda</label><input type="text" id="m-s" inputmode="numeric" value="34"></div>
+      <div class="field"><label for="m-a">Paquetes de quien compra de más</label><input type="text" id="m-a" inputmode="numeric" value="3"></div>
+    </div>
+    <p class="small" id="m-note"></p>
+    <div class="rounds" id="m-rounds"></div>
+    <div class="actions"><button type="button" class="btn quiet small" id="m-reset">Borrar las rondas</button></div>
+    <div class="qres">
+      <span class="eyebrow">Después de votar</span>
+      <h3>La matriz de pagos</h3>
+      <p class="small">Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.</p>
+      <div class="parsed">
+        <table class="payoff">
+          <thead><tr><th></th><th>Los demás compran lo normal</th><th>Los demás compran de más</th></tr></thead>
+          <tbody>
+            <tr><th>Yo compro lo normal</th><td>Hay para todos y gasto lo justo.</td><td class="hl">Llego tarde y me quedo sin papel.</td></tr>
+            <tr><th>Yo compro de más</th><td>Tengo de sobra, pero he gastado más y me ocupa la despensa.</td><td class="hl">Algo consigo, pero la estantería se vacía y otros se quedan sin nada.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Dato de referencia: INE, Encuesta de Empleo del Tiempo 2009-2010, «Distribución de actividades en un día promedio, por sexo» (población de 10 años o más). Es la última edición publicada que se ha podido consultar.</span>
+    <span>La encuesta B se inspira en la actividad <a href="https://ecosfron.org/repositorio-materiales-ies/mis-usos-del-tiempo/" target="_blank" rel="noopener">«Mis usos del tiempo»</a> de Economistas sin Fronteras.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // ---------- Encuestas ----------
+  const QA = [
+    { id: "a1", t: "Cuando se declaró el estado de alarma (marzo de 2020), ¿vuestra familia compró más de lo habitual?",
+      o: ["No, lo mismo de siempre", "Un poco más", "Mucho más", "No lo recordamos"] },
+    { id: "a2", t: "Si comprasteis más, ¿cuál fue la razón principal?",
+      o: ["No compramos más", "Por si cerraban las tiendas o faltaba algo", "Porque veíamos que los demás compraban", "Para salir menos de casa", "Por si subían los precios", "Otra razón"] },
+    { id: "a3", t: "¿Encontrasteis estanterías vacías de algún producto?",
+      o: ["Sí", "No", "No lo recordamos"] },
+    { id: "a4", t: "En 2020, ¿vuestra familia ahorró más, igual o menos que en un año normal?",
+      o: ["Más", "Igual", "Menos", "No lo sabemos o preferimos no contestar"] },
+    { id: "a5", t: "Si ahorrasteis más, ¿por qué, sobre todo?",
+      o: ["No ahorramos más", "No se podía gastar: estaba todo cerrado", "Por precaución, por si venían tiempos peores", "Por las dos cosas"] },
+    { id: "a6", t: "¿Teníais pagado algo que no pudisteis usar (un viaje, unas entradas, una actividad)? ¿Qué hicisteis?",
+      o: ["No teníamos nada pagado", "Pedimos que nos devolvieran el dinero", "Lo cambiamos por otra fecha o por un vale", "Lo dimos por perdido", "Lo usamos igualmente cuando se pudo"] },
+    { id: "a7", t: "Con las escuelas cerradas, ¿quién se ocupó principalmente de los niños y niñas de casa?",
+      o: ["Sobre todo la madre", "Sobre todo el padre", "Los dos por igual", "Abuelos u otros familiares", "Otra persona (cuidadora, vecina…)", "No había niños pequeños o se cuidaban solos"] },
+    { id: "a8", t: "En las primeras semanas, ¿hasta qué punto sabíais lo que iba a pasar?",
+      o: ["1 · Nada", "2", "3", "4", "5 · Completamente"], scale: true },
+    { id: "a9", t: "Para decidir qué hacer, ¿en qué os fijasteis más?",
+      o: ["En lo que decían las autoridades", "En lo que hacían familiares, amigos y vecinos", "En las noticias y las redes sociales", "En nuestra propia experiencia o intuición"] }
+  ];
+  const DAY = ["Laborable (lunes a viernes)", "Sábado o domingo"];
+  const ROL = ["Yo (estudiante)", "Madre", "Padre", "Otra persona adulta", "Otro u otra menor de casa"];
+  const SEXO = ["Mujer", "Hombre", "Otro o prefiere no decirlo"];
+  const TRAB = ["Sí", "No"];
+  const MAXP = 8;
+  // INE, EET 2009-2010, día promedio por sexo (horas decimales)
+  const INE = { hogar: { M: 4 + 4/60, H: 1 + 50/60 }, trabajo: { M: 1 + 53/60, H: 3 + 3/60 } };
+
+  // ---------- Códigos ----------
+  const ALPH = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const check = s => { let n = 0; for (let i = 0; i < s.length; i++) n = (n + (i + 1) * s.charCodeAt(i)) % 32; return ALPH[n]; };
+  const nonce = () => { const a = new Uint32Array(2); crypto.getRandomValues(a); return ALPH[a[0] % 32] + ALPH[a[1] % 32]; };
+  const half = h => Math.max(0, Math.min(32, Math.round(h * 2)));
+  const two = n => String(n).padStart(2, "0");
+
+  function encodeA(ans) { const body = "A-" + ans.join("") + "-" + nonce(); return body + check(body); }
+  function encodeB(day, people) {
+    const ps = people.map(p => "" + p.rol + p.sexo + p.trab + two(half(p.hogar)) + two(half(p.trabajo)));
+    const body = "B" + day + "-" + ps.join("-") + "-" + nonce(); return body + check(body);
+  }
+  function parseCode(raw) {
+    const c = String(raw).toUpperCase().replace(/\s+/g, "");
+    if (!c) return null;
+    const body = c.slice(0, -1), ck = c.slice(-1);
+    if (c.length < 6 || check(body) !== ck) return { ok: false, code: c, err: "El código no cuadra: revisa que esté bien copiado." };
+    let m = /^A-(\d{9})-([A-Z2-9]{2})$/.exec(body);
+    if (m) {
+      const ans = m[1].split("").map(Number);
+      for (let i = 0; i < 9; i++) {
+        const max = QA[i].o.length - (QA[i].scale ? 0 : 1);
+        const v = QA[i].scale ? ans[i] - 1 : ans[i];
+        if (v < 0 || v > (QA[i].scale ? 4 : max)) return { ok: false, code: c, err: "Respuesta fuera de rango en la pregunta " + (i + 1) + "." };
+      }
+      return { ok: true, code: c, tipo: "A", ans };
+    }
+    m = /^B([01])-((?:\d{7}-){1,8})([A-Z2-9]{2})$/.exec(body);
+    if (m) {
+      const parts = m[2].slice(0, -1).split("-");
+      const people = [];
+      for (const p of parts) {
+        const rol = +p[0], sexo = +p[1], trab = +p[2], hh = +p.slice(3, 5), ht = +p.slice(5, 7);
+        if (rol > 4 || sexo > 2 || trab > 1 || hh > 32 || ht > 32) return { ok: false, code: c, err: "Hay un dato fuera de rango." };
+        people.push({ rol, sexo, trab, hogar: hh / 2, trabajo: ht / 2 });
+      }
+      return { ok: true, code: c, tipo: "B", day: +m[1], people };
+    }
+    return { ok: false, code: c, err: "No es un código de estas encuestas." };
+  }
+
+  // ---------- Utilidades ----------
+  const $ = id => document.getElementById(id);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const fmtH = h => { if (!isFinite(h)) return "—"; const m = Math.round(h * 60); return Math.floor(m / 60) + " h " + two(m % 60); };
+  const pct = (a, b) => b ? Math.round(100 * a / b) + " %" : "—";
+  const groupId = name => name.trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+  const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+  async function copyText(text, statusEl) {
+    try { await navigator.clipboard.writeText(text); statusEl.textContent = "Copiado."; statusEl.className = "status ok"; }
+    catch { statusEl.textContent = "No se ha podido copiar: selecciona el texto y cópialo a mano."; statusEl.className = "status bad"; }
+  }
+
+  // ---------- Pestañas ----------
+  const VIEWS = ["contestar", "introducir", "resultados", "matriz"];
+  function show(view) {
+    if (!VIEWS.includes(view)) view = "contestar";
+    for (const v of VIEWS) {
+      $("view-" + v).hidden = v !== view;
+      $("tab-" + v).setAttribute("aria-selected", String(v === view));
+    }
+    if (view === "resultados") renderResults();
+    if (view === "matriz") renderMatriz();
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+  // ---------- Formulario A ----------
+  function buildA() {
+    const f = $("form-A");
+    QA.forEach((q, i) => {
+      const fs = el("fieldset", { class: "q" },
+        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), el("span", { class: "qtext", text: q.t }))),
+        el("div", { class: "opts" + (q.scale ? " row" : "") },
+          q.o.map((o, j) => el("label", {}, el("input", { type: "radio", name: q.id, id: q.id + "-" + j, value: q.scale ? j + 1 : j }), el("span", { text: o })))));
+      f.append(fs);
+    });
+    f.append(el("div", { class: "actions", style: "padding-top:16px;border-top:1px solid var(--rule)" },
+      el("button", { type: "submit", class: "btn", text: "Obtener el código" }),
+      el("span", { class: "status", id: "statusA", "aria-live": "polite" })));
+    f.addEventListener("submit", e => {
+      e.preventDefault();
+      const ans = QA.map(q => { const r = f.querySelector('input[name="' + q.id + '"]:checked'); return r ? +r.value : null; });
+      const miss = ans.findIndex(a => a === null);
+      if (miss >= 0) { $("statusA").textContent = "Falta la pregunta A" + (miss + 1) + "."; $("statusA").className = "status bad"; return; }
+      $("statusA").textContent = "";
+      showCode(encodeA(ans));
+    });
+  }
+
+  // ---------- Formulario B ----------
+  function personRow(idx, preset) {
+    const p = preset || { rol: idx === 0 ? 0 : 1, sexo: 0, trab: 1, hogar: "", trabajo: "" };
+    const sel = (name, opts, val, label) => el("label", {}, label,
+      el("select", { id: name + "-" + idx, "data-f": name }, opts.map((o, j) => { const op = el("option", { value: j, text: o }); if (j === val) op.selected = true; return op; })));
+    const num = (name, val, label) => el("label", {}, label,
+      el("input", { type: "text", id: name + "-" + idx, "data-f": name, inputmode: "decimal", autocomplete: "off", value: val, placeholder: "0" }));
+    const row = el("div", { class: "person" },
+      sel("rol", ROL, p.rol, "Quién"), sel("sexo", SEXO, p.sexo, "Sexo"), sel("trab", TRAB, p.trab, "¿Trabajo pagado?"),
+      num("hogar", p.hogar, "Horas hogar y cuidados"), num("trabajo", p.trabajo, "Horas trabajo pagado"),
+      el("button", { type: "button", class: "btn quiet small rm", text: "Quitar" }));
+    row.querySelector(".rm").addEventListener("click", () => { if ($("persons").children.length > 1) { row.remove(); syncAdd(); } });
+    return row;
+  }
+  function syncAdd() { $("add-person").disabled = $("persons").children.length >= MAXP; }
+  function buildB() {
+    const f = $("form-B");
+    f.append(
+      el("fieldset", { class: "q" },
+        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "B1" }), el("span", { class: "qtext", text: "¿Qué día fue ayer?" }))),
+        el("div", { class: "opts row" }, DAY.map((o, j) => el("label", {}, el("input", { type: "radio", name: "day", id: "day-" + j, value: j }), el("span", { text: o }))))),
+      el("fieldset", { class: "q" },
+        el("legend", {}, el("span", { class: "qhead" }, el("span", { class: "qnum", text: "B2" }), el("span", { class: "qtext", text: "Para cada persona de casa (tú incluida): ¿cuántas horas dedicó ayer al hogar y los cuidados, y cuántas al trabajo pagado?" }))),
+        el("p", { class: "help", text: "Hogar y cuidados: cocinar, limpiar, lavar y planchar, hacer la compra, cuidar de niños o de personas mayores, gestiones de la casa. Trabajo pagado: horas de trabajo, sin contar los desplazamientos. Usa medias horas si hace falta (1,5 = una hora y media)." }),
+        el("div", { class: "persons", id: "persons" }),
+        el("div", { class: "help" }, el("button", { type: "button", class: "btn ghost small", id: "add-person", text: "Añadir persona" }))),
+      el("div", { class: "actions", style: "padding-top:16px;border-top:1px solid var(--rule)" },
+        el("button", { type: "submit", class: "btn", text: "Obtener el código" }),
+        el("span", { class: "status", id: "statusB", "aria-live": "polite" })));
+    $("persons").append(personRow(0), personRow(1, { rol: 1, sexo: 0, trab: 0, hogar: "", trabajo: "" }), personRow(2, { rol: 2, sexo: 1, trab: 0, hogar: "", trabajo: "" }));
+    let next = 3;
+    $("add-person").addEventListener("click", () => { if ($("persons").children.length < MAXP) { $("persons").append(personRow(next++, { rol: 3, sexo: 0, trab: 1, hogar: "", trabajo: "" })); syncAdd(); } });
+    f.addEventListener("submit", e => {
+      e.preventDefault();
+      const st = $("statusB");
+      const d = f.querySelector('input[name="day"]:checked');
+      if (!d) { st.textContent = "Falta decir qué día fue ayer."; st.className = "status bad"; return; }
+      const people = [];
+      for (const row of $("persons").children) {
+        const g = k => row.querySelector('[data-f="' + k + '"]').value;
+        const rawH = String(g("hogar")).trim().replace(",", "."), rawT = String(g("trabajo")).trim().replace(",", ".");
+        const okNum = s => s === "" || /^\d{1,2}(\.\d+)?$/.test(s);
+        if (!okNum(rawH) || !okNum(rawT)) { st.textContent = "Escribe las horas con números, por ejemplo 2 o 1,5."; st.className = "status bad"; return; }
+        const h = rawH === "" ? 0 : parseFloat(rawH), t = rawT === "" ? 0 : parseFloat(rawT);
+        if (h < 0 || h > 16 || t < 0 || t > 16 || h + t > 20) { st.textContent = "Revisa las horas: cada dato entre 0 y 16, y que la suma tenga sentido en un día."; st.className = "status bad"; return; }
+        people.push({ rol: +g("rol"), sexo: +g("sexo"), trab: +g("trab"), hogar: h, trabajo: t });
+      }
+      st.textContent = "";
+      showCode(encodeB(+d.value, people));
+    });
+  }
+
+  // ---------- Elegir encuesta y mostrar código ----------
+  function pick(s) {
+    $("pick-A").setAttribute("aria-pressed", String(s === "A"));
+    $("pick-B").setAttribute("aria-pressed", String(s === "B"));
+    $("form-A").hidden = s !== "A"; $("form-B").hidden = s !== "B";
+    $("code-out").hidden = true;
+  }
+  $("pick-A").addEventListener("click", () => pick("A"));
+  $("pick-B").addEventListener("click", () => pick("B"));
+  let lastCode = "";
+  function showCode(code) {
+    lastCode = code;
+    $("code-text").textContent = code;
+    $("copy-status").textContent = ""; $("direct-status").textContent = "";
+    $("code-out").hidden = false;
+    $("code-out").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+  }
+  $("copy-code").addEventListener("click", () => copyText(lastCode, $("copy-status")));
+
+  // ---------- Almacén compartido (db) ----------
+  let db = null, canWrite = false, groups = [], unsubGroups = null, unsubResp = null;
+  let localSet = null; // códigos pegados sin guardar
+  let exampleSet = null;
+  let currentRows = [];
+
+  async function saveCodes(gname, parsedList, statusEl) {
+    const gid = groupId(gname);
+    if (!gid) { statusEl.textContent = "Escribe el nombre del grupo."; statusEl.className = "status bad"; return false; }
+    statusEl.textContent = "Guardando…"; statusEl.className = "status";
+    try {
+      await db.doc("clases/" + gid).set({ nombre: gname.trim() });
+      let n = 0;
+      for (const p of parsedList) {
+        await db.collection("clases/" + gid + "/respuestas").doc(p.code).set({ tipo: p.tipo, codigo: p.code, guardado: new Date().toISOString() });
+        n++;
+      }
+      store.set("grupo", gname.trim());
+      statusEl.textContent = n + (n === 1 ? " respuesta guardada" : " respuestas guardadas") + " en «" + gname.trim() + "»."; statusEl.className = "status ok";
+      return true;
+    } catch (e) {
+      if (e && e.code === "invalid_argument") { canWrite = false; applyWriteState(); statusEl.textContent = "Esta cuenta no puede guardar datos en la aplicación."; }
+      else if (e && e.code === "quota_exceeded") statusEl.textContent = "El almacén está lleno: borra respuestas de grupos antiguos.";
+      else statusEl.textContent = "No se ha podido guardar. Vuelve a intentarlo en un momento.";
+      statusEl.className = "status bad"; return false;
+    }
+  }
+
+  function applyWriteState() {
+    const note = $("write-note");
+    $("direct-save").hidden = !(db && canWrite);
+    if (db && canWrite) { note.hidden = true; }
+    else {
+      note.hidden = false;
+      note.replaceChildren(
+        el("strong", { text: db ? "Esta cuenta solo puede consultar." : "Para guardar los códigos hay que abrir la aplicación con la cuenta del docente." }),
+        el("span", { text: "Mientras tanto, puedes comprobar los códigos y ver sus resultados sin guardarlos." }));
+    }
+    $("save-codes").hidden = !(db && canWrite);
+  }
+
+  function refreshGroupOptions() {
+    const dl = $("group-list"); dl.replaceChildren(...groups.map(g => el("option", { value: g.nombre })));
+    const sel = $("res-source"); const prev = sel.value;
+    const opts = [];
+    groups.forEach(g => opts.push(el("option", { value: "g:" + g.id, text: "Grupo · " + g.nombre })));
+    if (localSet) opts.push(el("option", { value: "local", text: "Códigos pegados (sin guardar)" }));
+    opts.push(el("option", { value: "ejemplo", text: "Datos de ejemplo (inventados)" }));
+    sel.replaceChildren(...opts);
+    const want = prev && [...sel.options].some(o => o.value === prev) ? prev
+      : (groups.length ? "g:" + (groups.find(g => g.nombre === store.get("grupo")) || groups[0]).id : (localSet ? "local" : "ejemplo"));
+    sel.value = want;
+  }
+
+  // ---------- Introducir ----------
+  let lastParsed = [];
+  $("check-codes").addEventListener("click", () => {
+    const lines = $("codes-in").value.split(/\n|,|;/).map(s => s.trim()).filter(Boolean);
+    const seen = new Set();
+    lastParsed = lines.map(parseCode).filter(Boolean).map(p => { if (p.ok && seen.has(p.code)) return { ok: false, code: p.code, err: "Repetido en la lista." }; seen.add(p.code); return p; });
+    const good = lastParsed.filter(p => p.ok);
+    const tbl = el("table", {},
+      el("thead", {}, el("tr", {}, el("th", { text: "Código" }), el("th", { text: "Encuesta" }), el("th", { text: "Estado" }))),
+      el("tbody", {}, lastParsed.map(p => el("tr", {},
+        el("td", { class: "mono", text: p.code }),
+        el("td", { text: p.ok ? (p.tipo === "A" ? "A · decisiones 2020" : "B · " + p.people.length + (p.people.length === 1 ? " persona" : " personas")) : "—" }),
+        el("td", {}, p.ok ? el("span", { class: "tag ok", text: "correcto" }) : el("span", {}, el("span", { class: "tag bad", text: "error" }), " ", p.err))))));
+    $("parsed").replaceChildren(el("p", { class: "small", text: good.length + " de " + lastParsed.length + " códigos correctos." }), tbl);
+    $("save-codes").disabled = !(good.length && db && canWrite);
+    $("local-codes").disabled = !good.length;
+    $("save-status").textContent = "";
+  });
+  $("save-codes").addEventListener("click", async () => {
+    const good = lastParsed.filter(p => p.ok); if (!good.length) return;
+    $("save-codes").disabled = true;
+    const ok = await saveCodes($("group-name").value, good, $("save-status"));
+    $("save-codes").disabled = ok;
+  });
+  $("local-codes").addEventListener("click", () => {
+    localSet = lastParsed.filter(p => p.ok);
+    refreshGroupOptions(); $("res-source").value = "local";
+    location.hash = "resultados";
+  });
+  $("direct-save-btn").addEventListener("click", async () => {
+    const p = parseCode(lastCode); if (!p || !p.ok) return;
+    await saveCodes($("direct-group").value, [p], $("direct-status"));
+  });
+
+  // ---------- Datos de ejemplo (inventados, solo para ver cómo funciona) ----------
+  function makeExample() {
+    let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    const pickW = w => { let x = r() * w.reduce((a, b) => a + b, 0); for (let i = 0; i < w.length; i++) { x -= w[i]; if (x <= 0) return i; } return w.length - 1; };
+    const out = [];
+    for (let k = 0; k < 24; k++) {
+      const a1 = pickW([8, 9, 5, 2]);
+      const ans = [a1, a1 === 0 ? 0 : pickW([0, 6, 3, 4, 1, 1]), pickW([7, 2, 1]), pickW([6, 4, 3, 2]), pickW([4, 5, 3, 3]), pickW([6, 4, 5, 2, 1]), pickW([7, 2, 4, 4, 1, 3]), pickW([6, 7, 4, 2, 1]) + 1, pickW([7, 5, 4, 3])];
+      out.push({ ok: true, tipo: "A", ans, code: "EJEMPLO-A" + k });
+      const people = [{ rol: 0, sexo: pickW([1, 1]), trab: 1, hogar: Math.round(r() * 3 * 2) / 2, trabajo: 0 },
+        { rol: 1, sexo: 0, trab: pickW([3, 1]), hogar: Math.round((2 + r() * 4) * 2) / 2, trabajo: Math.round(r() * 8 * 2) / 2 },
+        { rol: 2, sexo: 1, trab: pickW([4, 1]), hogar: Math.round((0.5 + r() * 2.5) * 2) / 2, trabajo: Math.round((3 + r() * 6) * 2) / 2 }];
+      out.push({ ok: true, tipo: "B", day: pickW([4, 1]), people, code: "EJEMPLO-B" + k });
+    }
+    return out;
+  }
+
+  // ---------- Resultados ----------
+  function bars(rows) {
+    const max = Math.max(1, ...rows.map(r => r.v));
+    return el("div", { class: "bars" }, rows.map(r => el("div", { class: "bar" },
+      el("span", { class: "lab", text: r.label }),
+      el("span", { class: "track", "aria-hidden": "true" }, el("span", { class: "fill" + (r.ref ? " ref" : ""), style: "width:" + (100 * r.v / max).toFixed(1) + "%" })),
+      el("span", { class: "val", text: r.text }))));
+  }
+  function renderResults() {
+    const src = $("res-source").value;
+    let rows = [];
+    let sourceLabel = "";
+    if (src === "ejemplo") { exampleSet = exampleSet || makeExample(); rows = exampleSet; sourceLabel = "ejemplo"; }
+    else if (src === "local") { rows = localSet || []; }
+    else if (src && src.startsWith("g:")) { rows = currentRows; }
+    const out = $("results");
+    const A = rows.filter(p => p.tipo === "A"), Ball = rows.filter(p => p.tipo === "B");
+    const dayF = $("res-day").value;
+    const B = dayF === "all" ? Ball : Ball.filter(p => String(p.day) === dayF);
+    $("export-row").hidden = !rows.length;
+    if (!rows.length) {
+      out.replaceChildren(el("div", { class: "empty" },
+        el("h3", { text: "Todavía no hay respuestas en este grupo" }),
+        el("p", { class: "small", text: "Cuando se guarden los códigos de la clase en «Introducir códigos», aquí aparecerán los recuentos de la encuesta A y la comparación de horas de la encuesta B con la media del INE." }),
+        el("button", { type: "button", class: "btn ghost small", id: "go-example", text: "Ver cómo queda con datos de ejemplo" })));
+      $("go-example").addEventListener("click", () => { $("res-source").value = "ejemplo"; renderResults(); });
+      return;
+    }
+    const persons = B.flatMap(p => p.people.map(x => ({ ...x, day: p.day })));
+    const kids = [];
+    if (sourceLabel === "ejemplo") kids.push(el("p", { class: "example-flag", text: "Datos de ejemplo inventados: solo sirven para ver cómo funciona la aplicación." }));
+    kids.push(el("div", { class: "stats" },
+      el("div", { class: "stat" }, el("b", { text: A.length }), el("span", { text: "hogares en la encuesta A" })),
+      el("div", { class: "stat" }, el("b", { text: B.length }), el("span", { text: "hogares en la encuesta B" })),
+      el("div", { class: "stat" }, el("b", { text: persons.length }), el("span", { text: "personas en la encuesta B" }))));
+
+    // Encuesta B: comparación con el INE
+    const adults = persons.filter(x => x.rol >= 1 && x.rol <= 3);
+    const young = persons.filter(x => x.rol === 0 || x.rol === 4);
+    const mean = (arr, k) => arr.length ? arr.reduce((a, x) => a + x[k], 0) / arr.length : NaN;
+    const by = (arr, s) => arr.filter(x => x.sexo === s);
+    const aM = by(adults, 0), aH = by(adults, 1), yM = by(young, 0), yH = by(young, 1);
+    const cmp = (title, key) => {
+      const r = [
+        { label: "Mujeres adultas · clase (n=" + aM.length + ")", v: mean(aM, key) || 0, text: fmtH(mean(aM, key)) },
+        { label: "Mujeres · INE 2009-10", v: INE[key].M, text: fmtH(INE[key].M), ref: true },
+        { label: "Hombres adultos · clase (n=" + aH.length + ")", v: mean(aH, key) || 0, text: fmtH(mean(aH, key)) },
+        { label: "Hombres · INE 2009-10", v: INE[key].H, text: fmtH(INE[key].H), ref: true }
+      ];
+      return el("div", { class: "cgroup" }, el("h3", { text: title }), bars(r));
+    };
+    const gapC = mean(aM, "hogar") - mean(aH, "hogar"), gapI = INE.hogar.M - INE.hogar.H;
+    kids.push(el("div", { class: "qres" },
+      el("span", { class: "eyebrow", text: "Encuesta B · horas al día" }),
+      el("h2", { text: "¿Se parece la clase a la media del INE?" }),
+      el("div", { class: "legend" }, el("span", {}, el("i"), "Nuestra clase"), el("span", {}, el("i", { class: "ref" }), "INE, día promedio 2009-2010")),
+      el("div", { class: "compare" },
+        cmp("Hogar y cuidados", "hogar"),
+        cmp("Trabajo pagado", "trabajo"),
+        el("div", { class: "cgroup" }, el("h3", { text: "Diferencia entre mujeres y hombres en hogar y cuidados" }),
+          el("p", {}, "En la clase, las mujeres adultas dedican ", el("strong", { text: isFinite(gapC) ? (gapC >= 0 ? fmtH(gapC) + " más" : fmtH(-gapC) + " menos") : "—" }),
+            " al día que los hombres adultos. En el INE (2009-2010), la diferencia es de ", el("strong", { text: fmtH(gapI) }), ".")),
+        el("div", { class: "cgroup" }, el("h3", { text: "Y el alumnado y otros menores de casa" }),
+          bars([
+            { label: "Chicas (n=" + yM.length + ")", v: mean(yM, "hogar") || 0, text: fmtH(mean(yM, "hogar")) },
+            { label: "Chicos (n=" + yH.length + ")", v: mean(yH, "hogar") || 0, text: fmtH(mean(yH, "hogar")) }
+          ]))),
+      el("div", { class: "limits" },
+        el("strong", { text: "Antes de sacar conclusiones" }),
+        el("ul", {},
+          el("li", { text: "Unos pocos hogares de una clase no son una muestra representativa de España." }),
+          el("li", { text: "El INE da la media de un día cualquiera (laborables y fines de semana) de toda la población de 10 años o más, y sus datos son de 2009-2010; nosotros preguntamos por «ayer»." }),
+          el("li", { text: "Las horas son las que recuerda y declara cada familia: la memoria y lo que nos parece bien decir también cuentan." })))));
+
+    // Encuesta A: recuentos
+    const qblocks = QA.map((q, i) => {
+      const counts = q.o.map(() => 0);
+      A.forEach(p => { const v = q.scale ? p.ans[i] - 1 : p.ans[i]; if (counts[v] !== undefined) counts[v]++; });
+      return el("div", { class: "qres" },
+        el("div", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), el("span", { class: "qtext", text: q.t })),
+        bars(q.o.map((o, j) => ({ label: o, v: counts[j], text: counts[j] + " · " + pct(counts[j], A.length) }))));
+    });
+    kids.push(el("div", { class: "qres", style: "border-top:2px solid var(--ink)" },
+      el("span", { class: "eyebrow", text: "Encuesta A · " + A.length + " hogares" }),
+      el("h2", { text: "Qué decidieron nuestras familias en 2020" }),
+      el("p", { class: "small", text: "Para cada respuesta, preguntaos con qué modelo se explica mejor: el cálculo, una desviación de la racionalidad o una respuesta razonable cuando nadie sabe lo que va a pasar." })));
+    kids.push(...qblocks);
+    out.replaceChildren(...kids);
+  }
+  $("res-source").addEventListener("change", () => { const v = $("res-source").value; if (v.startsWith("g:")) subscribeGroup(v.slice(2)); renderResults(); });
+  $("res-day").addEventListener("change", renderResults);
+
+  function subscribeGroup(gid) {
+    if (unsubResp) { unsubResp(); unsubResp = null; }
+    currentRows = [];
+    if (!db) return;
+    unsubResp = db.collection("clases/" + gid + "/respuestas").onSnapshot(snap => {
+      currentRows = snap.docs.map(d => parseCode((d.data() || {}).codigo || "")).filter(p => p && p.ok);
+      if (!$("view-resultados").hidden && $("res-source").value === "g:" + gid) renderResults();
+    }, () => { currentRows = []; });
+  }
+
+  // ---------- CSV ----------
+  function rowsForExport() {
+    const src = $("res-source").value;
+    return src === "ejemplo" ? (exampleSet || []) : src === "local" ? (localSet || []) : currentRows;
+  }
+  const csvCell = v => { const s = String(v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csvA() {
+    const head = ["codigo", ...QA.map((q, i) => "A" + (i + 1))];
+    const lines = rowsForExport().filter(p => p.tipo === "A").map(p => [p.code, ...QA.map((q, i) => q.scale ? p.ans[i] : q.o[p.ans[i]])]);
+    return [head, ...lines].map(r => r.map(csvCell).join(";")).join("\n");
+  }
+  function csvB() {
+    const head = ["codigo_hogar", "dia", "quien", "sexo", "trabajo_pagado", "horas_hogar_cuidados", "horas_trabajo_pagado"];
+    const lines = rowsForExport().filter(p => p.tipo === "B").flatMap(p => p.people.map(x => [p.code, DAY[p.day], ROL[x.rol], SEXO[x.sexo], TRAB[x.trab], String(x.hogar).replace(".", ","), String(x.trabajo).replace(".", ",")]));
+    return [head, ...lines].map(r => r.map(csvCell).join(";")).join("\n");
+  }
+  let downloads = null;
+  async function offer(name, text) {
+    const st = $("csv-status");
+    if (downloads) {
+      try { await downloads.save({ filename: name, data: "﻿" + text }); st.textContent = "Descargado."; st.className = "status ok"; return; }
+      catch (e) { if (e && e.code === "declined") { st.textContent = ""; return; } }
+    }
+    copyText(text, st);
+    st.textContent = st.className.includes("ok") ? "La descarga no está disponible aquí: los datos se han copiado; pégalos en una hoja de cálculo." : st.textContent;
+  }
+  $("csv-A").addEventListener("click", () => offer("encuesta-A-decisiones-2020.csv", csvA()));
+  $("csv-B").addEventListener("click", () => offer("encuesta-B-horas-cuidados.csv", csvB()));
+
+  // ---------- Matriz ----------
+  const RLAB = [["Ronda 1", "A ciegas: nadie sabe qué votan los demás."], ["Ronda 2", "Ya habéis visto el resultado de la ronda 1."], ["Ronda 3", "El súper de al lado ya está vacío."]];
+  let mRounds = [null, null, null];
+  try { const st = JSON.parse(store.get("matriz") || "null"); if (Array.isArray(st) && st.length === 3) mRounds = st; } catch {}
+  const intOr = (id, d) => { const v = parseInt(String($(id).value).trim(), 10); return isFinite(v) && v >= 0 ? v : d; };
+  function simulate(n, k, stock, want) {
+    // Hogares en orden aleatorio; cada uno se lleva lo que quiere si queda. Media de 2000 repeticiones.
+    let seed = 12345 + n * 7 + k * 131 + stock * 17 + want;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const reps = 2000; let sumOut = 0;
+    const base = Array.from({ length: n }, (_, i) => i < k ? want : 1);
+    for (let r = 0; r < reps; r++) {
+      const a = base.slice();
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      let left = stock, out = 0;
+      for (const w of a) { if (left <= 0) { out++; continue; } left -= Math.min(w, left); }
+      sumOut += out;
+    }
+    return sumOut / reps;
+  }
+  function renderMatriz() {
+    const n = Math.max(1, intOr("m-n", 28)), stock = intOr("m-s", 34), want = Math.max(2, intOr("m-a", 3));
+    $("m-note").textContent = "En un día normal cada hogar se lleva 1 paquete: hacen falta " + n + " y hay " + stock + ". Se fabrica lo de siempre o más.";
+    const cards = RLAB.map((lab, i) => {
+      const k = mRounds[i];
+      const input = el("input", { type: "text", id: "m-k" + i, inputmode: "numeric", value: k == null ? "" : k, placeholder: "—" });
+      input.addEventListener("change", () => {
+        const raw = String(input.value).trim();
+        const v = raw === "" ? null : parseInt(raw, 10);
+        mRounds[i] = v == null || !isFinite(v) || v < 0 ? null : Math.min(v, n);
+        store.set("matriz", JSON.stringify(mRounds));
+        renderMatriz();
+      });
+      const kids = [el("span", { class: "k", text: lab[0] }), el("span", { class: "q", text: lab[1] }),
+        el("label", { class: "small", for: "m-k" + i, text: "¿Cuántos compran de más?" }), input];
+      if (k != null) {
+        const out = simulate(n, k, stock, want);
+        const outR = Math.round(out);
+        const demand = (n - k) + k * want;
+        kids.push(el("div", { class: "stat" }, el("b", { class: "big", text: Math.round(100 * k / n) + " %" }), el("span", { text: "compra de más" })));
+        kids.push(el("div", { class: "shelf", "aria-label": outR + " hogares de " + n + " se quedan sin papel" }, Array.from({ length: n }, (_, j) => el("i", { class: j < n - outR ? "" : "out" }))));
+        kids.push(el("p", { class: "small" }, "Se piden ", el("strong", { text: String(demand) }), " paquetes y hay ", el("strong", { text: String(stock) }), ". De media, ", el("strong", { text: outR + (outR === 1 ? " hogar se queda" : " hogares se quedan") }), " sin papel."));
+      }
+      return el("div", { class: "round" }, kids);
+    });
+    $("m-rounds").replaceChildren(...cards);
+  }
+  ["m-n", "m-s", "m-a"].forEach(id => $(id).addEventListener("change", renderMatriz));
+  $("m-reset").addEventListener("click", () => { mRounds = [null, null, null]; store.set("matriz", JSON.stringify(mRounds)); renderMatriz(); });
+
+  // ---------- Arranque ----------
+  buildA(); buildB(); syncAdd();
+  const g0 = store.get("grupo"); if (g0) { $("group-name").value = g0; $("direct-group").value = g0; }
+  refreshGroupOptions();
+  applyWriteState();
+  show(location.hash.slice(1));
+
+  (async () => {
+    const C = window.claude;
+    if (!C || !C.use) return;
+    const [dbNs, userNs, dl] = await Promise.all([C.use("db"), C.use("user"), C.use("downloads")]);
+    downloads = dl;
+    db = dbNs;
+    if (!db) { applyWriteState(); return; }
+    let w = null;
+    try { w = userNs ? await userNs.can("data.write") : null; } catch { w = null; }
+    canWrite = w !== false;
+    applyWriteState();
+    unsubGroups = db.collection("clases").onSnapshot(snap => {
+      groups = snap.docs.map(d => ({ id: d.id, nombre: (d.data() || {}).nombre || d.id })).sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
+      const before = $("res-source").value;
+      refreshGroupOptions();
+      const now = $("res-source").value;
+      if (now.startsWith("g:") && (now !== before || !unsubResp)) subscribeGroup(now.slice(2));
+      if (!$("view-resultados").hidden) renderResults();
+    }, () => {});
+  })();
+})();
+</script>
