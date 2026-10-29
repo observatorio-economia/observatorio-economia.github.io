@@ -27,6 +27,8 @@ sh ~/Documents/observatorio-economia/actualizar.sh
 
 Todo lo que hay en `sa01/` … `libro/` y `datos/` se genera: no lo edites a mano.
 
+**Protección:** si el archivo del vault de una herramienta parece una versión más antigua que la que ya está en la web (sin las piezas comunes o mucho más corto), el script no lo copia y avisa con ✗. Revisa ese archivo y su artefacto de Claude; si de verdad es el bueno, `FORZAR=1 sh actualizar.sh`. Además, cada versión publicada queda en el historial de git.
+
 El script copia cada herramienta y solo le añade el esqueleto de página, la hoja de estilo y el menú de la web, y cambia el enlace «← Panel del Observatorio» (la constante `PANEL_URL` de las piezas comunes) para que lleve a la portada. También copia `05-SA/_observatorio-comun/observatorio-common.css` y `.js` a `assets/comun/` para la portada. No modifica nada del vault.
 
 La portada de la web no se copia de `05-SA/panel-observatorio.html`: se genera con la lista de `assets/menu.js`.

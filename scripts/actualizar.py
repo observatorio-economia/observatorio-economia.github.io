@@ -10,7 +10,7 @@
 
 Uso: sh actualizar.sh (que llama a este archivo). Sin dependencias: solo Python 3.
 """
-import html, json, re, shutil, sys
+import html, json, os, re, shutil, sys
 from pathlib import Path
 
 web, vault = Path(sys.argv[1]), Path(sys.argv[2])
@@ -200,6 +200,15 @@ for carpeta, origen in HERRAMIENTAS:
     prefijo = "../../" if dentro else "../"
     destino = web / carpeta / ("herramientas" if dentro else "") / "index.html"
     s = src.read_text(encoding="utf-8")
+    # Protección: si el vault trae una versión que parece más antigua que la que ya está en la web
+    # (sin las piezas comunes, o mucho más corta), no se copia y se avisa. Con FORZAR=1 se copia igualmente.
+    antes = destino.read_text(encoding="utf-8") if destino.is_file() else ""
+    retrocede = ("OBS-COMMON-JS:BEGIN" in antes and "OBS-COMMON-JS:BEGIN" not in s) or (antes and len(s) < 0.7 * (len(antes) - 600))
+    if retrocede and os.environ.get("FORZAR") != "1":
+        aviso(False, f"{carpeta}: NO copiado. El archivo del vault ({len(s) // 1024} KB) parece una versión más antigua que la de la web "
+                     f"({len(antes) // 1024} KB){', sin las piezas comunes' if 'OBS-COMMON-JS:BEGIN' not in s else ''}. "
+                     f"Revisa {src} (y su artefacto); si de verdad es la buena: FORZAR=1 sh actualizar.sh")
+        continue
     s, n = PANEL_HTML.subn(f'href="{prefijo}index.html"', s)
     n += s.count(PANEL_JS)
     s = s.replace(PANEL_JS, f'"{prefijo}index.html"').replace(NUEVA_PESTANA, "href: opts.panelUrl || PANEL_URL")
