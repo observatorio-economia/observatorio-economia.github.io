@@ -43,7 +43,7 @@
   ];
 
   // Autoría y licencia: aparecen al pie de todas las páginas, con la forma de citarlas
-  const AUTOR = { nombre: "Jordi Vila Canals", cita: "Vila Canals, J." }, ANYO = 2026;
+  const AUTOR = { nombre: "Jordi Vila Garrido", cita: "Vila Garrido, J." }, ANYO = 2026;
   const LICENCIA = { nombre: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/deed.es" };
 
   const TXT = {

@@ -1,6 +1,6 @@
 # Licencia
 
-© 2026 Jordi Vila Canals. *Observatorio · Economía 1.º de Bachillerato*.
+© 2026 Jordi Vila Garrido. *Observatorio · Economía 1.º de Bachillerato*.
 
 Los textos, apuntes, herramientas y datos elaborados para esta web se publican con la licencia
 **Creative Commons Reconocimiento-CompartirIgual 4.0 Internacional (CC BY-SA 4.0)**:
