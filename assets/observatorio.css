@@ -94,6 +94,13 @@ body.obs-page.obs-proj .row .d { font-size: 17px; }
 .obs-menu__sa a:hover { border-color: var(--accent); color: var(--accent); }
 .obs-menu__sa a[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .obs-menu__sa span { color: var(--ref); border: 1px dashed var(--rule); cursor: default; }
+.obs-menu__datos {
+  display: inline-flex; align-items: center; height: 32px; padding: 0 10px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase;
+  border: 1px solid var(--ink);
+}
+.obs-menu__datos:hover { border-color: var(--accent); color: var(--accent); }
+.obs-menu__datos[aria-current="page"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .obs-menu__tema {
   font: 500 12px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
   background: transparent; border: 1px solid var(--rule); height: 32px; padding: 0 10px; cursor: pointer;

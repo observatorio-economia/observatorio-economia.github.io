@@ -23,10 +23,13 @@ web, vault = Path(sys.argv[1]), Path(sys.argv[2])
 HERRAMIENTAS = [
     ("sa01", "SA01-que-es-la-economia/material/observatorio-sa1.html"),
     ("sa02", "SA02-el-comportamiento-humano/material/SA2-herramientas.html"),
+    ("sa03", "SA03-la-produccion/material/observatorio-sa3.html"),
     ("sa04", "SA04-el-mercado/material/observatorio-sa4.html"),
     ("sa05", "SA05-crecimiento-y-desarrollo/material/observatorio-sa5.html"),
     ("sa06", "SA06-el-mercado-laboral/material/observatorio-sa6.html"),
+    ("sa08", "SA08-el-dinero/material/observatorio-sa8.html"),
     ("sa09", "SA09-comercio-internacional/material/observatorio-sa9.html"),
+    ("datos", "_base-de-datos/observatorio-datos.html"),
 ]
 
 PANEL = "https://claude.ai/artifact/TMzyeD3wBN9TAyT8vaKeZs"

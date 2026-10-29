@@ -1,0 +1,1648 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<title data-i18n="doc.title">Observatorio · SA 3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 920px) con cuatro herramientas en pestañas; calculadora a dos columnas (cifras y fórmulas | gráficos). Curvas: azul = CMg, ocre = CT y CMe, verde = CVMe, grafito = IT, IMg y precio */
+:root {
+  --bg: #ffffff;
+  --paper: #f6f7f9;
+  --ink: #23262b;
+  --muted: #5d636c;
+  --rule: #d9dde3;
+  --grid: #eceef2;
+  --accent: #2f4f8a;
+  --accent-soft: #edf1f8;
+  --ref: #9aa1ab;
+  --ok: #2d6a4f;
+  --bad: #a4372c;
+  --s1: #2f4f8a;
+  --s2: #b35c1e;
+  --s3: #0f8a6c;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c; --grid: #24282d;
+    --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c; --grid: #24282d;
+  --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+header.top { padding-block: 32px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.15; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 66ch; display: flex; flex-direction: column; gap: 8px; }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button {
+  font: 500 15px var(--font-body); color: var(--muted); background: none; border: 0;
+  padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer;
+  display: flex; gap: 8px; align-items: baseline;
+}
+nav.tabs button .n { font-family: var(--font-mono); font-size: 12px; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button.soon { color: var(--ref); }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.view { display: flex; flex-direction: column; gap: 40px; }
+.block { display: flex; flex-direction: column; gap: 18px; }
+.block + .block { border-top: 2px solid var(--ink); padding-top: 26px; }
+
+/* Controles */
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 24px; }
+.slider { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.slider .lab { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--muted); }
+.slider output { font-family: var(--font-mono); font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
+input[type="text"] { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 8px; width: 100%; min-width: 0; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 14px; color: var(--muted); }
+.params { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 15px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 5px 10px; font-size: 14px; }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* Cifras */
+.stats { display: flex; gap: 14px 30px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.stat b.pos { color: var(--ok); } .stat b.neg { color: var(--bad); }
+.state { display: flex; gap: 10px; align-items: baseline; font-size: 15px; }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; letter-spacing: .03em; }
+.chip.ok { color: var(--ok); } .chip.bad { color: var(--bad); } .chip.mid { color: var(--s2); } .chip.neutral { color: var(--muted); }
+.notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+.notice strong { font-weight: 600; }
+
+/* Gráficos */
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; position: relative; }
+figcaption { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
+.legend i.box { height: 10px; border: 0; }
+.legend i.dash { border-top-style: dashed; }
+.plot { position: relative; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+svg .grid line { stroke: var(--grid); stroke-width: 1; }
+svg .axis line, svg .axis path { stroke: var(--muted); stroke-width: 1; }
+svg text { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+svg text.axl { font-family: var(--font-body); font-size: 13px; }
+svg text.lbl { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+svg text.lbl-in { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+.c-s1 { stroke: var(--s1); } .c-s2 { stroke: var(--s2); } .c-s3 { stroke: var(--s3); } .c-ink { stroke: var(--ink); }
+.curve { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.pline { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.guide { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.a-ok { fill: var(--ok); fill-opacity: .18; stroke: var(--ok); stroke-width: 1; }
+.a-bad { fill: var(--bad); fill-opacity: .16; stroke: var(--bad); stroke-width: 1; }
+.a-cs { fill: var(--s1); fill-opacity: .12; stroke: none; }
+.a-dwl { stroke: var(--bad); stroke-width: 1; }
+.hatch-line { stroke: var(--bad); stroke-width: 1.5; }
+.dot { stroke: var(--bg); stroke-width: 2; }
+.dot.ink { fill: var(--ink); } .dot.s1 { fill: var(--s1); } .dot.ref { fill: var(--ref); }
+.hover-line { stroke: var(--muted); stroke-width: 1; }
+.tip {
+  position: absolute; pointer-events: none; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 6px 9px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,.12); min-width: 140px; z-index: 2;
+  display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums;
+}
+.tip .h { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; }
+.tip .r i { display: inline-block; width: 10px; height: 2px; vertical-align: 4px; margin-right: 6px; }
+
+/* Tablas */
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.pos { color: var(--ok); } td.neg { color: var(--bad); }
+details { border-top: 1px solid var(--rule); padding-top: 10px; }
+summary { cursor: pointer; font-size: 14px; color: var(--accent); font-weight: 500; }
+details[open] summary { margin-bottom: 10px; }
+
+/* Matriz y rondas (oligopolio) */
+table.payoff { table-layout: fixed; min-width: 520px; }
+table.payoff th, table.payoff td { border: 1px solid var(--rule); padding: 10px; vertical-align: top; text-align: left; white-space: normal; }
+table.payoff thead th { background: var(--paper); color: var(--ink); }
+table.payoff tbody th { background: var(--paper); color: var(--ink); width: 10em; }
+table.payoff td .me { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+table.payoff td .other { color: var(--muted); font-size: 14px; }
+table.payoff td.hl { background: var(--accent-soft); }
+.rounds { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.round { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.round .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.round .q { font-size: 14px; color: var(--muted); }
+.bars { display: flex; flex-direction: column; gap: 6px; }
+.bar { display: grid; grid-template-columns: minmax(0, 9.5em) 1fr 3.6em; gap: 8px; align-items: center; font-size: 13px; }
+.track { height: 12px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+.fill.ref { background: var(--ref); } .fill.s2 { background: var(--s2); }
+.bar .val { font-family: var(--font-mono); text-align: right; }
+.empty { border: 1px dashed var(--rule); padding: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.rule { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rule .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.rule .pick { font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 1.1; }
+.rule.win { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+svg .b-cost { fill: var(--ref); fill-opacity: .55; }
+svg .b-cost.lead { fill: var(--s1); fill-opacity: .8; }
+svg .b-mok { fill: var(--ok); fill-opacity: .7; }
+svg .b-mbad { fill: var(--bad); fill-opacity: .7; }
+svg .b-pos { fill: var(--accent); }
+svg .b-neg { fill: var(--bad); }
+svg .zero { stroke: var(--ink); stroke-width: 1; }
+svg text.val { fill: var(--ink); font-size: 13px; }
+svg text.cat { fill: var(--ink); font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.duo-head { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.world { display: flex; flex-direction: column; gap: 14px; border: 1px solid var(--rule); border-radius: 6px; padding: 16px; }
+.world > h3 { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.fstats { display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.fstats b { font-family: var(--font-mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fstats b.pos { color: var(--ok); } .fstats b.neg { color: var(--bad); }
+.share { display: flex; height: 30px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--bg); }
+.share span { display: flex; align-items: center; padding: 0 10px; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; color: #fff; min-width: 0; }
+.share .sa { background: var(--s2); } .share .sb { background: var(--s1); }
+@media (prefers-reduced-motion: no-preference) { .share span { transition: flex-basis .35s ease; } }
+.timeline { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border: 2px solid var(--ink); padding: 12px 14px; border-radius: 6px; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 3; }
+.timeline .slider { flex: 1 1 260px; }
+.timeline .wk { font-family: var(--font-display); font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; min-width: 5.5em; }
+.closed-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--bad); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a, .small a { color: var(--accent); }
+@media (max-width: 640px) {
+  .bar { grid-template-columns: minmax(0, 1fr) 3.6em; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+  .stat b { font-size: 24px; }
+}
+/* Ficha docente: una línea por pestaña */
+.obs-ficha dd { white-space: pre-line; }
+header.top .obs-bar { margin-bottom: 6px; }
+/* Modo proyector: rótulos de los gráficos y cifras más grandes */
+body.obs-proj svg text { font-size: 15px; }
+body.obs-proj svg text.lbl, body.obs-proj svg text.lbl-in, body.obs-proj svg text.val { font-size: 17px; }
+body.obs-proj svg text.axl { font-size: 16px; }
+body.obs-proj svg text.cat { font-size: 20px; }
+body.obs-proj .fstats, body.obs-proj .bar, body.obs-proj table { font-size: 17px; }
+body.obs-proj .share { height: 38px; }
+body.obs-proj .share span { font-size: 17px; }
+body.obs-proj .timeline .wk { font-size: 34px; }
+body.obs-proj .slider .lab, body.obs-proj .slider output { font-size: 18px; }
+body.obs-proj .tip { font-size: 16px; }
+
+/* SA 3: calculadora con resultados y fórmulas, editor de funciones, frontera de posibilidades */
+.calc { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 820px) { .calc { grid-template-columns: minmax(0, 1fr); } }
+.panel { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.inputs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
+.inputs .field.wide { grid-column: 1 / -1; }
+input[type="number"] { font: 16px var(--font-mono); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); padding: 7px 8px; width: 100%; min-width: 0; font-variant-numeric: tabular-nums; }
+.fn { font-family: var(--font-mono) !important; font-size: 16px !important; }
+.results { display: flex; flex-direction: column; border-top: 2px solid var(--ink); }
+.res { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 9px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.res .nm { font-weight: 600; font-size: 15px; }
+.res .fx { grid-column: 1; font-family: var(--font-mono); font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.res .v { grid-column: 2; grid-row: 1 / span 2; font-family: var(--font-display); font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.res .v.pos { color: var(--ok); } .res .v.neg { color: var(--bad); }
+.res.key .v { font-size: 32px; }
+.seg2 { display: inline-flex; border: 1px solid var(--ink); }
+.seg2 button { font: 500 13px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; background: var(--bg); color: var(--ink); border: 0; padding: 8px 12px; cursor: pointer; }
+.seg2 button + button { border-left: 1px solid var(--ink); }
+.seg2 button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.err { color: var(--bad); font-size: 14px; font-family: var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.examples { display: flex; flex-wrap: wrap; gap: 8px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.card { background: var(--paper); border: 1px solid var(--rule); padding: 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.card .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.card .pick { font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 1.1; }
+.card ul { margin: 0; padding-left: 1.1em; font-size: 14px; display: flex; flex-direction: column; gap: 3px; }
+.question { border: 2px solid var(--ink); padding: 14px 16px; font-family: var(--font-read, Georgia, serif); font-size: 18px; }
+.question b { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 4px; }
+.workers { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.worker { border: 1px solid var(--rule); background: var(--paper); padding: 6px 8px; display: grid; grid-template-columns: auto 1fr 1fr; gap: 6px; align-items: center; font-size: 13px; }
+.worker.moved { border-color: var(--s1); box-shadow: inset 3px 0 0 var(--s1); }
+.worker .id { font-family: var(--font-mono); color: var(--muted); }
+.worker input { font: 13px var(--font-mono); width: 100%; padding: 3px 4px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); min-width: 0; }
+.cardlist { font-family: var(--font-mono); font-size: 13px; white-space: pre-wrap; background: var(--paper); border: 1px solid var(--rule); padding: 10px; max-height: 260px; overflow: auto; }
+svg .pt-in { fill: var(--muted); }
+svg .front-old { fill: none; stroke: var(--ref); stroke-width: 1.5; stroke-dasharray: 4 4; }
+svg .front { fill: none; stroke: var(--s1); stroke-width: 2.5; stroke-linejoin: round; }
+svg .front-rand { fill: none; stroke: var(--s2); stroke-width: 1.5; stroke-dasharray: 2 3; }
+svg .gap-ok { stroke: var(--ok); stroke-width: 4; }
+svg .gap-bad { stroke: var(--bad); stroke-width: 4; }
+body.obs-proj .res .v { font-size: 34px; }
+body.obs-proj .res .nm { font-size: 19px; }
+body.obs-proj .res .fx { font-size: 16px; }
+body.obs-proj .question { font-size: 22px; }
+body.obs-proj input[type="number"], body.obs-proj .fn { font-size: 20px !important; }
+
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div id="obs-bar"></div>
+    <span class="eyebrow" data-i18n="hd.eyebrow">Observatorio · SA 3 · La producción</span>
+    <h1 data-i18n="hd.h1">Costes y producción</h1>
+    <p class="lede" data-i18n="hd.lede">Herramientas para proyectar en clase y para que el alumnado pruebe sus propias cifras: cuánto cuesta producir, cuándo se gana dinero, por qué una empresa enorme puede quebrar y cómo se dibuja lo que una economía puede producir.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Herramientas" data-i18n-attr="aria-label:aria.tabs">
+    <button role="tab" id="tab-calc" aria-selected="true" data-view="calc"><span class="n">1</span><span data-i18n="tab.1">Calculadora de costes</span></button>
+    <button role="tab" id="tab-dos" aria-selected="false" data-view="dos"><span class="n">2</span><span data-i18n="tab.2">Dos formas de dibujar los costes</span></button>
+    <button role="tab" id="tab-gm" aria-selected="false" data-view="gm"><span class="n">3</span><span data-i18n="tab.3">General Motors, 2009</span></button>
+    <button role="tab" id="tab-fpp" aria-selected="false" data-view="fpp"><span class="n">4</span><span data-i18n="tab.4">Frontera de posibilidades</span></button>
+  </nav>
+
+  <!-- ===================== 1 · CALCULADORA ===================== -->
+  <section class="view" id="view-calc" role="tabpanel" aria-labelledby="tab-calc">
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="c.eyebrow">1 · Ingresos, costes y beneficio</span>
+        <h2 data-i18n="c.h2">¿Cuándo empieza a ganar dinero una empresa?</h2>
+        <p data-i18n="c.p">Cambia cualquier cifra: los resultados y el gráfico cambian a la vez. La fórmula y el dibujo dicen lo mismo.</p>
+      </div>
+      <div class="actions">
+        <div class="seg2" role="group" aria-label="Modo" data-i18n-attr="aria-label:c.mode">
+          <button type="button" id="m-simple" aria-pressed="true" data-i18n="c.simple">Calculadora</button>
+          <button type="button" id="m-fn" aria-pressed="false" data-i18n="c.fnmode">Escribe tu función</button>
+        </div>
+      </div>
+      <div class="calc">
+        <div class="panel">
+          <div class="inputs" id="simple-in">
+            <div class="field"><label for="c-p" data-i18n="c.price">Precio (€ por unidad)</label><input type="number" id="c-p" value="20" step="0.5" min="0"></div>
+            <div class="field"><label for="c-cf" data-i18n="c.cf">Coste fijo (€)</label><input type="number" id="c-cf" value="200" step="10" min="0"></div>
+            <div class="field"><label for="c-cv" data-i18n="c.cvu">Coste por unidad (€)</label><input type="number" id="c-cv" value="15" step="0.5" min="0"></div>
+            <div class="field"><label for="c-qmax" data-i18n="c.qmax">Unidades como máximo en el gráfico</label><input type="number" id="c-qmax" value="100" step="10" min="1"></div>
+          </div>
+          <div class="panel" id="fn-in" hidden>
+            <div class="field"><label for="f-ct" data-i18n="c.fct">Costes totales: CT(q) =</label><input type="text" id="f-ct" class="fn" value="200 + 15q" spellcheck="false" autocomplete="off"></div>
+            <div class="field"><label for="f-it" data-i18n="c.fit">Ingresos totales: IT(q) =</label><input type="text" id="f-it" class="fn" value="20q" spellcheck="false" autocomplete="off"></div>
+            <div class="field"><label for="f-qmax" data-i18n="c.qmax">Unidades como máximo en el gráfico</label><input type="number" id="f-qmax" value="100" step="1" min="1"></div>
+            <div class="err" id="f-err" aria-live="polite"></div>
+            <p class="small" data-i18n="c.syntax">Se escribe con q: 200 + 15q · 640 + 200q − 40q^2 + 5q^3 · (30 − 0,1q)·q. Valen la coma y el punto decimal.</p>
+            <div class="examples">
+              <button type="button" class="btn quiet small" data-ex="lin" data-i18n="c.ex1">Lineal (Excel)</button>
+              <button type="button" class="btn quiet small" data-ex="u" data-i18n="c.ex2">Curva en U (manual)</button>
+              <button type="button" class="btn quiet small" data-ex="mono" data-i18n="c.ex3">Monopolio</button>
+            </div>
+          </div>
+          <div class="slider">
+            <div class="lab"><label for="c-q" data-i18n="c.q">Unidades vendidas (q)</label><output id="c-q-out" for="c-q"></output></div>
+            <input type="range" id="c-q" min="0" max="100" step="1" value="60">
+          </div>
+          <div class="results" id="c-res" aria-live="polite"></div>
+        </div>
+        <div class="panel">
+          <figure>
+            <figcaption data-i18n="c.ch1">Ingresos y costes totales</figcaption>
+            <div class="legend">
+              <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.it">Ingresos totales (IT)</span></span>
+              <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ct">Costes totales (CT)</span></span>
+              <span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="lg.cf">Coste fijo (CF)</span></span>
+            </div>
+            <div class="plot"><svg class="chart" id="c-tot" role="img" data-i18n-attr="aria-label:c.ch1"></svg><div class="tip" id="c-tot-tip" hidden></div></div>
+          </figure>
+          <figure>
+            <figcaption data-i18n="c.ch2">Por unidad: coste medio, coste marginal e ingreso marginal</figcaption>
+            <div class="legend">
+              <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.cme">Coste medio (CMe)</span></span>
+              <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">Coste marginal (CMg)</span></span>
+              <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.img">Ingreso marginal (IMg)</span></span>
+            </div>
+            <div class="plot"><svg class="chart" id="c-uni" role="img" data-i18n-attr="aria-label:c.ch2"></svg><div class="tip" id="c-uni-tip" hidden></div></div>
+          </figure>
+        </div>
+      </div>
+      <div class="notice" id="c-note"></div>
+      <details>
+        <summary data-i18n="c.table">Ver la tabla y descargarla para Excel</summary>
+        <div class="scroll"><table id="c-table"></table></div>
+        <div class="actions" style="margin-top:10px">
+          <button type="button" class="btn ghost small" id="c-dl" data-i18n="c.dl">Descargar la tabla (Excel)</button>
+          <span class="small" id="c-dl-status" aria-live="polite"></span>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · DOS FORMAS ===================== -->
+  <section class="view" id="view-dos" role="tabpanel" aria-labelledby="tab-dos" hidden>
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="d.eyebrow">2 · Dos supuestos sobre los costes</span>
+        <h2 data-i18n="d.h2">¿Sube el coste de cada unidad más?</h2>
+        <p data-i18n="d.p1">El manual supone rendimientos decrecientes: a partir de cierto punto, cada unidad más cuesta más que la anterior y las curvas tienen forma de U. Otra tradición (Sraffa, Shaikh y los postkeynesianos) observa que en muchas fábricas cada unidad cuesta lo mismo hasta llegar a la capacidad. Las dos empresas tienen el mismo coste fijo, 200 € a la semana.</p>
+      </div>
+      <div class="controls">
+        <div class="slider">
+          <div class="lab"><label for="d-p" data-i18n="d.price">Precio de venta</label><output id="d-p-out" for="d-p"></output></div>
+          <input type="range" id="d-p" min="8" max="32" step="0.5" value="20">
+        </div>
+      </div>
+      <div class="cards" id="d-cards"></div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="d.ch1">Rendimientos decrecientes (curvas en U)</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s1)"></i>CMg</span>
+            <span><i style="border-color:var(--s2)"></i>CMe</span>
+            <span><i style="border-color:var(--s3)"></i>CVMe</span>
+            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.p">Precio</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="d-u" role="img" data-i18n-attr="aria-label:d.ch1"></svg><div class="tip" id="d-u-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="d.ch2">Coste por unidad constante hasta la capacidad</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s1)"></i>CMg = CVMe</span>
+            <span><i style="border-color:var(--s2)"></i>CMe</span>
+            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.p">Precio</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="d-l" role="img" data-i18n-attr="aria-label:d.ch2"></svg><div class="tip" id="d-l-tip" hidden></div></div>
+        </figure>
+      </div>
+      <div class="notice" id="d-note"></div>
+      <details>
+        <summary data-i18n="d.table">Ver las dos tablas de costes</summary>
+        <div class="scroll"><table id="d-table"></table></div>
+      </details>
+      <p class="small" data-i18n="d.src">Supuesto de partida de la segunda empresa: Sraffa (1926), «Las leyes de los rendimientos en condiciones de competencia»; Shaikh, Capitalismo: competencia, conflicto y crisis (FCE, 2023), cap. 7. Cifras inventadas para el aula.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · GENERAL MOTORS ===================== -->
+  <section class="view" id="view-gm" role="tabpanel" aria-labelledby="tab-gm" hidden>
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="g.eyebrow">3 · El peso de los costes fijos</span>
+        <h2 data-i18n="g.h2">¿Cómo puede quebrar una empresa enorme?</h2>
+        <p data-i18n="g.p1">General Motors fue durante décadas la mayor fabricante de coches del mundo. En 2009 sus ventas en Estados Unidos cayeron un 30 % y en junio se declaró en quiebra. Fábricas, plantillas, pensiones y deudas siguen costando lo mismo aunque se vendan menos coches.</p>
+        <p class="small" data-i18n="g.p2">Cifras ilustrativas de una empresa «como GM», no sus cuentas reales: solo la caída del 30 % de 2009 es un dato real.</p>
+      </div>
+      <div class="timeline">
+        <span class="wk" id="g-year">2007</span>
+        <div class="slider">
+          <div class="lab"><label for="g-t" data-i18n="g.year">Año</label><output id="g-t-out" for="g-t"></output></div>
+          <input type="range" id="g-t" min="2005" max="2010" step="1" value="2007">
+        </div>
+        <button type="button" class="btn" id="g-play" data-i18n="g.play">Reproducir</button>
+      </div>
+      <div class="controls">
+        <div class="slider">
+          <div class="lab"><label for="g-cut" data-i18n="g.cut">Reducir costes fijos (cerrar fábricas y marcas)</label><output id="g-cut-out" for="g-cut"></output></div>
+          <input type="range" id="g-cut" min="0" max="40" step="5" value="0">
+        </div>
+      </div>
+      <div class="stats" id="g-stats"></div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="g.ch1">Coste medio por coche según lo que se vende</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.cme">Coste medio (CMe)</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="g.lgv">Coste variable por coche</span></span>
+            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="g.lgp">Precio medio por coche</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="g-cme" role="img" data-i18n-attr="aria-label:g.ch1"></svg><div class="tip" id="g-cme-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="g.ch2">Resultado año a año (miles de millones de $)</figcaption>
+          <div class="legend">
+            <span><i class="box" style="background:var(--ok)"></i><span data-i18n="lg.ben">Beneficio</span></span>
+            <span><i class="box" style="background:var(--bad)"></i><span data-i18n="lg.per">Pérdida</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="g-res" role="img" data-i18n-attr="aria-label:g.ch2"></svg><div class="tip" id="g-res-tip" hidden></div></div>
+        </figure>
+      </div>
+      <div class="question"><b data-i18n="g.qk">Pregunta para la clase</b><span data-i18n="g.q">Si las ventas caen un 30 %, ¿por qué los costes no caen un 30 %? ¿Qué parte de los costes no se puede recortar de un año para otro?</span></div>
+      <p class="small" data-i18n-html="g.src">Fuentes de los datos reales: <a href="https://www.industryweek.com/finance/software-systems/article/21943378/gm-sales-down-30-in-2009" target="_blank" rel="noopener">IndustryWeek, «GM Sales Down 30% in 2009»</a>. GM se acogió al capítulo 11 de la ley de quiebras de EE. UU. el 1 de junio de 2009.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 4 · FRONTERA ===================== -->
+  <section class="view" id="view-fpp" role="tabpanel" aria-labelledby="tab-fpp" hidden>
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="p.eyebrow">4a · La frontera la construye la clase</span>
+        <h2 data-i18n="p.h2">¿Por qué la frontera se curva?</h2>
+        <p data-i18n="p.p1">Cada alumno o alumna es una persona trabajadora que sabe producir dos cosas: alimentos y máquinas, pero no igual de bien. Mueve el deslizador para pasar personas de los alimentos a las máquinas. Primero pasan las que menos alimentos dejan de producir por cada máquina: así la frontera se curva sola.</p>
+      </div>
+      <div class="controls">
+        <div class="field"><label for="p-n" data-i18n="p.n">Personas en la clase</label><input type="number" id="p-n" value="28" min="2" max="60" step="1"></div>
+        <div class="slider">
+          <div class="lab"><label for="p-k" data-i18n="p.k">Personas que fabrican máquinas</label><output id="p-k-out" for="p-k"></output></div>
+          <input type="range" id="p-k" min="0" max="28" step="1" value="0">
+        </div>
+        <div class="actions" style="align-self:end">
+          <label class="check"><input type="checkbox" id="p-rand"> <span data-i18n="p.rand">Repartir al azar</span></label>
+          <button type="button" class="btn quiet small" id="p-new" data-i18n="p.new">Otra clase</button>
+        </div>
+      </div>
+      <div class="stats" id="p-stats"></div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="p.ch1">Frontera de posibilidades de producción</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="p.lgf">Frontera (orden eficiente)</span></span>
+            <span><i class="dash" style="border-color:var(--s2)"></i><span data-i18n="p.lgr">Reparto al azar</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="p-chart" role="img" data-i18n-attr="aria-label:p.ch1"></svg><div class="tip" id="p-chart-tip" hidden></div></div>
+        </figure>
+        <div class="panel">
+          <div class="notice" id="p-note" aria-live="polite"></div>
+          <details>
+            <summary data-i18n="p.cards">Tarjetas del alumnado (se pueden cambiar)</summary>
+            <div class="workers" id="p-workers"></div>
+            <p class="small" style="margin-top:8px" data-i18n="p.cardshelp">Cada tarjeta: alimentos y máquinas que produce esa persona en un día. Lista para copiar e imprimir:</p>
+            <div class="cardlist" id="p-cardlist"></div>
+            <div class="actions" style="margin-top:8px"><button type="button" class="btn ghost small" id="p-copy" data-i18n="p.copy">Copiar la lista</button><span class="small" id="p-copy-status"></span></div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="p2.eyebrow">4b · La frontera se mueve</span>
+        <h2 data-i18n="p2.h2">¿Máquinas hoy o comida hoy?</h2>
+        <p data-i18n="p2.p1">Las máquinas que se fabrican este año hacen más productiva a toda la clase el año siguiente; las que se gastan hay que reponerlas. Elige qué parte del trabajo va a máquinas y añade, si quieres, progreso técnico. Pulsa «Reproducir» para ver diez años.</p>
+      </div>
+      <div class="controls">
+        <div class="slider">
+          <div class="lab"><label for="q-k" data-i18n="p2.k">Personas que fabrican máquinas cada año</label><output id="q-k-out" for="q-k"></output></div>
+          <input type="range" id="q-k" min="0" max="28" step="1" value="7">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="q-ta" data-i18n="p2.ta">Progreso técnico en alimentos (al año)</label><output id="q-ta-out" for="q-ta"></output></div>
+          <input type="range" id="q-ta" min="0" max="10" step="1" value="0">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="q-tm" data-i18n="p2.tm">Progreso técnico en máquinas (al año)</label><output id="q-tm-out" for="q-tm"></output></div>
+          <input type="range" id="q-tm" min="0" max="10" step="1" value="0">
+        </div>
+      </div>
+      <div class="timeline">
+        <span class="wk" id="q-year"></span>
+        <div class="slider">
+          <div class="lab"><label for="q-t" data-i18n="p2.t">Año</label><output id="q-t-out" for="q-t"></output></div>
+          <input type="range" id="q-t" min="0" max="10" step="1" value="0">
+        </div>
+        <button type="button" class="btn" id="q-play" data-i18n="g.play">Reproducir</button>
+      </div>
+      <div class="stats" id="q-stats"></div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="p2.ch1">La frontera, año a año</figcaption>
+          <div class="legend">
+            <span><i class="dash" style="border-color:var(--ref)"></i><span data-i18n="p2.lg0">Año 0</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="p2.lgt">Año elegido</span></span>
+            <span><i class="box" style="background:var(--ink);border-radius:50%"></i><span data-i18n="p2.lgp">Lo que se produce</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="q-chart" role="img" data-i18n-attr="aria-label:p2.ch1"></svg><div class="tip" id="q-chart-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="p2.ch2">Alimentos disponibles cada año</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="p2.lgc">Con el reparto elegido</span></span>
+            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="p2.lgz">Sin fabricar máquinas</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="q-cons" role="img" data-i18n-attr="aria-label:p2.ch2"></svg><div class="tip" id="q-cons-tip" hidden></div></div>
+        </figure>
+      </div>
+      <div class="notice" id="q-note" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-i18n="ft.1">Cifras de los ejemplos inventadas para el aula, salvo las indicadas en la pestaña de General Motors. La calculadora parte del Excel del Tema 3 (coste fijo 200 €, coste por unidad 15 €, precio 20 €).</span>
+  </footer>
+</div>
+
+<script>
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
+  "use strict";
+  const PANEL_URL = "../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
+    }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+</script>
+<script>
+(() => {
+  "use strict";
+  OBS.register({
+    es: {
+      "doc.title": "Observatorio · SA 3",
+      "hd.eyebrow": "Observatorio · SA 3 · La producción",
+      "hd.h1": "Costes y producción",
+      "hd.lede": "Herramientas para proyectar en clase y para que el alumnado pruebe sus propias cifras: cuánto cuesta producir, cuándo se gana dinero, por qué una empresa enorme puede quebrar y cómo se dibuja lo que una economía puede producir.",
+      "aria.tabs": "Herramientas",
+      "tab.1": "Calculadora de costes", "tab.2": "Dos formas de dibujar los costes", "tab.3": "General Motors, 2009", "tab.4": "Frontera de posibilidades",
+      "c.eyebrow": "1 · Ingresos, costes y beneficio",
+      "c.h2": "¿Cuándo empieza a ganar dinero una empresa?",
+      "c.p": "Cambia cualquier cifra: los resultados y el gráfico cambian a la vez. La fórmula y el dibujo dicen lo mismo.",
+      "c.mode": "Modo", "c.simple": "Calculadora", "c.fnmode": "Escribe tu función",
+      "c.price": "Precio (€ por unidad)", "c.cf": "Coste fijo (€)", "c.cvu": "Coste por unidad (€)", "c.qmax": "Unidades como máximo en el gráfico",
+      "c.fct": "Costes totales: CT(q) =", "c.fit": "Ingresos totales: IT(q) =",
+      "c.syntax": "Se escribe con q: 200 + 15q · 640 + 200q − 40q^2 + 5q^3 · (30 − 0,1q)·q. Valen la coma y el punto decimal.",
+      "c.ex1": "Lineal (Excel)", "c.ex2": "Curva en U (manual)", "c.ex3": "Monopolio",
+      "c.q": "Unidades vendidas (q)", "c.units": "{q} unidades",
+      "c.ch1": "Ingresos y costes totales", "c.ch2": "Por unidad: coste medio, coste marginal e ingreso marginal",
+      "c.table": "Ver la tabla y descargarla para Excel", "c.dl": "Descargar la tabla (Excel)",
+      "lg.it": "Ingresos totales (IT)", "lg.ct": "Costes totales (CT)", "lg.cf": "Coste fijo (CF)",
+      "lg.cme": "Coste medio (CMe)", "lg.cmg": "Coste marginal (CMg)", "lg.img": "Ingreso marginal (IMg)", "lg.p": "Precio",
+      "lg.ben": "Beneficio", "lg.per": "Pérdida",
+      "r.it": "Ingresos totales (IT)", "r.cf": "Coste fijo (CF)", "r.cv": "Coste variable (CV)", "r.ct": "Costes totales (CT)",
+      "r.ben": "Beneficio", "r.per": "Pérdida", "r.cme": "Coste medio (CMe)", "r.cmg": "Coste de producir una unidad más (CMg)",
+      "r.be": "Umbral de rentabilidad", "r.max": "Máximo beneficio",
+      "f.it": "P × q = {p} × {q}", "f.cf": "no depende de lo que se produce", "f.cv": "coste por unidad × q = {c} × {q}",
+      "f.ct": "CF + CV = {cf} + {cv}", "f.ben": "IT − CT = {it} − {ct}", "f.cme": "CT ÷ q = {ct} ÷ {q}",
+      "f.cmg": "CT(q + 1) − CT(q): siempre {c} €", "f.be": "CF ÷ (P − coste por unidad) = {cf} ÷ {m}",
+      "f.itfn": "IT({q})", "f.cffn": "CT(0)", "f.cvfn": "CT({q}) − CF", "f.ctfn": "CT({q})", "f.cmgfn": "lo que suma al coste la última unidad",
+      "f.befn": "donde IT = CT", "f.maxfn": "donde IMg = CMg",
+      "v.units": "{q} uds.", "v.none": "no se alcanza", "v.nomax": "sin máximo",
+      "n.simple.ok": "Cada unidad deja **{m} €** por encima de su coste para ir pagando el coste fijo. Hacen falta **{be} unidades** para cubrir los {cf} € de coste fijo: ese es el umbral de rentabilidad. A partir de ahí, cada unidad vendida es beneficio, y no hay un punto en el que convenga parar.",
+      "n.simple.bad": "**El precio no cubre ni el coste de cada unidad** ({c} €): cuanto más vende, más pierde. Nunca llega al umbral de rentabilidad.",
+      "n.fn.max": "El beneficio es máximo en **q ≈ {q}** ({ben}), donde el ingreso marginal es igual al coste marginal (**IMg = CMg**): una unidad más añadiría más coste que ingreso.",
+      "n.fn.edge": "El beneficio **no deja de crecer** hasta el final del gráfico: con estas funciones no hay un punto en el que convenga parar. Pasa cuando el coste de una unidad más no sube.",
+      "n.fn.loss": "Con estas funciones **no hay ninguna cantidad con beneficio**: lo mejor es perder lo menos posible.",
+      "n.fn.be": "Umbral de rentabilidad: **{list}**.",
+      "e.empty": "Escribe una función de q.",
+      "e.char": "Hay un carácter que no entiendo, «{c}», en la posición {p}.",
+      "e.expect": "Falta un número, una q o un paréntesis en la posición {p}.",
+      "e.close": "Falta cerrar un paréntesis «)» en la posición {p}.",
+      "e.extra": "Sobra «{c}» en la posición {p}.",
+      "e.num": "El número de la posición {p} está mal escrito.",
+      "e.nan": "La función no da un número en algunos valores de q (por ejemplo, una división entre cero en q = {q}). Esos puntos no se dibujan.",
+      "e.huge": "Los valores son enormes (más de un billón): revisa la función o reduce las unidades del gráfico.",
+      "e.which": "En {f}: ",
+      "t.q": "q", "t.cf": "CF", "t.cv": "CV", "t.ct": "CT", "t.it": "IT", "t.ben": "Beneficio", "t.cme": "CMe", "t.cmg": "CMg",
+      "ax.q": "Unidades (q)", "ax.eur": "€", "ax.eurU": "€ por unidad",
+      "tip.q": "q = {q}", "tip.be": "Umbral: q = {q}", "tip.max": "Máximo: q = {q}",
+      "lbl.ben": "Beneficio {v}", "lbl.per": "Pérdida {v}", "lbl.be": "Umbral {q}", "lbl.max": "Máximo {q}",
+      "dl.file": "costes-sa3.csv",
+      "d.eyebrow": "2 · Dos supuestos sobre los costes",
+      "d.h2": "¿Sube el coste de cada unidad más?",
+      "d.p1": "El manual supone rendimientos decrecientes: a partir de cierto punto, cada unidad más cuesta más que la anterior y las curvas tienen forma de U. Otra tradición (Sraffa, Shaikh y los postkeynesianos) observa que en muchas fábricas cada unidad cuesta lo mismo hasta llegar a la capacidad. Las dos empresas tienen el mismo coste fijo, 200 € a la semana.",
+      "d.price": "Precio de venta", "d.ch1": "Rendimientos decrecientes (curvas en U)", "d.ch2": "Coste por unidad constante hasta la capacidad",
+      "d.table": "Ver las dos tablas de costes",
+      "d.src": "Supuesto de partida de la segunda empresa: Sraffa (1926), «Las leyes de los rendimientos en condiciones de competencia»; Shaikh, Capitalismo: competencia, conflicto y crisis (FCE, 2023), cap. 7. Cifras inventadas para el aula.",
+      "d.k1": "Rendimientos decrecientes", "d.k2": "Coste constante hasta la capacidad",
+      "d.u.stop": "Se para en {q} unidades", "d.u.none": "No le conviene producir",
+      "d.u.l1": "Produce hasta que el coste marginal iguala al precio (P = CMg).",
+      "d.u.l2": "Umbral de rentabilidad: precio de {p} € (mínimo del coste medio).",
+      "d.u.l3": "Punto de cierre: precio por debajo de {p} € (mínimo del coste variable medio).",
+      "d.u.l4": "Resultado a este precio: {b} a la semana.",
+      "d.l.go": "Quiere vender hasta su capacidad ({cap})", "d.l.none": "No le conviene producir",
+      "d.l.l1": "Cada unidad cuesta {c} €: el coste marginal no sube y nada la frena antes de la capacidad.",
+      "d.l.l2": "Umbral de rentabilidad: vender {q} unidades a este precio.",
+      "d.l.l2b": "A este precio no llega al umbral ni con toda la capacidad.",
+      "d.l.l3": "Punto de cierre: precio por debajo de {c} € (su coste por unidad).",
+      "d.l.l4": "Resultado vendiendo toda la capacidad: {b} a la semana.",
+      "d.note": "En la empresa de curvas en U, **el coste marginal frena la producción**: se para donde una unidad más cuesta lo que vale. En la de coste constante **no hay freno**: su límite son los clientes que consiga, y por eso compite por ellos (pestaña de competencia real de la SA 4).",
+      "d.cap": "capacidad", "d.th.u": "Rendimientos decrecientes", "d.th.l": "Coste constante",
+      "g.eyebrow": "3 · El peso de los costes fijos", "g.h2": "¿Cómo puede quebrar una empresa enorme?",
+      "g.p1": "General Motors fue durante décadas la mayor fabricante de coches del mundo. En 2009 sus ventas en Estados Unidos cayeron un 30 % y en junio se declaró en quiebra. Fábricas, plantillas, pensiones y deudas siguen costando lo mismo aunque se vendan menos coches.",
+      "g.p2": "Cifras ilustrativas de una empresa «como GM», no sus cuentas reales: solo la caída del 30 % de 2009 es un dato real.",
+      "g.year": "Año", "g.play": "Reproducir", "g.pause": "Pausa",
+      "g.cut": "Recorte de costes fijos tras la quiebra (se aplica en 2010)",
+      "g.ch1": "Coste medio por coche según lo que se vende", "g.ch2": "Resultado año a año (miles de millones de $)",
+      "g.lgv": "Coste variable por coche", "g.lgp": "Precio medio por coche",
+      "g.qk": "Pregunta para la clase",
+      "g.q": "Si las ventas caen un 30 %, ¿por qué los costes no caen un 30 %? ¿Qué parte de los costes no se puede recortar de un año para otro?",
+      "g.src": "Fuente del dato real: <a href=\"https://www.industryweek.com/finance/software-systems/article/21943378/gm-sales-down-30-in-2009\" target=\"_blank\" rel=\"noopener\">IndustryWeek, «GM Sales Down 30% in 2009»</a>. GM se acogió al capítulo 11 de la ley de quiebras de EE. UU. el 1 de junio de 2009.",
+      "g.s.sales": "Coches vendidos (millones)", "g.s.cf": "Coste fijo (miles de millones $)", "g.s.cfu": "Coste fijo por coche", "g.s.cme": "Coste medio por coche",
+      "g.s.res": "Resultado (miles de millones $)", "g.ax.q": "Coches vendidos al año (millones)", "g.ax.u": "$ por coche", "g.ax.y": "Año", "g.ax.r": "Miles de millones $",
+      "g.tip.cme": "Coste medio", "g.tip.v": "Coste variable", "g.tip.p": "Precio",
+      "p.eyebrow": "4a · La frontera la construye la clase", "p.h2": "¿Por qué la frontera se curva?",
+      "p.p1": "Cada alumno o alumna es una persona trabajadora que sabe producir dos cosas, alimentos y máquinas, pero no igual de bien. Mueve el deslizador para pasar personas de los alimentos a las máquinas. Primero pasan las que menos alimentos dejan de producir por cada máquina: así la frontera se curva sola.",
+      "p.n": "Personas en la clase", "p.k": "Personas que fabrican máquinas", "p.rand": "Repartir al azar", "p.new": "Otra clase",
+      "p.ch1": "Frontera de posibilidades de producción", "p.lgf": "Frontera (orden eficiente)", "p.lgr": "Reparto al azar",
+      "p.cards": "Tarjetas del alumnado (se pueden cambiar)",
+      "p.cardshelp": "Cada tarjeta: alimentos y máquinas que produce esa persona en un día. Lista para copiar e imprimir:",
+      "p.copy": "Copiar la lista", "p.copied": "Copiada.", "p.copyfail": "Selecciona la lista y cópiala a mano.",
+      "p.card": "Persona {i}: {a} alimentos o {b} máquinas al día",
+      "p.s.food": "Alimentos al día", "p.s.mach": "Máquinas al día", "p.s.oc": "Coste de la última máquina",
+      "p.oc": "{v} alimentos", "p.ax.x": "Máquinas al día", "p.ax.y": "Alimentos al día",
+      "p.n0": "Toda la clase produce alimentos: **{f} alimentos y ninguna máquina**. Mueve el deslizador.",
+      "p.neff": "La última persona que ha pasado a las máquinas (n.º {i}) fabrica {b} y deja de producir {a} alimentos: **cada máquina cuesta {oc} alimentos**. Las primeras en pasar costaban menos. Por eso la frontera se curva: el coste de oportunidad crece.",
+      "p.nrand": "Con este reparto al azar el punto queda **por dentro de la frontera**: con las mismas personas se podrían tener **{x} alimentos más** sin perder ninguna máquina. Eso es producir de forma ineficiente.",
+      "p.nall": "Toda la clase fabrica máquinas: **{m} máquinas y ningún alimento**.",
+      "p.tip": "{k} personas en máquinas",
+      "p2.eyebrow": "4b · La frontera se mueve", "p2.h2": "¿Máquinas hoy o comida hoy?",
+      "p2.p1": "Las máquinas que se fabrican este año hacen más productiva a toda la clase el año siguiente; las que se gastan hay que reponerlas. Elige qué parte del trabajo va a máquinas y añade, si quieres, progreso técnico. Pulsa «Reproducir» para ver diez años.",
+      "p2.k": "Personas que fabrican máquinas cada año", "p2.ta": "Progreso técnico en alimentos (al año)", "p2.tm": "Progreso técnico en máquinas (al año)",
+      "p2.t": "Año", "p2.year": "Año {t}",
+      "p2.ch1": "La frontera, año a año", "p2.lg0": "Año 0", "p2.lgt": "Año elegido", "p2.lgp": "Lo que se produce",
+      "p2.ch2": "Alimentos disponibles cada año", "p2.lgc": "Con el reparto elegido", "p2.lgz": "Sin fabricar máquinas",
+      "p2.s.food": "Alimentos al día", "p2.s.mach": "Máquinas al día", "p2.s.cap": "Máquinas en uso (año 0 = 100)", "p2.s.prod": "Productividad (año 0 = 100)",
+      "p2.up": "Se fabrican **más máquinas de las que se gastan**: el capital crece y la frontera se desplaza hacia fuera año tras año. A cambio, hoy hay menos alimentos que si nadie fabricara máquinas.",
+      "p2.down": "Se fabrican **menos máquinas de las que se gastan**: las máquinas se van gastando y la frontera encoge. Hoy hay más alimentos, pero cada año menos.",
+      "p2.flat": "Se repone **justo lo que se gasta**: sin progreso técnico, la frontera no se mueve.",
+      "p2.tech": "El progreso técnico desplaza la frontera hacia fuera aunque no se acumulen más máquinas{bias}.",
+      "p2.bias": "; si mejora más un bien, la frontera se estira hacia ese lado",
+      "p2.zero": "Fíjate en la línea discontinua: sin fabricar máquinas hay más alimentos al principio, pero las máquinas se gastan y la producción cae.",
+      "p2.tip": "Año {t}",
+      "ft.1": "Cifras de los ejemplos inventadas para el aula, salvo las indicadas en la pestaña de General Motors. La calculadora parte del Excel del Tema 3 (coste fijo 200 €, coste por unidad 15 €, precio 20 €)."
+    },
+    va: {
+      "doc.title": "Observatori · SA 3",
+      "hd.eyebrow": "Observatori · SA 3 · La producció",
+      "hd.h1": "Costos i producció",
+      "hd.lede": "Ferramentes per a projectar en classe i perquè l'alumnat prove les seues pròpies xifres: quant costa produir, quan es guanyen diners, per què una empresa enorme pot fer fallida i com es dibuixa el que una economia pot produir.",
+      "aria.tabs": "Ferramentes",
+      "tab.1": "Calculadora de costos", "tab.2": "Dues maneres de dibuixar els costos", "tab.3": "General Motors, 2009", "tab.4": "Frontera de possibilitats",
+      "c.eyebrow": "1 · Ingressos, costos i benefici",
+      "c.h2": "Quan comença a guanyar diners una empresa?",
+      "c.p": "Canvia qualsevol xifra: els resultats i el gràfic canvien alhora. La fórmula i el dibuix diuen el mateix.",
+      "c.mode": "Mode", "c.simple": "Calculadora", "c.fnmode": "Escriu la teua funció",
+      "c.price": "Preu (€ per unitat)", "c.cf": "Cost fix (€)", "c.cvu": "Cost per unitat (€)", "c.qmax": "Unitats com a màxim en el gràfic",
+      "c.fct": "Costos totals: CT(q) =", "c.fit": "Ingressos totals: IT(q) =",
+      "c.syntax": "S'escriu amb q: 200 + 15q · 640 + 200q − 40q^2 + 5q^3 · (30 − 0,1q)·q. Valen la coma i el punt decimal.",
+      "c.ex1": "Lineal (Excel)", "c.ex2": "Corba en U (manual)", "c.ex3": "Monopoli",
+      "c.q": "Unitats venudes (q)", "c.units": "{q} unitats",
+      "c.ch1": "Ingressos i costos totals", "c.ch2": "Per unitat: cost mitjà, cost marginal i ingrés marginal",
+      "c.table": "Veure la taula i descarregar-la per a Excel", "c.dl": "Descarregar la taula (Excel)",
+      "lg.it": "Ingressos totals (IT)", "lg.ct": "Costos totals (CT)", "lg.cf": "Cost fix (CF)",
+      "lg.cme": "Cost mitjà (CMe)", "lg.cmg": "Cost marginal (CMg)", "lg.img": "Ingrés marginal (IMg)", "lg.p": "Preu",
+      "lg.ben": "Benefici", "lg.per": "Pèrdua",
+      "r.it": "Ingressos totals (IT)", "r.cf": "Cost fix (CF)", "r.cv": "Cost variable (CV)", "r.ct": "Costos totals (CT)",
+      "r.ben": "Benefici", "r.per": "Pèrdua", "r.cme": "Cost mitjà (CMe)", "r.cmg": "Cost de produir una unitat més (CMg)",
+      "r.be": "Llindar de rendibilitat", "r.max": "Benefici màxim",
+      "f.it": "P × q = {p} × {q}", "f.cf": "no depén del que es produïx", "f.cv": "cost per unitat × q = {c} × {q}",
+      "f.ct": "CF + CV = {cf} + {cv}", "f.ben": "IT − CT = {it} − {ct}", "f.cme": "CT ÷ q = {ct} ÷ {q}",
+      "f.cmg": "CT(q + 1) − CT(q): sempre {c} €", "f.be": "CF ÷ (P − cost per unitat) = {cf} ÷ {m}",
+      "f.itfn": "IT({q})", "f.cffn": "CT(0)", "f.cvfn": "CT({q}) − CF", "f.ctfn": "CT({q})", "f.cmgfn": "el que suma al cost l'última unitat",
+      "f.befn": "on IT = CT", "f.maxfn": "on IMg = CMg",
+      "v.units": "{q} u.", "v.none": "no s'arriba", "v.nomax": "sense màxim",
+      "n.simple.ok": "Cada unitat deixa **{m} €** per damunt del seu cost per a anar pagant el cost fix. Calen **{be} unitats** per a cobrir els {cf} € de cost fix: eixe és el llindar de rendibilitat. A partir d'ací, cada unitat venuda és benefici, i no hi ha cap punt en què convinga parar.",
+      "n.simple.bad": "**El preu no cobrix ni el cost de cada unitat** ({c} €): com més ven, més perd. No arriba mai al llindar de rendibilitat.",
+      "n.fn.max": "El benefici és màxim en **q ≈ {q}** ({ben}), on l'ingrés marginal és igual al cost marginal (**IMg = CMg**): una unitat més afegiria més cost que ingrés.",
+      "n.fn.edge": "El benefici **no deixa de créixer** fins al final del gràfic: amb estes funcions no hi ha cap punt en què convinga parar. Passa quan el cost d'una unitat més no puja.",
+      "n.fn.loss": "Amb estes funcions **no hi ha cap quantitat amb benefici**: el millor és perdre el mínim possible.",
+      "n.fn.be": "Llindar de rendibilitat: **{list}**.",
+      "e.empty": "Escriu una funció de q.",
+      "e.char": "Hi ha un caràcter que no entenc, «{c}», en la posició {p}.",
+      "e.expect": "Falta un número, una q o un parèntesi en la posició {p}.",
+      "e.close": "Falta tancar un parèntesi «)» en la posició {p}.",
+      "e.extra": "Sobra «{c}» en la posició {p}.",
+      "e.num": "El número de la posició {p} està mal escrit.",
+      "e.nan": "La funció no dona un número en alguns valors de q (per exemple, una divisió entre zero en q = {q}). Eixos punts no es dibuixen.",
+      "e.huge": "Els valors són enormes (més d'un bilió): revisa la funció o reduïx les unitats del gràfic.",
+      "e.which": "En {f}: ",
+      "t.q": "q", "t.cf": "CF", "t.cv": "CV", "t.ct": "CT", "t.it": "IT", "t.ben": "Benefici", "t.cme": "CMe", "t.cmg": "CMg",
+      "ax.q": "Unitats (q)", "ax.eur": "€", "ax.eurU": "€ per unitat",
+      "tip.q": "q = {q}", "tip.be": "Llindar: q = {q}", "tip.max": "Màxim: q = {q}",
+      "lbl.ben": "Benefici {v}", "lbl.per": "Pèrdua {v}", "lbl.be": "Llindar {q}", "lbl.max": "Màxim {q}",
+      "dl.file": "costos-sa3.csv",
+      "d.eyebrow": "2 · Dos supòsits sobre els costos",
+      "d.h2": "Puja el cost de cada unitat més?",
+      "d.p1": "El manual suposa rendiments decreixents: a partir d'un cert punt, cada unitat més costa més que l'anterior i les corbes tenen forma de U. Una altra tradició (Sraffa, Shaikh i els postkeynesians) observa que en moltes fàbriques cada unitat costa el mateix fins a arribar a la capacitat. Les dues empreses tenen el mateix cost fix, 200 € a la setmana.",
+      "d.price": "Preu de venda", "d.ch1": "Rendiments decreixents (corbes en U)", "d.ch2": "Cost per unitat constant fins a la capacitat",
+      "d.table": "Veure les dues taules de costos",
+      "d.src": "Supòsit de partida de la segona empresa: Sraffa (1926), «Les lleis dels rendiments en condicions de competència»; Shaikh, Capitalismo: competencia, conflicto y crisis (FCE, 2023), cap. 7. Xifres inventades per a l'aula.",
+      "d.k1": "Rendiments decreixents", "d.k2": "Cost constant fins a la capacitat",
+      "d.u.stop": "Para en {q} unitats", "d.u.none": "No li convé produir",
+      "d.u.l1": "Produïx fins que el cost marginal iguala el preu (P = CMg).",
+      "d.u.l2": "Llindar de rendibilitat: preu de {p} € (mínim del cost mitjà).",
+      "d.u.l3": "Punt de tancament: preu per davall de {p} € (mínim del cost variable mitjà).",
+      "d.u.l4": "Resultat a este preu: {b} a la setmana.",
+      "d.l.go": "Vol vendre fins a la seua capacitat ({cap})", "d.l.none": "No li convé produir",
+      "d.l.l1": "Cada unitat costa {c} €: el cost marginal no puja i res no la frena abans de la capacitat.",
+      "d.l.l2": "Llindar de rendibilitat: vendre {q} unitats a este preu.",
+      "d.l.l2b": "A este preu no arriba al llindar ni amb tota la capacitat.",
+      "d.l.l3": "Punt de tancament: preu per davall de {c} € (el seu cost per unitat).",
+      "d.l.l4": "Resultat venent tota la capacitat: {b} a la setmana.",
+      "d.note": "En l'empresa de corbes en U, **el cost marginal frena la producció**: para on una unitat més costa el que val. En la de cost constant **no hi ha fre**: el seu límit són els clients que aconseguisca, i per això competix per ells (pestanya de competència real de la SA 4).",
+      "d.cap": "capacitat", "d.th.u": "Rendiments decreixents", "d.th.l": "Cost constant",
+      "g.eyebrow": "3 · El pes dels costos fixos", "g.h2": "Com pot fer fallida una empresa enorme?",
+      "g.p1": "General Motors va ser durant dècades la major fabricant de cotxes del món. En 2009 les seues vendes als Estats Units van caure un 30 % i al juny es va declarar en fallida. Fàbriques, plantilles, pensions i deutes continuen costant el mateix encara que es venguen menys cotxes.",
+      "g.p2": "Xifres il·lustratives d'una empresa «com GM», no els seus comptes reals: només la caiguda del 30 % de 2009 és una dada real.",
+      "g.year": "Any", "g.play": "Reproduir", "g.pause": "Pausa",
+      "g.cut": "Retall de costos fixos després de la fallida (s'aplica en 2010)",
+      "g.ch1": "Cost mitjà per cotxe segons el que es ven", "g.ch2": "Resultat any a any (milers de milions de $)",
+      "g.lgv": "Cost variable per cotxe", "g.lgp": "Preu mitjà per cotxe",
+      "g.qk": "Pregunta per a la classe",
+      "g.q": "Si les vendes cauen un 30 %, per què els costos no cauen un 30 %? Quina part dels costos no es pot retallar d'un any per a un altre?",
+      "g.src": "Font de la dada real: <a href=\"https://www.industryweek.com/finance/software-systems/article/21943378/gm-sales-down-30-in-2009\" target=\"_blank\" rel=\"noopener\">IndustryWeek, «GM Sales Down 30% in 2009»</a>. GM es va acollir al capítol 11 de la llei de fallides dels EUA l'1 de juny de 2009.",
+      "g.s.sales": "Cotxes venuts (milions)", "g.s.cf": "Cost fix (milers de milions $)", "g.s.cfu": "Cost fix per cotxe", "g.s.cme": "Cost mitjà per cotxe",
+      "g.s.res": "Resultat (milers de milions $)", "g.ax.q": "Cotxes venuts a l'any (milions)", "g.ax.u": "$ per cotxe", "g.ax.y": "Any", "g.ax.r": "Milers de milions $",
+      "g.tip.cme": "Cost mitjà", "g.tip.v": "Cost variable", "g.tip.p": "Preu",
+      "p.eyebrow": "4a · La frontera la construïx la classe", "p.h2": "Per què la frontera es corba?",
+      "p.p1": "Cada alumne o alumna és una persona treballadora que sap produir dues coses, aliments i màquines, però no igual de bé. Mou el control lliscant per a passar persones dels aliments a les màquines. Primer passen les que menys aliments deixen de produir per cada màquina: així la frontera es corba sola.",
+      "p.n": "Persones de la classe", "p.k": "Persones que fabriquen màquines", "p.rand": "Repartir a l'atzar", "p.new": "Una altra classe",
+      "p.ch1": "Frontera de possibilitats de producció", "p.lgf": "Frontera (ordre eficient)", "p.lgr": "Repartiment a l'atzar",
+      "p.cards": "Targetes de l'alumnat (es poden canviar)",
+      "p.cardshelp": "Cada targeta: aliments i màquines que produïx eixa persona en un dia. Llista per a copiar i imprimir:",
+      "p.copy": "Copiar la llista", "p.copied": "Copiada.", "p.copyfail": "Selecciona la llista i copia-la a mà.",
+      "p.card": "Persona {i}: {a} aliments o {b} màquines al dia",
+      "p.s.food": "Aliments al dia", "p.s.mach": "Màquines al dia", "p.s.oc": "Cost de l'última màquina",
+      "p.oc": "{v} aliments", "p.ax.x": "Màquines al dia", "p.ax.y": "Aliments al dia",
+      "p.n0": "Tota la classe produïx aliments: **{f} aliments i cap màquina**. Mou el control lliscant.",
+      "p.neff": "L'última persona que ha passat a les màquines (núm. {i}) en fabrica {b} i deixa de produir {a} aliments: **cada màquina costa {oc} aliments**. Les primeres a passar costaven menys. Per això la frontera es corba: el cost d'oportunitat creix.",
+      "p.nrand": "Amb este repartiment a l'atzar el punt queda **per dins de la frontera**: amb les mateixes persones es podrien tindre **{x} aliments més** sense perdre cap màquina. Això és produir de manera ineficient.",
+      "p.nall": "Tota la classe fabrica màquines: **{m} màquines i cap aliment**.",
+      "p.tip": "{k} persones en màquines",
+      "p2.eyebrow": "4b · La frontera es mou", "p2.h2": "Màquines hui o menjar hui?",
+      "p2.p1": "Les màquines que es fabriquen enguany fan més productiva tota la classe l'any següent; les que es gasten cal reposar-les. Tria quina part del treball va a màquines i afig, si vols, progrés tècnic. Prem «Reproduir» per a veure deu anys.",
+      "p2.k": "Persones que fabriquen màquines cada any", "p2.ta": "Progrés tècnic en aliments (a l'any)", "p2.tm": "Progrés tècnic en màquines (a l'any)",
+      "p2.t": "Any", "p2.year": "Any {t}",
+      "p2.ch1": "La frontera, any a any", "p2.lg0": "Any 0", "p2.lgt": "Any triat", "p2.lgp": "El que es produïx",
+      "p2.ch2": "Aliments disponibles cada any", "p2.lgc": "Amb el repartiment triat", "p2.lgz": "Sense fabricar màquines",
+      "p2.s.food": "Aliments al dia", "p2.s.mach": "Màquines al dia", "p2.s.cap": "Màquines en ús (any 0 = 100)", "p2.s.prod": "Productivitat (any 0 = 100)",
+      "p2.up": "Es fabriquen **més màquines de les que es gasten**: el capital creix i la frontera es desplaça cap a fora any rere any. A canvi, hui hi ha menys aliments que si ningú no fabricara màquines.",
+      "p2.down": "Es fabriquen **menys màquines de les que es gasten**: les màquines es van gastant i la frontera s'encongix. Hui hi ha més aliments, però cada any menys.",
+      "p2.flat": "Es reposa **just el que es gasta**: sense progrés tècnic, la frontera no es mou.",
+      "p2.tech": "El progrés tècnic desplaça la frontera cap a fora encara que no s'acumulen més màquines{bias}.",
+      "p2.bias": "; si millora més un bé, la frontera s'estira cap a eixe costat",
+      "p2.zero": "Fixa't en la línia discontínua: sense fabricar màquines hi ha més aliments al principi, però les màquines es gasten i la producció cau.",
+      "p2.tip": "Any {t}",
+      "ft.1": "Xifres dels exemples inventades per a l'aula, llevat de les indicades en la pestanya de General Motors. La calculadora partix de l'Excel del Tema 3 (cost fix 200 €, cost per unitat 15 €, preu 20 €)."
+    }
+  });
+  const FICHA = {
+    sesiones: { es: "Por definir.", va: "Per definir." },
+    saberes: [
+      { code: "A3", es: "La modelización como herramienta para entender las interacciones económicas.", va: "La modelització com a ferramenta per a entendre les interaccions econòmiques." },
+      { code: "A4", es: "La frontera de posibilidades de producción.", va: "La frontera de possibilitats de producció." },
+      { code: "A6", es: "La función de producción: costes, ingresos y beneficios.", va: "La funció de producció: costos, ingressos i beneficis." },
+      { code: "A10", es: "El análisis marginal.", va: "L'anàlisi marginal." },
+      { code: "A14", es: "La eficiencia. Productividad.", va: "L'eficiència. Productivitat." },
+      { code: "B3", es: "El análisis coste-beneficio.", va: "L'anàlisi cost-benefici." }
+    ],
+    criterios: [
+      { code: "1.2", es: "Comprender el problema de la escasez identificando los motivos y comparando, de manera justificada, diferentes estrategias económicas de resolución del mismo.", va: "Comprendre el problema de l'escassetat identificant els motius i comparant, de manera justificada, diferents estratègies econòmiques de resolució d'este." },
+      { code: "1.3", es: "Conocer los procesos que intervienen en la toma de las decisiones económicas de manera individual y colectiva, analizando el impacto que tienen en la sociedad.", va: "Conéixer els processos que intervenen en la presa de les decisions econòmiques de manera individual i col·lectiva, analitzant l'impacte que tenen en la societat." },
+      { code: "6.1", es: "Plantear soluciones socioeconómicas que respondan a necesidades individuales y colectivas investigando y explorando la realidad económica teniendo en cuenta diversos factores y aplicando las herramientas propias del ámbito de la economía.", va: "Plantejar solucions socioeconòmiques que responguen a necessitats individuals i col·lectives, investigant i explorant la realitat econòmica, tenint en compte diversos factors i aplicant les ferramentes pròpies de l'àmbit de l'economia." }
+    ],
+    uso: {
+      es: "1 · Calculadora de costes (A6, A10, B3): ingresos, costes, beneficio, coste medio y marginal y umbral de rentabilidad; el alumnado puede escribir sus propias funciones y descargar la tabla para Excel.\n2 · Dos formas de dibujar los costes (A3, A6, A10): rendimientos decrecientes frente a coste constante hasta la capacidad.\n3 · General Motors, 2009 (A6, A14): el peso de los costes fijos cuando se hunden las ventas.\n4 · Frontera de posibilidades (A4, A14): la construye la clase con sus tarjetas; coste de oportunidad creciente, ineficiencia, acumulación de capital y progreso técnico.",
+      va: "1 · Calculadora de costos (A6, A10, B3): ingressos, costos, benefici, cost mitjà i marginal i llindar de rendibilitat; l'alumnat pot escriure les seues pròpies funcions i descarregar la taula per a Excel.\n2 · Dues maneres de dibuixar els costos (A3, A6, A10): rendiments decreixents davant de cost constant fins a la capacitat.\n3 · General Motors, 2009 (A6, A14): el pes dels costos fixos quan s'enfonsen les vendes.\n4 · Frontera de possibilitats (A4, A14): la construïx la classe amb les seues targetes; cost d'oportunitat creixent, ineficiència, acumulació de capital i progrés tècnic."
+    }
+  };
+  const $ = id => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const t = (k, v) => OBS.t(k, v);
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const fmtA = v => { if (!isFinite(v)) return "—"; const a = Math.abs(v); return v.toLocaleString("es-ES", { maximumFractionDigits: a >= 100 ? 0 : a >= 10 ? 1 : 2 }); };
+  const eur = v => fmtA(v) + " €";
+  const signed = (v, unit = " €") => !isFinite(v) ? "—" : (v > 0.0005 ? "+" : v < -0.0005 ? "−" : "") + fmtA(Math.abs(v)) + unit;
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const sv = (tag, attrs = {}, text) => { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
+  const rich = (k, v) => { const parts = t(k, v).split(/\*\*(.+?)\*\*/); return el("span", {}, parts.map((p, i) => i % 2 ? el("strong", { text: p }) : p)); };
+  const lab = x => typeof x === "function" ? x() : x;
+  let downloads = null;
+  (async () => { try { if (window.claude && window.claude.use) downloads = await window.claude.use("downloads"); } catch { downloads = null; } })();
+
+  // ---------- Pestañas ----------
+  const VIEWS = ["calc", "dos", "gm", "fpp"];
+  function show(view) {
+    if (!VIEWS.includes(view)) view = "calc";
+    for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+  // ---------- Motor de gráficos (el de la SA 4, con eje y que puede empezar en negativo) ----------
+  const M = { l: 66, r: 22, t: 14, b: 50 };
+  let clipN = 0;
+  function frame(svg, o) {
+    svg.replaceChildren();
+    const W = o.w || 560, H = o.h || 360;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const pw = W - M.l - M.r, ph = H - M.t - M.b;
+    const x0 = o.xMin || 0, y0 = o.yMin || 0;
+    const sx = x => M.l + ((x - x0) / (o.xMax - x0)) * pw;
+    const sy = y => M.t + ph - ((y - y0) / (o.yMax - y0)) * ph;
+    const defs = sv("defs"); const cid = "clip" + (++clipN);
+    const cp = sv("clipPath", { id: cid }); cp.append(sv("rect", { x: M.l, y: M.t, width: pw, height: ph })); defs.append(cp); svg.append(defs);
+    const grid = sv("g", { class: "grid" }), axis = sv("g", { class: "axis" });
+    o.yTicks.forEach(v => { grid.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(v), y2: sy(v) })); svg.append(sv("text", { x: M.l - 8, y: sy(v) + 4, "text-anchor": "end" }, (o.yFmt || fmtA)(v))); });
+    o.xTicks.forEach(v => svg.append(sv("text", { x: sx(v), y: H - M.b + 18, "text-anchor": "middle" }, (o.xFmt || fmtA)(v))));
+    const base = y0 <= 0 && o.yMax >= 0 ? 0 : y0;
+    axis.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(base), y2: sy(base) }));
+    axis.append(sv("line", { x1: M.l, x2: M.l, y1: M.t, y2: M.t + ph }));
+    svg.append(grid, axis);
+    svg.append(sv("text", { x: (M.l + W - M.r) / 2, y: H - 8, "text-anchor": "middle", class: "axl" }, lab(o.xLabel)));
+    svg.append(sv("text", { x: 14, y: M.t + ph / 2, "text-anchor": "middle", class: "axl", transform: `rotate(-90 14 ${M.t + ph / 2})` }, lab(o.yLabel)));
+    const plot = sv("g", { "clip-path": `url(#${cid})` }), top = sv("g");
+    svg.append(plot, top);
+    return { sx, sy, plot, top, o, pw, ph, W, H, x0, y0 };
+  }
+  const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  function line(F, pts, cls, extra = {}) {
+    // corta la línea donde hay huecos (valores no finitos)
+    let d = "", pen = false;
+    for (const [x, y] of pts) {
+      if (!isFinite(y)) { pen = false; continue; }
+      const lo = F.o.yMin || 0, span = F.o.yMax - lo, yy = clamp(y, lo - span * 2, F.o.yMax + span * 2);
+      d += (pen ? "L" : "M") + F.sx(x).toFixed(1) + " " + F.sy(yy).toFixed(1); pen = true;
+    }
+    if (d) F.plot.append(sv("path", { d, class: cls, ...extra }));
+  }
+  function curve(F, fn, x0, x1, cls, steps = 200, extra = {}) {
+    const pts = []; for (let i = 0; i <= steps; i++) { const x = x0 + (x1 - x0) * i / steps; pts.push([x, fn(x)]); }
+    line(F, pts, "curve " + cls, extra);
+  }
+  function poly(F, pts, cls) { F.plot.append(sv("path", { d: path(pts.map(p => [F.sx(p[0]), F.sy(p[1])])) + " Z", class: cls })); }
+  function label(F, x, y, text, anchor = "start", cls = "lbl", dy = -8) {
+    const px = clamp(F.sx(x), M.l + 4, F.W - M.r - 4), py = clamp(F.sy(y) + dy, M.t + 12, F.H - M.b - 4);
+    F.top.append(sv("text", { x: px, y: py, "text-anchor": anchor, class: cls }, text));
+  }
+  function hover(svg, tip, F, rows) {
+    const ln = sv("line", { class: "hover-line", y1: M.t, y2: M.t + F.ph, visibility: "hidden" });
+    svg.append(ln);
+    const hit = sv("rect", { x: M.l, y: M.t, width: F.pw, height: F.ph, fill: "transparent" });
+    svg.append(hit);
+    hit.addEventListener("pointermove", e => {
+      const r = svg.getBoundingClientRect(); const vx = (e.clientX - r.left) * F.W / r.width;
+      const x = clamp(F.x0 + (vx - M.l) / F.pw * (F.o.xMax - F.x0), F.x0, F.o.xMax);
+      ln.setAttribute("x1", F.sx(x)); ln.setAttribute("x2", F.sx(x)); ln.setAttribute("visibility", "visible");
+      const data = rows(x);
+      tip.replaceChildren(el("span", { class: "h", text: data.head }), ...data.rows.map(([c, k, v]) => el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
+      tip.hidden = false;
+      const px = e.clientX - r.left, tw = tip.offsetWidth;
+      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px";
+      tip.style.top = Math.max(0, e.clientY - r.top - 20) + "px";
+    });
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; ln.setAttribute("visibility", "hidden"); });
+  }
+  function nice(lo, hi, n = 5) {
+    if (!isFinite(lo) || !isFinite(hi)) { lo = 0; hi = 1; }
+    if (hi - lo < 1e-9) { hi = lo + (Math.abs(lo) || 1); }
+    const raw = (hi - lo) / n, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+    const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+    const a = Math.floor(lo / step) * step, b = Math.ceil(hi / step) * step, ticks = [];
+    for (let v = a; v <= b + step * 1e-6; v += step) ticks.push(Math.abs(v) < step * 1e-9 ? 0 : v);
+    return { lo: a, hi: b, ticks };
+  }
+  const C = { s1: "var(--s1)", s2: "var(--s2)", s3: "var(--s3)", ink: "var(--ink)", ok: "var(--ok)", bad: "var(--bad)", muted: "var(--muted)" };
+
+  // =====================================================================
+  // Analizador de expresiones propio (sin eval ni Function)
+  // Gramática: expr = term (("+"|"−") term)* ; term = unary (("*"|"×"|"·"|"/"|implícito) unary)* ;
+  //            unary = ("+"|"−") unary | power ; power = primary ("^" unary)? ; primary = número | q | "(" expr ")"
+  // =====================================================================
+  function parseFn(src) {
+    const toks = []; let i = 0; const s = String(src);
+    const err = (key, vars) => { const e = new Error(key); e.key = key; e.vars = vars; e.pos = vars.p - 1; throw e; };
+    while (i < s.length) {
+      const ch = s[i];
+      if (/\s/.test(ch)) { i++; continue; }
+      if (/[0-9.,]/.test(ch)) {
+        const st = i; let txt = "";
+        while (i < s.length && /[0-9.,]/.test(s[i])) txt += s[i++];
+        const norm = txt.replace(",", ".");
+        if (!/^(\d+(\.\d*)?|\.\d+)$/.test(norm)) err("e.num", { p: st + 1 });
+        toks.push({ t: "num", v: parseFloat(norm), pos: st }); continue;
+      }
+      if (ch === "q" || ch === "Q") { toks.push({ t: "q", pos: i++ }); continue; }
+      if ("+-−–".includes(ch)) { toks.push({ t: "op", v: ch === "+" ? "+" : "-", pos: i++ }); continue; }
+      if ("*×·⋅".includes(ch)) { toks.push({ t: "op", v: "*", pos: i++ }); continue; }
+      if ("/÷:".includes(ch)) { toks.push({ t: "op", v: "/", pos: i++ }); continue; }
+      if (ch === "^") { toks.push({ t: "op", v: "^", pos: i++ }); continue; }
+      if (ch === "²" || ch === "³") { toks.push({ t: "op", v: "^", pos: i }); toks.push({ t: "num", v: ch === "²" ? 2 : 3, pos: i++ }); continue; }
+      if (ch === "(" || ch === "[") { toks.push({ t: "(", pos: i++ }); continue; }
+      if (ch === ")" || ch === "]") { toks.push({ t: ")", pos: i++ }); continue; }
+      err("e.char", { c: ch, p: i + 1 });
+    }
+    if (!toks.length) { const e = new Error("e.empty"); e.key = "e.empty"; e.vars = {}; e.pos = 0; throw e; }
+    let k = 0;
+    const peek = () => toks[k];
+    const endPos = () => s.length + 1;
+    const startsPrimary = tk => tk && (tk.t === "num" || tk.t === "q" || tk.t === "(");
+    function expr() {
+      let f = term();
+      while (peek() && peek().t === "op" && (peek().v === "+" || peek().v === "-")) {
+        const op = toks[k++].v, a = f, b = term();
+        f = op === "+" ? (q => a(q) + b(q)) : (q => a(q) - b(q));
+      }
+      return f;
+    }
+    function term() {
+      let f = unary();
+      for (;;) {
+        const tk = peek();
+        if (tk && tk.t === "op" && (tk.v === "*" || tk.v === "/")) {
+          k++; const a = f, b = unary();
+          f = tk.v === "*" ? (q => a(q) * b(q)) : (q => a(q) / b(q));
+        } else if (startsPrimary(tk)) {
+          const a = f, b = unary(); f = q => a(q) * b(q);
+        } else break;
+      }
+      return f;
+    }
+    function unary() {
+      const tk = peek();
+      if (tk && tk.t === "op" && (tk.v === "+" || tk.v === "-")) { k++; const a = unary(); return tk.v === "-" ? (q => -a(q)) : a; }
+      return power();
+    }
+    function power() {
+      const base = primary();
+      const tk = peek();
+      if (tk && tk.t === "op" && tk.v === "^") { k++; const ex = unary(); return q => Math.pow(base(q), ex(q)); }
+      return base;
+    }
+    function primary() {
+      const tk = peek();
+      if (!tk) err("e.expect", { p: endPos() });
+      if (tk.t === "num") { k++; const v = tk.v; return () => v; }
+      if (tk.t === "q") { k++; return q => q; }
+      if (tk.t === "(") {
+        k++; const f = expr();
+        if (!peek() || peek().t !== ")") err("e.close", { p: peek() ? peek().pos + 1 : endPos() });
+        k++; return f;
+      }
+      err("e.expect", { p: tk.pos + 1 });
+    }
+    const f = expr();
+    if (k < toks.length) { const tk = toks[k]; err(tk.t === ")" ? "e.extra" : "e.expect", { c: s[tk.pos], p: tk.pos + 1 }); }
+    return f;
+  }
+  const fnError = (e, which, src) => {
+    const msg = t("e.which", { f: which }) + t(e.key || "e.expect", e.vars || {});
+    return e.key === "e.empty" ? msg : msg + "\n" + src + "\n" + " ".repeat(Math.max(0, Math.min(e.pos, src.length))) + "^";
+  };
+
+  // =====================================================================
+  // 1 · CALCULADORA
+  // =====================================================================
+  let mode = "simple";
+  const EXAMPLES = {
+    lin: { ct: "200 + 15q", it: "20q", qmax: 100 },
+    u: { ct: "640 + 200q - 40q^2 + 5q^3", it: "320q", qmax: 8 },
+    mono: { ct: "200 + 15q", it: "(50 - 0,2q)·q", qmax: 200 }
+  };
+  function model() {
+    if (mode === "simple") {
+      const P = +$("c-p").value || 0, CF = Math.max(0, +$("c-cf").value || 0), c = Math.max(0, +$("c-cv").value || 0);
+      const qmax = Math.max(1, Math.round(+$("c-qmax").value || 100));
+      return { ok: true, simple: true, P, CF, c, qmax, CT: q => CF + c * q, IT: q => P * q, errs: [] };
+    }
+    const errs = []; let CT = null, IT = null;
+    const sct = $("f-ct").value, sit = $("f-it").value;
+    try { CT = parseFn(sct); } catch (e) { errs.push(fnError(e, "CT", sct)); }
+    try { IT = parseFn(sit); } catch (e) { errs.push(fnError(e, "IT", sit)); }
+    const qmax = Math.max(0.1, +$("f-qmax").value || 10);
+    return { ok: !errs.length, simple: false, CT, IT, qmax, errs };
+  }
+  function analyse(m) {
+    const N = 600, h = m.qmax / 4000, qs = [];
+    for (let i = 0; i <= N; i++) qs.push(m.qmax * i / N);
+    const ct = qs.map(m.CT), it = qs.map(m.IT), ben = qs.map((q, i) => it[i] - ct[i]);
+    const der = (f, q) => q - h < 0 ? (f(q + h) - f(q)) / h : (f(q + h) - f(q - h)) / (2 * h);
+    const cmg = qs.map(q => der(m.CT, q)), img = qs.map(q => der(m.IT, q));
+    const cme = qs.map((q, i) => q > 0 ? ct[i] / q : NaN);
+    let nanAt = null, huge = false;
+    qs.forEach((q, i) => { if (!isFinite(ct[i]) || !isFinite(it[i])) { if (nanAt == null) nanAt = q; } if ((isFinite(ct[i]) && Math.abs(ct[i]) > 1e12) || (isFinite(it[i]) && Math.abs(it[i]) > 1e12)) huge = true; });
+    const bisect = (f, a, b) => { let fa = f(a); for (let j = 0; j < 40; j++) { const mid = (a + b) / 2, fm = f(mid); if ((fm < 0) === (fa < 0)) { a = mid; fa = fm; } else b = mid; } return (a + b) / 2; };
+    const prof = q => m.IT(q) - m.CT(q);
+    const bes = [];
+    for (let i = 1; i <= N; i++) { if (!isFinite(ben[i - 1]) || !isFinite(ben[i]) || qs[i] <= 0) continue; if (ben[i] === 0) { bes.push(qs[i]); continue; } if (ben[i - 1] !== 0 && qs[i - 1] > 0 && (ben[i - 1] < 0) !== (ben[i] < 0)) bes.push(bisect(prof, qs[i - 1], qs[i])); }
+    let bi = -1; for (let i = 1; i <= N; i++) if (isFinite(ben[i]) && (bi < 0 || ben[i] > ben[bi])) bi = i;
+    let qmaxB = bi >= 0 ? qs[bi] : NaN;
+    if (bi > 0 && bi < N) { let a = qs[bi - 1], b = qs[bi + 1]; for (let j = 0; j < 60; j++) { const m1 = a + (b - a) / 3, m2 = b - (b - a) / 3; if (prof(m1) < prof(m2)) a = m1; else b = m2; } qmaxB = (a + b) / 2; }
+    const interior = bi > 0 && bi < N;
+    return { qs, ct, it, ben, cmg, img, cme, bes, qmaxB, benMax: prof(qmaxB), interior, nanAt, huge, der };
+  }
+  const resRow = (nameKey, fx, val, cls = "", key = false) => el("div", { class: "res" + (key ? " key" : "") }, el("span", { class: "nm", text: t(nameKey) }), el("span", { class: "fx", text: fx }), el("span", { class: "v" + (cls ? " " + cls : ""), text: val }));
+  function renderCalc() {
+    const m = model();
+    $("simple-in").hidden = mode !== "simple"; $("fn-in").hidden = mode === "simple";
+    $("m-simple").setAttribute("aria-pressed", String(mode === "simple")); $("m-fn").setAttribute("aria-pressed", String(mode !== "simple"));
+    const qIn = $("c-q");
+    const qmax = m.qmax;
+    qIn.max = String(qmax); qIn.step = String(m.simple || qmax >= 50 ? 1 : qmax / 100);
+    if (+qIn.value > qmax) qIn.value = String(qmax);
+    const q = +qIn.value;
+    $("c-q-out").textContent = t("c.units", { q: fmtA(q) });
+    $("f-err").textContent = m.errs.join("\n\n");
+    if (!m.ok) {
+      $("c-res").replaceChildren(); $("c-note").replaceChildren(); ["c-tot", "c-uni"].forEach(id => $(id).replaceChildren()); $("c-table").replaceChildren();
+      return;
+    }
+    const A = analyse(m);
+    const warn = [];
+    if (A.nanAt != null) warn.push(t("e.nan", { q: fmtA(A.nanAt) }));
+    if (A.huge) warn.push(t("e.huge"));
+    if (!m.simple) $("f-err").textContent = warn.join("\n");
+    const CTq = m.CT(q), ITq = m.IT(q), CF = m.CT(0), CV = CTq - CF, B = ITq - CTq, CMe = q > 0 ? CTq / q : NaN;
+    const CMgq = m.simple ? m.c : m.CT(q + 1) - CTq;
+    // Resultados con su fórmula
+    const rows = [];
+    if (m.simple) {
+      const mrg = m.P - m.c, be = mrg > 0 ? m.CF / mrg : Infinity;
+      rows.push(resRow("r.it", t("f.it", { p: fmtA(m.P), q: fmtA(q) }), eur(ITq)));
+      rows.push(resRow("r.cf", t("f.cf"), eur(m.CF)));
+      rows.push(resRow("r.cv", t("f.cv", { c: fmtA(m.c), q: fmtA(q) }), eur(CV)));
+      rows.push(resRow("r.ct", t("f.ct", { cf: fmtA(m.CF), cv: fmtA(CV) }), eur(CTq)));
+      rows.push(resRow(B >= 0 ? "r.ben" : "r.per", t("f.ben", { it: fmtA(ITq), ct: fmtA(CTq) }), signed(B), B >= 0 ? "pos" : "neg", true));
+      rows.push(resRow("r.cme", t("f.cme", { ct: fmtA(CTq), q: fmtA(q) }), eur(CMe)));
+      rows.push(resRow("r.cmg", t("f.cmg", { c: fmtA(m.c) }), eur(m.c)));
+      rows.push(resRow("r.be", mrg > 0 ? t("f.be", { cf: fmtA(m.CF), m: fmtA(mrg) }) : "P ≤ " + fmtA(m.c) + " €", isFinite(be) ? t("v.units", { q: fmtA(be) }) : t("v.none")));
+      $("c-note").replaceChildren(mrg > 0 ? rich("n.simple.ok", { m: fmtA(mrg), be: fmtA(be), cf: fmtA(m.CF) }) : rich("n.simple.bad", { c: fmtA(m.c) }));
+    } else {
+      rows.push(resRow("r.it", t("f.itfn", { q: fmtA(q) }), eur(ITq)));
+      rows.push(resRow("r.cf", t("f.cffn"), eur(CF)));
+      rows.push(resRow("r.cv", t("f.cvfn", { q: fmtA(q) }), eur(CV)));
+      rows.push(resRow("r.ct", t("f.ctfn", { q: fmtA(q) }), eur(CTq)));
+      rows.push(resRow(B >= 0 ? "r.ben" : "r.per", t("f.ben", { it: fmtA(ITq), ct: fmtA(CTq) }), signed(B), B >= 0 ? "pos" : "neg", true));
+      rows.push(resRow("r.cme", t("f.cme", { ct: fmtA(CTq), q: fmtA(q) }), eur(CMe)));
+      rows.push(resRow("r.cmg", t("f.cmgfn"), eur(A.der(m.CT, q))));
+      rows.push(resRow("r.be", t("f.befn"), A.bes.length ? A.bes.map(b => t("v.units", { q: fmtA(b) })).join(" · ") : t("v.none")));
+      rows.push(resRow("r.max", A.interior ? t("f.maxfn") : "—", A.interior ? t("v.units", { q: fmtA(A.qmaxB) }) : t("v.nomax")));
+      const notes = [];
+      if (!A.interior && A.benMax > 0) notes.push(rich("n.fn.edge"));
+      else if (A.benMax <= 0) notes.push(rich("n.fn.loss"));
+      else notes.push(rich("n.fn.max", { q: fmtA(A.qmaxB), ben: signed(A.benMax) }));
+      if (A.bes.length) notes.push(rich("n.fn.be", { list: A.bes.map(b => "q ≈ " + fmtA(b)).join(", ") }));
+      $("c-note").replaceChildren(...notes);
+    }
+    $("c-res").replaceChildren(...rows);
+
+    // Gráfico de totales
+    const fin = arr => arr.filter(v => isFinite(v));
+    const allT = fin([...A.ct, ...A.it, 0]);
+    const yT = nice(Math.min(...allT), Math.max(...allT));
+    const xT = nice(0, qmax);
+    const F = frame($("c-tot"), { xMax: qmax, xTicks: xT.ticks.filter(v => v <= qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
+    line(F, A.qs.map(x => [x, CF]), "curve", { style: "stroke:var(--muted);stroke-dasharray:5 4" });
+    line(F, A.qs.map((x, i) => [x, A.ct[i]]), "curve c-s2");
+    line(F, A.qs.map((x, i) => [x, A.it[i]]), "curve c-ink");
+    label(F, qmax * 0.02, CF, "CF", "start", "lbl", -6);
+    if (isFinite(ITq) && isFinite(CTq)) {
+      F.plot.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(Math.min(0, yT.lo) < 0 ? 0 : yT.lo), y2: F.sy(Math.min(ITq, CTq)), class: "guide" }));
+      F.top.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(ITq), y2: F.sy(CTq), class: B >= 0 ? "gap-ok" : "gap-bad" }));
+      F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(ITq), r: 5, class: "dot ink" }));
+      F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(CTq), r: 5, class: "dot", style: "fill:var(--s2)" }));
+      label(F, q, (ITq + CTq) / 2, t(B >= 0 ? "lbl.ben" : "lbl.per", { v: signed(B) }), q > qmax * 0.6 ? "end" : "start", "lbl", 4);
+    }
+    A.bes.forEach(b => { const y = m.CT(b); F.top.append(sv("circle", { cx: F.sx(b), cy: F.sy(y), r: 6, class: "dot", style: "fill:var(--accent)" })); label(F, b, y, t("lbl.be", { q: fmtA(b) }), "end", "lbl", -10); });
+    const itE = A.it[A.it.length - 1], ctE = A.ct[A.ct.length - 1];
+    label(F, qmax * 0.97, itE, "IT", "end", "lbl", itE >= ctE ? -10 : 20);
+    label(F, qmax * 0.97, ctE, "CT", "end", "lbl", ctE > itE ? -10 : 20);
+    hover($("c-tot"), $("c-tot-tip"), F, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.ink, "IT", eur(m.IT(x))], [C.s2, "CT", eur(m.CT(x))], [B >= 0 ? C.ok : C.bad, t("t.ben"), signed(m.IT(x) - m.CT(x))]] }));
+
+    // Gráfico por unidad
+    const from = Math.floor(A.qs.length * 0.12);
+    const uvals = fin([...A.cme.slice(from), ...A.cmg, ...A.img]).sort((a, b) => a - b);
+    const hiU = uvals.length ? uvals[Math.floor(uvals.length * 0.97)] : 1;
+    const yU = nice(Math.min(0, uvals[0] ?? 0), hiU * 1.1);
+    const G = frame($("c-uni"), { xMax: qmax, xTicks: xT.ticks.filter(v => v <= qmax + 1e-9), yMin: yU.lo, yMax: yU.hi, yTicks: yU.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") });
+    line(G, A.qs.map((x, i) => [x, A.img[i]]), "pline");
+    line(G, A.qs.map((x, i) => [x, A.cme[i]]), "curve c-s2");
+    line(G, A.qs.map((x, i) => [x, A.cmg[i]]), "curve c-s1");
+    const mgE = A.cmg[A.cmg.length - 1], meE = A.cme[A.cme.length - 1];
+    label(G, qmax * 0.97, mgE, "CMg", "end", "lbl", mgE > meE ? -10 : 20);
+    label(G, qmax * 0.97, meE, "CMe", "end", "lbl", meE >= mgE ? -10 : 20);
+    label(G, qmax * 0.02, A.img[1], "IMg", "start", "lbl", -8);
+    G.plot.append(sv("line", { x1: G.sx(q), x2: G.sx(q), y1: G.sy(yU.lo), y2: G.sy(yU.hi), class: "guide" }));
+    if (!m.simple && A.interior) { const yq = A.der(m.CT, A.qmaxB); G.top.append(sv("circle", { cx: G.sx(A.qmaxB), cy: G.sy(yq), r: 6, class: "dot", style: "fill:var(--accent)" })); label(G, A.qmaxB, yq, t("lbl.max", { q: fmtA(A.qmaxB) }), "start", "lbl", -10); }
+    hover($("c-uni"), $("c-uni-tip"), G, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.s2, "CMe", x > 0 ? eur(m.CT(x) / x) : "—"], [C.s1, "CMg", eur(A.der(m.CT, x))], [C.ink, "IMg", eur(A.der(m.IT, x))]] }));
+
+    // Tabla
+    const step = m.simple ? Math.max(1, Math.round(qmax / 10)) : qmax / 10;
+    const tq = []; for (let v = 0; v <= qmax + 1e-9; v += step) tq.push(+v.toFixed(6));
+    tableRows = tq.map(x => { const ctx = m.CT(x), itx = m.IT(x), cf = m.CT(0); return [x, cf, ctx - cf, ctx, itx, itx - ctx, x > 0 ? ctx / x : NaN, m.simple ? m.c : A.der(m.CT, x)]; });
+    const head = ["t.q", "t.cf", "t.cv", "t.ct", "t.it", "t.ben", "t.cme", "t.cmg"].map(k => t(k));
+    $("c-table").replaceChildren(el("thead", {}, el("tr", {}, head.map(h => el("th", { text: h })))),
+      el("tbody", {}, tableRows.map(r => el("tr", {}, r.map((v, j) => el("td", { class: j === 5 ? (v >= 0 ? "pos" : "neg") : null, text: j === 5 ? signed(v, "") : fmtA(v) }))))));
+  }
+  let tableRows = [];
+  $("c-dl").addEventListener("click", async () => {
+    const head = ["t.q", "t.cf", "t.cv", "t.ct", "t.it", "t.ben", "t.cme", "t.cmg"].map(k => t(k));
+    const num = v => isFinite(v) ? String(Math.round(v * 1000) / 1000).replace(".", ",") : "";
+    const csv = OBS.csv([head, ...tableRows.map(r => r.map(num))]);
+    $("c-dl-status").textContent = await OBS.download(t("dl.file"), csv, "text/csv;charset=utf-8", { downloads });
+  });
+  ["c-p", "c-cf", "c-cv", "c-qmax", "f-qmax", "c-q"].forEach(id => $(id).addEventListener("input", renderCalc));
+  ["f-ct", "f-it"].forEach(id => $(id).addEventListener("input", renderCalc));
+  $("m-simple").addEventListener("click", () => { mode = "simple"; $("c-q").value = "60"; renderCalc(); });
+  $("m-fn").addEventListener("click", () => { mode = "fn"; renderCalc(); });
+  document.querySelectorAll("[data-ex]").forEach(b => b.addEventListener("click", () => {
+    const ex = EXAMPLES[b.dataset.ex]; $("f-ct").value = ex.ct; $("f-it").value = ex.it; $("f-qmax").value = ex.qmax;
+    $("c-q").value = String(ex.qmax / 2); renderCalc();
+  }));
+
+  // =====================================================================
+  // 2 · DOS FORMAS DE DIBUJAR LOS COSTES
+  // =====================================================================
+  const U = {
+    CT: q => 200 + 20 * q - 0.3 * q * q + 0.0025 * q ** 3,
+    CMg: q => 20 - 0.6 * q + 0.0075 * q * q,
+    CVMe: q => 20 - 0.3 * q + 0.0025 * q * q,
+    CMe: q => q > 0 ? 200 / q + 20 - 0.3 * q + 0.0025 * q * q : Infinity,
+    q: P => P < 11 ? 0 : (0.6 + Math.sqrt(0.36 - 0.03 * (20 - P))) / 0.015
+  };
+  let U_MIN_CME = Infinity, U_Q_MIN = 0;
+  for (let q = 1; q <= 120; q += 0.01) { const v = U.CMe(q); if (v < U_MIN_CME) { U_MIN_CME = v; U_Q_MIN = q; } }
+  const L = { F: 200, c: 15, cap: 100, CT: q => 200 + 15 * q, CMe: q => q > 0 ? 200 / q + 15 : Infinity };
+  function renderDos() {
+    const P = +$("d-p").value;
+    $("d-p-out").textContent = fmtA(P) + " €";
+    const ax = { w: 520, h: 340, xMax: 120, yMax: 40, xTicks: [0, 20, 40, 60, 80, 100, 120], yTicks: [0, 10, 20, 30, 40], xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") };
+    // Empresa en U
+    const qu = U.q(P), bu = qu > 0 ? P * qu - U.CT(qu) : -200;
+    const F = frame($("d-u"), ax);
+    curve(F, U.CVMe, 0, 120, "c-s3"); curve(F, U.CMe, 4, 120, "c-s2"); curve(F, U.CMg, 0, 120, "c-s1");
+    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(120), y1: F.sy(P), y2: F.sy(P), class: "pline" }));
+    label(F, 2, P, "P = " + fmtA(P) + " €", "start");
+    label(F, 103, U.CMg(103), "CMg", "end"); label(F, 120, U.CMe(120), "CMe", "end", "lbl", 18); label(F, 120, U.CVMe(120), "CVMe", "end", "lbl", 18);
+    if (qu > 0) {
+      const ac = U.CMe(qu);
+      poly(F, [[0, Math.min(P, ac)], [qu, Math.min(P, ac)], [qu, Math.max(P, ac)], [0, Math.max(P, ac)]], P >= ac ? "a-ok" : "a-bad");
+      F.top.append(sv("circle", { cx: F.sx(qu), cy: F.sy(P), r: 6, class: "dot s1" }));
+    }
+    F.top.append(sv("circle", { cx: F.sx(60), cy: F.sy(11), r: 4, class: "dot", style: "fill:var(--s3)" }));
+    F.top.append(sv("circle", { cx: F.sx(U_Q_MIN), cy: F.sy(U_MIN_CME), r: 4, class: "dot", style: "fill:var(--s2)" }));
+    hover($("d-u"), $("d-u-tip"), F, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.s1, "CMg", eur(U.CMg(x))], [C.s2, "CMe", x > 1 ? eur(U.CMe(x)) : "—"], [C.s3, "CVMe", eur(U.CVMe(x))]] }));
+    // Empresa de coste constante
+    const be = P > L.c ? L.F / (P - L.c) : Infinity, bl = P > L.c ? P * L.cap - L.CT(L.cap) : -200;
+    const G = frame($("d-l"), ax);
+    curve(G, L.CMe, 4, 120, "c-s2");
+    G.plot.append(sv("path", { d: path([[G.sx(0), G.sy(L.c)], [G.sx(L.cap), G.sy(L.c)]]), class: "curve c-s1" }));
+    G.plot.append(sv("path", { d: path([[G.sx(L.cap), G.sy(L.c)], [G.sx(L.cap), G.sy(40)]]), class: "curve c-s1", "stroke-dasharray": "4 4" }));
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(120), y1: G.sy(P), y2: G.sy(P), class: "pline" }));
+    label(G, 2, P, "P = " + fmtA(P) + " €", "start");
+    label(G, L.cap, 36, t("d.cap"), "start", "lbl", 0);
+    label(G, L.cap - 2, L.c, "CMg = CVMe = 15 €", "end", "lbl", 18); label(G, 120, L.CMe(120), "CMe", "end", "lbl", -8);
+    if (P > L.c) {
+      const ac = L.CMe(L.cap);
+      poly(G, [[0, Math.min(P, ac)], [L.cap, Math.min(P, ac)], [L.cap, Math.max(P, ac)], [0, Math.max(P, ac)]], P >= ac ? "a-ok" : "a-bad");
+      G.top.append(sv("circle", { cx: G.sx(L.cap), cy: G.sy(P), r: 6, class: "dot s1" }));
+      if (be <= 120) G.top.append(sv("circle", { cx: G.sx(be), cy: G.sy(P), r: 5, class: "dot", style: "fill:var(--accent)" }));
+    }
+    hover($("d-l"), $("d-l-tip"), G, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.s1, "CMg", x <= L.cap ? eur(L.c) : "—"], [C.s2, "CMe", x > 1 ? eur(L.CMe(x)) : "—"]] }));
+    // Tarjetas
+    const card = (k, pick, items) => el("div", { class: "card" }, el("span", { class: "k", text: k }), el("span", { class: "pick", text: pick }), el("ul", {}, items.map(x => el("li", { text: x }))));
+    $("d-cards").replaceChildren(
+      card(t("d.k1"), qu > 0 ? t("d.u.stop", { q: fmtA(qu) }) : t("d.u.none"), [t("d.u.l1"), t("d.u.l2", { p: fmtA(U_MIN_CME) }), t("d.u.l3", { p: fmtA(11) }), t("d.u.l4", { b: signed(bu) })]),
+      card(t("d.k2"), P > L.c ? t("d.l.go", { cap: L.cap }) : t("d.l.none"), [t("d.l.l1", { c: fmtA(L.c) }), be <= L.cap ? t("d.l.l2", { q: fmtA(Math.ceil(be)) }) : t("d.l.l2b"), t("d.l.l3", { c: fmtA(L.c) }), t("d.l.l4", { b: signed(bl) })]));
+    $("d-note").replaceChildren(rich("d.note"));
+    // Tabla
+    const head = el("tr", {}, el("th", { text: "q" }), ["CT", "CMe", "CVMe", "CMg"].map(h => el("th", { text: t("d.th.u") + " · " + h })), ["CT", "CMe", "CMg"].map(h => el("th", { text: t("d.th.l") + " · " + h })));
+    const rows = []; for (let q = 0; q <= 120; q += 10) rows.push(el("tr", {}, el("td", { text: fmt(q) }),
+      [U.CT(q), q ? U.CMe(q) : NaN, U.CVMe(q), U.CMg(q)].map(v => el("td", { text: fmtA(v) })),
+      [q <= L.cap ? L.CT(q) : NaN, q && q <= L.cap ? L.CMe(q) : NaN, q <= L.cap ? L.c : NaN].map(v => el("td", { text: fmtA(v) }))));
+    $("d-table").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
+  }
+  $("d-p").addEventListener("input", renderDos);
+
+  // =====================================================================
+  // 3 · GENERAL MOTORS (cifras ilustrativas; caída real del 30 % en 2009)
+  // =====================================================================
+  const GM_YEARS = [2005, 2006, 2007, 2008, 2009, 2010];
+  const GM_IDX = [118, 108, 100, 77, 54, 60]; // 2009 = 2008 × 0,70
+  const GM = { base: 4.0, CF: 24, price: 25000, v: 18000 };
+  function gmYear(i, cut) {
+    const sales = GM.base * GM_IDX[i] / 100; // millones de coches
+    const cf = GM.CF * (GM_YEARS[i] >= 2010 ? 1 - cut : 1); // miles de millones $
+    const cfu = cf * 1e9 / (sales * 1e6), cme = cfu + GM.v;
+    const res = sales * 1e6 * (GM.price - GM.v) / 1e9 - cf;
+    return { year: GM_YEARS[i], sales, cf, cfu, cme, res };
+  }
+  let gmTimer = null;
+  function renderGM() {
+    const yr = +$("g-t").value, i = GM_YEARS.indexOf(yr), cut = +$("g-cut").value / 100;
+    $("g-year").textContent = String(yr); $("g-t-out").textContent = String(yr);
+    $("g-cut-out").textContent = fmt(cut * 100) + " %";
+    $("g-play").textContent = t(gmTimer ? "g.pause" : "g.play");
+    const all = GM_YEARS.map((_, j) => gmYear(j, cut)), d = all[i];
+    const stat = (v, k, cls) => el("div", { class: "stat" }, el("b", { class: cls || null, text: v }), el("span", { text: t(k) }));
+    $("g-stats").replaceChildren(
+      stat(fmt(d.sales, 2), "g.s.sales"), stat(fmt(d.cf, 1), "g.s.cf"), stat(fmt(d.cfu) + " $", "g.s.cfu"), stat(fmt(d.cme) + " $", "g.s.cme"),
+      stat(signed(d.res, ""), "g.s.res", d.res >= 0 ? "pos" : "neg"));
+    // Coste medio según ventas
+    const cfNow = d.cf;
+    const F = frame($("g-cme"), { w: 520, h: 340, xMin: 1.5, xMax: 5, xTicks: [2, 3, 4, 5], yMin: 15000, yMax: 35000, yTicks: [15000, 20000, 25000, 30000, 35000], yFmt: v => fmt(v), xLabel: () => t("g.ax.q"), yLabel: () => t("g.ax.u") });
+    curve(F, s => cfNow * 1e9 / (s * 1e6) + GM.v, 1.5, 5, "c-s2");
+    F.plot.append(sv("line", { x1: F.sx(1.5), x2: F.sx(5), y1: F.sy(GM.v), y2: F.sy(GM.v), class: "curve c-s1" }));
+    F.plot.append(sv("line", { x1: F.sx(1.5), x2: F.sx(5), y1: F.sy(GM.price), y2: F.sy(GM.price), class: "pline" }));
+    all.forEach((a, j) => {
+      const cur = j === i, y = cfNow * 1e9 / (a.sales * 1e6) + GM.v;
+      if (a.sales < 1.5 || a.sales > 5) return;
+      F.top.append(sv("circle", { cx: F.sx(a.sales), cy: F.sy(y), r: cur ? 7 : 4, class: "dot", style: cur ? "fill:var(--accent)" : "fill:var(--ref)" }));
+      if (cur) label(F, a.sales, y, String(a.year), a.sales > 4 ? "end" : "start", "lbl", -12);
+    });
+    label(F, 5, GM.price, t("g.tip.p"), "end", "lbl", -6); label(F, 5, GM.v, t("g.tip.v"), "end", "lbl", -6);
+    hover($("g-cme"), $("g-cme-tip"), F, s => ({ head: fmt(s, 2) + " M", rows: [[C.s2, t("g.tip.cme"), fmt(cfNow * 1e9 / (s * 1e6) + GM.v) + " $"], [C.s1, t("g.tip.v"), fmt(GM.v) + " $"], [C.ink, t("g.tip.p"), fmt(GM.price) + " $"]] }));
+    // Resultado año a año (barras desde cero)
+    const vals = all.map(a => a.res), yR = nice(Math.min(0, ...vals), Math.max(0, ...vals));
+    const G = frame($("g-res"), { w: 520, h: 340, xMin: 0, xMax: 6, xTicks: [], yMin: yR.lo, yMax: yR.hi, yTicks: yR.ticks, xLabel: () => t("g.ax.y"), yLabel: () => t("g.ax.r") });
+    all.forEach((a, j) => {
+      const x = j + 0.5, w = 0.6, y0 = G.sy(0), y1 = G.sy(a.res);
+      G.top.append(sv("rect", { x: G.sx(x - w / 2), y: Math.min(y0, y1), width: G.sx(x + w / 2) - G.sx(x - w / 2), height: Math.max(1, Math.abs(y1 - y0) - 1), style: (a.res >= 0 ? "fill:var(--ok)" : "fill:var(--bad)") + (j === i ? "" : ";fill-opacity:.45") }));
+      G.top.append(sv("text", { x: G.sx(x), y: G.H - M.b + 18, "text-anchor": "middle", style: j === i ? "font-weight:700;fill:var(--ink)" : null }, String(a.year)));
+      G.top.append(sv("text", { x: G.sx(x), y: a.res >= 0 ? y1 - 6 : y1 + 16, "text-anchor": "middle", class: "val" }, signed(a.res, "")));
+    });
+    hover($("g-res"), $("g-res-tip"), G, x => { const a = all[clamp(Math.floor(x), 0, 5)]; return { head: String(a.year), rows: [[a.res >= 0 ? C.ok : C.bad, t("g.s.res"), signed(a.res, "")], [C.s2, t("g.s.sales"), fmt(a.sales, 2)]] }; });
+  }
+  function gmStop() { if (gmTimer) { clearInterval(gmTimer); gmTimer = null; } $("g-play").textContent = t("g.play"); }
+  $("g-play").addEventListener("click", () => {
+    if (gmTimer) { gmStop(); return; }
+    if (+$("g-t").value >= 2010) $("g-t").value = "2005";
+    gmTimer = setInterval(() => { const v = +$("g-t").value; if (v >= 2010) { gmStop(); renderGM(); return; } $("g-t").value = String(v + 1); renderGM(); }, 1100);
+    renderGM();
+  });
+  $("g-t").addEventListener("input", () => { gmStop(); renderGM(); });
+  $("g-cut").addEventListener("input", renderGM);
+
+  // =====================================================================
+  // 4 · FRONTERA DE POSIBILIDADES DE PRODUCCIÓN
+  // =====================================================================
+  let seed = 20261029, workers = [];
+  const rng = s => () => (s = (s * 16807) % 2147483647) / 2147483647;
+  function makeWorkers(n) {
+    const r = rng(seed);
+    workers = Array.from({ length: n }, (_, i) => ({ id: i + 1, a: 3 + Math.floor(r() * 8), b: 1 + Math.floor(r() * 6) }));
+    randOrder = shuffle(workers.map((_, i) => i), rng(seed + 7));
+  }
+  const shuffle = (arr, r) => { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; };
+  let randOrder = [];
+  const effOrder = () => workers.map((w, i) => i).sort((x, y) => workers[x].a / workers[x].b - workers[y].a / workers[y].b || workers[x].id - workers[y].id);
+  function path2(order, fa = 1, fb = 1) {
+    const totA = workers.reduce((s, w) => s + w.a, 0); const pts = [{ k: 0, food: totA * fa, mach: 0 }];
+    let food = totA, mach = 0;
+    order.forEach((idx, j) => { food -= workers[idx].a; mach += workers[idx].b; pts.push({ k: j + 1, food: food * fa, mach: mach * fb, w: workers[idx] }); });
+    return pts;
+  }
+  function foodOnFrontier(eff, mach) {
+    for (let j = 1; j < eff.length; j++) if (eff[j].mach >= mach - 1e-9) { const a = eff[j - 1], b = eff[j]; const tt = b.mach === a.mach ? 1 : (mach - a.mach) / (b.mach - a.mach); return a.food + (b.food - a.food) * tt; }
+    return 0;
+  }
+  function renderFPP() {
+    const n = workers.length, k = clamp(+$("p-k").value, 0, n), rand = $("p-rand").checked;
+    $("p-k").max = String(n); $("p-k-out").textContent = String(k);
+    const eff = path2(effOrder()), rnd = path2(randOrder);
+    const cur = (rand ? rnd : eff)[k];
+    const lastW = cur.w;
+    const stat = (v, kk) => el("div", { class: "stat" }, el("b", { text: v }), el("span", { text: t(kk) }));
+    $("p-stats").replaceChildren(stat(fmt(cur.food), "p.s.food"), stat(fmt(cur.mach), "p.s.mach"), stat(lastW ? t("p.oc", { v: fmt(lastW.a / lastW.b, 2) }) : "—", "p.s.oc"));
+    const xm = eff[eff.length - 1].mach, ym = eff[0].food;
+    const xT = nice(0, xm), yT = nice(0, ym);
+    const F = frame($("p-chart"), { w: 520, h: 360, xMax: xT.hi, xTicks: xT.ticks, yMax: yT.hi, yTicks: yT.ticks, yFmt: v => fmt(v), xFmt: v => fmt(v), xLabel: () => t("p.ax.x"), yLabel: () => t("p.ax.y") });
+    poly(F, [[0, 0], ...eff.map(p => [p.mach, p.food])], "a-cs");
+    line(F, eff.map(p => [p.mach, p.food]), "front");
+    if (rand) line(F, rnd.map(p => [p.mach, p.food]), "front-rand");
+    eff.forEach(p => F.top.append(sv("circle", { cx: F.sx(p.mach), cy: F.sy(p.food), r: 2.5, class: "dot s1", style: "stroke-width:0" })));
+    F.top.append(sv("circle", { cx: F.sx(cur.mach), cy: F.sy(cur.food), r: 7, class: "dot", style: "fill:" + (rand ? "var(--s2)" : "var(--accent)") }));
+    hover($("p-chart"), $("p-chart-tip"), F, x => { const p = eff.reduce((a, b) => Math.abs(b.mach - x) < Math.abs(a.mach - x) ? b : a); return { head: t("p.tip", { k: p.k }), rows: [[C.s1, t("p.s.food"), fmt(p.food)], [C.s1, t("p.s.mach"), fmt(p.mach)]] }; });
+    // Aviso
+    let note;
+    if (k === 0) note = rich("p.n0", { f: fmt(cur.food) });
+    else if (k === n) note = rich("p.nall", { m: fmt(cur.mach) });
+    else if (rand) { const gap = foodOnFrontier(eff, cur.mach) - cur.food; note = gap > 0.5 ? rich("p.nrand", { x: fmt(gap) }) : rich("p.neff", { i: lastW.id, a: lastW.a, b: lastW.b, oc: fmt(lastW.a / lastW.b, 2) }); }
+    else note = rich("p.neff", { i: lastW.id, a: lastW.a, b: lastW.b, oc: fmt(lastW.a / lastW.b, 2) });
+    $("p-note").replaceChildren(note);
+    // Tarjetas: las personas que ya fabrican máquinas, marcadas
+    const moved = new Set((rand ? randOrder : effOrder()).slice(0, k));
+    document.querySelectorAll("#p-workers .worker").forEach((d, i) => d.classList.toggle("moved", moved.has(i)));
+    $("p-cardlist").textContent = workers.map(w => t("p.card", { i: w.id, a: w.a, b: w.b })).join("\n");
+    renderGrowth();
+  }
+  function buildWorkerCards() {
+    $("p-workers").replaceChildren(...workers.map((w, i) => {
+      const ia = el("input", { type: "number", min: "0", max: "50", value: w.a, "aria-label": "A" + w.id, title: t("p.ax.y") });
+      const ib = el("input", { type: "number", min: "0", max: "50", value: w.b, "aria-label": "M" + w.id, title: t("p.ax.x") });
+      ia.addEventListener("input", () => { workers[i].a = Math.max(0, +ia.value || 0); renderFPP(); });
+      ib.addEventListener("input", () => { workers[i].b = Math.max(0.1, +ib.value || 0.1); renderFPP(); });
+      return el("div", { class: "worker" }, el("span", { class: "id", text: "#" + w.id }), ia, ib);
+    }));
+  }
+  function resetClass() {
+    const n = clamp(Math.round(+$("p-n").value || 28), 2, 60); $("p-n").value = n;
+    makeWorkers(n); buildWorkerCards();
+    $("p-k").max = String(n); if (+$("p-k").value > n) $("p-k").value = String(n);
+    $("q-k").max = String(n); $("q-k").value = String(Math.round(n / 4));
+    renderFPP();
+  }
+  $("p-n").addEventListener("change", resetClass);
+  $("p-new").addEventListener("click", () => { seed = (seed * 48271) % 2147483647; resetClass(); });
+  $("p-k").addEventListener("input", renderFPP);
+  $("p-rand").addEventListener("change", renderFPP);
+  $("p-copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText($("p-cardlist").textContent); $("p-copy-status").textContent = t("p.copied"); }
+    catch { $("p-copy-status").textContent = t("p.copyfail"); }
+  });
+
+  // ---- 4b · La frontera se mueve: acumulación de capital y progreso técnico ----
+  const DELTA = 0.15, ALPHA = 0.35, YEARS = 10;
+  function growthPath(k) {
+    const order = effOrder(), n = workers.length;
+    const kref = Math.round(n / 4);
+    const mref = order.slice(0, kref).reduce((s, i) => s + workers[i].b, 0) || 1;
+    const K0 = mref / DELTA, ta = +$("q-ta").value / 100, tm = +$("q-tm").value / 100;
+    const totA = workers.reduce((s, w) => s + w.a, 0);
+    const foodK = totA - order.slice(0, k).reduce((s, i) => s + workers[i].a, 0), machK = order.slice(0, k).reduce((s, i) => s + workers[i].b, 0);
+    const out = []; let K = K0;
+    for (let y = 0; y <= YEARS; y++) {
+      const m = Math.pow(K / K0, ALPHA), fa = m * Math.pow(1 + ta, y), fb = m * Math.pow(1 + tm, y);
+      const food = foodK * fa, mach = machK * fb;
+      out.push({ y, K, m, fa, fb, food, mach });
+      K = (1 - DELTA) * K + mach;
+    }
+    return { out, kref };
+  }
+  let qTimer = null;
+  function renderGrowth() {
+    if (!workers.length) return;
+    const n = workers.length, k = clamp(+$("q-k").value, 0, n), y = +$("q-t").value;
+    $("q-k-out").textContent = String(k); $("q-ta-out").textContent = $("q-ta").value + " %"; $("q-tm-out").textContent = $("q-tm").value + " %";
+    $("q-year").textContent = t("p2.year", { t: y }); $("q-t-out").textContent = String(y);
+    $("q-play").textContent = t(qTimer ? "g.pause" : "g.play");
+    const { out, kref } = growthPath(k), zero = growthPath(0).out, now = out[y];
+    const stat = (v, kk) => el("div", { class: "stat" }, el("b", { text: v }), el("span", { text: t(kk) }));
+    $("q-stats").replaceChildren(stat(fmt(now.food), "p2.s.food"), stat(fmt(now.mach, 1), "p2.s.mach"), stat(fmt(100 * now.K / out[0].K), "p2.s.cap"), stat(fmt(100 * now.m * Math.pow(1 + +$("q-ta").value / 100, y)), "p2.s.prod"));
+    const eff = path2(effOrder());
+    const maxX = Math.max(...out.map(o => eff[eff.length - 1].mach * o.fb)), maxY = Math.max(...out.map(o => eff[0].food * o.fa));
+    const xT = nice(0, maxX), yT = nice(0, maxY);
+    const F = frame($("q-chart"), { w: 520, h: 360, xMax: xT.hi, xTicks: xT.ticks, yMax: yT.hi, yTicks: yT.ticks, yFmt: v => fmt(v), xFmt: v => fmt(v), xLabel: () => t("p.ax.x"), yLabel: () => t("p.ax.y") });
+    line(F, eff.map(p => [p.mach * out[0].fb, p.food * out[0].fa]), "front-old");
+    line(F, eff.map(p => [p.mach * now.fb, p.food * now.fa]), "front");
+    line(F, out.slice(0, y + 1).map(o => [o.mach, o.food]), "guide");
+    out.slice(0, y + 1).forEach((o, j) => F.top.append(sv("circle", { cx: F.sx(o.mach), cy: F.sy(o.food), r: j === y ? 7 : 3, class: "dot", style: j === y ? "fill:var(--ink)" : "fill:var(--ref);stroke-width:0" })));
+    hover($("q-chart"), $("q-chart-tip"), F, x => { const p = eff.reduce((a, b) => Math.abs(b.mach * now.fb - x) < Math.abs(a.mach * now.fb - x) ? b : a); return { head: t("p2.tip", { t: y }), rows: [[C.s1, t("p.s.food"), fmt(p.food * now.fa)], [C.s1, t("p.s.mach"), fmt(p.mach * now.fb, 1)]] }; });
+    // Alimentos por año
+    const allF = [...out, ...zero].map(o => o.food), yC = nice(0, Math.max(...allF));
+    const G = frame($("q-cons"), { w: 520, h: 360, xMax: YEARS, xTicks: [0, 2, 4, 6, 8, 10], yMax: yC.hi, yTicks: yC.ticks, yFmt: v => fmt(v), xFmt: v => fmt(v), xLabel: () => t("p2.t"), yLabel: () => t("p.ax.y") });
+    line(G, zero.map(o => [o.y, o.food]), "pline");
+    line(G, out.map(o => [o.y, o.food]), "curve c-s2");
+    G.top.append(sv("circle", { cx: G.sx(y), cy: G.sy(now.food), r: 6, class: "dot", style: "fill:var(--s2)" }));
+    hover($("q-cons"), $("q-cons-tip"), G, x => { const j = Math.round(clamp(x, 0, YEARS)); return { head: t("p2.tip", { t: j }), rows: [[C.s2, t("p2.lgc"), fmt(out[j].food)], [C.ink, t("p2.lgz"), fmt(zero[j].food)]] }; });
+    // Aviso
+    const ta = +$("q-ta").value, tm = +$("q-tm").value;
+    const parts = [rich(k > kref ? "p2.up" : k < kref ? "p2.down" : "p2.flat")];
+    if (ta || tm) parts.push(rich("p2.tech", { bias: ta !== tm ? t("p2.bias") : "" }));
+    if (k > 0) parts.push(rich("p2.zero"));
+    $("q-note").replaceChildren(...parts);
+  }
+  function qStop() { if (qTimer) { clearInterval(qTimer); qTimer = null; } $("q-play").textContent = t("g.play"); }
+  $("q-play").addEventListener("click", () => {
+    if (qTimer) { qStop(); return; }
+    if (+$("q-t").value >= YEARS) $("q-t").value = "0";
+    qTimer = setInterval(() => { const v = +$("q-t").value; if (v >= YEARS) { qStop(); renderGrowth(); return; } $("q-t").value = String(v + 1); renderGrowth(); }, 800);
+    renderGrowth();
+  });
+  $("q-t").addEventListener("input", () => { qStop(); renderGrowth(); });
+  ["q-k", "q-ta", "q-tm"].forEach(id => $(id).addEventListener("input", renderGrowth));
+
+  // ---------- Barra común, idioma y arranque ----------
+  OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
+  OBS.apply();
+  OBS.onLang(() => { renderCalc(); renderDos(); renderGM(); buildWorkerCards(); renderFPP(); });
+  renderCalc();
+  renderDos();
+  renderGM();
+  resetClass();
+  show(location.hash.slice(1));
+})();
+</script>

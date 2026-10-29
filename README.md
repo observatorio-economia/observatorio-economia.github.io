@@ -9,7 +9,7 @@ index.html               Panel del Observatorio (portada con las 10 SA, en caste
 assets/observatorio.css  Hoja de estilo de la web: portada y menú común
 assets/menu.js           Menú común + lista de las 10 SA (la única lista que hay que mantener)
 assets/comun/            Piezas comunes del vault (línea gráfica, idioma, modo proyector), copiadas por actualizar.sh
-sa01/ … sa09/            Las herramientas (copias generadas desde el vault, no editar a mano)
+sa01/ … sa09/, datos/   Las herramientas y la Base de datos (copias generadas desde el vault, no editar a mano)
 actualizar.sh            Vuelve a copiar las herramientas y las piezas comunes desde el vault
 .nojekyll                Para que GitHub Pages sirva los archivos tal cual
 ```

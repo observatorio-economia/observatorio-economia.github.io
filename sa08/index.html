@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<title data-i18n="doc.title">Observatorio · SA 8</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: una columna (máx. 1040px) con dos pestañas: calculadora de inflación (controles, cifras, dos gráficos) y mi cesta de la compra (deslizadores por grupo, cifras, barras por grupo). Datos reales del INE incrustados en un bloque JSON común con la página «Base de datos». */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+.wrap { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+header.top { padding-block: 20px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 8px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 46px); line-height: 1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; margin: 0; line-height: 1.1; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 700; font-size: 20px; margin: 0; line-height: 1.15; text-transform: uppercase; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 66ch; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 70ch; display: flex; flex-direction: column; gap: 8px; }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button { color: var(--muted); background: none; border: 0; padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); }
+section.view { display: flex; flex-direction: column; gap: 26px; }
+.btn { padding: 9px 16px; border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.small { padding: 5px 10px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 22px; align-items: end; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label, .field .lab { font-size: 14px; color: var(--muted); }
+select, input[type="text"], input[type="number"] { font: 16px var(--font-body); color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 0; padding: 8px 10px; width: 100%; min-width: 0; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 2px 0; }
+.stats { display: flex; gap: 14px 34px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 32px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.notice { border-left: 3px solid var(--accent); background: var(--paper); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+figcaption { font-family: var(--font-display); font-weight: 700; font-size: 18px; text-transform: uppercase; }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
+.legend i.dash { border-top-style: dashed; }
+.legend i.box { height: 10px; border: 0; width: 12px; }
+.plot { position: relative; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+svg .grid line { stroke: var(--grid); stroke-width: 1; }
+svg .axis line { stroke: var(--muted); stroke-width: 1; }
+svg text { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+svg text.axl { font-family: var(--font-body); font-size: 13px; }
+svg text.lbl { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+.curve { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.c-s1 { stroke: var(--s1); } .c-s2 { stroke: var(--s2); } .c-ink { stroke: var(--ink); } .c-acc { stroke: var(--accent); }
+.pline { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.dot { stroke: var(--paper); stroke-width: 2; }
+.hover-line { stroke: var(--muted); stroke-width: 1; }
+.bar-pos { fill: var(--s1); } .bar-neg { fill: var(--bad); } .bar-hi { fill: var(--accent); }
+.tip { position: absolute; pointer-events: none; background: var(--paper); border: 1px solid var(--rule); padding: 6px 9px; font-size: 13px; min-width: 150px; z-index: 2; display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.tip .h { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; }
+.tip .r i { display: inline-block; width: 10px; height: 2px; vertical-align: 4px; margin-right: 6px; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; white-space: normal; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.pos { color: var(--ok); } td.neg { color: var(--bad); }
+details > summary { cursor: pointer; font-size: 14px; color: var(--accent); font-weight: 500; }
+details[open] > summary { margin-bottom: 10px; }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a, .small a, .notice a { color: var(--accent); }
+.status { font-size: 14px; min-height: 1.4em; color: var(--muted); }
+body.obs-proj svg text { font-size: 15px; }
+body.obs-proj svg text.lbl, body.obs-proj svg text.axl { font-size: 16px; }
+body.obs-proj .stat b { font-size: 42px; }
+body.obs-proj table { font-size: 17px; }
+
+.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px 22px; }
+.grow { display: grid; grid-template-columns: minmax(0, 1fr) 4.6em; gap: 2px 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--rule); }
+.grow .nm { font-size: 14px; min-width: 0; }
+.grow output { font-family: var(--font-mono); font-size: 14px; text-align: right; font-variant-numeric: tabular-nums; }
+.grow input { grid-column: 1 / -1; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; }
+.quick { display: flex; gap: 8px; flex-wrap: wrap; }
+.big-eq { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 5vw, 40px); line-height: 1.1; text-transform: uppercase; }
+.big-eq em { font-style: normal; color: var(--accent); }
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div id="obs-bar"></div>
+    <span class="eyebrow" data-i18n="hd.eyebrow">Observatorio · SA 8 · El dinero</span>
+    <h1 data-i18n="hd.title">La inflación en tu bolsillo</h1>
+    <p class="lede" data-i18n="hd.lede">Cuánto ha subido la vida desde un año cualquiera, con los datos del IPC del INE.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Herramientas" data-i18n-attr="aria-label:tabs.aria">
+    <button role="tab" id="tab-calc" aria-selected="true" data-view="calc" data-i18n="tab.calc">Calculadora de inflación</button>
+    <button role="tab" id="tab-cesta" aria-selected="false" data-view="cesta" data-i18n="tab.cesta">Mi cesta de la compra</button>
+  </nav>
+
+  <section class="view" id="view-calc" role="tabpanel" aria-labelledby="tab-calc">
+    <div class="prose">
+      <h2 data-i18n="c.h">¿Cuánto valen hoy 100 € de 1973?</h2>
+      <p data-i18n="c.p">Elige una cantidad y dos años. La calculadora usa el IPC (índice de precios de consumo) medio de cada año: si el índice se ha multiplicado por dos, hace falta el doble de dinero para comprar lo mismo.</p>
+    </div>
+    <div class="quick" id="c-quick"></div>
+    <div class="controls">
+      <div class="field"><label for="c-amt" data-i18n="c.amt">Cantidad (€)</label><input type="number" id="c-amt" min="0" step="1" value="100" inputmode="decimal"></div>
+      <div class="field"><label for="c-y0" data-i18n="c.y0">Año de partida</label><select id="c-y0"></select></div>
+      <div class="field"><label for="c-y1" data-i18n="c.y1">Año de llegada</label><select id="c-y1"></select></div>
+    </div>
+    <p class="big-eq" id="c-eq" aria-live="polite"></p>
+    <div class="stats" id="c-stats"></div>
+    <div class="notice" id="c-note"></div>
+    <div class="charts">
+      <figure>
+        <figcaption id="c-f1"></figcaption>
+        <div class="legend"><span><i style="border-color:var(--s1)"></i><span data-i18n="c.leg1">Lo que hace falta cada año para comprar lo mismo</span></span></div>
+        <div class="plot"><svg class="chart" id="c-chart1" role="img" data-i18n-attr="aria-label:c.f1aria"></svg><div class="tip" id="c-tip1" hidden></div></div>
+      </figure>
+      <figure>
+        <figcaption data-i18n="c.f2">Inflación de cada año</figcaption>
+        <div class="legend"><span><i class="box" style="background:var(--s1)"></i><span data-i18n="c.leg2">Subida de la media anual del IPC</span></span><span><i class="box" style="background:var(--accent)"></i><span data-i18n="c.leg3">Año más alto del periodo</span></span></div>
+        <div class="plot"><svg class="chart" id="c-chart2" role="img" data-i18n-attr="aria-label:c.f2aria"></svg><div class="tip" id="c-tip2" hidden></div></div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="view" id="view-cesta" role="tabpanel" aria-labelledby="tab-cesta" hidden>
+    <div class="prose">
+      <h2 data-i18n="b.h">Cada familia tiene su propia inflación</h2>
+      <p data-i18n="b.p1">El INE no publica el precio de cada producto (la barra de pan o el litro de leche), sino un índice para cada grupo de la cesta: alimentos, vivienda, transporte… Cada grupo pesa según lo que gastan de media los hogares: es su ponderación.</p>
+      <p data-i18n="b.p2">Aquí empiezas con una compra de 100 € repartida como la cesta media y ves cuánto costaría después. Cambia el reparto y comprueba que tu inflación no es la oficial.</p>
+    </div>
+    <div class="controls">
+      <div class="field"><label for="b-y0" data-i18n="b.y0">Año de partida</label><select id="b-y0"></select></div>
+      <div class="field"><label for="b-y1" data-i18n="b.y1">Año de llegada</label><select id="b-y1"></select></div>
+    </div>
+    <div class="presets" id="b-presets"></div>
+    <div class="stats" id="b-stats"></div>
+    <div class="notice" id="b-note"></div>
+    <div class="groups" id="b-groups"></div>
+    <figure>
+      <figcaption data-i18n="b.f">Cuánto ha subido cada grupo</figcaption>
+      <div class="legend"><span><i class="box" style="background:var(--s1)"></i><span data-i18n="b.leg1">Subida del grupo</span></span><span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="b.leg2">IPC general</span></span></div>
+      <div class="plot"><svg class="chart" id="b-chart" role="img" data-i18n-attr="aria-label:b.faria"></svg><div class="tip" id="b-tip" hidden></div></div>
+    </figure>
+    <details><summary data-i18n="b.table">Ver la tabla</summary><div class="scroll"><table id="b-table"></table></div></details>
+  </section>
+
+  <footer>
+    <span data-i18n-html="ft.src">Datos: INE, Índice de Precios de Consumo, base 2021: medias anuales por grupos (<a href="https://www.ine.es/jaxiT3/Tabla.htm?t=50934" target="_blank" rel="noopener">tabla 50934</a>), ponderaciones (<a href="https://www.ine.es/jaxiT3/Tabla.htm?t=50946" target="_blank" rel="noopener">tabla 50946</a>) y tasas desde 1961 (<a href="https://www.ine.es/jaxiT3/Tabla.htm?t=50911" target="_blank" rel="noopener">tabla 50911</a>). Consulta: 29 de octubre de 2026.</span>
+    <span data-i18n="ft.note">Antes de 2002 la serie se reconstruye con las tasas publicadas (redondeadas a un decimal): puede haber diferencias de una o dos décimas. Para años anteriores al euro, las pesetas se pasan a euros al cambio fijo de 166,386 pesetas.</span>
+    <span id="ft-base"></span>
+  </footer>
+</div>
+
+<script type="application/json" id="obs-data">{"format":"observatorio-datos/1","retrieved":"2026-10-29","series":[{"id":"ipc-general","block":"precios","name":{"es":"IPC. Índice general (media anual)","va":"IPC. Índex general (mitjana anual)"},"what":{"es":"Cuánto cuesta, de media en el año, la cesta de bienes y servicios que compran los hogares, comparada con 2021.","va":"Quant costa, de mitjana en l'any, la cistella de béns i servicis que compren les llars, comparada amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"},{"id":"50911","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50911"},{"id":"50902","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50902"}],"retrieved":"2026-10-29"},"method":{"es":"2002-2025: medias anuales publicadas por el INE (tabla 50934, base 2021). 1961-2001: media de los índices mensuales reconstruidos a partir de las tasas de variación publicadas por el INE (tabla 50911, redondeadas a un decimal), enganchados al índice oficial de enero de 2002 (tabla 50902). Error posible de una o dos décimas en las tasas anteriores a 2002.","va":"2002-2025: mitjanes anuals publicades per l'INE (taula 50934, base 2021). 1961-2001: mitjana dels índexs mensuals reconstruïts a partir de les taxes de variació publicades per l'INE (taula 50911, arredonides a un decimal), enganxats a l'índex oficial de gener de 2002 (taula 50902). Error possible d'una o dues dècimes en les taxes anteriors a 2002."},"data":[[1961,2.527],[1962,2.674],[1963,2.907],[1964,3.112],[1965,3.523],[1966,3.747],[1967,3.987],[1968,4.184],[1969,4.275],[1970,4.52],[1971,4.893],[1972,5.294],[1973,5.898],[1974,6.82],[1975,7.982],[1976,9.388],[1977,11.696],[1978,14.007],[1979,16.196],[1980,18.719],[1981,21.435],[1982,24.536],[1983,27.503],[1984,30.598],[1985,33.3],[1986,36.233],[1987,38.143],[1988,39.994],[1989,42.697],[1990,45.569],[1991,48.245],[1992,51.098],[1993,53.371],[1994,55.903],[1995,58.488],[1996,60.601],[1997,61.727],[1998,62.863],[1999,64.322],[2000,66.551],[2001,68.926],[2002,71.092],[2003,73.253],[2004,75.479],[2005,78.022],[2006,80.765],[2007,83.015],[2008,86.399],[2009,86.15],[2010,87.701],[2011,90.504],[2012,92.717],[2013,94.023],[2014,93.881],[2015,93.412],[2016,93.222],[2017,95.046],[2018,96.638],[2019,97.314],[2020,97.0],[2021,100.0],[2022,108.391],[2023,112.219],[2024,115.333],[2025,118.415]]},{"id":"ipc-g01","block":"precios","group":"01","name":{"es":"IPC. Alimentos y bebidas no alcohólicas (media anual)","va":"IPC. Aliments i begudes no alcohòliques (mitjana anual)"},"short":{"es":"Alimentos y bebidas no alcohólicas","va":"Aliments i begudes no alcohòliques"},"what":{"es":"Precio medio del grupo «Alimentos y bebidas no alcohólicas» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Aliments i begudes no alcohòliques» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,67.218],[2003,69.973],[2004,72.678],[2005,74.974],[2006,78.057],[2007,80.939],[2008,85.697],[2009,84.796],[2010,84.088],[2011,85.813],[2012,87.81],[2013,90.257],[2014,89.942],[2015,90.998],[2016,92.272],[2017,93.407],[2018,94.946],[2019,95.928],[2020,98.187],[2021,100.0],[2022,111.639],[2023,124.659],[2024,129.105],[2025,132.258]]},{"id":"ipc-g02","block":"precios","group":"02","name":{"es":"IPC. Bebidas alcohólicas y tabaco (media anual)","va":"IPC. Begudes alcohòliques i tabac (mitjana anual)"},"short":{"es":"Bebidas alcohólicas y tabaco","va":"Begudes alcohòliques i tabac"},"what":{"es":"Precio medio del grupo «Bebidas alcohólicas y tabaco» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Begudes alcohòliques i tabac» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,47.95],[2003,49.561],[2004,51.711],[2005,54.336],[2006,55.334],[2007,59.219],[2008,61.557],[2009,67.006],[2010,74.318],[2011,81.907],[2012,86.746],[2013,92.026],[2014,93.356],[2015,94.624],[2016,95.09],[2017,96.704],[2018,98.504],[2019,99.164],[2020,99.7],[2021,100.0],[2022,103.868],[2023,111.768],[2024,116.219],[2025,120.69]]},{"id":"ipc-g03","block":"precios","group":"03","name":{"es":"IPC. Vestido y calzado (media anual)","va":"IPC. Vestit i calçat (mitjana anual)"},"short":{"es":"Vestido y calzado","va":"Vestit i calçat"},"what":{"es":"Precio medio del grupo «Vestido y calzado» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Vestit i calçat» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,87.112],[2003,90.421],[2004,92.066],[2005,93.323],[2006,94.495],[2007,95.504],[2008,96.147],[2009,94.553],[2010,94.257],[2011,94.515],[2012,94.768],[2013,94.808],[2014,94.913],[2015,95.223],[2016,95.827],[2017,96.29],[2018,97.115],[2019,98.023],[2020,98.992],[2021,100.0],[2022,102.672],[2023,104.96],[2024,105.886],[2025,106.322]]},{"id":"ipc-g04","block":"precios","group":"04","name":{"es":"IPC. Vivienda, agua, electricidad, gas y otros combustibles (media anual)","va":"IPC. Habitatge, aigua, electricitat, gas i altres combustibles (mitjana anual)"},"short":{"es":"Vivienda, agua, electricidad, gas y otros combustibles","va":"Habitatge, aigua, electricitat, gas i altres combustibles"},"what":{"es":"Precio medio del grupo «Vivienda, agua, electricidad, gas y otros combustibles» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Habitatge, aigua, electricitat, gas i altres combustibles» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,59.478],[2003,61.199],[2004,63.34],[2005,66.709],[2006,71.064],[2007,73.669],[2008,78.565],[2009,79.586],[2010,82.398],[2011,88.367],[2012,92.845],[2013,93.692],[2014,94.934],[2015,92.934],[2016,88.994],[2017,92.483],[2018,94.665],[2019,93.281],[2020,89.977],[2021,100.0],[2022,115.505],[2023,102.786],[2024,106.508],[2025,113.088]]},{"id":"ipc-g05","block":"precios","group":"05","name":{"es":"IPC. Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar (media anual)","va":"IPC. Mobles, articles de la llar i articles per al manteniment corrent de la llar (mitjana anual)"},"short":{"es":"Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar","va":"Mobles, articles de la llar i articles per al manteniment corrent de la llar"},"what":{"es":"Precio medio del grupo «Muebles, artículos del hogar y artículos para el mantenimiento corriente del hogar» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Mobles, articles de la llar i articles per al manteniment corrent de la llar» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,82.485],[2003,84.141],[2004,85.45],[2005,87.25],[2006,89.504],[2007,91.82],[2008,94.184],[2009,95.557],[2010,96.113],[2011,97.195],[2012,98.048],[2013,98.959],[2014,98.417],[2015,98.197],[2016,98.352],[2017,97.918],[2018,98.051],[2019,98.692],[2020,99.068],[2021,100.0],[2022,106.344],[2023,111.683],[2024,112.524],[2025,113.332]]},{"id":"ipc-g06","block":"precios","group":"06","name":{"es":"IPC. Sanidad (media anual)","va":"IPC. Sanitat (mitjana anual)"},"short":{"es":"Sanidad","va":"Sanitat"},"what":{"es":"Precio medio del grupo «Sanidad» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Sanitat» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,87.502],[2003,89.336],[2004,89.674],[2005,90.441],[2006,91.657],[2007,90.265],[2008,90.416],[2009,89.808],[2010,88.945],[2011,87.763],[2012,90.871],[2013,97.125],[2014,97.251],[2015,97.388],[2016,97.151],[2017,97.87],[2018,98.157],[2019,98.956],[2020,99.322],[2021,100.0],[2022,101.102],[2023,102.995],[2024,105.089],[2025,107.242]]},{"id":"ipc-g07","block":"precios","group":"07","name":{"es":"IPC. Transporte (media anual)","va":"IPC. Transport (mitjana anual)"},"short":{"es":"Transporte","va":"Transport"},"what":{"es":"Precio medio del grupo «Transporte» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Transport» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,65.474],[2003,66.834],[2004,69.78],[2005,74.188],[2006,77.525],[2007,79.117],[2008,83.732],[2009,78.862],[2010,84.285],[2011,91.042],[2012,95.398],[2013,95.79],[2014,94.88],[2015,90.639],[2016,88.777],[2017,92.482],[2018,95.77],[2019,96.867],[2020,93.197],[2021,100.0],[2022,112.15],[2023,111.73],[2024,112.484],[2025,113.083]]},{"id":"ipc-g08","block":"precios","group":"08","name":{"es":"IPC. Comunicaciones (media anual)","va":"IPC. Comunicacions (mitjana anual)"},"short":{"es":"Comunicaciones","va":"Comunicacions"},"what":{"es":"Precio medio del grupo «Comunicaciones» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Comunicacions» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,124.625],[2003,121.391],[2004,120.122],[2005,118.233],[2006,116.672],[2007,116.883],[2008,116.862],[2009,116.082],[2010,115.208],[2011,114.274],[2012,110.404],[2013,105.735],[2014,99.276],[2015,97.465],[2016,99.964],[2017,101.263],[2018,103.531],[2019,104.333],[2020,103.085],[2021,100.0],[2022,98.748],[2023,101.821],[2024,101.88],[2025,103.46]]},{"id":"ipc-g09","block":"precios","group":"09","name":{"es":"IPC. Ocio y cultura (media anual)","va":"IPC. Oci i cultura (mitjana anual)"},"short":{"es":"Ocio y cultura","va":"Oci i cultura"},"what":{"es":"Precio medio del grupo «Ocio y cultura» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Oci i cultura» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,103.269],[2003,103.894],[2004,103.977],[2005,103.796],[2006,103.918],[2007,103.233],[2008,103.101],[2009,102.694],[2010,101.421],[2011,101.332],[2012,102.027],[2013,102.769],[2014,101.375],[2015,100.993],[2016,100.032],[2017,101.1],[2018,100.913],[2019,100.453],[2020,99.84],[2021,100.0],[2022,102.798],[2023,107.283],[2024,109.913],[2025,110.845]]},{"id":"ipc-g10","block":"precios","group":"10","name":{"es":"IPC. Enseñanza (media anual)","va":"IPC. Ensenyament (mitjana anual)"},"short":{"es":"Enseñanza","va":"Ensenyament"},"what":{"es":"Precio medio del grupo «Enseñanza» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Ensenyament» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,59.097],[2003,61.975],[2004,64.465],[2005,67.193],[2006,69.872],[2007,72.998],[2008,75.905],[2009,78.548],[2010,80.51],[2011,82.449],[2012,86.41],[2013,93.391],[2014,95.04],[2015,96.052],[2016,96.642],[2017,97.528],[2018,98.295],[2019,99.25],[2020,99.846],[2021,100.0],[2022,101.249],[2023,103.24],[2024,106.08],[2025,108.782]]},{"id":"ipc-g11","block":"precios","group":"11","name":{"es":"IPC. Restaurantes y hoteles (media anual)","va":"IPC. Restaurants i hotels (mitjana anual)"},"short":{"es":"Restaurantes y hoteles","va":"Restaurants i hotels"},"what":{"es":"Precio medio del grupo «Restaurantes y hoteles» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Restaurants i hotels» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,65.587],[2003,68.41],[2004,71.176],[2005,74.178],[2006,77.482],[2007,81.238],[2008,85.065],[2009,86.708],[2010,87.759],[2011,89.151],[2012,89.942],[2013,90.394],[2014,90.825],[2015,91.593],[2016,92.612],[2017,94.334],[2018,96.146],[2019,98.066],[2020,99.135],[2021,100.0],[2022,106.402],[2023,113.676],[2024,119.18],[2025,124.309]]},{"id":"ipc-g12","block":"precios","group":"12","name":{"es":"IPC. Otros bienes y servicios (media anual)","va":"IPC. Altres béns i servicis (mitjana anual)"},"short":{"es":"Otros bienes y servicios","va":"Altres béns i servicis"},"what":{"es":"Precio medio del grupo «Otros bienes y servicios» de la cesta del IPC, comparado con 2021.","va":"Preu mitjà del grup «Altres béns i servicis» de la cistella de l'IPC, comparat amb 2021."},"unit":{"es":"Índice, 2021 = 100","va":"Índex, 2021 = 100"},"source":{"org":"INE","tables":[{"id":"50934","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50934"}],"retrieved":"2026-10-29"},"method":{"es":"Medias anuales publicadas por el INE (base 2021).","va":"Mitjanes anuals publicades per l'INE (base 2021)."},"data":[[2002,66.372],[2003,68.576],[2004,70.649],[2005,72.818],[2006,75.488],[2007,77.947],[2008,80.529],[2009,82.556],[2010,84.438],[2011,86.905],[2012,88.933],[2013,90.748],[2014,91.643],[2015,93.1],[2016,94.584],[2017,95.422],[2018,96.283],[2019,97.626],[2020,99.013],[2021,100.0],[2022,103.516],[2023,108.432],[2024,111.909],[2025,115.845]]}],"weights":{"unit":{"es":"Por mil del gasto de los hogares","va":"Per mil de la despesa de les llars"},"source":{"org":"INE","tables":[{"id":"50946","url":"https://www.ine.es/jaxiT3/Tabla.htm?t=50946"}],"retrieved":"2026-10-29"},"years":[2022,2023,2024,2025],"values":{"01":[226.148,195.833,191.603,185.386],"02":[31.177,40.017,38.495,37.719],"03":[60.19,39.283,39.465,39.68],"04":[142.496,126.801,119.965,121.584],"05":[58.009,58.357,53.457,52.756],"06":[43.67,59.775,57.867,57.182],"07":[129.776,137.98,143.783,143.931],"08":[35.577,32.439,33.535,32.609],"09":[63.689,78.699,85.888,85.624],"10":[15.892,20.049,18.778,18.723],"11":[130.323,132.377,139.304,147.513],"12":[63.054,78.391,77.859,77.294]}},"notes":{"es":"Desde enero de 2026 el INE publica el IPC en base 2025 con una nueva clasificación de 13 grupos (ECOICOP versión 2). Estas series usan la base 2021 con 12 grupos, completas hasta 2025.","va":"Des de gener de 2026 l'INE publica l'IPC en base 2025 amb una nova classificació de 13 grups (ECOICOP versió 2). Estes sèries usen la base 2021 amb 12 grups, completes fins a 2025."}}</script>
+<script>
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
+  "use strict";
+  const PANEL_URL = "../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
+    }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+</script>
+<script>
+(() => {
+  "use strict";
+  // ---------- Utilidades comunes de las páginas de datos ----------
+  const $ = id => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const t = (k, v) => OBS.t(k, v);
+  const L = o => o == null ? "" : typeof o === "string" ? o : (o[OBS.lang()] || o.es || "");
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const pct = (v, d = 1) => (v > 0 ? "+" : v < 0 ? "−" : "") + fmt(Math.abs(v), d) + " %";
+  const el = OBS.h;
+  const sv = (tag, attrs = {}, text) => { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v); if (text != null) n.textContent = text; return n; };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const DATA = JSON.parse(document.getElementById("obs-data").textContent);
+  const SERIES = Object.fromEntries(DATA.series.map(s => [s.id, s]));
+  const asMap = s => new Map(s.data);
+  // Escala «bonita» para los ejes
+  function niceTicks(lo, hi, n = 5) {
+    const span = hi - lo || 1, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n) || 10 * mag;
+    const a = Math.floor(lo / step) * step, b = Math.ceil(hi / step) * step, out = [];
+    for (let v = a; v <= b + step / 2; v += step) out.push(Math.round(v * 1e6) / 1e6);
+    return out;
+  }
+  /* Gráfico de líneas o barras con una sola escala.
+     o = { w, h, x:[min,max], xTicks, yTicks, yFmt, xFmt, xLabel, yLabel,
+           lines:[{pts:[[x,y]], cls, dash}], bars:[{x, y, cls}], hline:{y, label}, rows: x => {head, rows:[[color,label,value]]} } */
+  function chart(svg, tip, o) {
+    svg.replaceChildren();
+    const W = o.w || 480, H = o.h || 300, M = { l: 62, r: 18, t: 14, b: 46 };
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const pw = W - M.l - M.r, ph = H - M.t - M.b;
+    const [x0, x1] = o.x, y0 = o.yTicks[0], y1 = o.yTicks[o.yTicks.length - 1];
+    const sx = x => M.l + (x - x0) / ((x1 - x0) || 1) * pw;
+    const sy = y => M.t + ph - (y - y0) / ((y1 - y0) || 1) * ph;
+    const g = sv("g", { class: "grid" });
+    o.yTicks.forEach(v => { g.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(v), y2: sy(v) })); svg.append(sv("text", { x: M.l - 8, y: sy(v) + 4, "text-anchor": "end" }, (o.yFmt || fmt)(v))); });
+    (o.xTicks || []).forEach(v => svg.append(sv("text", { x: sx(v), y: H - M.b + 18, "text-anchor": "middle" }, (o.xFmt || String)(v))));
+    svg.append(g);
+    const ax = sv("g", { class: "axis" }); ax.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(Math.max(y0, Math.min(0, y1)) ), y2: sy(Math.max(y0, Math.min(0, y1))) })); svg.append(ax);
+    if (o.xLabel) svg.append(sv("text", { x: (M.l + W - M.r) / 2, y: H - 8, "text-anchor": "middle", class: "axl" }, o.xLabel));
+    if (o.yLabel) svg.append(sv("text", { x: 12, y: M.t + ph / 2, "text-anchor": "middle", class: "axl", transform: `rotate(-90 12 ${M.t + ph / 2})` }, o.yLabel));
+    const bw = o.bars && o.bars.length ? Math.max(2, pw / (x1 - x0 + 1) * 0.7) : 0;
+    (o.bars || []).forEach(b => {
+      const yA = sy(Math.max(0, Math.min(b.y, y1))), yB = sy(Math.min(0, Math.max(b.y, y0)));
+      svg.append(sv("rect", { x: sx(b.x) - bw / 2, y: Math.min(yA, yB), width: bw, height: Math.max(1, Math.abs(yB - yA)), class: b.cls || (b.y >= 0 ? "bar-pos" : "bar-neg") }));
+    });
+    if (o.hline) { svg.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(o.hline.y), y2: sy(o.hline.y), class: "pline" })); if (o.hline.label) svg.append(sv("text", { x: W - M.r, y: sy(o.hline.y) - 6, "text-anchor": "end", class: "lbl" }, o.hline.label)); }
+    (o.lines || []).forEach(l => {
+      const d = l.pts.map((p, i) => (i ? "L" : "M") + sx(p[0]).toFixed(1) + " " + sy(p[1]).toFixed(1)).join(" ");
+      svg.append(sv("path", { d, class: "curve " + (l.cls || "c-s1"), "stroke-dasharray": l.dash ? "5 4" : null }));
+      const last = l.pts[l.pts.length - 1];
+      if (last && l.endDot) svg.append(sv("circle", { cx: sx(last[0]), cy: sy(last[1]), r: 5, class: "dot", style: "fill:var(--" + (l.dotVar || "s1") + ")" }));
+    });
+    if (!o.rows) return;
+    const line = sv("line", { class: "hover-line", y1: M.t, y2: M.t + ph, visibility: "hidden" }); svg.append(line);
+    const hit = sv("rect", { x: M.l, y: M.t, width: pw, height: ph, fill: "transparent" }); svg.append(hit);
+    const move = e => {
+      const r = svg.getBoundingClientRect(), vx = (e.clientX - r.left) * W / r.width;
+      const x = Math.round(clamp(x0 + (vx - M.l) / pw * (x1 - x0), x0, x1));
+      const data = o.rows(x); if (!data) return;
+      line.setAttribute("x1", sx(x)); line.setAttribute("x2", sx(x)); line.setAttribute("visibility", "visible");
+      tip.replaceChildren(el("span", { class: "h", text: data.head }), ...data.rows.map(([c, k, v]) => el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
+      tip.hidden = false;
+      const px = e.clientX - r.left, tw = tip.offsetWidth;
+      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px";
+      tip.style.top = Math.max(0, e.clientY - r.top - 20) + "px";
+    };
+    hit.addEventListener("pointermove", move);
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; line.setAttribute("visibility", "hidden"); });
+  }
+  // Guardar un archivo: capacidad de descargas de Claude; fuera de Claude, descarga normal del navegador
+  let downloadsCap = null;
+  (async () => { try { if (window.claude && window.claude.use) downloadsCap = await window.claude.use("downloads"); } catch {} })();
+  async function saveFile(name, data) {
+    if (downloadsCap) {
+      try { await downloadsCap.save({ filename: name, data }); return t("dl.saved"); }
+      catch (e) { if (e && e.code === "declined") return ""; return t("dl.fail"); }
+    }
+    const inClaude = !!(window.claude && window.claude.use);
+    if (!inClaude) {
+      try {
+        const blob = data instanceof Blob ? data : new Blob([data]);
+        const url = URL.createObjectURL(blob); const a = el("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 3000); return t("dl.saved");
+      } catch {}
+    }
+    return t("dl.fail");
+  }
+  // Libro de Excel con SheetJS (cargado desde cdnjs); hojas = [{name, rows}]
+  function xlsxBuffer(sheets) {
+    if (!window.XLSX) return null;
+    const wb = XLSX.utils.book_new();
+    sheets.forEach(sh => XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sh.rows), sh.name.slice(0, 31)));
+    return XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  }
+  OBS.register({
+    es: { "dl.saved": "Archivo preparado.", "dl.fail": "No se ha podido descargar aquí. Abre la herramienta desde su archivo para descargar.", "dl.noxlsx": "No se ha cargado el generador de Excel; se descarga en CSV." },
+    va: { "dl.saved": "Arxiu preparat.", "dl.fail": "No s'ha pogut descarregar ací. Obri la ferramenta des del seu arxiu per a descarregar.", "dl.noxlsx": "No s'ha carregat el generador d'Excel; es descarrega en CSV." }
+  });
+
+  OBS.register({
+    es: {
+      "doc.title": "Observatorio · SA 8", "hd.eyebrow": "Observatorio · SA 8 · El dinero", "hd.title": "La inflación en tu bolsillo",
+      "hd.lede": "Cuánto ha subido la vida desde un año cualquiera, con los datos del IPC del INE.", "tabs.aria": "Herramientas",
+      "tab.calc": "Calculadora de inflación", "tab.cesta": "Mi cesta de la compra",
+      "c.h": "¿Cuánto valen hoy 100 € de 1973?",
+      "c.p": "Elige una cantidad y dos años. La calculadora usa el IPC (índice de precios de consumo) medio de cada año: si el índice se ha multiplicado por dos, hace falta el doble de dinero para comprar lo mismo.",
+      "c.amt": "Cantidad (€)", "c.y0": "Año de partida", "c.y1": "Año de llegada",
+      "c.q1973": "100 € de 1973", "c.q2002": "100 € de 2002 (llega el euro)", "c.q2021": "100 € de 2021",
+      "c.eq": "{a} de {y0} equivalen a <em>{b}</em> de {y1}",
+      "c.mult": "Los precios se han multiplicado por", "c.cum": "Subida acumulada de los precios", "c.avg": "Inflación media cada año", "c.max": "Año de más inflación",
+      "c.note.up": "Con {a} de {y1} se compra lo mismo que con {b} de {y0}. Dicho de otro modo: el dinero de {y0} ha perdido {p} de su poder de compra.",
+      "c.note.down": "Entre {y0} y {y1} los precios bajaron: con el mismo dinero se compra algo más.",
+      "c.note.same": "Elige dos años distintos.",
+      "c.f1": "Lo que valen {a} de {y0}, año a año", "c.f1aria": "Cantidad necesaria cada año para comprar lo mismo", "c.leg1": "Lo que hace falta cada año para comprar lo mismo",
+      "c.f2": "Inflación de cada año", "c.f2aria": "Variación anual de la media del IPC", "c.leg2": "Subida de la media anual del IPC", "c.leg3": "Año más alto del periodo",
+      "c.year": "Año {y}", "c.need": "Hace falta", "c.infl": "Inflación", "c.ax.y": "Euros", "c.ax.p": "% anual",
+      "b.h": "Cada familia tiene su propia inflación",
+      "b.p1": "El INE no publica el precio de cada producto (la barra de pan o el litro de leche), sino un índice para cada grupo de la cesta: alimentos, vivienda, transporte… Cada grupo pesa según lo que gastan de media los hogares: es su ponderación.",
+      "b.p2": "Aquí empiezas con una compra de 100 € repartida como la cesta media y ves cuánto costaría después. Cambia el reparto y comprueba que tu inflación no es la oficial.",
+      "b.y0": "Año de partida", "b.y1": "Año de llegada",
+      "b.pre.media": "Cesta media (INE 2025)", "b.pre.comida": "Más comida", "b.pre.transporte": "Más transporte", "b.pre.vivienda": "Más vivienda",
+      "b.cost": "Tu compra de 100 € de {y0} costaría en {y1}", "b.mine": "Tu inflación", "b.official": "IPC general (oficial)", "b.media": "Cesta media con estas ponderaciones",
+      "b.note": "Tu cesta ha subido {m} y el IPC general {o}. {diff}",
+      "b.diff.more": "Tu inflación es mayor que la oficial: gastas más en lo que más ha subido.",
+      "b.diff.less": "Tu inflación es menor que la oficial: gastas más en lo que menos ha subido.",
+      "b.diff.same": "Tu inflación es casi igual que la oficial.",
+      "b.wnote": "Las ponderaciones de partida son las de 2025 del INE ({src}). El INE cambia las ponderaciones cada año, por eso la cesta media no coincide exactamente con el IPC general.",
+      "b.f": "Cuánto ha subido cada grupo", "b.faria": "Subida de precios de cada grupo frente al IPC general", "b.leg1": "Subida del grupo", "b.leg2": "IPC general",
+      "b.table": "Ver la tabla", "b.th.g": "Grupo", "b.th.w": "En tu compra", "b.th.r": "Subida", "b.th.end": "Costaría", "b.total": "Total",
+      "b.ax": "% de subida", "b.general": "IPC general",
+      "ft.src": "Datos: INE, Índice de Precios de Consumo, base 2021: medias anuales por grupos (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50934\" target=\"_blank\" rel=\"noopener\">tabla 50934</a>), ponderaciones (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50946\" target=\"_blank\" rel=\"noopener\">tabla 50946</a>) y tasas desde 1961 (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50911\" target=\"_blank\" rel=\"noopener\">tabla 50911</a>). Consulta: 29 de octubre de 2026.",
+      "ft.note": "Antes de 2002 la serie se reconstruye con las tasas publicadas (redondeadas a un decimal): puede haber diferencias de una o dos décimas. Para años anteriores al euro, las pesetas se pasan a euros al cambio fijo de 166,386 pesetas.",
+      "f.ses": "Por definir", "f.uso": "Calculadora: el poder de compra del dinero entre dos años y la inflación de cada año (la crisis del petróleo de 1973 y la estanflación). Mi cesta: índices, ponderaciones y por qué cada familia tiene su propia inflación."
+    },
+    va: {
+      "doc.title": "Observatori · SA 8", "hd.eyebrow": "Observatori · SA 8 · Els diners", "hd.title": "La inflació a la butxaca",
+      "hd.lede": "Quant ha pujat la vida des d'un any qualsevol, amb les dades de l'IPC de l'INE.", "tabs.aria": "Ferramentes",
+      "tab.calc": "Calculadora d'inflació", "tab.cesta": "La meua cistella de la compra",
+      "c.h": "Quant valen hui 100 € de 1973?",
+      "c.p": "Tria una quantitat i dos anys. La calculadora usa l'IPC (índex de preus de consum) mitjà de cada any: si l'índex s'ha multiplicat per dos, cal el doble de diners per a comprar el mateix.",
+      "c.amt": "Quantitat (€)", "c.y0": "Any de partida", "c.y1": "Any d'arribada",
+      "c.q1973": "100 € de 1973", "c.q2002": "100 € de 2002 (arriba l'euro)", "c.q2021": "100 € de 2021",
+      "c.eq": "{a} de {y0} equivalen a <em>{b}</em> de {y1}",
+      "c.mult": "Els preus s'han multiplicat per", "c.cum": "Pujada acumulada dels preus", "c.avg": "Inflació mitjana cada any", "c.max": "Any de més inflació",
+      "c.note.up": "Amb {a} de {y1} es compra el mateix que amb {b} de {y0}. Dit d'una altra manera: els diners de {y0} han perdut {p} del seu poder de compra.",
+      "c.note.down": "Entre {y0} i {y1} els preus van baixar: amb els mateixos diners es compra un poc més.",
+      "c.note.same": "Tria dos anys diferents.",
+      "c.f1": "El que valen {a} de {y0}, any a any", "c.f1aria": "Quantitat necessària cada any per a comprar el mateix", "c.leg1": "El que cal cada any per a comprar el mateix",
+      "c.f2": "Inflació de cada any", "c.f2aria": "Variació anual de la mitjana de l'IPC", "c.leg2": "Pujada de la mitjana anual de l'IPC", "c.leg3": "Any més alt del període",
+      "c.year": "Any {y}", "c.need": "Cal", "c.infl": "Inflació", "c.ax.y": "Euros", "c.ax.p": "% anual",
+      "b.h": "Cada família té la seua pròpia inflació",
+      "b.p1": "L'INE no publica el preu de cada producte (la barra de pa o el litre de llet), sinó un índex per a cada grup de la cistella: aliments, habitatge, transport… Cada grup pesa segons el que gasten de mitjana les llars: és la seua ponderació.",
+      "b.p2": "Ací comences amb una compra de 100 € repartida com la cistella mitjana i veus quant costaria després. Canvia el repartiment i comprova que la teua inflació no és l'oficial.",
+      "b.y0": "Any de partida", "b.y1": "Any d'arribada",
+      "b.pre.media": "Cistella mitjana (INE 2025)", "b.pre.comida": "Més menjar", "b.pre.transporte": "Més transport", "b.pre.vivienda": "Més habitatge",
+      "b.cost": "La teua compra de 100 € de {y0} costaria en {y1}", "b.mine": "La teua inflació", "b.official": "IPC general (oficial)", "b.media": "Cistella mitjana amb estes ponderacions",
+      "b.note": "La teua cistella ha pujat {m} i l'IPC general {o}. {diff}",
+      "b.diff.more": "La teua inflació és més alta que l'oficial: gastes més en el que més ha pujat.",
+      "b.diff.less": "La teua inflació és més baixa que l'oficial: gastes més en el que menys ha pujat.",
+      "b.diff.same": "La teua inflació és quasi igual que l'oficial.",
+      "b.wnote": "Les ponderacions de partida són les de 2025 de l'INE ({src}). L'INE canvia les ponderacions cada any, per això la cistella mitjana no coincidix exactament amb l'IPC general.",
+      "b.f": "Quant ha pujat cada grup", "b.faria": "Pujada de preus de cada grup enfront de l'IPC general", "b.leg1": "Pujada del grup", "b.leg2": "IPC general",
+      "b.table": "Veure la taula", "b.th.g": "Grup", "b.th.w": "En la teua compra", "b.th.r": "Pujada", "b.th.end": "Costaria", "b.total": "Total",
+      "b.ax": "% de pujada", "b.general": "IPC general",
+      "ft.src": "Dades: INE, Índex de Preus de Consum, base 2021: mitjanes anuals per grups (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50934\" target=\"_blank\" rel=\"noopener\">taula 50934</a>), ponderacions (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50946\" target=\"_blank\" rel=\"noopener\">taula 50946</a>) i taxes des de 1961 (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50911\" target=\"_blank\" rel=\"noopener\">taula 50911</a>). Consulta: 29 d'octubre de 2026.",
+      "ft.note": "Abans de 2002 la sèrie es reconstruïx amb les taxes publicades (arredonides a un decimal): hi pot haver diferències d'una o dues dècimes. Per a anys anteriors a l'euro, les pessetes es passen a euros al canvi fix de 166,386 pessetes.",
+      "f.ses": "Per definir", "f.uso": "Calculadora: el poder de compra dels diners entre dos anys i la inflació de cada any (la crisi del petroli de 1973 i l'estagflació). La meua cistella: índexs, ponderacions i per què cada família té la seua pròpia inflació."
+    }
+  });
+
+  const FICHA = {
+    sesiones: { es: "Por definir", va: "Per definir" },
+    saberes: [
+      { code: "A18", es: "Dinero y transacciones. Funciones del dinero y formas de dinero.", va: "Diners i transaccions. Funcions dels diners i formes de diners." },
+      { code: "D9", es: "La política monetaria y la estabilidad de precios.", va: "La política monetària i l'estabilitat de preus." },
+      { code: "D11", es: "La inflación: teorías explicativas.", va: "La inflació: teories explicatives." },
+      { code: "D12", es: "Efecto de las políticas monetarias sobre la inflación, el crecimiento y el bienestar.", va: "Efecte de les polítiques monetàries sobre la inflació, el creixement i el benestar." }
+    ],
+    criterios: [
+      { code: "1.1", es: "Comprender la realidad económica actual, analizando la repercusión de las decisiones adoptadas en el ámbito económico, valorando los procesos de integración económica y estableciendo comparaciones sobre las soluciones alternativas que ofrecen los distintos sistemas.", va: "Comprendre la realitat econòmica actual, analitzant la repercussió de les decisions adoptades en l'àmbit econòmic, valorant els processos d'integració econòmica i establint comparacions sobre les solucions alternatives que oferixen els diferents sistemes." },
+      { code: "4.1", es: "Conocer y comprender el funcionamiento del sistema financiero valorando sus efectos sobre la economía real y analizando los elementos que intervienen en las decisiones financieras relacionadas con la inversión, el ahorro, los productos financieros y la búsqueda de fuentes de financiación.", va: "Conéixer i comprendre el funcionament del sistema financer valorant els seus efectes sobre l'economia real i analitzant els elements que intervenen en les decisions financeres relacionades amb la inversió, l'estalvi, els productes financers i la busca de fonts de finançament." },
+      { code: "4.2 ◐", es: "Planificar y gestionar con responsabilidad y progresiva autonomía las finanzas personales y adoptar decisiones fundamentadas a partir del conocimiento y comprensión del sistema financiero y de los elementos que intervienen en las decisiones financieras, valorando los efectos que estas pueden provocar en la economía real.", va: "Planificar i gestionar amb responsabilitat i progressiva autonomia les finances personals i adoptar decisions fonamentades a partir del coneixement i comprensió del sistema financer i dels elements que intervenen en les decisions financeres, valorant els efectes que estes poden provocar en l'economia real." },
+      { code: "4.3", es: "Adquirir conocimientos financieros a partir del análisis del sistema financiero, su funcionamiento y los efectos que se derivan de las decisiones adoptadas en él y estableciendo conexiones entre estos aprendizajes y las decisiones financieras personales que afectan a la vida cotidiana.", va: "Adquirir coneixements financers a partir de l'anàlisi del sistema financer, el seu funcionament i els efectes que es deriven de les decisions adoptades en este i establint connexions entre estos aprenentatges i les decisions financeres personals que afecten la vida quotidiana." }
+    ],
+    uso: { es: "Calculadora: el poder de compra del dinero entre dos años y la inflación de cada año (la crisis del petróleo de 1973 y la estanflación). Mi cesta: índices, ponderaciones y por qué cada familia tiene su propia inflación.", va: "Calculadora: el poder de compra dels diners entre dos anys i la inflació de cada any (la crisi del petroli de 1973 i l'estagflació). La meua cistella: índexs, ponderacions i per què cada família té la seua pròpia inflació." }
+  };
+
+  // ---------- Pestañas ----------
+  const VIEWS = ["calc", "cesta"];
+  function show(v) { if (!VIEWS.includes(v)) v = "calc"; VIEWS.forEach(x => { $("view-" + x).hidden = x !== v; $("tab-" + x).setAttribute("aria-selected", String(x === v)); }); }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+  // ---------- Datos ----------
+  const GEN = asMap(SERIES["ipc-general"]);
+  const YEARS = [...GEN.keys()].sort((a, b) => a - b);
+  const YMIN = YEARS[0], YMAX = YEARS[YEARS.length - 1];
+  const GROUPS = DATA.series.filter(s => s.group);
+  const GMAP = Object.fromEntries(GROUPS.map(s => [s.group, asMap(s)]));
+  const GY = [...GMAP["01"].keys()].sort((a, b) => a - b);
+  const W25 = (() => { const yi = DATA.weights.years.indexOf(Math.max(...DATA.weights.years)); return Object.fromEntries(Object.entries(DATA.weights.values).map(([g, arr]) => [g, arr[yi]])); })();
+  const WYEAR = Math.max(...DATA.weights.years);
+  const eur = (v, d = 2) => fmt(v, d) + " €";
+  function fillYears(sel, years, val) { sel.replaceChildren(...years.map(y => el("option", { value: y, text: y }))); sel.value = val; }
+
+  // ---------- Calculadora ----------
+  fillYears($("c-y0"), YEARS, 1973); fillYears($("c-y1"), YEARS, YMAX);
+  function quick() {
+    const q = [["c.q1973", 100, 1973], ["c.q2002", 100, 2002], ["c.q2021", 100, 2021]];
+    $("c-quick").replaceChildren(...q.map(([k, a, y]) => { const b = el("button", { type: "button", class: "btn ghost small", text: t(k) }); b.addEventListener("click", () => { $("c-amt").value = a; $("c-y0").value = y; $("c-y1").value = YMAX; renderCalc(); }); return b; }));
+  }
+  function renderCalc() {
+    const a = Math.max(0, parseFloat(String($("c-amt").value).replace(",", ".")) || 0);
+    const y0 = +$("c-y0").value, y1 = +$("c-y1").value;
+    const i0 = GEN.get(y0), i1 = GEN.get(y1), r = i1 / i0, b = a * r;
+    $("c-eq").innerHTML = "";
+    $("c-eq").append(...(() => { const span = el("span"); span.innerHTML = t("c.eq", { a: eur(a), y0, b: eur(b), y1 }); return [span]; })());
+    const n = Math.abs(y1 - y0), lo = Math.min(y0, y1), hi = Math.max(y0, y1);
+    const avg = n ? (Math.pow(GEN.get(hi) / GEN.get(lo), 1 / n) - 1) * 100 : 0;
+    let mx = null; for (let y = lo + 1; y <= hi; y++) { const v = (GEN.get(y) / GEN.get(y - 1) - 1) * 100; if (!mx || v > mx.v) mx = { y, v }; }
+    $("c-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: "× " + fmt(r, 2) }), el("span", { text: t("c.mult") })),
+      el("div", { class: "stat" }, el("b", { text: pct((r - 1) * 100, 1) }), el("span", { text: t("c.cum") })),
+      el("div", { class: "stat" }, el("b", { text: pct(y1 >= y0 ? avg : -avg, 1) }), el("span", { text: t("c.avg") })),
+      mx ? el("div", { class: "stat" }, el("b", { text: mx.y + " · " + pct(mx.v, 1) }), el("span", { text: t("c.max") })) : null);
+    const note = y0 === y1 ? t("c.note.same") : (y1 > y0 && r >= 1) ? t("c.note.up", { a: eur(a), y1, b: eur(a / r), y0, p: fmt((1 - 1 / r) * 100, 1) + " %" }) : t("c.note.down", { y0, y1 });
+    $("c-note").textContent = note;
+    $("c-f1").textContent = t("c.f1", { a: eur(a, 0), y0 });
+    // Gráfico 1: cantidad equivalente cada año
+    const pts = []; for (let y = lo; y <= hi; y++) pts.push([y, a * GEN.get(y) / i0]);
+    const vals = pts.map(p => p[1]); const yt = niceTicks(Math.min(0, ...vals), Math.max(...vals) * 1.05, 5);
+    const xt = niceTicks(lo, hi, 6).filter(x => x >= lo && x <= hi);
+    chart($("c-chart1"), $("c-tip1"), { x: [lo, Math.max(hi, lo + 1)], xTicks: xt, yTicks: yt, yFmt: v => fmt(v), xLabel: "", yLabel: t("c.ax.y"),
+      lines: [{ pts, cls: "c-s1", endDot: true }], hline: { y: a },
+      rows: x => { const p = pts.find(q => q[0] === x); return p ? { head: t("c.year", { y: x }), rows: [["var(--s1)", t("c.need"), eur(p[1])]] } : null; } });
+    // Gráfico 2: inflación anual
+    const bars = []; for (let y = lo + 1; y <= hi; y++) bars.push({ x: y, y: (GEN.get(y) / GEN.get(y - 1) - 1) * 100 });
+    if (mx) bars.forEach(bb => { if (bb.x === mx.y) bb.cls = "bar-hi"; });
+    const bv = bars.map(bb => bb.y); const yt2 = niceTicks(Math.min(0, ...bv), Math.max(1, ...bv), 5);
+    chart($("c-chart2"), $("c-tip2"), { x: [lo, Math.max(hi, lo + 1)], xTicks: xt, yTicks: yt2, yFmt: v => fmt(v), yLabel: t("c.ax.p"), bars,
+      rows: x => { const bb = bars.find(q => q.x === x); return bb ? { head: t("c.year", { y: x }), rows: [["var(--s1)", t("c.infl"), pct(bb.y, 1)]] } : null; } });
+  }
+  ["c-amt", "c-y0", "c-y1"].forEach(id => $(id).addEventListener("input", renderCalc));
+
+  // ---------- Mi cesta ----------
+  fillYears($("b-y0"), GY.slice(0, -1), 2019); fillYears($("b-y1"), GY.slice(1), GY[GY.length - 1]);
+  const BOOST = { comida: ["01"], transporte: ["07"], vivienda: ["04"] };
+  let share = {};
+  function preset(name) {
+    const w = { ...W25 };
+    if (BOOST[name]) BOOST[name].forEach(g => { w[g] *= 2; });
+    const tot = Object.values(w).reduce((x, y) => x + y, 0);
+    share = Object.fromEntries(Object.entries(w).map(([g, v]) => [g, 100 * v / tot]));
+    buildSliders(); renderBasket();
+  }
+  function presets() {
+    $("b-presets").replaceChildren(...["media", "comida", "transporte", "vivienda"].map(p => { const b = el("button", { type: "button", class: "btn ghost small", text: t("b.pre." + p) }); b.addEventListener("click", () => preset(p)); return b; }));
+  }
+  function buildSliders() {
+    $("b-groups").replaceChildren(...GROUPS.map(s => {
+      const id = "b-w" + s.group;
+      const out = el("output", { for: id, id: id + "-o", text: eur(share[s.group], 2) });
+      const inp = el("input", { type: "range", id, min: "0", max: "40", step: "0.5", value: String(Math.round(share[s.group] * 2) / 2), "aria-label": L(s.short) });
+      inp.addEventListener("input", () => { setShare(s.group, +inp.value); });
+      return el("div", { class: "grow" }, el("label", { class: "nm", for: id, text: L(s.short) }), out, inp);
+    }));
+  }
+  // Al mover un grupo, los demás se reajustan en proporción para que la compra siga sumando 100 €
+  function setShare(g, v) {
+    v = clamp(v, 0, 100);
+    const others = Object.keys(share).filter(k => k !== g), rest = others.reduce((x, k) => x + share[k], 0);
+    const left = 100 - v;
+    others.forEach(k => { share[k] = rest > 0 ? share[k] * left / rest : left / others.length; });
+    share[g] = v;
+    GROUPS.forEach(s => { const o = $("b-w" + s.group + "-o"); if (o) o.textContent = eur(share[s.group], 2); if (s.group !== g) { const i = $("b-w" + s.group); if (i) i.value = String(Math.round(share[s.group] * 2) / 2); } });
+    renderBasket();
+  }
+  function renderBasket() {
+    let y0 = +$("b-y0").value, y1 = +$("b-y1").value;
+    if (y1 <= y0) { y1 = Math.min(GY[GY.length - 1], y0 + 1); $("b-y1").value = y1; }
+    const rise = g => GMAP[g].get(y1) / GMAP[g].get(y0);
+    let mine = 0, media = 0; const totW = Object.values(W25).reduce((x, y) => x + y, 0);
+    GROUPS.forEach(s => { mine += share[s.group] * rise(s.group); media += 100 * W25[s.group] / totW * rise(s.group); });
+    const off = (GEN.get(y1) / GEN.get(y0) - 1) * 100, m = mine - 100;
+    $("b-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: eur(mine) }), el("span", { text: t("b.cost", { y0, y1 }) })),
+      el("div", { class: "stat" }, el("b", { text: pct(m, 1) }), el("span", { text: t("b.mine") })),
+      el("div", { class: "stat" }, el("b", { text: pct(off, 1) }), el("span", { text: t("b.official") })),
+      el("div", { class: "stat" }, el("b", { text: pct(media - 100, 1) }), el("span", { text: t("b.media") })));
+    const diff = Math.abs(m - off) < 0.5 ? t("b.diff.same") : m > off ? t("b.diff.more") : t("b.diff.less");
+    $("b-note").replaceChildren(el("span", { text: t("b.note", { m: pct(m, 1), o: pct(off, 1), diff }) }), el("span", { class: "small", text: t("b.wnote", { src: "INE, " + (OBS.lang() === "va" ? "taula" : "tabla") + " 50946" }) }));
+    // Barras horizontales por grupo
+    const rows = GROUPS.map(s => ({ g: s.group, name: L(s.short), r: (rise(s.group) - 1) * 100 })).sort((a, b) => b.r - a.r);
+    drawHBars($("b-chart"), $("b-tip"), rows, off);
+    $("b-table").replaceChildren(
+      el("thead", {}, el("tr", {}, [t("b.th.g"), t("b.th.w") + " (" + y0 + ")", t("b.th.r"), t("b.th.end") + " (" + y1 + ")"].map(x => el("th", { text: x })))),
+      el("tbody", {}, GROUPS.map(s => el("tr", {}, el("td", { text: L(s.short) }), el("td", { text: eur(share[s.group]) }), el("td", { class: rise(s.group) >= 1 ? "" : "neg", text: pct((rise(s.group) - 1) * 100, 1) }), el("td", { text: eur(share[s.group] * rise(s.group)) }))),
+        el("tr", {}, el("td", { text: t("b.total") }), el("td", { text: eur(100) }), el("td", { text: pct(m, 1) }), el("td", { text: eur(mine) }))));
+  }
+  function drawHBars(svg, tip, rows, ref) {
+    svg.replaceChildren();
+    const W = 760, rh = 30, M = { l: 300, r: 70, t: 10, b: 36 }, H = M.t + M.b + rh * rows.length;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const vals = rows.map(r => r.r).concat([ref, 0]); const ticks = niceTicks(Math.min(0, ...vals), Math.max(...vals), 5);
+    const a = ticks[0], b = ticks[ticks.length - 1], sx = v => M.l + (v - a) / (b - a) * (W - M.l - M.r);
+    const g = sv("g", { class: "grid" }); ticks.forEach(v => { g.append(sv("line", { x1: sx(v), x2: sx(v), y1: M.t, y2: H - M.b })); svg.append(sv("text", { x: sx(v), y: H - M.b + 18, "text-anchor": "middle" }, fmt(v) + " %")); }); svg.append(g);
+    rows.forEach((r, i) => {
+      const cy = M.t + rh * (i + 0.5), x0 = sx(0), x1 = sx(r.r);
+      const grp = sv("g");
+      grp.append(sv("rect", { x: Math.min(x0, x1), y: cy - 9, width: Math.max(1, Math.abs(x1 - x0)), height: 18, class: r.r >= 0 ? "bar-pos" : "bar-neg" }));
+      grp.append(sv("text", { x: M.l - 8, y: cy + 4, "text-anchor": "end", class: "lbl" }, r.name.length > 42 ? r.name.slice(0, 40) + "…" : r.name));
+      grp.append(sv("text", { x: Math.max(x0, x1) + 6, y: cy + 4 }, pct(r.r, 1)));
+      grp.append(sv("rect", { x: 0, y: cy - rh / 2, width: W, height: rh, fill: "transparent" }));
+      grp.addEventListener("pointerenter", () => { tip.replaceChildren(el("span", { class: "h", text: r.name }), el("span", { class: "r" }, el("span", { text: t("b.leg1") }), el("b", { text: pct(r.r, 1) })), el("span", { class: "r" }, el("span", { text: t("b.general") }), el("b", { text: pct(ref, 1) }))); tip.hidden = false; const rr = svg.getBoundingClientRect(); tip.style.left = Math.min(rr.width - 180, (x1 / W) * rr.width) + "px"; tip.style.top = (cy / H) * rr.height + "px"; });
+      grp.addEventListener("pointerleave", () => { tip.hidden = true; });
+      svg.append(grp);
+    });
+    svg.append(sv("line", { x1: sx(0), x2: sx(0), y1: M.t, y2: H - M.b, class: "axis", style: "stroke:var(--ink)" }));
+    svg.append(sv("line", { x1: sx(ref), x2: sx(ref), y1: M.t, y2: H - M.b, class: "pline" }));
+    svg.append(sv("text", { x: sx(ref), y: H - 4, "text-anchor": "middle", class: "lbl" }, t("b.general")));
+  }
+  ["b-y0", "b-y1"].forEach(id => $(id).addEventListener("input", renderBasket));
+
+  // ---------- Arranque ----------
+  OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
+  function renderAll() { OBS.apply(); quick(); presets(); buildSliders(); renderCalc(); renderBasket(); $("ft-base").textContent = L(DATA.notes); }
+  OBS.onLang(renderAll);
+  preset("media");
+  renderAll();
+  show(location.hash.slice(1));
+})();
+</script>

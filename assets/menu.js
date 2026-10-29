@@ -13,7 +13,9 @@
     { n: 2, ruta: "sa02/", estado: "open",
       t: { es: "El comportamiento humano en la actividad económica", va: "El comportament humà en l'activitat econòmica" },
       d: { es: "Encuestas a las familias, resultados de la clase y matriz de la estantería.", va: "Enquestes a les famílies, resultats de la classe i matriu del prestatge." } },
-    { n: 3, t: { es: "La producción", va: "La producció" } },
+    { n: 3, ruta: "sa03/", estado: "proto",
+      t: { es: "La producción", va: "La producció" },
+      d: { es: "Calculadora de costes con el caso de General Motors (2009) y frontera de posibilidades de producción.", va: "Calculadora de costos amb el cas de General Motors (2009) i frontera de possibilitats de producció." } },
     { n: 4, ruta: "sa04/", estado: "proto",
       t: { es: "El mercado", va: "El mercat" },
       d: { es: "Competencia perfecta, monopolio, el dilema de las dos gasolineras y la guerra de precios de la competencia real.", va: "Competència perfecta, monopoli, el dilema de les dues gasolineres i la guerra de preus de la competència real." } },
@@ -24,12 +26,18 @@
       t: { es: "El mercado laboral", va: "El mercat laboral" },
       d: { es: "El salario como precio frente al ciclo de Goodwin: el mismo cambio, dos respuestas.", va: "El salari com a preu enfront del cicle de Goodwin: el mateix canvi, dues respostes." } },
     { n: 7, t: { es: "El Estado y sus cuentas", va: "L'Estat i els seus comptes" } },
-    { n: 8, t: { es: "El dinero", va: "Els diners" } },
+    { n: 8, ruta: "sa08/", estado: "proto",
+      t: { es: "El dinero", va: "Els diners" },
+      d: { es: "La inflación en tu bolsillo: calculadora del IPC desde 1961 y «Mi cesta de la compra».", va: "La inflació a la butxaca: calculadora de l'IPC des de 1961 i «La meua cistella de la compra»." } },
     { n: 9, ruta: "sa09/", estado: "proto",
       t: { es: "Comercio internacional", va: "Comerç internacional" },
       d: { es: "Ricardo frente a Shaikh: ventaja comparativa o ventaja absoluta, con déficit y deuda.", va: "Ricardo enfront de Shaikh: avantatge comparatiu o avantatge absolut, amb dèficit i deute." } },
     { n: 10, t: { es: "Las finanzas", va: "Les finances" } },
   ];
+  // Páginas comunes a todo el curso (fuera de la lista de SA)
+  const DATOS = { ruta: "datos/", t: { es: "Base de datos", va: "Base de dades" },
+    corto: { es: "Datos", va: "Dades" },
+    d: { es: "Series oficiales ya limpias para trabajar en Excel, con su fuente, lo que miden y sus unidades.", va: "Sèries oficials ja netes per a treballar en Excel, amb la seua font, el que mesuren i les seues unitats." } };
 
   const TXT = {
     es: { home: "Observatorio", sub: "Economía · 1.º Bach.", nav: "Situaciones de aprendizaje", soon: "próximamente",
@@ -85,7 +93,9 @@
     });
     const home = el("a", { class: "obs-menu__home", href: enlace(""), "aria-current": normaliza(enlace("")) === aqui() ? "page" : null },
       el("b", { text: tx("home") }), el("span", { text: tx("sub") }));
-    return el("nav", { class: "obs-menu", "aria-label": tx("home") }, el("div", { class: "obs-menu__in" }, home, lista, boton));
+    const datos = el("a", { class: "obs-menu__datos", href: enlace(DATOS.ruta), title: L(DATOS.t), text: L(DATOS.corto),
+      "aria-current": normaliza(enlace(DATOS.ruta)) === aqui() ? "page" : null });
+    return el("nav", { class: "obs-menu", "aria-label": tx("home") }, el("div", { class: "obs-menu__in" }, home, lista, datos, boton));
   }
   function pintarMenu() {
     const nueva = menu();
@@ -94,6 +104,11 @@
   }
 
   function panel() {
+    const extra = document.getElementById("panel-datos");
+    if (extra) extra.replaceChildren(el("li", {}, el("a", { class: "row", href: enlace(DATOS.ruta) },
+      el("span", { class: "num", "aria-hidden": "true", text: "∑" }),
+      el("span", {}, el("span", { class: "t", text: L(DATOS.t) }), el("br"), el("span", { class: "d", text: L(DATOS.d) })),
+      el("span", { class: "state", text: tx("open") }))));
     const ol = document.getElementById("panel-sa");
     if (!ol) return;
     ol.replaceChildren(...SA.map(s => {
