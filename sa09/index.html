@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/menu.js"></script>
+<title data-i18n="doc.title">Observatorio · SA 9</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: una columna de trabajo (máx. 920px) con tres vistas en pestañas (Ricardo, Shaikh, comparar supuestos). Curvas: azul = nivel relativo y producción, ocre = saldo comercial, rojo = deuda */
+:root {
+  --bg: #ffffff;
+  --paper: #f6f7f9;
+  --ink: #23262b;
+  --muted: #5d636c;
+  --rule: #d9dde3;
+  --grid: #eceef2;
+  --accent: #2f4f8a;
+  --accent-soft: #edf1f8;
+  --ref: #9aa1ab;
+  --ok: #2d6a4f;
+  --bad: #a4372c;
+  --s1: #2f4f8a;
+  --s2: #b35c1e;
+  --s3: #0f8a6c;
+  --font-display: "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c; --grid: #24282d;
+    --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --paper: #1c1f23; --ink: #e6e8eb; --muted: #9ba2ac; --rule: #30353c; --grid: #24282d;
+  --accent: #93acdb; --accent-soft: #1f2836; --ref: #6c737d; --ok: #7cc4a0; --bad: #e8877b;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+.wrap { max-width: 920px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+header.top { padding-block: 32px 18px; border-bottom: 2px solid var(--ink); display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(30px, 6vw, 44px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 26px; margin: 0; line-height: 1.15; text-wrap: balance; }
+h3 { font-family: var(--font-display); font-weight: 600; font-size: 19px; margin: 0; line-height: 1.2; }
+p { margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.small { font-size: 14px; color: var(--muted); }
+.prose { max-width: 66ch; display: flex; flex-direction: column; gap: 8px; }
+nav.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--rule); }
+nav.tabs button {
+  font: 500 15px var(--font-body); color: var(--muted); background: none; border: 0;
+  padding: 10px 14px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer;
+  display: flex; gap: 8px; align-items: baseline;
+}
+nav.tabs button .n { font-family: var(--font-mono); font-size: 12px; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs button.soon { color: var(--ref); }
+button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.view { display: flex; flex-direction: column; gap: 40px; }
+.block { display: flex; flex-direction: column; gap: 18px; }
+.block + .block { border-top: 2px solid var(--ink); padding-top: 26px; }
+
+/* Controles */
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 24px; }
+.slider { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.slider .lab { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; color: var(--muted); }
+.slider output { font-family: var(--font-mono); font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
+input[type="text"] { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 7px 8px; width: 100%; min-width: 0; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 14px; color: var(--muted); }
+.params { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 15px; cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+.btn { font: 600 15px var(--font-body); padding: 9px 16px; border-radius: 4px; border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn.small { padding: 5px 10px; font-size: 14px; }
+.btn.quiet { border-color: var(--rule); background: transparent; color: var(--muted); font-weight: 500; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* Cifras */
+.stats { display: flex; gap: 14px 30px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.stat { display: flex; flex-direction: column; min-width: 0; }
+.stat b { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.stat b.pos { color: var(--ok); } .stat b.neg { color: var(--bad); }
+.state { display: flex; gap: 10px; align-items: baseline; font-size: 15px; }
+.chip { font-family: var(--font-mono); font-size: 12px; padding: 2px 8px; border-radius: 3px; border: 1px solid currentColor; white-space: nowrap; letter-spacing: .03em; }
+.chip.ok { color: var(--ok); } .chip.bad { color: var(--bad); } .chip.mid { color: var(--s2); } .chip.neutral { color: var(--muted); }
+.notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
+.notice strong { font-weight: 600; }
+
+/* Gráficos */
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; position: relative; }
+figcaption { font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 16px; height: 0; border-top: 2px solid; }
+.legend i.box { height: 10px; border: 0; }
+.legend i.dash { border-top-style: dashed; }
+.plot { position: relative; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+svg .grid line { stroke: var(--grid); stroke-width: 1; }
+svg .axis line, svg .axis path { stroke: var(--muted); stroke-width: 1; }
+svg text { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; }
+svg text.axl { font-family: var(--font-body); font-size: 13px; }
+svg text.lbl { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+svg text.lbl-in { font-family: var(--font-body); font-size: 13px; font-weight: 600; fill: var(--ink); }
+.c-s1 { stroke: var(--s1); } .c-s2 { stroke: var(--s2); } .c-s3 { stroke: var(--s3); } .c-ink { stroke: var(--ink); }
+.curve { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.pline { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.guide { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; }
+.a-ok { fill: var(--ok); fill-opacity: .18; stroke: var(--ok); stroke-width: 1; }
+.a-bad { fill: var(--bad); fill-opacity: .16; stroke: var(--bad); stroke-width: 1; }
+.a-cs { fill: var(--s1); fill-opacity: .12; stroke: none; }
+.a-dwl { stroke: var(--bad); stroke-width: 1; }
+.hatch-line { stroke: var(--bad); stroke-width: 1.5; }
+.dot { stroke: var(--bg); stroke-width: 2; }
+.dot.ink { fill: var(--ink); } .dot.s1 { fill: var(--s1); } .dot.ref { fill: var(--ref); }
+.hover-line { stroke: var(--muted); stroke-width: 1; }
+.tip {
+  position: absolute; pointer-events: none; background: var(--bg); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 6px 9px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,.12); min-width: 140px; z-index: 2;
+  display: flex; flex-direction: column; gap: 2px; font-variant-numeric: tabular-nums;
+}
+.tip .h { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tip .r { display: flex; justify-content: space-between; gap: 12px; }
+.tip .r i { display: inline-block; width: 10px; height: 2px; vertical-align: 4px; margin-right: 6px; }
+
+/* Tablas */
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 600; color: var(--muted); font-size: 13px; }
+td.pos { color: var(--ok); } td.neg { color: var(--bad); }
+details { border-top: 1px solid var(--rule); padding-top: 10px; }
+summary { cursor: pointer; font-size: 14px; color: var(--accent); font-weight: 500; }
+details[open] summary { margin-bottom: 10px; }
+
+/* Matriz y rondas (oligopolio) */
+table.payoff { table-layout: fixed; min-width: 520px; }
+table.payoff th, table.payoff td { border: 1px solid var(--rule); padding: 10px; vertical-align: top; text-align: left; white-space: normal; }
+table.payoff thead th { background: var(--paper); color: var(--ink); }
+table.payoff tbody th { background: var(--paper); color: var(--ink); width: 10em; }
+table.payoff td .me { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+table.payoff td .other { color: var(--muted); font-size: 14px; }
+table.payoff td.hl { background: var(--accent-soft); }
+.rounds { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.round { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.round .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+.round .q { font-size: 14px; color: var(--muted); }
+.bars { display: flex; flex-direction: column; gap: 6px; }
+.bar { display: grid; grid-template-columns: minmax(0, 9.5em) 1fr 3.6em; gap: 8px; align-items: center; font-size: 13px; }
+.track { height: 12px; background: var(--paper); border: 1px solid var(--rule); position: relative; }
+.fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+.fill.ref { background: var(--ref); } .fill.s2 { background: var(--s2); }
+.bar .val { font-family: var(--font-mono); text-align: right; }
+.empty { border: 1px dashed var(--rule); padding: 22px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.rule { border: 1px solid var(--rule); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rule .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.rule .pick { font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 1.1; }
+.rule.win { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+svg .b-cost { fill: var(--ref); fill-opacity: .55; }
+svg .b-cost.lead { fill: var(--s1); fill-opacity: .8; }
+svg .b-mok { fill: var(--ok); fill-opacity: .7; }
+svg .b-mbad { fill: var(--bad); fill-opacity: .7; }
+svg .b-pos { fill: var(--accent); }
+svg .b-neg { fill: var(--bad); }
+svg .zero { stroke: var(--ink); stroke-width: 1; }
+svg text.val { fill: var(--ink); font-size: 13px; }
+svg text.cat { fill: var(--ink); font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.duo-head { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+.world { display: flex; flex-direction: column; gap: 14px; border: 1px solid var(--rule); border-radius: 6px; padding: 16px; }
+.world > h3 { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.fstats { display: flex; gap: 6px 18px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.fstats b { font-family: var(--font-mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fstats b.pos { color: var(--ok); } .fstats b.neg { color: var(--bad); }
+.share { display: flex; height: 30px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--bg); }
+.share span { display: flex; align-items: center; padding: 0 10px; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; color: #fff; min-width: 0; }
+.share .sa { background: var(--s2); } .share .sb { background: var(--s1); }
+@media (prefers-reduced-motion: no-preference) { .share span { transition: flex-basis .35s ease; } }
+.timeline { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; border: 2px solid var(--ink); padding: 12px 14px; border-radius: 6px; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 3; }
+.timeline .slider { flex: 1 1 260px; }
+.timeline .wk { font-family: var(--font-display); font-weight: 700; font-size: 26px; font-variant-numeric: tabular-nums; min-width: 5.5em; }
+.closed-tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--bad); }
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 14px; display: flex; flex-direction: column; gap: 4px; }
+footer a, .small a { color: var(--accent); }
+@media (max-width: 640px) {
+  .bar { grid-template-columns: minmax(0, 1fr) 3.6em; }
+  .bar .track { grid-column: 1 / -1; grid-row: 2; }
+  .stat b { font-size: 24px; }
+}
+/* Ficha docente: una línea por pestaña */
+.obs-ficha dd { white-space: pre-line; }
+header.top .obs-bar { margin-bottom: 6px; }
+/* Modo proyector: rótulos de los gráficos y cifras más grandes */
+body.obs-proj svg text { font-size: 15px; }
+body.obs-proj svg text.lbl, body.obs-proj svg text.lbl-in, body.obs-proj svg text.val { font-size: 17px; }
+body.obs-proj svg text.axl { font-size: 16px; }
+body.obs-proj svg text.cat { font-size: 20px; }
+body.obs-proj .fstats, body.obs-proj .bar, body.obs-proj table { font-size: 17px; }
+body.obs-proj .share { height: 38px; }
+body.obs-proj .share span { font-size: 17px; }
+body.obs-proj .timeline .wk { font-size: 34px; }
+body.obs-proj .slider .lab, body.obs-proj .slider output { font-size: 18px; }
+body.obs-proj .tip { font-size: 16px; }
+
+blockquote.quote { margin: 0; padding: 4px 0 4px 16px; border-left: 3px solid var(--ink); font-family: var(--font-display); font-size: 21px; line-height: 1.3; max-width: 56ch; display: flex; flex-direction: column; gap: 4px; }
+blockquote.quote cite { font-family: var(--font-body); font-style: normal; font-size: 13px; color: var(--muted); }
+#c-table { min-width: 640px; }
+.fill.s1 { background: var(--s1); }
+#c-table tbody th { width: 13em; }
+svg .zero { stroke: var(--ink); stroke-width: 1; }
+body.obs-proj blockquote.quote { font-size: 26px; }
+body.obs-proj svg text { font-size: 15px; }
+body.obs-proj svg text.lbl, body.obs-proj svg text.axl { font-size: 16px; }
+body.obs-proj .share { height: 40px; } body.obs-proj .share span { font-size: 16px; }
+body.obs-proj table { font-size: 17px; }
+/* OBS-COMMON-CSS:BEGIN */
+/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+   Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
+   Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
+:root {
+  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
+  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
+  --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+    --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
+  --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0; }
+h1 { line-height: 1; }
+header.top h1::after, header h1::after { content: ""; display: block; width: 2.4em; height: 6px; margin-top: 12px; background: var(--accent); transform: skewX(-24deg); transform-origin: left; }
+.eyebrow { color: var(--accent); }
+.lede, .prose p { font-family: var(--font-read); }
+nav.tabs button { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; }
+nav.tabs button[aria-selected="true"] { border-bottom-color: var(--accent); }
+.btn { font-family: var(--font-mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; border-radius: 0; background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.quiet { border-color: var(--rule); color: var(--muted); }
+.notice { border-left-color: var(--accent); background: var(--paper); }
+input[type="range"], input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+.block + .block { border-top-color: var(--ink); }
+.round, .world, .rule, details.ext, .obs-ficha, figure .plot { border-radius: 0; }
+.world, .round, .rule { background: var(--paper); }
+
+/* Esquinas rectas, como en Econplebs (los círculos siguen siendo círculos) */
+.btn, input[type="text"], input[type="number"], select, textarea, .round, .rule, .world, .plate, .timeline, .share, .person, .seg button,
+.obs-seg, .obs-toggle, details.obs-ficha, .tip, .chip, .tag, .state, .roundbar, .codebox, .empty, figure, .circuit, .vbar, .check { border-radius: 0; }
+.share span { color: var(--on-series); }
+.tip { background: var(--paper); }
+.obs-seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+/* Piezas comunes del Observatorio: barra de herramientas, idioma, modo proyector y ficha docente.
+   Usa los tokens de cada página (--bg, --ink, --muted, --rule, --accent, --accent-soft, --paper, fuentes). */
+a.back { font-size: 14px; font-weight: 500; color: var(--accent); text-decoration: none; }
+a.back:hover { text-decoration: underline; }
+.obs-bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; }
+.obs-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.obs-seg button { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 0; padding: 5px 10px; cursor: pointer; }
+.obs-seg button + button { border-left: 1px solid var(--rule); }
+.obs-seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+.obs-toggle { font: 500 13px var(--font-body); color: var(--muted); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; padding: 5px 10px; cursor: pointer; }
+.obs-toggle[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.obs-seg button:focus-visible, .obs-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+details.obs-ficha { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 14px; background: var(--paper); font-size: 14px; }
+details.obs-ficha > summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+details.obs-ficha[open] > summary { margin-bottom: 10px; }
+.obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-ficha dt { color: var(--muted); }
+.obs-ficha dd { margin: 0; min-width: 0; }
+.obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
+@media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
+/* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
+body.obs-proj { font-size: 19px; }
+body.obs-proj .wrap { max-width: 1240px; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
+body.obs-proj h2 { font-size: 32px; }
+body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
+body.obs-proj .btn { font-size: 18px; padding: 12px 20px; }
+body.obs-proj input[type="range"] { height: 28px; }
+body.obs-proj .stat b { font-size: 36px; }
+body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
+body.obs-proj .obs-tools.keep { display: flex; }
+
+/* OBS-COMMON-CSS:END */
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div id="obs-bar"></div>
+    <span class="eyebrow" data-i18n="hd.eyebrow">Observatorio · SA 9 · Comercio internacional</span>
+    <h1 data-i18n="hd.title">Modelos de comercio internacional</h1>
+    <p class="lede" data-i18n-html="hd.lede"></p>
+  </header>
+
+  <nav class="tabs" role="tablist" data-i18n-attr="aria-label:aria.tabs">
+    <button role="tab" id="tab-ricardo" aria-selected="true" data-view="ricardo"><span class="n">1</span><span data-i18n="tab.ricardo">Ricardo</span></button>
+    <button role="tab" id="tab-shaikh" aria-selected="false" data-view="shaikh"><span class="n">2</span><span data-i18n="tab.shaikh">Shaikh</span></button>
+    <button role="tab" id="tab-supuestos" aria-selected="false" data-view="supuestos"><span class="n">3</span><span data-i18n="tab.sup">Comparar supuestos</span></button>
+  </nav>
+
+  <!-- ===================== 1 · RICARDO ===================== -->
+  <section class="view" id="view-ricardo" role="tabpanel" aria-labelledby="tab-ricardo">
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="r1.eyebrow">1a · Ventaja comparativa</span>
+        <h2 data-i18n="r1.h2">¿Ganan los dos aunque uno sea mejor en todo?</h2>
+        <p data-i18n="r1.p1"></p>
+        <p class="small" data-i18n="r1.p2"></p>
+      </div>
+      <div class="controls">
+        <div class="slider"><div class="lab"><label for="h-cE" data-i18n="h.cE">Inglaterra · horas por unidad de paño</label><output id="h-cE-out" for="h-cE"></output></div><input type="range" id="h-cE" min="40" max="160" step="5" value="100"></div>
+        <div class="slider"><div class="lab"><label for="h-wE" data-i18n="h.wE">Inglaterra · horas por unidad de vino</label><output id="h-wE-out" for="h-wE"></output></div><input type="range" id="h-wE" min="40" max="160" step="5" value="120"></div>
+        <div class="slider"><div class="lab"><label for="h-cP" data-i18n="h.cP">Portugal · horas por unidad de paño</label><output id="h-cP-out" for="h-cP"></output></div><input type="range" id="h-cP" min="40" max="160" step="5" value="90"></div>
+        <div class="slider"><div class="lab"><label for="h-wP" data-i18n="h.wP">Portugal · horas por unidad de vino</label><output id="h-wP-out" for="h-wP"></output></div><input type="range" id="h-wP" min="40" max="160" step="5" value="80"></div>
+      </div>
+      <div class="actions"><button type="button" class="btn quiet small" id="h-reset" data-i18n="h.reset">Volver a las cifras de Ricardo</button></div>
+      <div class="scroll"><table id="r-table"></table></div>
+      <div class="duo-head" id="r-cards"></div>
+      <div class="duo">
+        <figure>
+          <figcaption data-i18n="r.fig.world">Producción mundial con las mismas horas</figcaption>
+          <div class="legend"><span><i class="box" style="background:var(--ref)"></i><span data-i18n="r.leg.aut">Cada uno produce de todo</span></span><span><i class="box" style="background:var(--s1)"></i><span data-i18n="r.leg.spec">Cada uno se especializa</span></span></div>
+          <div id="r-world" class="bars"></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="r.fig.cons">Lo que consume cada país después de comerciar</figcaption>
+          <div class="scroll"><table id="r-cons"></table></div>
+          <p class="small" id="r-tot"></p>
+        </figure>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="r2.eyebrow">1b · El ajuste automático</span>
+        <h2 data-i18n="r2.h2">¿Se equilibra solo el comercio?</h2>
+        <p data-i18n="r2.p1"></p>
+        <p class="small" data-i18n="r2.p2"></p>
+      </div>
+      <div class="timeline">
+        <span class="wk" id="ra-label">Año 0</span>
+        <div class="slider"><div class="lab"><label for="ra-t" data-i18n="yrs">Años</label><output id="ra-t-out" for="ra-t"></output></div><input type="range" id="ra-t" min="0" max="20" step="1" value="0"></div>
+        <button type="button" class="btn" id="ra-play" data-i18n="play">Reproducir</button>
+      </div>
+      <div class="stats" id="ra-stats"></div>
+      <div class="notice" id="ra-note" aria-live="polite"></div>
+      <div class="duo">
+        <figure>
+          <figcaption data-i18n="ra.fig.ratio">Salarios y precios ingleses frente a portugueses</figcaption>
+          <div class="legend"><span><i style="border-color:var(--s1)"></i><span data-i18n="ra.leg.ratio">Nivel inglés ÷ nivel portugués</span></span><span><i class="box" style="background:var(--ok);opacity:.35"></i><span data-i18n="ra.leg.band">Zona en que cada país vende un bien</span></span></div>
+          <div class="plot"><svg class="chart" id="ra-ratio" role="img" data-i18n-attr="aria-label:ra.fig.ratio"></svg><div class="tip" id="ra-ratio-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="ra.fig.bal">Saldo comercial de Inglaterra</figcaption>
+          <div class="legend"><span><i style="border-color:var(--s2)"></i><span data-i18n="ra.leg.bal">Exportaciones menos importaciones</span></span></div>
+          <div class="plot"><svg class="chart" id="ra-bal" role="img" data-i18n-attr="aria-label:ra.fig.bal"></svg><div class="tip" id="ra-bal-tip" hidden></div></div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 2 · SHAIKH ===================== -->
+  <section class="view" id="view-shaikh" role="tabpanel" aria-labelledby="tab-shaikh" hidden>
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="s.eyebrow">2 · Ventaja absoluta</span>
+        <h2 data-i18n="s.h2">¿Y si el comercio no se equilibra solo?</h2>
+        <p data-i18n="s.p1"></p>
+        <p data-i18n="s.p2"></p>
+      </div>
+      <blockquote class="quote"><span data-i18n="s.quote"></span><cite data-i18n-html="s.cite"></cite></blockquote>
+      <div class="controls">
+        <div class="slider"><div class="lab"><label for="s-g" data-i18n="s.g">Mejora anual de la productividad inglesa</label><output id="s-g-out" for="s-g"></output></div><input type="range" id="s-g" min="0" max="6" step="0.5" value="0"></div>
+        <div class="slider"><div class="lab"><label for="s-d" data-i18n="s.d">Devaluación de la libra</label><output id="s-d-out" for="s-d"></output></div><input type="range" id="s-d" min="0" max="40" step="5" value="0"></div>
+        <div class="slider"><div class="lab"><label for="s-pt" data-i18n="s.pt">Parte de la devaluación que vuelve a los costes</label><output id="s-pt-out" for="s-pt"></output></div><input type="range" id="s-pt" min="0" max="100" step="10" value="60"></div>
+      </div>
+      <p class="small" data-i18n="s.ptnote"></p>
+      <div class="timeline">
+        <span class="wk" id="sa-label">Año 0</span>
+        <div class="slider"><div class="lab"><label for="sa-t" data-i18n="yrs">Años</label><output id="sa-t-out" for="sa-t"></output></div><input type="range" id="sa-t" min="0" max="20" step="1" value="0"></div>
+        <button type="button" class="btn" id="sa-play" data-i18n="play">Reproducir</button>
+      </div>
+      <div class="stats" id="sa-stats"></div>
+      <div class="notice" id="sa-note" aria-live="polite"></div>
+      <div class="duo">
+        <div class="field"><span class="small" id="sa-share-c-lab"></span><div class="share" id="sa-share-c"></div></div>
+        <div class="field"><span class="small" id="sa-share-w-lab"></span><div class="share" id="sa-share-w"></div></div>
+      </div>
+      <div class="duo">
+        <figure>
+          <figcaption data-i18n="sa.fig.bal">Saldo comercial de Inglaterra</figcaption>
+          <div class="legend"><span><i style="border-color:var(--s2)"></i><span data-i18n="ra.leg.bal">Exportaciones menos importaciones</span></span></div>
+          <div class="plot"><svg class="chart" id="sa-bal" role="img" data-i18n-attr="aria-label:sa.fig.bal"></svg><div class="tip" id="sa-bal-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="sa.fig.debt">Deuda exterior de Inglaterra</figcaption>
+          <div class="legend"><span><i style="border-color:var(--bad)"></i><span data-i18n="sa.leg.debt">Préstamos recibidos de Portugal, con intereses</span></span></div>
+          <div class="plot"><svg class="chart" id="sa-debt" role="img" data-i18n-attr="aria-label:sa.fig.debt"></svg><div class="tip" id="sa-debt-tip" hidden></div></div>
+        </figure>
+      </div>
+      <details>
+        <summary data-i18n="yearbyyear">Año a año</summary>
+        <div class="scroll"><table id="sa-hist"></table></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================== 3 · SUPUESTOS ===================== -->
+  <section class="view" id="view-supuestos" role="tabpanel" aria-labelledby="tab-supuestos" hidden>
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="c.eyebrow">3 · Comparar supuestos</span>
+        <h2 data-i18n="c.h2">Mismos países, dos maneras de explicar el comercio</h2>
+        <p data-i18n="c.p1"></p>
+      </div>
+      <div class="scroll"><table class="payoff" id="c-table"></table></div>
+      <div class="notice"><span data-i18n="c.hilo"></span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span data-i18n-html="ft.ricardo"></span>
+    <span data-i18n-html="ft.shaikh"></span>
+    <span data-i18n="ft.nums"></span>
+  </footer>
+</div>
+
+<script>
+// OBS-COMMON-JS:BEGIN
+/* Piezas comunes del Observatorio (se copian dentro de cada página entre las marcas OBS-COMMON).
+   OBS.t(clave, vars)  · traducción castellano/valenciano con {variables}
+   OBS.register({es:{...}, va:{...}})  · añade textos de la página
+   OBS.apply()  · aplica data-i18n, data-i18n-html y data-i18n-attr="atributo:clave;..."
+   OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
+   OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
+   OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+window.OBS = (() => {
+  "use strict";
+  const PANEL_URL = "../index.html";
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+  // Fuente de lectura de la línea Econplebs (Source Serif 4), cargada una vez
+  try {
+    if (!document.querySelector('link[data-obs-font]')) {
+      const l = document.createElement("link"); l.rel = "stylesheet"; l.dataset.obsFont = "1";
+      l.href = "https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap";
+      document.head.append(l);
+    }
+  } catch {}
+  const dict = { es: {}, va: {} };
+  const listeners = [];
+  let lang = store.get("obs-lang") === "va" ? "va" : "es";
+  const fill = (s, vars) => vars ? String(s).replace(/\{(\w+)\}/g, (m, k) => vars[k] != null ? vars[k] : m) : s;
+  function t(key, vars) {
+    const s = dict[lang][key] != null ? dict[lang][key] : dict.es[key] != null ? dict.es[key] : key;
+    return fill(s, vars);
+  }
+  function register(d) { for (const l of ["es", "va"]) if (d[l]) Object.assign(dict[l], d[l]); }
+  function apply(root) {
+    root = root || document;
+    root.querySelectorAll("[data-i18n]").forEach(n => { n.textContent = t(n.dataset.i18n); });
+    root.querySelectorAll("[data-i18n-html]").forEach(n => { n.innerHTML = t(n.dataset.i18nHtml); });
+    root.querySelectorAll("[data-i18n-attr]").forEach(n => n.dataset.i18nAttr.split(";").forEach(pair => {
+      const [attr, key] = pair.split(":").map(x => x.trim()); if (attr && key) n.setAttribute(attr, t(key));
+    }));
+    document.documentElement.lang = lang === "va" ? "ca-ES-valencia" : "es";
+    const tt = document.querySelector("title[data-i18n]"); if (tt) document.title = t(tt.dataset.i18n);
+  }
+  function setLang(l) {
+    lang = l === "va" ? "va" : "es"; store.set("obs-lang", lang); apply();
+    document.querySelectorAll(".obs-seg button[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    listeners.forEach(fn => { try { fn(lang); } catch (e) { console.error(e); } });
+  }
+  function onLang(fn) { listeners.push(fn); }
+  let proj = store.get("obs-proj") === "1";
+  function setProj(on) {
+    proj = !!on; store.set("obs-proj", proj ? "1" : "0");
+    document.body.classList.toggle("obs-proj", proj);
+    document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+  }
+  register({
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+      "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
+      "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
+      "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
+      "obs.saved": "Archivo descargado." },
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+      "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
+      "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
+      "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
+      "obs.saved": "Arxiu descarregat." }
+  });
+  const h = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (v != null && v !== false) n.setAttribute(k, v === true ? "" : v); }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  /* ficha = { sesiones: {es, va}, uso: {es, va}, saberes: [{code, es, va}], criterios: [{code, es, va}] } */
+  function renderFicha(box, ficha) {
+    const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+    const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
+    box.replaceChildren(
+      h("summary", { text: t("obs.ficha") }),
+      h("dl", {},
+        ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
+        ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
+        ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
+        ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
+  }
+  function mountBar(container, opts = {}) {
+    const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
+    const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
+      h("button", { type: "button", "data-lang": "es", "aria-pressed": String(lang === "es"), text: "Castellano" }),
+      h("button", { type: "button", "data-lang": "va", "aria-pressed": String(lang === "va"), text: "Valencià" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (b) setLang(b.dataset.lang); });
+    const pj = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pj.addEventListener("click", () => setProj(!proj));
+    const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
+    pjKeep.addEventListener("click", () => setProj(!proj));
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
+    const style = document.createElement("style");
+    style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
+    document.head.append(style);
+    if (opts.ficha) {
+      const box = h("details", { class: "obs-ficha" });
+      (opts.fichaContainer || container).after(box);
+      renderFicha(box, opts.ficha);
+      onLang(() => renderFicha(box, opts.ficha));
+    }
+    setProj(proj);
+  }
+  const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
+  async function download(name, text, type, opts = {}) {
+    const data = (type || "").includes("csv") ? "﻿" + text : text;
+    if (opts.downloads) { try { await opts.downloads.save({ filename: name, data }); return t("obs.saved"); } catch (e) { if (e && e.code === "declined") return ""; } }
+    const inArtifact = /claude\.ai|claudeusercontent/.test(location.hostname);
+    if (!inArtifact) {
+      try {
+        const url = URL.createObjectURL(new Blob([data], { type: type || "text/plain" }));
+        const a = h("a", { href: url, download: name }); document.body.append(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 2000); return t("obs.saved");
+      } catch {}
+    }
+    try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
+  }
+  document.addEventListener("DOMContentLoaded", () => apply());
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+})();
+
+// OBS-COMMON-JS:END
+</script>
+<script>
+(() => {
+  "use strict";
+  OBS.register({
+    es: {
+      "doc.title": "Observatorio · SA 9", "aria.tabs": "Modelos",
+      "hd.eyebrow": "Observatorio · SA 9 · Comercio internacional", "hd.title": "Modelos de comercio internacional",
+      "hd.lede": "Dos países, dos productos y dos explicaciones. <strong>Ricardo:</strong> cada país gana especializándose en lo que hace relativamente mejor, y el comercio se equilibra solo. <strong>Shaikh:</strong> venden las empresas que producen más barato, y el país menos eficiente acumula déficit y deuda.",
+      "tab.ricardo": "Ricardo", "tab.shaikh": "Shaikh", "tab.sup": "Comparar supuestos",
+      "r1.eyebrow": "1a · Ventaja comparativa", "r1.h2": "¿Ganan los dos aunque uno sea mejor en todo?",
+      "r1.p1": "El ejemplo de David Ricardo (1817): Inglaterra y Portugal producen paño y vino. Las cifras son las horas de trabajo que necesita cada país para producir una unidad. Portugal necesita menos horas en los dos productos: tiene ventaja absoluta en todo.",
+      "r1.p2": "Ventaja comparativa: lo que un país hace relativamente mejor, es decir, lo que le cuesta renunciar a menos del otro producto (coste de oportunidad).",
+      "h.cE": "Inglaterra · horas por unidad de paño", "h.wE": "Inglaterra · horas por unidad de vino",
+      "h.cP": "Portugal · horas por unidad de paño", "h.wP": "Portugal · horas por unidad de vino",
+      "h.reset": "Volver a las cifras de Ricardo", "hours": "{n} h",
+      "rt.country": "País", "rt.cloth": "Paño (horas)", "rt.wine": "Vino (horas)", "rt.opp": "Coste de un vino, en paño", "rt.abs": "Ventaja absoluta en",
+      "E": "Inglaterra", "P": "Portugal", "cloth": "paño", "wine": "vino", "Cloth": "Paño", "Wine": "Vino",
+      "both": "los dos", "none": "ninguno",
+      "card.spec": "{c} se especializa en", "card.why": "Renuncia a {o} de {other} por cada unidad de {good}; el otro país, a {o2}.",
+      "card.same": "Sin ventaja comparativa", "card.samewhy": "Los dos países renuncian a lo mismo para producir cada bien: especializarse no aumenta la producción.",
+      "r.fig.world": "Producción mundial con las mismas horas", "r.leg.aut": "Cada uno produce de todo", "r.leg.spec": "Cada uno se especializa",
+      "r.fig.cons": "Lo que consume cada país después de comerciar",
+      "ct.country": "País", "ct.before": "Antes (paño + vino)", "ct.after": "Después (paño + vino)", "ct.gain": "Ganancia",
+      "r.tot": "Se intercambia 1 unidad de vino por {t} de paño. Con las mismas horas de trabajo, los dos países consumen más que antes.",
+      "r.tot.none": "Sin diferencias de coste de oportunidad no hay intercambio que mejore a los dos.",
+      "unit": "{n} u.",
+      "r2.eyebrow": "1b · El ajuste automático", "r2.h2": "¿Se equilibra solo el comercio?",
+      "r2.p1": "Al abrir el comercio, los productos portugueses son más baratos en todo: Inglaterra compra paño y vino a Portugal y paga en oro. Según Ricardo, el oro que sale de Inglaterra hace bajar allí precios y salarios, y el que entra en Portugal los hace subir (teoría cuantitativa del dinero). Año tras año, el paño inglés se vuelve más barato que el portugués.",
+      "r2.p2": "Arrastra los años o pulsa «Reproducir». Si cambias las horas de arriba, cambia también el ajuste.",
+      "yrs": "Años", "play": "Reproducir", "pause": "Pausa", "year": "Año {n}", "yof": "{t} de {n}",
+      "ra.st.cloth": "Vende el paño", "ra.st.wine": "Vende el vino", "ra.st.bal": "Saldo comercial inglés", "ra.st.ratio": "Nivel inglés frente al portugués",
+      "ra.n0": "**Año 0: se abre el comercio.** Portugal es más barato en todo y Inglaterra solo importa. El oro empieza a salir de Inglaterra.",
+      "ra.ndef": "**Inglaterra todavía tiene déficit.** Sigue saliendo oro: bajan los precios y salarios ingleses y suben los portugueses.",
+      "ra.nband": "**Cada país vende ya un producto:** {c} vende el paño y {w} el vino. El déficit inglés es cada vez más pequeño.",
+      "ra.neq": "**El comercio se ha equilibrado solo.** Inglaterra exporta paño y Portugal vino, como dice la ventaja comparativa, aunque Portugal sigue siendo más eficiente en los dos.",
+      "ra.nsur": "**Inglaterra tiene superávit:** ahora entra oro en Inglaterra y sus precios vuelven a subir.",
+      "ra.fig.ratio": "Salarios y precios ingleses frente a portugueses", "ra.leg.ratio": "Nivel inglés ÷ nivel portugués", "ra.leg.band": "Zona en que cada país vende un bien",
+      "ra.fig.bal": "Saldo comercial de Inglaterra", "ra.leg.bal": "Exportaciones menos importaciones",
+      "ax.years": "Años", "ax.ratio": "Inglaterra ÷ Portugal", "ax.gold": "Onzas de oro al año", "ax.mill": "Millones de libras",
+      "tip.ratio": "Nivel relativo", "tip.bal": "Saldo",
+      "s.eyebrow": "2 · Ventaja absoluta", "s.h2": "¿Y si el comercio no se equilibra solo?",
+      "s.p1": "Para Anwar Shaikh, como para Adam Smith, no comercian los países sino empresas que buscan ganancia. En cada producto vende más quien produce más barato en términos absolutos: lo deciden los salarios y la productividad de cada país, no el oro que entra o sale.",
+      "s.p2": "El dinero que llega a Portugal no sube sus precios: abarata allí el crédito y vuelve a Inglaterra en forma de préstamos. Así se tapa el déficit, pero Inglaterra se endeuda año tras año.",
+      "s.quote": "«Los países con menos capitales competitivos sufrirán déficits crónicos en la balanza comercial que serán cubiertos por endeudamiento externo crónico».",
+      "s.cite": "Anwar Shaikh, <em>Capitalismo: competencia, conflicto y crisis</em>, FCE, 2023, p. 723",
+      "s.g": "Mejora anual de la productividad inglesa", "s.d": "Devaluación de la libra", "s.pt": "Parte de la devaluación que vuelve a los costes",
+      "s.ptnote": "Devaluar abarata los productos ingleses, pero encarece las materias primas importadas y empuja a pedir subidas salariales: una parte del abaratamiento se pierde. Las mismas horas de trabajo y los mismos países que en la pestaña de Ricardo.",
+      "pct": "{n} %", "pcty": "{n} % al año",
+      "sa.st.bal": "Saldo comercial inglés", "sa.st.debt": "Deuda exterior", "sa.st.ind": "Producción de las fábricas inglesas", "sa.st.reg": "Marcan el precio",
+      "sa.share": "{g}: ventas en Inglaterra", "sa.firmsE": "Inglesas", "sa.firmsP": "Portuguesas",
+      "sa.n0": "**Año 0: se abre el comercio.** Las empresas portuguesas producen más barato los dos bienes, así que son las que marcan el precio.",
+      "sa.ndef": "**Inglaterra importa cada vez más** y sus fábricas venden menos. El déficit se cubre con préstamos que llegan de Portugal: la deuda ya es de {d}.",
+      "sa.nrec": "**Las fábricas inglesas recuperan mercado** en {g} porque ya producen más barato. El déficit se reduce, pero la deuda acumulada sigue ahí: {d}.",
+      "sa.nsur": "**Inglaterra ya tiene superávit:** ahora es más eficiente y empieza a devolver la deuda ({d}).",
+      "sa.ncred": "**Inglaterra ya es acreedora:** con sus superávits presta al exterior ({d}).",
+      "sa.nflat": "**El déficit no se corrige solo.** Ni bajan los precios ingleses ni suben los portugueses: la deuda sigue creciendo ({d}).",
+      "sa.fig.bal": "Saldo comercial de Inglaterra", "sa.fig.debt": "Deuda exterior de Inglaterra", "sa.leg.debt": "Préstamos recibidos de Portugal, con intereses", "sa.leg.ind": "Producción de las fábricas inglesas",
+      "sa.ax.idx": "Millones de libras · producción en índice (año 0 = 100)",
+      "tip.debt": "Deuda", "tip.ind": "Producción (índice)",
+      "yearbyyear": "Año a año",
+      "sh.year": "Año", "sh.cloth": "Paño: cuota inglesa", "sh.wine": "Vino: cuota inglesa", "sh.bal": "Saldo", "sh.debt": "Deuda", "sh.ind": "Producción (índice)",
+      "c.eyebrow": "3 · Comparar supuestos", "c.h2": "Mismos países, dos maneras de explicar el comercio",
+      "c.p1": "Los dos modelos usan las mismas horas de trabajo. Lo que cambia son los supuestos sobre quién comercia y qué hace el dinero.",
+      "c.th.q": "Pregunta", "c.th.r": "Ricardo (ventaja comparativa)", "c.th.s": "Shaikh (ventaja absoluta)",
+      "c.q1": "¿Quién comercia?", "c.r1": "Al final del razonamiento, los países, que se especializan.", "c.s1": "Empresas que buscan ganancia, también entre países.",
+      "c.q2": "¿Qué decide quién exporta?", "c.r2": "El coste comparativo: lo que cada país hace relativamente mejor.", "c.s2": "El coste absoluto: salarios y productividad. Vende quien produce más barato.",
+      "c.q3": "¿Qué hace el dinero que entra con el superávit?", "c.r3": "Sube los precios del país que exporta (teoría cuantitativa del dinero).", "c.s3": "Abarata el crédito en ese país y sale como préstamos al país con déficit.",
+      "c.q4": "¿Se equilibra solo el comercio?", "c.r4": "Sí: los precios se ajustan hasta que exportaciones e importaciones se igualan.", "c.s4": "No: el déficit puede durar décadas, cubierto con deuda exterior.",
+      "c.q5": "¿Qué pasa con el empleo?", "c.r5": "En su versión moderna se supone pleno empleo: quien pierde su trabajo en un sector lo encuentra en otro.", "c.s5": "Los sectores que pierden mercado cierran fábricas y puede aparecer paro.",
+      "c.q6": "¿Qué política se deduce?", "c.r6": "Abrir el comercio: los dos países ganan.", "c.s6": "Mejorar los costes reales (productividad, técnica); el libre comercio favorece a quien ya es más competitivo.",
+      "c.hilo": "Hilo de la SA: en la guerra arancelaria actual se discute si los déficits comerciales persistentes se corrigen solos o hay que actuar sobre ellos. Cada modelo da una respuesta distinta.",
+      "ft.ricardo": "David Ricardo, <em>Principios de economía política y tributación</em> (1817), cap. 7: ejemplo de Inglaterra y Portugal con el paño y el vino.",
+      "ft.shaikh": "Anwar Shaikh, <em>Capitalismo: competencia, conflicto y crisis</em>, Fondo de Cultura Económica, 2023 (ed. original en inglés, 2016), cap. 11, pp. 704-747, que retoma a Smith, Marx y Harrod.",
+      "ft.nums": "Las cifras de los años, los préstamos y la producción son un ejemplo propio para el aula: el modelo es simplificado y no reproduce ningún caso real."
+    },
+    va: {
+      "doc.title": "Observatori · SA 9", "aria.tabs": "Models",
+      "hd.eyebrow": "Observatori · SA 9 · Comerç internacional", "hd.title": "Models de comerç internacional",
+      "hd.lede": "Dos països, dos productes i dues explicacions. <strong>Ricardo:</strong> cada país guanya especialitzant-se en el que fa relativament millor, i el comerç s'equilibra a soles. <strong>Shaikh:</strong> venen les empreses que produïxen més barat, i el país menys eficient acumula dèficit i deute.",
+      "tab.ricardo": "Ricardo", "tab.shaikh": "Shaikh", "tab.sup": "Comparar supòsits",
+      "r1.eyebrow": "1a · Avantatge comparatiu", "r1.h2": "Guanyen els dos encara que un siga millor en tot?",
+      "r1.p1": "L'exemple de David Ricardo (1817): Anglaterra i Portugal produïxen drap i vi. Les xifres són les hores de treball que necessita cada país per a produir una unitat. Portugal necessita menys hores en els dos productes: té avantatge absolut en tot.",
+      "r1.p2": "Avantatge comparatiu: el que un país fa relativament millor, és a dir, allò que li costa renunciar a menys de l'altre producte (cost d'oportunitat).",
+      "h.cE": "Anglaterra · hores per unitat de drap", "h.wE": "Anglaterra · hores per unitat de vi",
+      "h.cP": "Portugal · hores per unitat de drap", "h.wP": "Portugal · hores per unitat de vi",
+      "h.reset": "Tornar a les xifres de Ricardo", "hours": "{n} h",
+      "rt.country": "País", "rt.cloth": "Drap (hores)", "rt.wine": "Vi (hores)", "rt.opp": "Cost d'un vi, en drap", "rt.abs": "Avantatge absolut en",
+      "E": "Anglaterra", "P": "Portugal", "cloth": "drap", "wine": "vi", "Cloth": "Drap", "Wine": "Vi",
+      "both": "els dos", "none": "cap",
+      "card.spec": "{c} s'especialitza en", "card.why": "Renuncia a {o} de {other} per cada unitat de {good}; l'altre país, a {o2}.",
+      "card.same": "Sense avantatge comparatiu", "card.samewhy": "Els dos països renuncien al mateix per a produir cada bé: especialitzar-se no augmenta la producció.",
+      "r.fig.world": "Producció mundial amb les mateixes hores", "r.leg.aut": "Cada un produïx de tot", "r.leg.spec": "Cada un s'especialitza",
+      "r.fig.cons": "El que consumix cada país després de comerciar",
+      "ct.country": "País", "ct.before": "Abans (drap + vi)", "ct.after": "Després (drap + vi)", "ct.gain": "Guany",
+      "r.tot": "S'intercanvia 1 unitat de vi per {t} de drap. Amb les mateixes hores de treball, els dos països consumixen més que abans.",
+      "r.tot.none": "Sense diferències de cost d'oportunitat no hi ha intercanvi que millore els dos.",
+      "unit": "{n} u.",
+      "r2.eyebrow": "1b · L'ajust automàtic", "r2.h2": "S'equilibra a soles el comerç?",
+      "r2.p1": "En obrir el comerç, els productes portuguesos són més barats en tot: Anglaterra compra drap i vi a Portugal i paga en or. Segons Ricardo, l'or que ix d'Anglaterra hi fa baixar els preus i els salaris, i el que entra a Portugal els fa pujar (teoria quantitativa dels diners). Any rere any, el drap anglés es torna més barat que el portugués.",
+      "r2.p2": "Arrossega els anys o prem «Reproduir». Si canvies les hores de dalt, canvia també l'ajust.",
+      "yrs": "Anys", "play": "Reproduir", "pause": "Pausa", "year": "Any {n}", "yof": "{t} de {n}",
+      "ra.st.cloth": "Ven el drap", "ra.st.wine": "Ven el vi", "ra.st.bal": "Saldo comercial anglés", "ra.st.ratio": "Nivell anglés davant del portugués",
+      "ra.n0": "**Any 0: s'obri el comerç.** Portugal és més barat en tot i Anglaterra només importa. L'or comença a eixir d'Anglaterra.",
+      "ra.ndef": "**Anglaterra encara té dèficit.** Continua eixint or: baixen els preus i els salaris anglesos i pugen els portuguesos.",
+      "ra.nband": "**Cada país ja ven un producte:** {c} ven el drap i {w} el vi. El dèficit anglés és cada vegada més xicotet.",
+      "ra.neq": "**El comerç s'ha equilibrat a soles.** Anglaterra exporta drap i Portugal vi, com diu l'avantatge comparatiu, encara que Portugal continua sent més eficient en els dos.",
+      "ra.nsur": "**Anglaterra té superàvit:** ara entra or a Anglaterra i els seus preus tornen a pujar.",
+      "ra.fig.ratio": "Salaris i preus anglesos davant dels portuguesos", "ra.leg.ratio": "Nivell anglés ÷ nivell portugués", "ra.leg.band": "Zona en què cada país ven un bé",
+      "ra.fig.bal": "Saldo comercial d'Anglaterra", "ra.leg.bal": "Exportacions menys importacions",
+      "ax.years": "Anys", "ax.ratio": "Anglaterra ÷ Portugal", "ax.gold": "Unces d'or a l'any", "ax.mill": "Milions de lliures",
+      "tip.ratio": "Nivell relatiu", "tip.bal": "Saldo",
+      "s.eyebrow": "2 · Avantatge absolut", "s.h2": "I si el comerç no s'equilibra a soles?",
+      "s.p1": "Per a Anwar Shaikh, com per a Adam Smith, no comercien els països sinó empreses que busquen guany. En cada producte ven més qui produïx més barat en termes absoluts: ho decidixen els salaris i la productivitat de cada país, no l'or que entra o ix.",
+      "s.p2": "Els diners que arriben a Portugal no hi pugen els preus: hi abaratixen el crèdit i tornen a Anglaterra en forma de préstecs. Així es tapa el dèficit, però Anglaterra s'endeuta any rere any.",
+      "s.quote": "«Los países con menos capitales competitivos sufrirán déficits crónicos en la balanza comercial que serán cubiertos por endeudamiento externo crónico».",
+      "s.cite": "Anwar Shaikh, <em>Capitalismo: competencia, conflicto y crisis</em>, FCE, 2023, p. 723 (cita de l'edició castellana)",
+      "s.g": "Millora anual de la productivitat anglesa", "s.d": "Devaluació de la lliura", "s.pt": "Part de la devaluació que torna als costos",
+      "s.ptnote": "Devaluar abaratix els productes anglesos, però encarix les matèries primeres importades i empeny a demanar pujades salarials: una part de l'abaratiment es perd. Les mateixes hores de treball i els mateixos països que en la pestanya de Ricardo.",
+      "pct": "{n} %", "pcty": "{n} % a l'any",
+      "sa.st.bal": "Saldo comercial anglés", "sa.st.debt": "Deute exterior", "sa.st.ind": "Producció de les fàbriques angleses", "sa.st.reg": "Marquen el preu",
+      "sa.share": "{g}: vendes a Anglaterra", "sa.firmsE": "Angleses", "sa.firmsP": "Portugueses",
+      "sa.n0": "**Any 0: s'obri el comerç.** Les empreses portugueses produïxen més barat els dos béns, així que són les que marquen el preu.",
+      "sa.ndef": "**Anglaterra importa cada vegada més** i les seues fàbriques venen menys. El dèficit es cobrix amb préstecs que arriben de Portugal: el deute ja és de {d}.",
+      "sa.nrec": "**Les fàbriques angleses recuperen mercat** en {g} perquè ja produïxen més barat. El dèficit es reduïx, però el deute acumulat continua ací: {d}.",
+      "sa.nsur": "**Anglaterra ja té superàvit:** ara és més eficient i comença a tornar el deute ({d}).",
+      "sa.ncred": "**Anglaterra ja és creditora:** amb els seus superàvits presta a l'exterior ({d}).",
+      "sa.nflat": "**El dèficit no es corregix a soles.** Ni baixen els preus anglesos ni pugen els portuguesos: el deute continua creixent ({d}).",
+      "sa.fig.bal": "Saldo comercial d'Anglaterra", "sa.fig.debt": "Deute exterior d'Anglaterra", "sa.leg.debt": "Préstecs rebuts de Portugal, amb interessos", "sa.leg.ind": "Producció de les fàbriques angleses",
+      "sa.ax.idx": "Milions de lliures · producció en índex (any 0 = 100)",
+      "tip.debt": "Deute", "tip.ind": "Producció (índex)",
+      "yearbyyear": "Any rere any",
+      "sh.year": "Any", "sh.cloth": "Drap: quota anglesa", "sh.wine": "Vi: quota anglesa", "sh.bal": "Saldo", "sh.debt": "Deute", "sh.ind": "Producció (índex)",
+      "c.eyebrow": "3 · Comparar supòsits", "c.h2": "Mateixos països, dues maneres d'explicar el comerç",
+      "c.p1": "Els dos models usen les mateixes hores de treball. El que canvia són els supòsits sobre qui comercia i què fan els diners.",
+      "c.th.q": "Pregunta", "c.th.r": "Ricardo (avantatge comparatiu)", "c.th.s": "Shaikh (avantatge absolut)",
+      "c.q1": "Qui comercia?", "c.r1": "Al final del raonament, els països, que s'especialitzen.", "c.s1": "Empreses que busquen guany, també entre països.",
+      "c.q2": "Què decidix qui exporta?", "c.r2": "El cost comparatiu: el que cada país fa relativament millor.", "c.s2": "El cost absolut: salaris i productivitat. Ven qui produïx més barat.",
+      "c.q3": "Què fan els diners que entren amb el superàvit?", "c.r3": "Pugen els preus del país que exporta (teoria quantitativa dels diners).", "c.s3": "Abaratixen el crèdit en eixe país i ixen com a préstecs cap al país amb dèficit.",
+      "c.q4": "S'equilibra a soles el comerç?", "c.r4": "Sí: els preus s'ajusten fins que exportacions i importacions s'igualen.", "c.s4": "No: el dèficit pot durar dècades, cobert amb deute exterior.",
+      "c.q5": "Què passa amb l'ocupació?", "c.r5": "En la versió moderna se suposa plena ocupació: qui perd la feina en un sector la troba en un altre.", "c.s5": "Els sectors que perden mercat tanquen fàbriques i pot aparéixer desocupació.",
+      "c.q6": "Quina política se'n deduïx?", "c.r6": "Obrir el comerç: els dos països guanyen.", "c.s6": "Millorar els costos reals (productivitat, tècnica); el lliure comerç afavorix qui ja és més competitiu.",
+      "c.hilo": "Fil de la SA: en la guerra aranzelària actual es discutix si els dèficits comercials persistents es corregixen a soles o cal actuar-hi. Cada model dona una resposta diferent.",
+      "ft.ricardo": "David Ricardo, <em>Principis d'economia política i tributació</em> (1817), cap. 7: exemple d'Anglaterra i Portugal amb el drap i el vi.",
+      "ft.shaikh": "Anwar Shaikh, <em>Capitalismo: competencia, conflicto y crisis</em>, Fondo de Cultura Económica, 2023 (ed. original en anglés, 2016), cap. 11, pp. 704-747, que reprén Smith, Marx i Harrod.",
+      "ft.nums": "Les xifres dels anys, els préstecs i la producció són un exemple propi per a l'aula: el model és simplificat i no reproduïx cap cas real."
+    }
+  });
+  const FICHA = {
+    sesiones: { es: "Por definir.", va: "Per definir." },
+    saberes: [
+      { code: "C10", es: "El comercio internacional, los procesos de integración económica y sus efectos.", va: "El comerç internacional, els processos d'integració econòmica i els seus efectes." },
+      { code: "C11", es: "Proteccionismo y libre comercio.", va: "Proteccionisme i lliure comerç." },
+      { code: "C13", es: "Funcionamiento del comercio internacional y sus efectos económico-sociales.", va: "Funcionament del comerç internacional i els seus efectes economicosocials." },
+      { code: "E1", es: "La globalización: factores explicativos, oportunidades y riesgos.", va: "La globalització: factors explicatius, oportunitats i riscos." },
+      { code: "E2", es: "La convergencia económica entre países.", va: "La convergència econòmica entre països." },
+      { code: "E3", es: "La reducción de las desigualdades.", va: "La reducció de les desigualtats." },
+      { code: "E10", es: "Democracia y estado del bienestar.", va: "Democràcia i estat del benestar." },
+      { code: "E11", es: "El futuro del estado del bienestar y su relación con la democracia.", va: "El futur de l'estat del benestar i la seua relació amb la democràcia." },
+      { code: "E13", es: "Los flujos migratorios y sus implicaciones socioeconómicas.", va: "Els fluxos migratoris i les seues implicacions socioeconòmiques." }
+    ],
+    criterios: [
+      { code: "1.1", es: "Comprender la realidad económica actual, analizando la repercusión de las decisiones adoptadas en el ámbito económico, valorando los procesos de integración económica y estableciendo comparaciones sobre las soluciones alternativas que ofrecen los distintos sistemas.", va: "Comprendre la realitat econòmica actual, analitzant la repercussió de les decisions adoptades en l'àmbit econòmic, valorant els processos d'integració econòmica i establint comparacions sobre les solucions alternatives que oferixen els diferents sistemes." },
+      { code: "3.2", es: "Diferenciar los costes y beneficios que se generan en el flujo circular de la renta para cada uno de los agentes económicos, estableciendo relaciones entre ellos y determinando su repercusión en el desarrollo económico y bienestar social.", va: "Diferenciar els costos i beneficis que es generen en el flux circular de la renda per a cada un dels agents econòmics, establint relacions entre estos i determinant-ne la repercussió en el desenrotllament econòmic i benestar social." },
+      { code: "5.1", es: "Proponer iniciativas que fomenten la equidad, la justicia y la sostenibilidad a partir de la identificación de los retos y desafíos que plantea la economía actual, analizando, con sentido crítico, el impacto que provocan la globalización, la nueva economía y la revolución digital en el bienestar económico y social de los ciudadanos y ciudadanas.", va: "Proposar iniciatives que fomenten l'equitat, la justícia i la sostenibilitat a partir de la identificació dels reptes i desafiaments que planteja l'economia actual, analitzant, amb sentit crític, l'impacte que provoquen la globalització, la nova economia i la revolució digital en el benestar econòmic i social dels ciutadans i ciutadanes." },
+      { code: "5.2", es: "Comprender los retos económicos actuales analizando, de forma crítica y constructiva, el entorno, identificando aquellos elementos que condicionan y transforman la economía y fomentando iniciativas que respondan a las necesidades que plantean estos retos.", va: "Comprendre els reptes econòmics actuals, analitzant l'entorn de manera crítica i constructiva, identificant aquells elements que condicionen i transformen l'economia, i fomentant iniciatives que responguen a les necessitats que plantegen estos reptes." }
+    ],
+    uso: {
+      es: "1 · Ricardo: ventaja comparativa con el ejemplo de Inglaterra y Portugal y el ajuste automático por los flujos de oro.\n2 · Shaikh: ventaja absoluta, déficit persistente y deuda exterior, con las palancas de la productividad y la devaluación.\n3 · Comparar supuestos: tabla para la controversia, ligada a la guerra arancelaria actual.",
+      va: "1 · Ricardo: avantatge comparatiu amb l'exemple d'Anglaterra i Portugal i l'ajust automàtic pels fluxos d'or.\n2 · Shaikh: avantatge absolut, dèficit persistent i deute exterior, amb les palanques de la productivitat i la devaluació.\n3 · Comparar supòsits: taula per a la controvèrsia, lligada a la guerra aranzelària actual."
+    }
+  };
+  const $ = id => document.getElementById(id);
+  const NS = "http://www.w3.org/2000/svg";
+  const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("es-ES", { minimumFractionDigits: d, maximumFractionDigits: d }) : "—";
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const sv = (tag, attrs = {}, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) if (v != null) n.setAttribute(k, v);
+    if (text != null) n.textContent = text;
+    return n;
+  };
+  const t = (k, v) => OBS.t(k, v);
+  const rich = (k, v) => { const parts = t(k, v).split(/\*\*(.+?)\*\*/); return el("span", {}, parts.map((p, i) => i % 2 ? el("strong", { text: p }) : p)); };
+  const lab = x => typeof x === "function" ? x() : x;
+  const signed = (v, d = 0) => (v > 0.0001 ? "+" : v < -0.0001 ? "−" : "") + fmt(Math.abs(v), d);
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- Pestañas ----------
+  const VIEWS = ["ricardo", "shaikh", "supuestos"];
+  function show(view) {
+    if (!VIEWS.includes(view)) view = "ricardo";
+    for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+
+  // ---------- Motor de gráficos (SVG, una escala por gráfico) ----------
+  const M = { l: 62, r: 22, t: 14, b: 50 };
+  let clipN = 0;
+  function frame(svg, o) {
+    svg.replaceChildren();
+    const W = o.w || 640, H = o.h || 380;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const pw = W - M.l - M.r, ph = H - M.t - M.b;
+    const sx = x => M.l + (x / o.xMax) * pw;
+    const y0 = o.yMin || 0;
+    const sy = y => M.t + ph - ((y - y0) / (o.yMax - y0)) * ph;
+    const defs = sv("defs");
+    const cid = "clip" + (++clipN);
+    const cp = sv("clipPath", { id: cid }); cp.append(sv("rect", { x: M.l, y: M.t, width: pw, height: ph })); defs.append(cp);
+    const hid = "hatch" + clipN;
+    const pat = sv("pattern", { id: hid, width: 6, height: 6, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
+    pat.append(sv("line", { x1: 0, y1: 0, x2: 0, y2: 6, class: "hatch-line" })); defs.append(pat);
+    svg.append(defs);
+    const grid = sv("g", { class: "grid" }), axis = sv("g", { class: "axis" });
+    o.yTicks.forEach(t => {
+      grid.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(t), y2: sy(t) }));
+      svg.append(sv("text", { x: M.l - 8, y: sy(t) + 4, "text-anchor": "end" }, (o.yFmt || fmt)(t)));
+    });
+    o.xTicks.forEach(t => {
+      svg.append(sv("text", { x: sx(t), y: H - M.b + 18, "text-anchor": "middle" }, fmt(t)));
+    });
+    axis.append(sv("line", { x1: M.l, x2: W - M.r, y1: sy(y0), y2: sy(y0) }));
+    axis.append(sv("line", { x1: M.l, x2: M.l, y1: M.t, y2: sy(y0) }));
+    svg.append(grid, axis);
+    svg.append(sv("text", { x: (M.l + W - M.r) / 2, y: H - 8, "text-anchor": "middle", class: "axl" }, lab(o.xLabel)));
+    svg.append(sv("text", { x: 14, y: M.t + ph / 2, "text-anchor": "middle", class: "axl", transform: `rotate(-90 14 ${M.t + ph / 2})` }, lab(o.yLabel)));
+    const plot = sv("g", { "clip-path": `url(#${cid})` });
+    const top = sv("g");
+    svg.append(plot, top);
+    return { sx, sy, plot, top, o, pw, ph, hid, W, H };
+  }
+  const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  function curve(F, fn, x0, x1, cls, steps = 160) {
+    const pts = [];
+    for (let i = 0; i <= steps; i++) { const x = x0 + (x1 - x0) * i / steps; const y = fn(x); if (isFinite(y)) pts.push([F.sx(x), F.sy(clamp(y, -F.o.yMax, F.o.yMax * 3))]); }
+    F.plot.append(sv("path", { d: path(pts), class: "curve " + cls }));
+  }
+  function poly(F, pts, cls, extra = {}) { F.plot.append(sv("path", { d: path(pts.map(p => [F.sx(p[0]), F.sy(p[1])])) + " Z", class: cls, ...extra })); }
+  // Etiqueta directa al final visible de la curva
+  function endLabel(F, fn, x0, x1, text, dy = 0) {
+    let x = x1;
+    for (let i = 0; i <= 200; i++) { const t = x1 - (x1 - x0) * i / 200; const y = fn(t); if (isFinite(y) && y <= F.o.yMax * 0.93 && y >= 0) { x = t; break; } }
+    const px = Math.min(F.sx(x), F.W - M.r - 4), py = F.sy(fn(x)) - 8 + dy;
+    F.top.append(sv("text", { x: px, y: py, "text-anchor": "end", class: "lbl" }, text));
+  }
+  // Capa de lectura al pasar el puntero
+  function hover(svg, tip, F, rows) {
+    const line = sv("line", { class: "hover-line", y1: M.t, y2: F.sy(0), visibility: "hidden" });
+    svg.append(line);
+    const hit = sv("rect", { x: M.l, y: M.t, width: F.pw, height: F.ph, fill: "transparent" });
+    svg.append(hit);
+    const move = e => {
+      const r = svg.getBoundingClientRect();
+      const vx = (e.clientX - r.left) * F.W / r.width;
+      const x = clamp((vx - M.l) / F.pw * F.o.xMax, 0, F.o.xMax);
+      line.setAttribute("x1", F.sx(x)); line.setAttribute("x2", F.sx(x)); line.setAttribute("visibility", "visible");
+      const data = rows(x);
+      tip.replaceChildren(el("span", { class: "h", text: data.head }), ...data.rows.map(([c, k, v]) =>
+        el("span", { class: "r" }, el("span", {}, el("i", { style: "background:" + c }), k), el("b", { text: v }))));
+      tip.hidden = false;
+      const px = (e.clientX - r.left), tw = tip.offsetWidth;
+      tip.style.left = (px + 14 + tw > r.width ? px - tw - 14 : px + 14) + "px";
+      tip.style.top = Math.max(0, (e.clientY - r.top) - 20) + "px";
+    };
+    hit.addEventListener("pointermove", move);
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; line.setAttribute("visibility", "hidden"); });
+  }
+  const C = { s1: "var(--s1)", s2: "var(--s2)", s3: "var(--s3)", ink: "var(--ink)" };
+
+
+
+  // =====================================================================
+  // Datos comunes: horas de trabajo por unidad (Ricardo, 1817, cap. 7)
+  // =====================================================================
+  const RIC = { cE: 100, wE: 120, cP: 90, wP: 80 };
+  const H = () => ({ cE: +$("h-cE").value, wE: +$("h-wE").value, cP: +$("h-cP").value, wP: +$("h-wP").value });
+  const YEARS = 20;
+  // Escala con marcas redondas (1, 2, 2,5 o 5 por potencia de diez)
+  const niceScale = (vals, pad = 0.06) => {
+    let lo = Math.min(...vals), hi = Math.max(...vals); if (hi - lo < 1e-9) { lo -= 1; hi += 1; }
+    const span = hi - lo; lo -= span * pad; hi += span * pad;
+    const raw = (hi - lo) / 4, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(st => st >= raw);
+    const a = Math.floor(lo / step) * step, b = Math.ceil(hi / step) * step, ticks = [];
+    for (let v = a; v <= b + step / 2; v += step) ticks.push(Math.round(v / step) * step);
+    return { lo: a, hi: b, ticks };
+  };
+
+  // ---------- 1a · Ventaja comparativa ----------
+  function comparative(h) {
+    const oppE = h.wE / h.cE, oppP = h.wP / h.cP; // cuánto paño cuesta un vino
+    if (Math.abs(oppE - oppP) < 1e-9) return null;
+    // Inglaterra se especializa en paño si su vino es relativamente más caro (oppE > oppP)
+    const eCloth = oppE > oppP;
+    const LE = h.cE + h.wE, LP = h.cP + h.wP;
+    const lo = Math.min(oppE, oppP), hi = Math.max(oppE, oppP);
+    const T = (1 >= lo && 1 <= hi) ? 1 : (lo + hi) / 2; // paño por cada vino
+    let cons;
+    if (eCloth) {
+      const ce = LE / h.cE, wp = LP / h.wP;
+      cons = { E: [ce - T, 1], P: [T, wp - 1], world: { aut: [2, 2], spec: [ce, wp] } };
+    } else {
+      const we = LE / h.wE, cp = LP / h.cP;
+      cons = { E: [T, we - 1], P: [cp - T, 1], world: { aut: [2, 2], spec: [cp, we] } };
+    }
+    return { oppE, oppP, eCloth, T, cons };
+  }
+  function renderStatic() {
+    const h = H();
+    ["cE", "wE", "cP", "wP"].forEach(k => $("h-" + k + "-out").textContent = t("hours", { n: h[k] }));
+    const absC = h.cE < h.cP ? t("E") : h.cP < h.cE ? t("P") : "=", absW = h.wE < h.wP ? t("E") : h.wP < h.wE ? t("P") : "=";
+    const absOf = c => { const a = []; if (absC === t(c)) a.push(t("cloth")); if (absW === t(c)) a.push(t("wine")); return a.length === 2 ? t("both") : a.length ? a[0] : t("none"); };
+    const cmp = comparative(h);
+    $("r-table").replaceChildren(
+      el("thead", {}, el("tr", {}, ["rt.country", "rt.cloth", "rt.wine", "rt.opp", "rt.abs"].map(k => el("th", { text: t(k) })))),
+      el("tbody", {},
+        el("tr", {}, el("td", { text: t("E") }), el("td", { text: fmt(h.cE) }), el("td", { text: fmt(h.wE) }), el("td", { text: fmt(h.wE / h.cE, 2) }), el("td", { text: absOf("E") })),
+        el("tr", {}, el("td", { text: t("P") }), el("td", { text: fmt(h.cP) }), el("td", { text: fmt(h.wP) }), el("td", { text: fmt(h.wP / h.cP, 2) }), el("td", { text: absOf("P") }))));
+    const cards = $("r-cards");
+    if (!cmp) {
+      cards.replaceChildren(el("div", { class: "rule" }, el("span", { class: "k", text: t("card.same") }), el("span", { class: "small", text: t("card.samewhy") })));
+    } else {
+      const card = (c, good, other, o, o2) => el("div", { class: "rule win" },
+        el("span", { class: "k", text: t("card.spec", { c: t(c) }) }),
+        el("span", { class: "pick", text: t(good === "cloth" ? "Cloth" : "Wine") }),
+        el("span", { class: "small", text: t("card.why", { o: fmt(o, 2), other: t(other), good: t(good), o2: fmt(o2, 2) }) }));
+      // coste de oportunidad del bien en que se especializa cada uno
+      const eGood = cmp.eCloth ? "cloth" : "wine", pGood = cmp.eCloth ? "wine" : "cloth";
+      const oc = (who, good) => good === "cloth" ? h["c" + who] / h["w" + who] : h["w" + who] / h["c" + who];
+      cards.replaceChildren(
+        card("E", eGood, eGood === "cloth" ? "wine" : "cloth", oc("E", eGood), oc("P", eGood)),
+        card("P", pGood, pGood === "cloth" ? "wine" : "cloth", oc("P", pGood), oc("E", pGood)));
+    }
+    // Producción mundial
+    const world = $("r-world");
+    if (cmp) {
+      const w = cmp.cons.world, max = Math.max(...w.aut, ...w.spec);
+      const row = (label, v, cls) => el("div", { class: "bar" }, el("span", { text: label }), el("span", { class: "track", "aria-hidden": "true" }, el("span", { class: "fill" + (cls ? " " + cls : ""), style: "width:" + (100 * v / max).toFixed(1) + "%" })), el("span", { class: "val", text: fmt(v, 2) }));
+      world.replaceChildren(row(t("Cloth") + " · " + t("r.leg.aut"), w.aut[0], "ref"), row(t("Cloth") + " · " + t("r.leg.spec"), w.spec[0], "s1"), row(t("Wine") + " · " + t("r.leg.aut"), w.aut[1], "ref"), row(t("Wine") + " · " + t("r.leg.spec"), w.spec[1], "s1"));
+      const fx = a => fmt(a[0], 2) + " + " + fmt(a[1], 2);
+      const gain = a => { const g = [a[0] - 1, a[1] - 1]; return (g[0] > 0.001 ? "+" + fmt(g[0], 2) + " " + t("cloth") : "") + (g[0] > 0.001 && g[1] > 0.001 ? ", " : "") + (g[1] > 0.001 ? "+" + fmt(g[1], 2) + " " + t("wine") : ""); };
+      $("r-cons").replaceChildren(
+        el("thead", {}, el("tr", {}, ["ct.country", "ct.before", "ct.after", "ct.gain"].map(k => el("th", { text: t(k) })))),
+        el("tbody", {}, ["E", "P"].map(c => el("tr", {}, el("td", { text: t(c) }), el("td", { text: "1,00 + 1,00" }), el("td", { text: fx(cmp.cons[c]) }), el("td", { class: "pos", text: gain(cmp.cons[c]) })))));
+      $("r-tot").textContent = t("r.tot", { t: fmt(cmp.T, 2) });
+    } else { world.replaceChildren(); $("r-cons").replaceChildren(); $("r-tot").textContent = t("r.tot.none"); }
+  }
+
+  // ---------- 1b · Ajuste automático (flujos de oro y teoría cuantitativa) ----------
+  // Cada país compra cada bien al productor más barato; la cantidad responde al precio (elasticidad 2).
+  // El saldo comercial mueve oro: el nivel de precios y salarios del país que exporta oro baja y el del que lo recibe sube.
+  function ricardoPath(h) {
+    let wE = 1, wP = 1; const out = [];
+    for (let y = 0; y <= YEARS; y++) {
+      const p = { cE: wE * h.cE, wE: wE * h.wE, cP: wP * h.cP, wP: wP * h.wP };
+      const clothE = p.cE < p.cP, wineE = p.wE < p.wP;
+      const pc = Math.min(p.cE, p.cP), pw = Math.min(p.wE, p.wP);
+      const qc = 10 * Math.pow(100 / pc, 2), qw = 10 * Math.pow(100 / pw, 2);
+      const exp = (clothE ? qc * pc : 0) + (wineE ? qw * pw : 0), imp = (!clothE ? qc * pc : 0) + (!wineE ? qw * pw : 0);
+      const bal = exp - imp;
+      out.push({ y, ratio: wE / wP, clothE, wineE, bal });
+      const f = Math.exp(0.2 * bal / Math.max(exp + imp, 1)); wE *= Math.sqrt(f); wP /= Math.sqrt(f);
+    }
+    const thC = h.cP / h.cE, thW = h.wP / h.wE; // Inglaterra vende paño si nivel < thC; vino si nivel < thW
+    return { out, lo: Math.min(thC, thW), hi: Math.max(thC, thW) };
+  }
+  let RP = null;
+  function renderRicardoYear() {
+    const h = H(); RP = ricardoPath(h);
+    const y = +$("ra-t").value, o = RP.out[y];
+    $("ra-label").textContent = t("year", { n: y }); $("ra-t-out").textContent = t("yof", { t: y, n: YEARS });
+    $("ra-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: t(o.clothE ? "E" : "P") }), el("span", { text: t("ra.st.cloth") })),
+      el("div", { class: "stat" }, el("b", { text: t(o.wineE ? "E" : "P") }), el("span", { text: t("ra.st.wine") })),
+      el("div", { class: "stat" }, el("b", { class: o.bal >= -0.5 ? "pos" : "neg", text: signed(o.bal) }), el("span", { text: t("ra.st.bal") + " · " + t("ax.gold").toLowerCase() })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.ratio * 100) + " %" }), el("span", { text: t("ra.st.ratio") })));
+    let k;
+    if (y === 0) k = "ra.n0";
+    else if (Math.abs(o.bal) < 0.05 * 236 && o.clothE !== o.wineE) k = "ra.neq";
+    else if (o.clothE !== o.wineE && o.bal < 0) k = "ra.nband";
+    else if (o.bal > 0) k = "ra.nsur";
+    else k = "ra.ndef";
+    $("ra-note").replaceChildren(rich(k, { c: t(o.clothE ? "E" : "P"), w: t(o.wineE ? "E" : "P") }));
+    // Gráfico del nivel relativo
+    const S1 = niceScale([...RP.out.map(r => r.ratio), RP.lo, RP.hi]);
+    const F = frame($("ra-ratio"), { w: 440, h: 320, xMax: YEARS, yMin: S1.lo, yMax: S1.hi, xTicks: [0, 5, 10, 15, 20], yTicks: S1.ticks, yFmt: v => fmt(v * 100) + " %", xLabel: () => t("ax.years"), yLabel: () => t("ax.ratio") });
+    if (RP.hi - RP.lo > 1e-6) poly(F, [[0, RP.lo], [YEARS, RP.lo], [YEARS, RP.hi], [0, RP.hi]], "a-ok");
+    F.plot.append(sv("path", { d: path(RP.out.map(r => [F.sx(r.y), F.sy(r.ratio)])), class: "curve c-s1" }));
+    F.top.append(sv("circle", { cx: F.sx(y), cy: F.sy(o.ratio), r: 6, class: "dot s1" }));
+    hover($("ra-ratio"), $("ra-ratio-tip"), F, x => { const r = RP.out[Math.round(clamp(x, 0, YEARS))]; return { head: t("year", { n: r.y }), rows: [["var(--s1)", t("tip.ratio"), fmt(r.ratio * 100) + " %"]] }; });
+    // Gráfico del saldo
+    const S2 = niceScale([0, ...RP.out.map(r => r.bal)]);
+    const G = frame($("ra-bal"), { w: 440, h: 320, xMax: YEARS, yMin: S2.lo, yMax: S2.hi, xTicks: [0, 5, 10, 15, 20], yTicks: S2.ticks, xLabel: () => t("ax.years"), yLabel: () => t("ax.gold") });
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(YEARS), y1: G.sy(0), y2: G.sy(0), class: "zero" }));
+    G.plot.append(sv("path", { d: path(RP.out.map(r => [G.sx(r.y), G.sy(r.bal)])), class: "curve c-s2" }));
+    G.top.append(sv("circle", { cx: G.sx(y), cy: G.sy(o.bal), r: 6, class: "dot", style: "fill:var(--s2)" }));
+    hover($("ra-bal"), $("ra-bal-tip"), G, x => { const r = RP.out[Math.round(clamp(x, 0, YEARS))]; return { head: t("year", { n: r.y }), rows: [["var(--s2)", t("tip.bal"), signed(r.bal)]] }; });
+  }
+
+  // =====================================================================
+  // 2 · Shaikh: ventaja absoluta, déficit persistente y deuda exterior
+  // =====================================================================
+  // Coste por unidad = horas × salario (los dos países pagan 1 por hora en moneda común al principio).
+  // Los compradores de cada mercado se van poco a poco hacia el productor más barato.
+  // El dinero que entra no cambia los precios: el déficit se cubre con préstamos (4 % de interés).
+  function shaikhPath(h, g, d, pt) {
+    const out = []; const Q = 10, r = 0.04;
+    let sEE = { c: 1, w: 1 }, sEP = { c: 0, w: 0 }, debt = 0;
+    for (let y = 0; y <= YEARS; y++) {
+      const f = Math.pow(1 - g, y) * (1 - d * (1 - pt));
+      const pE = { c: h.cE * f, w: h.wE * f }, pP = { c: h.cP, w: h.wP };
+      if (y > 0) for (const i of ["c", "w"]) {
+        const gap = (pP[i] - pE[i]) / Math.min(pP[i], pE[i]);
+        const step = clamp(0.6 * gap, -0.25, 0.25);
+        sEE[i] = clamp(sEE[i] + step, 0.1, 1); sEP[i] = clamp(sEP[i] + step, 0, 0.9); // siempre queda una parte de clientes fieles
+      }
+      const exp = (sEP.c * Q * pE.c + sEP.w * Q * pE.w) / 10;
+      const imp = ((1 - sEE.c) * Q * pP.c + (1 - sEE.w) * Q * pP.w) / 10;
+      const bal = exp - imp;
+      if (y > 0) debt = debt * (1 + r) - bal;
+      const ind = 100 * ((sEE.c + sEP.c) + (sEE.w + sEP.w)) / 2;
+      out.push({ y, sc: sEE.c, sw: sEE.w, bal, debt, ind, regC: pE.c < pP.c ? "E" : "P", regW: pE.w < pP.w ? "E" : "P" });
+    }
+    return out;
+  }
+  let SP = null;
+  function renderShaikh() {
+    const h = H(), g = +$("s-g").value / 100, d = +$("s-d").value / 100, pt = +$("s-pt").value / 100;
+    $("s-g-out").textContent = t("pcty", { n: fmt(g * 100, 1) }); $("s-d-out").textContent = t("pct", { n: fmt(d * 100) }); $("s-pt-out").textContent = t("pct", { n: fmt(pt * 100) });
+    SP = shaikhPath(h, g, d, pt);
+    const y = +$("sa-t").value, o = SP[y];
+    $("sa-label").textContent = t("year", { n: y }); $("sa-t-out").textContent = t("yof", { t: y, n: YEARS });
+    const mill = v => fmt(Math.abs(v)) + " M £";
+    $("sa-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { class: o.bal >= -0.5 ? "pos" : "neg", text: signed(o.bal) + " M £" }), el("span", { text: t("sa.st.bal") })),
+      el("div", { class: "stat" }, el("b", { class: o.debt > 0.5 ? "neg" : null, text: (o.debt < -0.5 ? "−" : "") + mill(o.debt) }), el("span", { text: t("sa.st.debt") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(o.ind) }), el("span", { text: t("sa.st.ind") + " (100 = " + t("year", { n: 0 }).toLowerCase() + ")" })),
+      el("div", { class: "stat" }, el("b", { text: t("Cloth") + ": " + t(o.regC) + " · " + t("Wine") + ": " + t(o.regW) }), el("span", { text: t("sa.st.reg") })));
+    const share = (id, s) => { const a = Math.round(s * 100), b = 100 - a; $(id).replaceChildren(
+      el("span", { class: "sb", style: "flex-basis:" + a + "%;" + (a === 0 ? "padding:0" : ""), text: a >= 14 ? t("sa.firmsE") + " " + a + " %" : "" }),
+      el("span", { class: "sa", style: "flex-basis:" + b + "%;" + (b === 0 ? "padding:0" : ""), text: b >= 14 ? t("sa.firmsP") + " " + b + " %" : "" }));
+      $(id).setAttribute("aria-label", t("sa.firmsE") + " " + a + " %, " + t("sa.firmsP") + " " + b + " %"); };
+    $("sa-share-c-lab").textContent = t("sa.share", { g: t("Cloth") }); share("sa-share-c", o.sc);
+    $("sa-share-w-lab").textContent = t("sa.share", { g: t("Wine") }); share("sa-share-w", o.sw);
+    const prev = SP[Math.max(0, y - 1)], dtx = mill(o.debt);
+    let k, gname = "";
+    if (y === 0) k = "sa.n0";
+    else if (o.bal > 0.5 && o.debt < -0.5) k = "sa.ncred";
+    else if (o.bal > 0.5) k = "sa.nsur";
+    else if ((o.sc > prev.sc + 0.001) || (o.sw > prev.sw + 0.001)) { k = "sa.nrec"; gname = o.sc > prev.sc + 0.001 ? t("cloth") : t("wine"); }
+    else if (y > 1 && Math.abs(o.bal - prev.bal) < 0.5) k = "sa.nflat";
+    else k = "sa.ndef";
+    $("sa-note").replaceChildren(rich(k, { d: dtx, g: gname }));
+    // Saldo
+    const S3 = niceScale([0, ...SP.map(r => r.bal)]);
+    const F = frame($("sa-bal"), { w: 440, h: 320, xMax: YEARS, yMin: S3.lo, yMax: S3.hi, xTicks: [0, 5, 10, 15, 20], yTicks: S3.ticks, xLabel: () => t("ax.years"), yLabel: () => t("ax.mill") });
+    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(YEARS), y1: F.sy(0), y2: F.sy(0), class: "zero" }));
+    F.plot.append(sv("path", { d: path(SP.map(r => [F.sx(r.y), F.sy(r.bal)])), class: "curve c-s2" }));
+    F.top.append(sv("circle", { cx: F.sx(y), cy: F.sy(o.bal), r: 6, class: "dot", style: "fill:var(--s2)" }));
+    hover($("sa-bal"), $("sa-bal-tip"), F, x => { const r = SP[Math.round(clamp(x, 0, YEARS))]; return { head: t("year", { n: r.y }), rows: [["var(--s2)", t("tip.bal"), signed(r.bal) + " M £"]] }; });
+    // Deuda y producción industrial
+    const S4 = niceScale([0, ...SP.map(r => r.debt)]);
+    const G = frame($("sa-debt"), { w: 440, h: 320, xMax: YEARS, yMin: S4.lo, yMax: S4.hi, xTicks: [0, 5, 10, 15, 20], yTicks: S4.ticks, xLabel: () => t("ax.years"), yLabel: () => t("ax.mill") });
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(YEARS), y1: G.sy(0), y2: G.sy(0), class: "zero" }));
+    G.plot.append(sv("path", { d: path(SP.map(r => [G.sx(r.y), G.sy(r.debt)])), class: "curve", style: "stroke:var(--bad)" }));
+    G.top.append(sv("circle", { cx: G.sx(y), cy: G.sy(o.debt), r: 6, class: "dot", style: "fill:var(--bad)" }));
+    hover($("sa-debt"), $("sa-debt-tip"), G, x => { const r = SP[Math.round(clamp(x, 0, YEARS))]; return { head: t("year", { n: r.y }), rows: [["var(--bad)", t("tip.debt"), fmt(r.debt) + " M £"]] }; });
+    // Tabla
+    $("sa-hist").replaceChildren(
+      el("thead", {}, el("tr", {}, ["sh.year", "sh.cloth", "sh.wine", "sh.bal", "sh.debt", "sh.ind"].map(k => el("th", { text: t(k) })))),
+      el("tbody", {}, SP.map(r => el("tr", {}, el("td", { text: r.y }), el("td", { text: fmt(r.sc * 100) + " %" }), el("td", { text: fmt(r.sw * 100) + " %" }),
+        el("td", { class: r.bal >= -0.5 ? "pos" : "neg", text: signed(r.bal) }), el("td", { text: fmt(r.debt) }), el("td", { text: fmt(r.ind) })))));
+  }
+
+  // =====================================================================
+  // 3 · Comparar supuestos
+  // =====================================================================
+  function renderCompare() {
+    $("c-table").replaceChildren(
+      el("thead", {}, el("tr", {}, el("th", { text: t("c.th.q") }), el("th", { text: t("c.th.r") }), el("th", { text: t("c.th.s") }))),
+      el("tbody", {}, [1, 2, 3, 4, 5, 6].map(i => el("tr", {}, el("th", { text: t("c.q" + i) }), el("td", { text: t("c.r" + i) }), el("td", { text: t("c.s" + i) })))));
+  }
+
+  // ---------- Reproducir ----------
+  function player(btnId, sliderId, render) {
+    let timer = null;
+    const stop = () => { if (timer) { clearInterval(timer); timer = null; } $(btnId).textContent = t("play"); };
+    $(btnId).addEventListener("click", () => {
+      if (timer) { stop(); return; }
+      if (+$(sliderId).value >= YEARS) $(sliderId).value = 0;
+      $(btnId).textContent = t("pause"); render();
+      timer = setInterval(() => { const v = +$(sliderId).value; if (v >= YEARS) { stop(); return; } $(sliderId).value = v + 1; render(); }, reduced() ? 1400 : 800);
+    });
+    $(sliderId).addEventListener("input", () => { stop(); render(); });
+    return stop;
+  }
+  const stopR = player("ra-play", "ra-t", renderRicardoYear);
+  const stopS = player("sa-play", "sa-t", renderShaikh);
+  ["h-cE", "h-wE", "h-cP", "h-wP"].forEach(id => $(id).addEventListener("input", () => { renderStatic(); renderRicardoYear(); renderShaikh(); }));
+  ["s-g", "s-d", "s-pt"].forEach(id => $(id).addEventListener("input", renderShaikh));
+  $("h-reset").addEventListener("click", () => { for (const k in RIC) $("h-" + k).value = RIC[k]; renderStatic(); renderRicardoYear(); renderShaikh(); });
+
+  function renderAll() { renderStatic(); renderRicardoYear(); renderShaikh(); renderCompare(); stopR(); stopS(); }
+  OBS.mountBar($("obs-bar"), { ficha: FICHA });
+  OBS.onLang(renderAll);
+  OBS.apply();
+  renderAll();
+  show(location.hash.slice(1));
+})();
+</script>

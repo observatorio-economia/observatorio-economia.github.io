@@ -25,7 +25,9 @@
       d: { es: "El salario como precio frente al ciclo de Goodwin: el mismo cambio, dos respuestas.", va: "El salari com a preu enfront del cicle de Goodwin: el mateix canvi, dues respostes." } },
     { n: 7, t: { es: "El Estado y sus cuentas", va: "L'Estat i els seus comptes" } },
     { n: 8, t: { es: "El dinero", va: "Els diners" } },
-    { n: 9, t: { es: "Comercio internacional", va: "Comerç internacional" } },
+    { n: 9, ruta: "sa09/", estado: "proto",
+      t: { es: "Comercio internacional", va: "Comerç internacional" },
+      d: { es: "Ricardo frente a Shaikh: ventaja comparativa o ventaja absoluta, con déficit y deuda.", va: "Ricardo enfront de Shaikh: avantatge comparatiu o avantatge absolut, amb dèficit i deute." } },
     { n: 10, t: { es: "Las finanzas", va: "Les finances" } },
   ];
 

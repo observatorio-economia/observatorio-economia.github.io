@@ -26,6 +26,7 @@ HERRAMIENTAS = [
     ("sa04", "SA04-el-mercado/material/observatorio-sa4.html"),
     ("sa05", "SA05-crecimiento-y-desarrollo/material/observatorio-sa5.html"),
     ("sa06", "SA06-el-mercado-laboral/material/observatorio-sa6.html"),
+    ("sa09", "SA09-comercio-internacional/material/observatorio-sa9.html"),
 ]
 
 PANEL = "https://claude.ai/artifact/TMzyeD3wBN9TAyT8vaKeZs"
