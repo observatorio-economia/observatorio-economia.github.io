@@ -8,7 +8,7 @@
    basta con quitar esta hoja (ESTILO_WEB = False en scripts/actualizar.py y la línea de index.html). */
 
 :root {
-  --bg: #F4F3EF; --paper: #FFFFFF; --ink: #1F2224; --band: #16181A; --muted: #6B6F6D; --rule: #D5D4CE; --grid: #E7E6E1;
+  --bg: #FAFAF8; --paper: #FFFFFF; --ink: #1F2224; --band: #16181A; --muted: #6B6F6D; --rule: #DCDCD8; --grid: #EDEDEA;
   --accent: #C8412F; --accent-soft: #F7E3DF; --ref: #9A9E9B;
   --font-display: "Jost", "Futura", "Century Gothic", "Helvetica Neue", Arial, sans-serif;
   --font-label: "Commissioner", "Helvetica Neue", Arial, sans-serif;
@@ -260,7 +260,7 @@ body.obs-page .obs-menu, .obs-menu { box-shadow: none; }
 /* ---------- Proporción de Econplebs (30/10, petición de Jordi): manda el blanco ----------
    Mismos colores que el tema 4.7 de Econplebs; lo que cambia es el reparto. La franja de arriba (menú, cabecera
    de la herramienta o portada) es blanca de lado a lado, y el contenido va en tarjetas blancas con filete fino
-   y raya de grafito arriba; el papel #F4F3EF solo asoma entre ellas. */
+   y raya de grafito arriba. Fondo: blanco mate #FAFAF8 (petición de Jordi, 30/10), sin el tono crudo del papel. */
 .wrap > #obs-bar, .wrap > header.top, .wrap > .obs-docente, .wrap > nav.tabs, .obs-page .hero {
   background: var(--paper); box-shadow: 0 0 0 100vmax var(--paper); clip-path: inset(0 -100vmax);
 }
