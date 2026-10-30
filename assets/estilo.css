@@ -1,0 +1,96 @@
+/* Línea gráfica de la web (30/10/2026).
+   Papel y blanco, grafito y un único acento rojo; Jost para los títulos (en minúscula), Commissioner para rótulos,
+   menú y botones (en mayúsculas espaciadas) y Literata para leer. Aire de familia discreto con la otra web de Jordi,
+   sin su identidad (sin logotipo, sin cuña, sin nombre): decisión W-33.
+   Se carga la ÚLTIMA en todas las páginas, también al final de cada herramienta (lo añade actualizar.sh),
+   así que manda sobre los colores y las letras de las piezas comunes sin tocar ningún archivo del vault.
+   Las herramientas publicadas en Claude conservan su estilo. Para volver al estilo anterior en la web,
+   basta con quitar esta hoja (ESTILO_WEB = False en scripts/actualizar.py y la línea de index.html). */
+
+:root {
+  --bg: #F4F3EF; --paper: #FFFFFF; --ink: #1F2224; --band: #16181A; --muted: #6B6F6D; --rule: #D5D4CE; --grid: #E7E6E1;
+  --accent: #C8412F; --accent-soft: #F7E3DF; --ref: #9A9E9B;
+  --font-display: "Jost", "Futura", "Century Gothic", "Helvetica Neue", Arial, sans-serif;
+  --font-label: "Commissioner", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Commissioner", "Helvetica Neue", Arial, sans-serif;
+  --font-read: "Literata", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16181A; --paper: #1F2224; --ink: #E9E8E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16181A; --paper: #1F2224; --ink: #E9E8E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; color-scheme: dark;
+}
+
+/* ---------- Letras ---------- */
+body { font-family: var(--font-body); }
+h1, h2, h3, figcaption { font-family: var(--font-display); font-weight: 600; text-transform: none; letter-spacing: -.01em; }
+h1 { line-height: 1.05; }
+/* filete recto bajo el título (en lugar de la cuña inclinada) */
+header.top h1::after, header h1::after { width: 2em; height: 4px; margin-top: 14px; transform: none; }
+.eyebrow, nav.tabs button, .btn, .state, .chip, .tag, .obs-seg button, .obs-toggle, .k, .roundbar .rk + .rt,
+.timeline .wk, .obs-menu, .obs-pie, summary {
+  font-family: var(--font-label);
+}
+.eyebrow, nav.tabs button, .btn, .state, .chip, .tag { font-weight: 600; letter-spacing: .1em; }
+.lede, .prose p, .obs-caso, .notice, .obs-texto { font-family: var(--font-read); }
+/* los números de los gráficos, con cifras de igual ancho */
+svg text { font-family: var(--font-label); font-variant-numeric: tabular-nums; }
+.stat b, .big, .num { font-family: var(--font-display); }
+
+/* ---------- Superficies ---------- */
+body { background: var(--bg); }
+.world, .round, .rule, .plate, .qcard, details.obs-ficha, .notice { background: var(--paper); }
+.notice { border-left-color: var(--accent); }
+
+/* ---------- Menú común: banda blanca de lado a lado ---------- */
+.obs-menu {
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+}
+.obs-menu__in { padding-block: 12px; }
+.obs-menu__home b {
+  font-family: var(--font-display); font-weight: 600; font-size: 22px; text-transform: none; letter-spacing: -.01em;
+  border-bottom: 3px solid var(--accent); padding-bottom: 1px;
+}
+.obs-menu__home span, .obs-menu__datos, .obs-menu__tema { font-family: var(--font-label); font-weight: 600; letter-spacing: .1em; }
+.obs-menu__home span { color: var(--muted); }
+.obs-menu__sa a, .obs-menu__sa span { font-family: var(--font-label); font-weight: 600; }
+.obs-menu__sa a { border-color: var(--rule); }
+.obs-menu__datos { border-color: var(--rule); }
+
+/* ---------- Páginas propias: listas en tarjeta blanca con filete rojo arriba ---------- */
+.obs-page header.top { border-bottom: 1px solid var(--rule); }
+.obs-page h1 { font-size: clamp(34px, 7vw, 52px); }
+.obs-page ol.sa { background: var(--paper); border-top: 3px solid var(--accent); padding: 0 16px; }
+.obs-page ol.sa li:last-child { border-bottom: 0; }
+.obs-page .row .t { font-family: var(--font-display); font-weight: 600; }
+.obs-page .row .d { font-family: var(--font-read); }
+.obs-page .state { font-size: 11px; }
+.obs-page .eyebrow, .obs-page .state, .obs-page .obs-herr b { font-family: var(--font-label); font-weight: 600; letter-spacing: .1em; }
+.obs-page .obs-fase h2 { font-size: 24px; }
+
+/* ---------- Actualidad ---------- */
+.obs-page .act-destacada { background: var(--paper); border-top: 3px solid var(--accent); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.obs-page .act-meta { font-family: var(--font-label); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.obs-page .act-meta .act-sa { color: var(--accent); }
+.obs-page .act-destacada h3 { font-size: 24px; margin: 0; line-height: 1.15; }
+.obs-page .act-destacada h3 a { color: inherit; text-decoration: none; }
+.obs-page .act-destacada h3 a:hover { color: var(--accent); }
+.obs-page .act-destacada p { font-family: var(--font-read); }
+.obs-page .act-pregunta { border-left: 3px solid var(--accent); padding: 2px 0 2px 14px; font-family: var(--font-read); font-style: italic; }
+.obs-page .act-fuentes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.obs-page .act-fuente { background: var(--paper); border-top: 2px solid var(--ink); padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.obs-page .act-fuente h3 { font-size: 18px; margin: 0; }
+.obs-page .act-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.obs-page .act-lista li { border-top: 1px solid var(--rule); padding: 8px 0; display: flex; flex-direction: column; gap: 2px; }
+.obs-page .act-lista a { color: var(--ink); text-decoration: none; font-family: var(--font-read); line-height: 1.35; }
+.obs-page .act-lista a:hover { color: var(--accent); text-decoration: underline; }
+.obs-page .act-lista time { font-family: var(--font-label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.obs-page .act-portada { display: flex; flex-direction: column; gap: 12px; }
+.obs-page .act-portada .act-mas { font-family: var(--font-label); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); text-decoration: none; align-self: flex-start; border-bottom: 2px solid var(--accent); }

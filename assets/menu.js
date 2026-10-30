@@ -43,6 +43,8 @@
 
   // Páginas comunes a todo el curso (fuera de la lista de SA)
   const TODAS_EXTRA = [
+    { ruta: "actualidad/", num: "◆", t: { es: "Actualidad", va: "Actualitat" }, corto: { es: "Actualidad", va: "Actualitat" },
+      d: { es: "Noticias de economía comentadas en clase y titulares de varios medios.", va: "Notícies d'economia comentades a classe i titulars de diversos mitjans." } },
     { ruta: "libro/", num: "¶", t: { es: "Libro del alumnado", va: "Llibre de l'alumnat" }, corto: { es: "Libro", va: "Llibre" },
       d: { es: "Los apuntes de todas las situaciones de aprendizaje, seguidos, para leer o imprimir.", va: "Els apunts de totes les situacions d'aprenentatge, seguits, per a llegir o imprimir." } },
     { ruta: "datos/", num: "∑", t: { es: "Base de datos", va: "Base de dades" }, corto: { es: "Datos", va: "Dades" },
@@ -57,10 +59,12 @@
   const TXT = {
     es: { home: "Observatorio", sub: "Economía · 1.º Bach.", nav: "Situaciones de aprendizaje", soon: "próximamente",
       open: "abrir", proto: "prototipo", tema: "Tema", auto: "automático", light: "claro", dark: "oscuro", cambiar: "Cambiar el tema; ahora {v}",
+      act: "Actualidad", pq: "Para pensar", actmas: "Más noticias y titulares",
       lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
       cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el" },
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
       open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
+      act: "Actualitat", pq: "Per a pensar", actmas: "Més notícies i titulars",
       lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
       cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el" },
   };
@@ -135,7 +139,35 @@
     barra = nueva;
   }
 
+  // Portada: la noticia comentada más reciente y los últimos titulares (los deja actualizar.sh en estado-web.js)
+  function portadaActualidad() {
+    const caja = document.getElementById("panel-actualidad");
+    const a = window.OBS_ESTADO && window.OBS_ESTADO.actualidad;
+    if (!caja) return;
+    if (!a || (!a.comentada && !(a.titulares || []).length)) { caja.hidden = true; return; }
+    const fecha = f => { const d = new Date(f); return isNaN(d) ? f : d.toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES", { day: "numeric", month: "short" }); };
+    const ext = { target: "_blank", rel: "noopener nofollow" };
+    const hijos = [el("h2", { text: tx("act") })];
+    const c = a.comentada;
+    if (c) {
+      const meta = el("div", { class: "act-meta" }, el("time", { text: c.fecha }), el("span", { text: c.fuente || "" }),
+        (c.sa || c.concepto) ? el("span", { class: "act-sa", text: (c.sa ? "SA " + c.sa : "") + (c.sa && c.concepto ? " · " : "") + (c.concepto || "") }) : "");
+      const tit = /^https?:\/\//.test(c.enlace || "") ? el("a", Object.assign({ href: c.enlace }, ext), c.titulo) : document.createTextNode(c.titulo);
+      const art = el("article", { class: "act-destacada" }, meta, el("h3", {}, tit));
+      if (c.pregunta) art.append(el("p", { class: "act-pregunta" }, el("strong", { text: tx("pq") + ": " }), c.pregunta));
+      hijos.push(art);
+    }
+    if ((a.titulares || []).length) {
+      hijos.push(el("ul", { class: "act-lista" }, ...a.titulares.map(i => el("li", {},
+        el("a", Object.assign({ href: i.enlace }, ext), i.titulo), el("time", { text: fecha(i.fecha) + " · " + i.fuente })))));
+    }
+    hijos.push(el("a", { class: "act-mas", href: enlace("actualidad/"), text: tx("actmas") }));
+    caja.replaceChildren(...hijos);
+    caja.hidden = false;
+  }
+
   function panel() {
+    portadaActualidad();
     const extra = document.getElementById("panel-datos");
     if (extra) extra.replaceChildren(...EXTRA.map(x => el("li", {}, el("a", { class: "row", href: enlace(x.ruta) },
       el("span", { class: "num", "aria-hidden": "true", text: x.num }),

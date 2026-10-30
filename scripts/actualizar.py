@@ -40,10 +40,17 @@ PANEL_HTML = re.compile(r'href="' + re.escape(PANEL) + r'"(?:\s+target="_blank")
 PANEL_JS = '"' + PANEL + '"'
 NUEVA_PESTANA = 'href: opts.panelUrl || PANEL_URL, target: "_blank", rel: "noopener"'
 
+# Línea gráfica de la web (assets/estilo.css, con Jost, Commissioner y Literata): va la última en todas las páginas,
+# también al final de cada herramienta. Con False, la web vuelve al estilo de las piezas comunes (el de Claude).
+ESTILO_WEB = True
+FUENTES_WEB_URL = "https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600&family=Jost:wght@500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap"
+
 FUENTES = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n'
            '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
            '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700'
-           '&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">')
+           '&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">'
+           + ('\n<link rel="stylesheet" href="' + FUENTES_WEB_URL + '">' if ESTILO_WEB else ""))
+
 
 esc = html.escape
 errores = 0
@@ -138,6 +145,7 @@ def pagina(prefijo, titulo, cuerpo, textos):
     """Página propia de la web con la línea gráfica común, el menú y los textos en castellano y valenciano."""
     reg = json.dumps({"es": {k: v[0] for k, v in textos.items()}, "va": {k: v[1] or v[0] for k, v in textos.items()}},
                      ensure_ascii=False).replace("</", "<\\/")
+    estilo = f'<link rel="stylesheet" href="{prefijo}assets/estilo.css">\n' if ESTILO_WEB else ""
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -148,7 +156,7 @@ def pagina(prefijo, titulo, cuerpo, textos):
 {FUENTES}
 <link rel="stylesheet" href="{prefijo}assets/observatorio.css">
 <link rel="stylesheet" href="{prefijo}assets/comun/observatorio-common.css">
-<script src="{prefijo}assets/comun/observatorio-common.js"></script>
+{estilo}<script src="{prefijo}assets/comun/observatorio-common.js"></script>
 <script src="{prefijo}assets/estado-web.js"></script>
 <script src="{prefijo}assets/menu.js"></script>
 </head>
@@ -172,6 +180,196 @@ def t(textos, clave, es, va=""):
     textos[clave] = (es, va)
     return clave
 
+
+# ---------------------------------------------------------------- Actualidad (noticias comentadas y titulares)
+# Las comentadas las escribe Jordi en el vault (05-SA/_actualidad/AAAA-MM-DD-….md, con «estado: publicado»).
+# Los titulares salen de los canales RSS de scripts/fuentes-actualidad.json: solo título, medio, fecha y enlace.
+# Con «--solo-titulares» se renuevan los titulares sin el vault (para una tarea diaria en GitHub), reutilizando
+# las comentadas que se guardaron la última vez en actualidad/datos.json.
+import urllib.request
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
+import xml.etree.ElementTree as ET
+
+SOLO_TITULARES = "--solo-titulares" in sys.argv
+NOMBRES_SA = {1: "SA 1", 2: "SA 2", 3: "SA 3", 4: "SA 4", 5: "SA 5", 6: "SA 6", 7: "SA 7", 8: "SA 8", 9: "SA 9", 10: "SA 10"}
+
+
+def limpio(t):
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", t or ""))).strip()
+
+
+def fecha_de(texto):
+    if not texto:
+        return None
+    try:
+        d = parsedate_to_datetime(texto)
+    except (TypeError, ValueError):
+        try:
+            d = datetime.fromisoformat(texto.strip().replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    return d if d.tzinfo else d.replace(tzinfo=timezone.utc)
+
+
+def leer_canal(url):
+    """Devuelve [(título, enlace, fecha)] de un canal RSS 2.0 o Atom."""
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Observatorio; lector de titulares)",
+                                               "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml"})
+    with urllib.request.urlopen(req, timeout=10) as r:
+        raiz = ET.fromstring(r.read())
+    sin_ns = lambda e: e.tag.split("}")[-1]
+    items = []
+    for e in raiz.iter():
+        if sin_ns(e) not in ("item", "entry"):
+            continue
+        hijos = {sin_ns(h): h for h in e}
+        titulo = limpio(hijos["title"].text if "title" in hijos else "")
+        enlace = ""
+        if "link" in hijos:
+            l = hijos["link"]
+            enlace = (l.get("href") or l.text or "").strip()
+        fecha = None
+        for k in ("pubDate", "published", "updated", "date"):
+            if k in hijos and hijos[k].text:
+                fecha = fecha_de(hijos[k].text); break
+        if titulo and enlace.startswith(("http://", "https://")):
+            items.append((titulo[:220], enlace, fecha))
+    return items
+
+
+def actualidad(vault_dir):
+    """Genera actualidad/index.html y actualidad/datos.json; devuelve el resumen para la portada."""
+    destino = web / "actualidad"
+    destino.mkdir(exist_ok=True)
+    previo = {}
+    if (destino / "datos.json").is_file():
+        try:
+            previo = json.loads((destino / "datos.json").read_text(encoding="utf-8"))
+        except ValueError:
+            previo = {}
+    # Noticias comentadas
+    if vault_dir is not None:
+        comentadas = []
+        carpeta = vault_dir / "_actualidad"
+        for p in sorted(carpeta.glob("[0-9]*.md")) if carpeta.is_dir() else []:
+            m, cuerpo = leer_md(p)
+            if m.get("estado", "").lower() != "publicado" or not m.get("titulo"):
+                continue
+            try:
+                sa = int(m.get("sa", "0") or 0)
+            except ValueError:
+                sa = 0
+            comentadas.append({"fecha": m.get("fecha", p.name[:10]), "titulo": m.get("titulo", ""), "fuente": m.get("fuente", ""),
+                               "enlace": m.get("enlace", ""), "sa": sa, "concepto": m.get("concepto", ""),
+                               "pregunta": m.get("pregunta", ""), "html": md_a_html(cuerpo) if tiene_texto(cuerpo) else ""})
+        comentadas.sort(key=lambda c: c["fecha"], reverse=True)
+    else:
+        comentadas = previo.get("comentadas", [])
+    # Titulares
+    conf = json.loads((web / "scripts" / "fuentes-actualidad.json").read_text(encoding="utf-8"))
+    limite = datetime.now(timezone.utc) - timedelta(days=int(conf.get("dias", 10)))
+    previos = {f["nombre"]: f for f in previo.get("titulares", [])}
+    titulares = []
+    for f in conf.get("fuentes", []):
+        try:
+            items = [i for i in leer_canal(f["url"]) if not i[2] or i[2] >= limite]
+            items.sort(key=lambda i: i[2] or limite, reverse=True)
+            lista = [{"titulo": t_, "enlace": e_, "fecha": d_.astimezone(timezone.utc).isoformat() if d_ else ""} for t_, e_, d_ in items[:int(conf.get("por_fuente", 5))]]
+            titulares.append({"nombre": f["nombre"], "items": lista, "leido": datetime.now(timezone.utc).isoformat()})
+        except Exception as ex:  # sin red o canal caído: se conserva lo de la última vez y se avisa, sin parar la web
+            viejo = previos.get(f["nombre"])
+            titulares.append(viejo or {"nombre": f["nombre"], "items": [], "leido": ""})
+            print(f"⚠ actualidad: no se ha podido leer «{f['nombre']}» ({type(ex).__name__}); se mantienen los titulares anteriores")
+    ahora = datetime.now(timezone.utc).isoformat()
+    datos = {"generado": ahora, "comentadas": comentadas, "titulares": titulares}
+    (destino / "datos.json").write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
+
+    # Página
+    tx = {}
+    t(tx, "pg.title", "Actualidad · Observatorio", "Actualitat · Observatori")
+    t(tx, "ac.eyebrow", "Economía · 1.º de Bachillerato", "Economia · 1r de Batxillerat")
+    t(tx, "ac.title", "Actualidad", "Actualitat")
+    t(tx, "ac.lede", "Noticias de economía para leer con los modelos del curso. Primero, las comentadas en clase; después, los titulares de varios medios, de líneas editoriales distintas: compara cómo cuenta cada uno la misma noticia.",
+      "Notícies d'economia per a llegir amb els models del curs. Primer, les comentades a classe; després, els titulars de diversos mitjans, de línies editorials diferents: compara com conta cadascun la mateixa notícia.")
+    t(tx, "ac.com", "Comentadas en clase", "Comentades a classe")
+    t(tx, "ac.nocom", "Todavía no hay noticias comentadas.", "Encara no hi ha notícies comentades.")
+    t(tx, "ac.tit", "Titulares de economía", "Titulars d'economia")
+    t(tx, "ac.titd", "Se actualizan solos a partir de los canales públicos de cada medio. Solo se muestran el titular y el enlace: la noticia completa está en la web del medio.",
+      "S'actualitzen sols a partir dels canals públics de cada mitjà. Només es mostren el titular i l'enllaç: la notícia completa està en la web del mitjà.")
+    t(tx, "ac.pq", "Para pensar", "Per a pensar")
+    t(tx, "ac.leer", "Leer la noticia", "Llegir la notícia")
+    t(tx, "ac.vacio", "Sin titulares recientes.", "Sense titulars recents.")
+    t(tx, "ac.act", "Actualizado: {f}", "Actualitzat: {f}")
+
+    def bloque_comentada(c, destacada):
+        sa = f'<span class="act-sa">{esc(NOMBRES_SA.get(c["sa"], ""))}{" · " + esc(c["concepto"]) if c["concepto"] else ""}</span>' if c["sa"] or c["concepto"] else ""
+        meta = f'<div class="act-meta"><time datetime="{esc(c["fecha"])}">{esc(c["fecha"])}</time><span>{esc(c["fuente"])}</span>{sa}</div>'
+        enlace = esc(c["enlace"]) if c["enlace"].startswith(("http://", "https://")) else ""
+        titulo = f'<a href="{enlace}" target="_blank" rel="noopener nofollow">{esc(c["titulo"])}</a>' if enlace else esc(c["titulo"])
+        preg = f'<p class="act-pregunta"><strong data-i18n="ac.pq">Para pensar</strong>: {esc(c["pregunta"])}</p>' if c["pregunta"] else ""
+        return f'<article class="act-destacada">{meta}<h3>{titulo}</h3>{c["html"]}{preg}</article>'
+
+    coms = "\n".join(bloque_comentada(c, i == 0) for i, c in enumerate(comentadas)) or '<p class="small" data-i18n="ac.nocom">Todavía no hay noticias comentadas.</p>'
+    fuentes = []
+    for f in titulares:
+        lis = "".join(f'<li><a href="{esc(i["enlace"])}" target="_blank" rel="noopener nofollow">{esc(i["titulo"])}</a>'
+                      f'{"<time datetime=" + chr(34) + esc(i["fecha"]) + chr(34) + "></time>" if i["fecha"] else ""}</li>' for i in f["items"])
+        fuentes.append(f'<section class="act-fuente"><h3>{esc(f["nombre"])}</h3>'
+                       + (f'<ul class="act-lista">{lis}</ul>' if lis else '<p class="small" data-i18n="ac.vacio">Sin titulares recientes.</p>') + "</section>")
+    cuerpo = f"""  <header class="top">
+    <span class="eyebrow" data-i18n="ac.eyebrow">Economía · 1.º de Bachillerato</span>
+    <h1 data-i18n="ac.title">Actualidad</h1>
+    <p class="lede" data-i18n="ac.lede"></p>
+  </header>
+  <section class="obs-fase">
+    <h2 data-i18n="ac.com">Comentadas en clase</h2>
+{coms}
+  </section>
+  <section class="obs-fase">
+    <h2 data-i18n="ac.tit">Titulares de economía</h2>
+    <p class="small"><span data-i18n="ac.titd"></span> <span class="act-cuando" data-generado="{esc(ahora)}"></span></p>
+    <div class="act-fuentes">
+{chr(10).join(fuentes)}
+    </div>
+  </section>
+  <script>
+  // Fechas en el formato y el idioma del lector
+  (function () {{
+    function pintar() {{
+      var va = window.OBS && OBS.lang() === "va", loc = va ? "ca-ES" : "es-ES";
+      document.querySelectorAll(".act-lista time").forEach(function (t) {{
+        var d = new Date(t.getAttribute("datetime")); if (!isNaN(d)) t.textContent = d.toLocaleDateString(loc, {{ day: "numeric", month: "short" }});
+      }});
+      var c = document.querySelector(".act-cuando"), d = new Date(c.dataset.generado);
+      if (!isNaN(d)) c.textContent = OBS.t("ac.act", {{ f: d.toLocaleString(loc, {{ day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }}) }});
+    }}
+    document.addEventListener("DOMContentLoaded", function () {{ pintar(); if (window.OBS) OBS.onLang(pintar); }});
+  }})();
+  </script>"""
+    (destino / "index.html").write_text(pagina("../", "Actualidad", cuerpo, tx), encoding="utf-8")
+    n_tit = sum(len(f["items"]) for f in titulares)
+    aviso(True, f"actualidad/index.html  ({len(comentadas)} comentadas, {n_tit} titulares de {len(titulares)} medios)")
+    # Resumen para la portada: la comentada más reciente y los tres titulares más recientes
+    todos = sorted(([i["fecha"], i["titulo"], i["enlace"], f["nombre"]] for f in titulares for i in f["items"] if i["fecha"]), reverse=True)[:3]
+    return {"comentada": ({k: comentadas[0][k] for k in ("fecha", "titulo", "fuente", "enlace", "sa", "concepto", "pregunta")} if comentadas else None),
+            "titulares": [{"fecha": a, "titulo": b, "enlace": c, "fuente": d} for a, b, c, d in todos]}
+
+
+def escribir_estado(publicados, resumen_actualidad):
+    """assets/estado-web.js: lo lee assets/menu.js (libro visible o no; portada con la actualidad)."""
+    estado = {"apuntesPublicados": publicados, "actualidad": resumen_actualidad}
+    (web / "assets" / "estado-web.js").write_text(
+        "/* Generado por actualizar.sh: no editar a mano. */\n"
+        "window.OBS_ESTADO = " + json.dumps(estado, ensure_ascii=False).replace("</", "<\\/") + ";\n", encoding="utf-8")
+    aviso(True, f"assets/estado-web.js  ({publicados} apuntes publicados)")
+
+
+if SOLO_TITULARES:
+    anterior = (web / "assets" / "estado-web.js").read_text(encoding="utf-8") if (web / "assets" / "estado-web.js").is_file() else ""
+    m_pub = re.search(r'"?apuntesPublicados"?\s*:\s*(\d+)', anterior)
+    escribir_estado(int(m_pub.group(1)) if m_pub else 0, actualidad(None))
+    sys.exit(0)
 
 # ---------------------------------------------------------------- 1 · Piezas comunes
 comun, destino_comun = vault / "_observatorio-comun", web / "assets" / "comun"
@@ -221,7 +419,9 @@ for carpeta, origen in HERRAMIENTAS:
         f'<script src="{prefijo}assets/estado-web.js"></script>',
         f'<script src="{prefijo}assets/menu.js"></script>', ""])
     destino.parent.mkdir(parents=True, exist_ok=True)
-    destino.write_text(cabecera + s, encoding="utf-8")
+    pie_estilo = ("\n<!-- Añadido por actualizar.sh: línea gráfica de la web, la última para que mande -->\n"
+                  f'<link rel="stylesheet" href="{FUENTES_WEB_URL}">\n<link rel="stylesheet" href="{prefijo}assets/estilo.css">\n') if ESTILO_WEB else ""
+    destino.write_text(cabecera + s + pie_estilo, encoding="utf-8")
     otros = len(re.findall(r"claude\.ai/artifact/", s))
     extra = (f"  ⚠ quedan {otros} enlaces a claude.ai" if otros else "") + ("" if n else "  ⚠ no he encontrado el enlace al panel")
     aviso(True, f"{destino.relative_to(web)}  ← {origen}{extra}")
@@ -351,13 +551,10 @@ cuerpo = f"""  <header class="top">
 (web / "libro" / "index.html").write_text(pagina("../", "Libro del alumnado", cuerpo, tx), encoding="utf-8")
 aviso(True, f"libro/index.html  ({len(SAS)} SA con apuntes)")
 
-# ---------------------------------------------------------------- 6 · Estado de la publicación
-# Lo lee assets/menu.js: por ejemplo, el libro del alumnado solo se enseña en el menú y en la portada
-# cuando hay al menos un apunte publicado (interruptor MOSTRAR_LIBRO en menu.js).
+# ---------------------------------------------------------------- 6 · Actualidad y estado de la publicación
+# El libro del alumnado solo se enseña en el menú y en la portada cuando hay al menos un apunte publicado
+# (interruptor MOSTRAR_LIBRO en menu.js); la portada enseña la actualidad.
 publicados = sum(publicada(sm, sc) for sa in SAS.values() for sm, sc in sa["sesiones"])
-(web / "assets" / "estado-web.js").write_text(
-    "/* Generado por actualizar.sh a partir del vault: no editar a mano. */\n"
-    f"window.OBS_ESTADO = {{ apuntesPublicados: {publicados} }};\n", encoding="utf-8")
-aviso(True, f"assets/estado-web.js  ({publicados} apuntes publicados)")
+escribir_estado(publicados, actualidad(vault))
 
 sys.exit(1 if errores else 0)

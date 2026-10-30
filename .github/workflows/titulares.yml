@@ -1,0 +1,29 @@
+# Renueva cada mañana los titulares de la sección Actualidad (sin el vault: las noticias comentadas
+# se reutilizan de actualidad/datos.json). Solo funciona cuando la web está en GitHub; en local no hace nada.
+name: Titulares de actualidad
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # cada día a las 6:00 UTC (7:00 u 8:00 en Valencia)
+  workflow_dispatch:       # y a mano, desde la pestaña Actions
+
+permissions:
+  contents: write
+
+jobs:
+  titulares:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Leer los canales y regenerar la página
+        run: python3 -I scripts/actualizar.py "$PWD" /sin-vault --solo-titulares
+      - name: Guardar si ha cambiado
+        run: |
+          git config user.name "titulares-automaticos"
+          git config user.email "titulares-automaticos@users.noreply.github.com"
+          git add actualidad assets/estado-web.js
+          git diff --cached --quiet || git commit -m "Titulares de actualidad del $(date -u +%d/%m/%Y)"
+          git push
