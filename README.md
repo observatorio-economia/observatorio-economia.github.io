@@ -60,6 +60,10 @@ Para empezar los apuntes de otra SA, copia la carpeta `web/` de la SA 1 a la car
 
 `assets/estilo.css` da a toda la web el aire de familia de la otra web de Jordi (decisión W-33: tipografía y colores, sin logotipo, cuña ni nombre): fondo papel `#F4F3EF` y tarjetas blancas, grafito `#1F2224`, un único rojo `#C8412F`, títulos en **Jost** y en minúscula, rótulos en **Commissioner** y lectura en **Literata**. Se carga la última en todas las páginas y `actualizar.sh` la añade al final de cada herramienta, así que no cambia ningún archivo del vault (las herramientas publicadas en Claude conservan su estilo). Para volver al estilo anterior: `ESTILO_WEB = False` en `scripts/actualizar.py` y quitar las dos líneas marcadas en `index.html`.
 
+## Portada
+
+La rellena `assets/menu.js`: arriba, **«Esta semana en clase»**, la SA que toca según las fechas del calendario (campos `ini` y `fin` de cada SA en `menu.js`, sacados de `02-curriculo/03-calendario-2026-27.md`); en vacaciones, la siguiente. Debajo, **la línea del curso** (un tramo por SA con el ancho de su duración: pasadas en grafito, la actual en rojo con la marca de hoy), la actualidad, las situaciones por trimestre (con la pregunta guía cuando está decidida, campo `q`) y las páginas comunes. El menú tiene «Situaciones» como desplegable con los títulos, «Actualidad», «Datos» y el botón del tema. Si cambia el calendario, hay que cambiar esas fechas en `menu.js`.
+
 ## Actualidad
 
 Se ve en el menú («Actualidad»), en la portada (el carrusel de la prensa salmón y la noticia comentada más reciente) y en `actualidad/` (carrusel, comentadas y titulares por medio).

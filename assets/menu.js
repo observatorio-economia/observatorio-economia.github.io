@@ -6,33 +6,34 @@
    - Si la página trae las piezas comunes del Observatorio (window.OBS), sigue su idioma.
    Se carga en <head> con <script src=".../assets/menu.js"></script>, sin defer. */
 (function () {
+  // Fechas de cada SA (con su margen) según 02-curriculo/03-calendario-2026-27.md; pregunta guía, solo las decididas.
   const SA = [
-    { n: 1, ruta: "sa01/", estado: "proto",
+    { n: 1, ini: "2026-09-14", fin: "2026-10-01", tri: 1, q: { es: "¿Cómo puede haber hambre cuando hay comida?", va: "Com pot haver-hi fam quan hi ha menjar?" },  ruta: "sa01/", estado: "proto",
       t: { es: "¿Qué es la economía?", va: "Què és l'economia?" },
       d: { es: "El juego del arroz y el flujo de la renta.", va: "El joc de l'arròs i el flux de la renda." } },
-    { n: 2, ruta: "sa02/", estado: "open",
+    { n: 2, ini: "2026-10-05", fin: "2026-10-27", tri: 1, q: { es: "¿Se puede decidir bien cuando nadie sabe lo que va a pasar?", va: "Es pot decidir bé quan ningú sap què passarà?" },  ruta: "sa02/", estado: "open",
       t: { es: "El comportamiento humano en la actividad económica", va: "El comportament humà en l'activitat econòmica" },
       d: { es: "Encuestas a las familias, resultados de la clase y matriz de la estantería.", va: "Enquestes a les famílies, resultats de la classe i matriu del prestatge." } },
-    { n: 3, ruta: "sa03/", estado: "proto",
+    { n: 3, ini: "2026-10-28", fin: "2026-11-18", tri: 1,  ruta: "sa03/", estado: "proto",
       t: { es: "La producción", va: "La producció" },
       d: { es: "Calculadora de costes con el caso de General Motors (2009) y frontera de posibilidades de producción.", va: "Calculadora de costos amb el cas de General Motors (2009) i frontera de possibilitats de producció." } },
-    { n: 4, ruta: "sa04/", estado: "proto",
+    { n: 4, ini: "2026-11-19", fin: "2026-12-21", tri: 1,  ruta: "sa04/", estado: "proto",
       t: { es: "El mercado", va: "El mercat" },
       d: { es: "Competencia perfecta, monopolio, el dilema de las dos gasolineras y la guerra de precios de la competencia real.", va: "Competència perfecta, monopoli, el dilema de les dues gasolineres i la guerra de preus de la competència real." } },
-    { n: 5, ruta: "sa05/", estado: "proto",
+    { n: 5, ini: "2027-01-07", fin: "2027-02-01", tri: 2,  ruta: "sa05/", estado: "proto",
       t: { es: "Crecimiento económico y desarrollo", va: "Creixement econòmic i desenvolupament" },
       d: { es: "Emisiones, clima y producción: pizarra de sistemas y simulador.", va: "Emissions, clima i producció: pissarra de sistemes i simulador." } },
-    { n: 6, ruta: "sa06/", estado: "proto",
+    { n: 6, ini: "2027-02-02", fin: "2027-02-22", tri: 2,  ruta: "sa06/", estado: "proto",
       t: { es: "El mercado laboral", va: "El mercat laboral" },
       d: { es: "El salario como precio frente al ciclo de Goodwin: el mismo cambio, dos respuestas.", va: "El salari com a preu enfront del cicle de Goodwin: el mateix canvi, dues respostes." } },
-    { n: 7, t: { es: "El Estado y sus cuentas", va: "L'Estat i els seus comptes" } },
-    { n: 8, ruta: "sa08/", estado: "proto",
+    { n: 7, ini: "2027-02-23", fin: "2027-03-24", tri: 2,  t: { es: "El Estado y sus cuentas", va: "L'Estat i els seus comptes" } },
+    { n: 8, ini: "2027-04-06", fin: "2027-04-27", tri: 3,  ruta: "sa08/", estado: "proto",
       t: { es: "El dinero", va: "Els diners" },
       d: { es: "La inflación en tu bolsillo: calculadora del IPC desde 1961 y «Mi cesta de la compra».", va: "La inflació a la butxaca: calculadora de l'IPC des de 1961 i «La meua cistella de la compra»." } },
-    { n: 9, ruta: "sa09/", estado: "proto",
+    { n: 9, ini: "2027-04-28", fin: "2027-05-26", tri: 3,  ruta: "sa09/", estado: "proto",
       t: { es: "Comercio internacional", va: "Comerç internacional" },
       d: { es: "Ricardo frente a Shaikh: ventaja comparativa o ventaja absoluta, con déficit y deuda.", va: "Ricardo enfront de Shaikh: avantatge comparatiu o avantatge absolut, amb dèficit i deute." } },
-    { n: 10, t: { es: "Las finanzas", va: "Les finances" } },
+    { n: 10, ini: "2027-05-27", fin: "2027-06-17", tri: 3,  t: { es: "Las finanzas", va: "Les finances" } },
   ];
   // Interruptor del libro del alumnado en el menú y la portada (la página libro/ se genera siempre):
   // "auto" = solo cuando hay algún apunte con «estado: publicado» (lo cuenta actualizar.sh en assets/estado-web.js);
@@ -60,6 +61,10 @@
     es: { home: "Observatorio", sub: "Economía · 1.º Bach.", nav: "Situaciones de aprendizaje", soon: "próximamente",
       open: "abrir", proto: "prototipo", tema: "Tema", auto: "automático", light: "claro", dark: "oscuro", cambiar: "Cambiar el tema; ahora {v}",
       act: "Actualidad", pq: "Para pensar", actmas: "Más noticias y titulares",
+      sit: "Situaciones", ahora: "Esta semana en clase", proxima: "Después de las vacaciones", ultima: "La última del curso",
+      abrirh: "Abrir la herramienta de la SA {n}", todas: "Ver todas las situaciones", sinherr: "La herramienta de esta SA está en preparación.",
+      del: "del {a} al {b}", camino: "El curso, de septiembre a junio", hoy: "hoy", ahoraCorto: "ahora",
+      tri1: "Primer trimestre", tri2: "Segundo trimestre", tri3: "Tercer trimestre", abrirc: "Abrir", menu: "Menú principal",
       carr: "carrusel", carrl: "Noticias de la prensa económica", diapo: "noticia", leeren: "Leer en {m}", img: "Imagen: {m}",
       ant: "Noticia anterior", sig: "Noticia siguiente", pausa: "Pausar", seguir: "Reanudar", ir: "Ir a la noticia {n}", comclase: "Comentada en clase",
       lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
@@ -67,6 +72,10 @@
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
       open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
       act: "Actualitat", pq: "Per a pensar", actmas: "Més notícies i titulars",
+      sit: "Situacions", ahora: "Aquesta setmana a classe", proxima: "Després de les vacances", ultima: "L'última del curs",
+      abrirh: "Obrir la ferramenta de la SA {n}", todas: "Veure totes les situacions", sinherr: "La ferramenta d'aquesta SA està en preparació.",
+      del: "del {a} al {b}", camino: "El curs, de setembre a juny", hoy: "hui", ahoraCorto: "ara",
+      tri1: "Primer trimestre", tri2: "Segon trimestre", tri3: "Tercer trimestre", abrirc: "Obrir", menu: "Menú principal",
       carr: "carrusel", carrl: "Notícies de la premsa econòmica", diapo: "notícia", leeren: "Llegir en {m}", img: "Imatge: {m}",
       ant: "Notícia anterior", sig: "Notícia següent", pausa: "Pausar", seguir: "Reprendre", ir: "Anar a la notícia {n}", comclase: "Comentada a classe",
       lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
@@ -104,26 +113,43 @@
   const normaliza = u => u.split("#")[0].split("?")[0].replace(/index\.html$/, "");
   const aqui = () => normaliza(location.href);
 
+  // Fechas: la SA de hoy según el calendario y fechas legibles
+  const dia = iso => new Date(iso + "T12:00:00");
+  const fechaLarga = iso => dia(iso).toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES", { day: "numeric", month: "long" });
+  function saDeHoy() {
+    const hoy = new Date();
+    const dentro = SA.find(s => dia(s.ini) <= hoy && hoy <= new Date(dia(s.fin).getTime() + 864e5));
+    if (dentro) return { sa: dentro, cuando: "ahora" };
+    const siguiente = SA.find(s => dia(s.ini) > hoy);
+    return siguiente ? { sa: siguiente, cuando: "proxima" } : { sa: SA[SA.length - 1], cuando: "ultima" };
+  }
+
+  const ICONO_TEMA = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg>';
   let barra = null;
   function menu() {
-    const lista = el("ol", { class: "obs-menu__sa", "aria-label": tx("nav") }, ...SA.map(s => el("li", {},
+    const dentroDe = r => aqui().startsWith(normaliza(enlace(r)));
+    // «Situaciones»: desplegable con los títulos (las que aún no tienen herramienta, sin enlace)
+    const lista = el("ol", { class: "obs-menu__lista" }, ...SA.map(s => el("li", {},
       s.ruta
-        ? el("a", { href: enlace(s.ruta), title: "SA " + s.n + " · " + L(s.t), "aria-label": "SA " + s.n + ": " + L(s.t), text: s.n,
-            "aria-current": aqui().startsWith(normaliza(enlace(s.ruta))) ? "page" : null })
-        : el("span", { title: "SA " + s.n + " · " + L(s.t) + " (" + tx("soon") + ")", "aria-label": "SA " + s.n + ": " + L(s.t) + ", " + tx("soon"), "aria-disabled": "true", text: s.n })
-    )));
-    const boton = el("button", { type: "button", class: "obs-menu__tema", text: tx("tema") + ": " + tx(tema), "aria-label": tx("cambiar").replace("{v}", tx(tema)) });
+        ? el("a", { href: enlace(s.ruta), "aria-current": dentroDe(s.ruta) ? "page" : null }, el("span", { class: "n", text: s.n }), L(s.t))
+        : el("span", { class: "obs-menu__no", "aria-disabled": "true" }, el("span", { class: "n", text: s.n }), L(s.t) + " (" + tx("soon") + ")"))));
+    const enAlgunaSA = SA.some(s => s.ruta && dentroDe(s.ruta));
+    const sit = el("details", { class: "obs-menu__sit" }, el("summary", { "aria-current": enAlgunaSA ? "page" : null, text: tx("sit") }), lista);
+    const extra = EXTRA.map(x => el("a", { class: "obs-menu__link", href: enlace(x.ruta), "aria-current": dentroDe(x.ruta) ? "page" : null, text: L(x.corto) }));
+    const boton = el("button", { type: "button", class: "obs-menu__tema", title: tx("tema") + ": " + tx(tema), "aria-label": tx("cambiar").replace("{v}", tx(tema)) });
+    boton.innerHTML = ICONO_TEMA;
     boton.addEventListener("click", () => {
       tema = TEMAS[(TEMAS.indexOf(tema) + 1) % TEMAS.length];
       guardar(tema); aplicarTema(); pintarMenu();
       document.querySelector(".obs-menu__tema")?.focus();
     });
-    const home = el("a", { class: "obs-menu__home", href: enlace(""), "aria-current": normaliza(enlace("")) === aqui() ? "page" : null },
-      el("b", { text: tx("home") }), el("span", { text: tx("sub") }));
-    const extra = EXTRA.map(x => el("a", { class: "obs-menu__datos", href: enlace(x.ruta), title: L(x.t), text: L(x.corto),
-      "aria-current": aqui().startsWith(normaliza(enlace(x.ruta))) ? "page" : null }));
-    return el("nav", { class: "obs-menu", "aria-label": tx("home") }, el("div", { class: "obs-menu__in" }, home, lista, ...extra, boton));
+    const home = el("a", { class: "obs-menu__home", href: enlace(""), "aria-current": normaliza(enlace("")) === aqui() ? "page" : null }, el("b", { text: tx("home") }));
+    return el("nav", { class: "obs-menu", "aria-label": tx("menu") },
+      el("div", { class: "obs-menu__in" }, home, el("div", { class: "obs-menu__nav" }, sit, ...extra), boton));
   }
+  // el desplegable se cierra al pulsar fuera o con Escape
+  document.addEventListener("click", e => { document.querySelectorAll(".obs-menu__sit[open]").forEach(d => { if (!d.contains(e.target)) d.open = false; }); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".obs-menu__sit[open]").forEach(d => { d.open = false; d.querySelector("summary").focus(); }); });
 
   // Pie: autoría, licencia y cómo citar la página que se está viendo
   let pieEl = null;
@@ -237,23 +263,81 @@
     caja.hidden = false;
   }
 
+  // Portada · «Esta semana en clase»: la SA que toca según el calendario
+  function portadaHero() {
+    const caja = document.getElementById("portada-hero");
+    if (!caja) return;
+    const { sa, cuando } = saDeHoy();
+    const fechas = tx("del").replace("{a}", fechaLarga(sa.ini)).replace("{b}", fechaLarga(sa.fin));
+    const hijos = [
+      el("p", { class: "hero-cuando" }, el("strong", { text: tx(cuando) }), ", " + fechas),
+      el("h1", { class: "hero-titulo" }, el("span", { class: "hero-n", text: "SA " + sa.n }), " ", L(sa.t))];
+    if (sa.q) hijos.push(el("p", { class: "hero-pregunta", text: L(sa.q) }));
+    if (sa.d) hijos.push(el("p", { class: "hero-desc", text: L(sa.d) }));
+    const acciones = el("div", { class: "hero-acciones" });
+    if (sa.ruta) acciones.append(el("a", { class: "boton boton-rojo", href: enlace(sa.ruta), text: tx("abrirh").replace("{n}", sa.n) }));
+    else hijos.push(el("p", { class: "hero-desc", text: tx("sinherr") }));
+    acciones.append(el("a", { class: "boton", href: "#situaciones", text: tx("todas") }));
+    hijos.push(acciones);
+    caja.replaceChildren(...hijos);
+  }
+
+  // Portada · la línea del curso: un tramo por SA, con el ancho de su duración; la de hoy en rojo
+  function portadaCamino() {
+    const caja = document.getElementById("portada-camino");
+    if (!caja) return;
+    const hoy = new Date(), { sa: actual, cuando } = saDeHoy();
+    const t0 = dia(SA[0].ini).getTime(), t1 = dia(SA[SA.length - 1].fin).getTime();
+    const tramos = SA.map(s => {
+      const ancho = Math.max(1, (dia(s.fin) - dia(s.ini)) / 864e5 + 1);
+      const estado = dia(s.fin) < hoy && s !== actual ? "pasada" : s === actual && cuando === "ahora" ? "actual" : "futura";
+      const etiqueta = "SA " + s.n + ": " + L(s.t) + ", " + tx("del").replace("{a}", fechaLarga(s.ini)).replace("{b}", fechaLarga(s.fin)) + (estado === "actual" ? " (" + tx("ahoraCorto") + ")" : "");
+      const contenido = [el("span", { class: "camino-n", text: s.n })];
+      const nodo = s.ruta
+        ? el("a", { class: "camino-tramo " + estado, href: enlace(s.ruta), title: etiqueta, "aria-label": etiqueta }, ...contenido)
+        : el("span", { class: "camino-tramo " + estado + " sin", title: etiqueta, "aria-label": etiqueta, role: "img" }, ...contenido);
+      if (estado === "actual") {
+        const pos = Math.min(100, Math.max(0, (hoy - dia(s.ini)) / (dia(s.fin) - dia(s.ini) + 864e5) * 100));
+        nodo.append(el("span", { class: "camino-hoy", style: "left:" + pos.toFixed(1) + "%", text: tx("hoy") }));
+      }
+      return el("li", { style: "flex-grow:" + ancho }, nodo);
+    });
+    // meses de septiembre a junio, debajo
+    const meses = [];
+    for (let m = new Date(2026, 8, 1); m <= new Date(2027, 5, 1); m.setMonth(m.getMonth() + 1)) {
+      const izq = Math.max(0, (m.getTime() - t0) / (t1 - t0) * 100);
+      meses.push(el("span", { style: "left:" + izq.toFixed(1) + "%", text: m.toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES", { month: "short" }).replace(".", "") }));
+    }
+    caja.replaceChildren(el("h2", { class: "camino-titulo", text: tx("camino") }),
+      el("ol", { class: "camino" }, ...tramos), el("div", { class: "camino-meses", "aria-hidden": "true" }, ...meses));
+  }
+
   function panel() {
-    portadaActualidad();
+    portadaHero(); portadaCamino(); portadaActualidad();
     const extra = document.getElementById("panel-datos");
     if (extra) extra.replaceChildren(...EXTRA.map(x => el("li", {}, el("a", { class: "row", href: enlace(x.ruta) },
       el("span", { class: "num", "aria-hidden": "true", text: x.num }),
       el("span", {}, el("span", { class: "t", text: L(x.t) }), el("br"), el("span", { class: "d", text: L(x.d) })),
       el("span", { class: "state", text: tx("open") })))));
-    const ol = document.getElementById("panel-sa");
-    if (!ol) return;
-    ol.replaceChildren(...SA.map(s => {
-      const texto = el("span", {}, el("span", { class: "t", text: L(s.t) }));
-      if (s.d) texto.append(el("br"), el("span", { class: "d", text: L(s.d) }));
-      const fila = s.ruta ? el("a", { class: "row", href: enlace(s.ruta) }) : el("div", { class: "row" });
-      fila.append(el("span", { class: "num", text: s.n }), texto,
-        el("span", { class: "state", text: s.ruta ? tx(s.estado || "open") : tx("soon") }));
-      return el("li", {}, fila);
-    }));
+    const caja = document.getElementById("panel-sa");
+    if (!caja) return;
+    const { sa: actual, cuando } = saDeHoy();
+    const grupos = [1, 2, 3].map(tri => el("section", { class: "sit-tri" },
+      el("h3", { text: tx("tri" + tri) }),
+      el("ol", { class: "sit-lista" }, ...SA.filter(s => s.tri === tri).map(s => {
+        const esAhora = s === actual && cuando === "ahora";
+        const texto = el("div", { class: "sit-texto" },
+          el("span", { class: "sit-t", text: L(s.t) }),
+          el("span", { class: "sit-f" }, tx("del").replace("{a}", fechaLarga(s.ini)).replace("{b}", fechaLarga(s.fin)),
+            esAhora ? el("span", { class: "sit-badge", text: tx("ahoraCorto") }) : ""));
+        if (s.q) texto.append(el("span", { class: "sit-q", text: L(s.q) }));
+        if (s.d) texto.append(el("span", { class: "sit-d", text: L(s.d) }));
+        const fila = s.ruta ? el("a", { class: "sit-fila", href: enlace(s.ruta) }) : el("div", { class: "sit-fila sin" });
+        fila.append(el("span", { class: "sit-n", text: s.n }), texto,
+          el("span", { class: "sit-accion", text: s.ruta ? tx("abrirc") : tx("soon") }));
+        return el("li", { class: esAhora ? "ahora" : null }, fila);
+      }))));
+    caja.replaceChildren(...grupos);
   }
 
   function arrancar() {

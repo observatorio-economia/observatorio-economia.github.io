@@ -21,18 +21,23 @@
 <body class="obs-page">
 <div class="wrap">
   <div id="obs-bar" style="padding-top:16px"></div>
-  <header class="top">
-    <span class="eyebrow" data-i18n="p.eyebrow">Economía · 1.º de Bachillerato</span>
+  <!-- Portada (la rellena assets/menu.js): «Esta semana en clase» según el calendario, la línea del curso,
+       la actualidad, las situaciones por trimestre y las páginas comunes -->
+  <header class="hero" id="portada-hero">
     <h1 data-i18n="p.title">Panel del Observatorio</h1>
-    <p class="lede" data-i18n="p.lede">Las herramientas digitales del curso, una por situación de aprendizaje. Entra en la de la situación que estéis trabajando.</p>
   </header>
+  <section class="camino-caja" id="portada-camino"></section>
 
-  <!-- Actualidad: la noticia comentada más reciente y los últimos titulares (assets/menu.js, con lo que deja actualizar.sh) -->
   <section class="act-portada" id="panel-actualidad" hidden></section>
 
-  <!-- La lista de SA la rellena assets/menu.js (es la misma que la del menú) -->
-  <ol class="sa" id="panel-sa"></ol>
-  <ol class="sa" id="panel-datos"></ol>
+  <section class="sit" id="situaciones" aria-labelledby="sit-h">
+    <h2 id="sit-h" data-i18n="p.sit">Situaciones de aprendizaje</h2>
+    <div id="panel-sa"></div>
+  </section>
+  <section class="otras" aria-labelledby="otras-h">
+    <h2 id="otras-h" data-i18n="p.otras">Para todo el curso</h2>
+    <ol class="sa" id="panel-datos"></ol>
+  </section>
   <noscript><p class="small">Para usar las herramientas hay que activar JavaScript en el navegador.</p></noscript>
 
   <div class="note">
@@ -46,13 +51,13 @@
   "use strict";
   OBS.register({
     es: {
-      "p.title": "Panel del Observatorio", "p.eyebrow": "Economía · 1.º de Bachillerato",
+      "p.title": "Panel del Observatorio", "p.eyebrow": "Economía · 1.º de Bachillerato", "p.sit": "Situaciones de aprendizaje", "p.otras": "Para todo el curso",
       "p.lede": "Las herramientas digitales del curso, una por situación de aprendizaje. Entra en la de la situación que estéis trabajando.",
       "p.note": "Para votar en clase se usa <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\">Plickers</a>, con tarjetas impresas y sin móviles.",
       "p.datos": "Las herramientas funcionan en el navegador: no piden cuenta ni envían datos a ningún servidor. Lo que se guarda (por ejemplo, los grupos de las encuestas de la SA 2) se queda en el navegador del ordenador donde se introduce."
     },
     va: {
-      "p.title": "Tauler de l'Observatori", "p.eyebrow": "Economia · 1r de Batxillerat",
+      "p.title": "Tauler de l'Observatori", "p.sit": "Situacions d'aprenentatge", "p.otras": "Per a tot el curs", "p.eyebrow": "Economia · 1r de Batxillerat",
       "p.lede": "Les ferramentes digitals del curs, una per situació d'aprenentatge. Entreu en la de la situació que estigueu treballant.",
       "p.note": "Per a votar en classe s'utilitza <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\">Plickers</a>, amb targetes impreses i sense mòbils.",
       "p.datos": "Les ferramentes funcionen en el navegador: no demanen compte ni envien dades a cap servidor. El que es guarda (per exemple, els grups de les enquestes de la SA 2) es queda en el navegador de l'ordinador on s'introduïx."
