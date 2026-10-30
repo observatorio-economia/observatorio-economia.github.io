@@ -373,6 +373,10 @@
     setTimeout(pie, 0);
     if (window.OBS && OBS.onLang) OBS.onLang(() => { pintarMenu(); panel(); pie(); });
   }
+  // Web instalable: el service worker (sw.js, en la raíz) guarda la web para usarla sin conexión
+  if ("serviceWorker" in navigator && /^https:|^http:\/\/(localhost|127\.0\.0\.1)/.test(location.href)) {
+    window.addEventListener("load", () => navigator.serviceWorker.register(new URL("sw.js", raiz)).catch(() => {}));
+  }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", arrancar);
   else arrancar();
 

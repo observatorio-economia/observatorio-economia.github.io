@@ -53,6 +53,16 @@ FUENTES = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n'
 
 
 esc = html.escape
+
+
+def app_head(prefijo):
+    """Lo que hace la web instalable (PWA): manifiesto, iconos y color de la barra del sistema."""
+    return (f'<link rel="manifest" href="{prefijo}manifest.webmanifest">\n'
+            f'<link rel="icon" type="image/png" sizes="32x32" href="{prefijo}assets/icono/favicon-32.png">\n'
+            f'<link rel="apple-touch-icon" href="{prefijo}assets/icono/apple-touch-icon.png">\n'
+            '<meta name="theme-color" content="#FFFFFF">\n'
+            '<meta name="apple-mobile-web-app-capable" content="yes">\n'
+            '<meta name="apple-mobile-web-app-title" content="Observatorio">\n')
 errores = 0
 
 
@@ -153,7 +163,7 @@ def pagina(prefijo, titulo, cuerpo, textos):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Generada por actualizar.sh a partir del vault: no editar a mano -->
 <title data-i18n="pg.title">{esc(titulo)}</title>
-{FUENTES}
+{app_head(prefijo)}{FUENTES}
 <link rel="stylesheet" href="{prefijo}assets/observatorio.css">
 <link rel="stylesheet" href="{prefijo}assets/comun/observatorio-common.css">
 {estilo}<script src="{prefijo}assets/comun/observatorio-common.js"></script>
@@ -449,6 +459,7 @@ for carpeta, origen in HERRAMIENTAS:
         "<!doctype html>", '<html lang="es">', "<head>", '<meta charset="utf-8">',
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         "<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->",
+        app_head(prefijo).rstrip("\n"),
         f'<link rel="stylesheet" href="{prefijo}assets/observatorio.css">',
         f'<script src="{prefijo}assets/estado-web.js"></script>',
         f'<script src="{prefijo}assets/menu.js"></script>', ""])
@@ -732,5 +743,58 @@ def inventario():
 
 
 inventario()
+
+
+# ---------------------------------------------------------------- 8 · Web instalable (PWA): sw.js
+def service_worker():
+    """sw.js: guarda la web en el dispositivo para que funcione sin conexión. Con red, siempre lo último
+    (primero la red y, si no responde en 4 s, la copia); sin red, la copia. La versión cambia sola cuando
+    cambia algún archivo, y entonces se renueva la copia."""
+    import hashlib
+    tipos = (".html", ".css", ".js", ".json", ".png", ".webmanifest", ".csv")
+    archivos = sorted(str(f.relative_to(web)).replace(os.sep, "/") for f in web.rglob("*")
+                      if f.is_file() and f.suffix in tipos and not any(x.startswith(".") for x in f.relative_to(web).parts)
+                      and f.relative_to(web).parts[0] not in ("scripts",) and f.name != "sw.js")
+    h = hashlib.sha256()
+    for a in archivos:
+        h.update(a.encode()); h.update((web / a).read_bytes())
+    version = h.hexdigest()[:12]
+    lista = json.dumps(["./"] + archivos, ensure_ascii=False, indent=0)
+    (web / "sw.js").write_text(f"""/* Generado por actualizar.sh: no editar a mano. Web instalable del Observatorio. */
+const VERSION = "obs-{version}";
+const ARCHIVOS = {lista};
+const FUENTES = "obs-fuentes";
+
+self.addEventListener("install", e => {{
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
+}});
+self.addEventListener("activate", e => {{
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION && k !== FUENTES).map(k => caches.delete(k))))
+    .then(() => self.clients.claim()));
+}});
+// Con red: lo último (y se guarda); si la red tarda más de 4 s o no hay, la copia guardada
+function redPrimero(req) {{
+  const red = fetch(req).then(r => {{ if (r.ok) {{ const c = r.clone(); caches.open(VERSION).then(k => k.put(req, c)); }} return r; }});
+  const espera = new Promise(res => setTimeout(res, 4000));
+  return Promise.race([red, espera.then(() => caches.match(req, {{ ignoreSearch: true }}))])
+    .then(r => r || red)
+    .catch(() => caches.match(req, {{ ignoreSearch: true }}).then(r => r || (req.mode === "navigate" ? caches.match("./index.html") : Response.error())));
+}}
+self.addEventListener("fetch", e => {{
+  const req = e.request;
+  if (req.method !== "GET") return;
+  const url = new URL(req.url);
+  if (url.origin === location.origin) {{ e.respondWith(redPrimero(req)); return; }}
+  // Letras de Google: se guardan la primera vez y después se sirven desde el dispositivo
+  if (/fonts\\.(googleapis|gstatic)\\.com$/.test(url.hostname)) {{
+    e.respondWith(caches.open(FUENTES).then(c => c.match(req).then(r => r || fetch(req).then(n => {{ c.put(req, n.clone()); return n; }}))));
+  }}
+}});
+""", encoding="utf-8")
+    peso = sum((web / a).stat().st_size for a in archivos) // 1024
+    aviso(True, f"sw.js  (web instalable: {len(archivos)} archivos, {peso} KB, versión {version})")
+
+
+service_worker()
 
 sys.exit(1 if errores else 0)

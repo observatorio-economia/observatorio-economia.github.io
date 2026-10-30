@@ -15,6 +15,8 @@ sa02/ … sa09/, datos/    Las demás herramientas y la Base de datos
 actualidad/              Actualidad: noticias comentadas y titulares de varios medios (página y datos.json)
 libro/                   Libro del alumnado: los apuntes de todas las SA seguidos, para leer o imprimir
 actualizar.sh            Construye todo desde el vault (llama a scripts/actualizar.py)
+manifest.webmanifest     Web instalable: nombre, colores e iconos (assets/icono/) de la app
+sw.js                    Web instalable: guarda la web en el dispositivo para usarla sin conexión; lo genera actualizar.sh
 inventario-web.md        Inventario de lo publicado (herramientas, pestañas, fuentes, estado, sesiones e interruptores); lo genera actualizar.sh: no se edita a mano
 LICENSE.md               Licencia CC BY-SA 4.0
 .nojekyll                Para que GitHub Pages sirva los archivos tal cual
@@ -60,6 +62,10 @@ Para empezar los apuntes de otra SA, copia la carpeta `web/` de la SA 1 a la car
 ## Línea gráfica
 
 `assets/estilo.css` da a toda la web el aire de familia de la otra web de Jordi (decisión W-33: tipografía y colores, sin logotipo, cuña ni nombre): fondo papel `#F4F3EF` y tarjetas blancas, grafito `#1F2224`, un único rojo `#C8412F`, títulos en **Jost** y en minúscula, rótulos en **Commissioner** y lectura en **Literata**. Se carga la última en todas las páginas y `actualizar.sh` la añade al final de cada herramienta, así que no cambia ningún archivo del vault (las herramientas publicadas en Claude conservan su estilo). Para volver al estilo anterior: `ESTILO_WEB = False` en `scripts/actualizar.py` y quitar las dos líneas marcadas en `index.html`.
+
+## Web instalable (app)
+
+La web se puede instalar como una app desde el navegador (en el móvil: «Añadir a la pantalla de inicio»; en Chrome o Edge: el icono de instalar de la barra de direcciones). Una vez abierta, funciona sin conexión, salvo los titulares de Actualidad. Con red, siempre muestra lo último; si la red no responde en 4 segundos, tira de la copia guardada. `actualizar.sh` regenera `sw.js` con la lista de archivos y una versión que cambia sola cuando cambia algo, así que no hay que tocar nada a mano. Solo funciona en https (GitHub Pages) o en `localhost`.
 
 ## Navegación
 

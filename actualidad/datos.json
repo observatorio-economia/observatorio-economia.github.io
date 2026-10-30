@@ -1,5 +1,5 @@
 {
- "generado": "2026-10-30T18:48:22.744616+00:00",
+ "generado": "2026-10-30T19:22:04.271722+00:00",
  "comentadas": [],
  "carrusel": [
   {
@@ -95,7 +95,7 @@
      "imagen": "https://e00-expansion.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933480633885.jpg"
     }
    ],
-   "leido": "2026-10-30T18:48:20.941659+00:00"
+   "leido": "2026-10-30T19:22:02.926404+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -132,7 +132,7 @@
      "imagen": "https://imagenes.elpais.com/resizer/v2/6MMEXXO2ZZG2JFWAJAVCXT3XGE.jpg?auth=21b70af9352a2ca0ec8c216f4c3f7c2cb0ebd1f5289d749cae2153bff10ac6d1"
     }
    ],
-   "leido": "2026-10-30T18:48:21.213943+00:00"
+   "leido": "2026-10-30T19:22:03.066901+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -169,7 +169,7 @@
      "imagen": "https://s3.elespanol.com/k/imgp/cms/elespanol/10400999.jpg?p=w:1706/h:960&h=26Q8SIqm"
     }
    ],
-   "leido": "2026-10-30T18:48:21.484456+00:00"
+   "leido": "2026-10-30T19:22:03.428282+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -188,7 +188,7 @@
      "imagen": ""
     }
    ],
-   "leido": "2026-10-30T18:48:21.581191+00:00"
+   "leido": "2026-10-30T19:22:03.521758+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -225,7 +225,7 @@
      "imagen": "https://imagenes.elpais.com/resizer/v2/77AU7X3XKFJL7FTLKSDXMERU5U.jpg?auth=e154c454f5809b7ce5c39bf224d6ac7295983dde246c3de443e99109620a982d"
     }
    ],
-   "leido": "2026-10-30T18:48:21.865398+00:00"
+   "leido": "2026-10-30T19:22:03.640481+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -262,7 +262,7 @@
      "imagen": "https://static.eldiario.es/clip/2dd92995-cbf7-4e99-8fe2-120ea4d13f27_16-9-discover-aspect-ratio_default_0.jpg"
     }
    ],
-   "leido": "2026-10-30T18:48:21.983513+00:00"
+   "leido": "2026-10-30T19:22:03.764906+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -299,12 +299,18 @@
      "imagen": "https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933610722095.jpg"
     }
    ],
-   "leido": "2026-10-30T18:48:22.254200+00:00"
+   "leido": "2026-10-30T19:22:03.928253+00:00"
   },
   {
    "nombre": "ABC · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Los inspectores de Hacienda denuncian media docena de intentos de utilizar la Agencia Tributaria con fines políticos: «Es la mayor crisis de la historia»",
+     "enlace": "https://www.abc.es/economia/inspectores-hacienda-denuncian-media-docena-intentos-utilizar-20261030103403-nt.html",
+     "fecha": "2026-10-30T18:48:48+00:00",
+     "imagen": "https://s1.abcstatics.com/abc/www/multimedia/economia/2026/10/30/MJ%20Montero%20ABC-RosLO3CwvVFMNR4oCuNYIpJ-1200x840@diario_abc.jpg"
+    },
     {
      "titulo": "Altos funcionarios de Transportes exigen blindar la investigación del accidente frente a «cualquier presión política»",
      "enlace": "https://www.abc.es/economia/ingenieros-transportes-exigen-blindar-investigacion-accidente-frente-20261030135407-nt.html",
@@ -328,15 +334,9 @@
      "enlace": "https://www.abc.es/economia/economia-espanola-frena-decima-tercer-trimestre-20261030102925-nt.html",
      "fecha": "2026-10-30T14:00:10+00:00",
      "imagen": "https://s1.abcstatics.com/abc/www/multimedia/economia/2026/10/30/paseo-R2keNg4PoeKmvg1GApLgoYO-1200x840@diario_abc.jpg"
-    },
-    {
-     "titulo": "Binance, la mayor bolsa de criptomonedas del mundo, denuncia un ciberataque de 6.300 millones de dólares",
-     "enlace": "https://www.abc.es/economia/binance-mayor-bolsa-criptomonedas-mundo-denuncia-ciberataque-20261030073304-nt.html",
-     "fecha": "2026-10-30T13:44:01+00:00",
-     "imagen": "https://s1.abcstatics.com/abc/www/multimedia/economia/2026/10/30/binance-kiT-U4090000975hXB-1200x840@diario_abc.JPG"
     }
    ],
-   "leido": "2026-10-30T18:48:22.526798+00:00"
+   "leido": "2026-10-30T19:22:04.052192+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -373,7 +373,7 @@
      "imagen": ""
     }
    ],
-   "leido": "2026-10-30T18:48:22.744531+00:00"
+   "leido": "2026-10-30T19:22:04.271657+00:00"
   }
  ]
 }
