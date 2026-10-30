@@ -277,6 +277,70 @@ body.obs-proj .res .fx { font-size: 16px; }
 body.obs-proj .question { font-size: 22px; }
 body.obs-proj input[type="number"], body.obs-proj .fn { font-size: 20px !important; }
 
+
+/* SA 3 · Laboratorio de costes (30/10/2026): una pregunta y una pantalla.
+   Controles y cifras a la izquierda, gráficos y tabla a la derecha; en el móvil, uno debajo del otro. */
+.lab-cab { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; justify-content: space-between; }
+.lab-cab h2 { flex: 1 1 340px; }
+.lab-ejemplos { display: flex; flex-wrap: wrap; gap: 6px; }
+.ej-btn { font: 500 14px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); padding: 7px 12px; cursor: pointer; }
+.ej-btn:hover { border-color: var(--ink); }
+.ej-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.lab { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 22px 28px; align-items: start; }
+@media (max-width: 900px) { .lab { grid-template-columns: minmax(0, 1fr); } }
+.lab-izq { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.lab-der { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.lab-datos { display: flex; flex-direction: column; gap: 10px; }
+.lab-fila { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.lab-fila select, .lab-vel select { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); padding: 7px 8px; width: 100%; min-width: 0; }
+.lab-play { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+.lab-play .btn { min-width: 9em; }
+.lab-vel { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--muted); }
+.lab-cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; border-top: 2px solid var(--ink); padding-top: 10px; }
+.lab-cifras div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lab-cifras b { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.lab-cifras b.pos { color: var(--ok); } .lab-cifras b.neg { color: var(--bad); }
+.lab-cifras span { font-size: 13px; color: var(--muted); }
+.lab-frase { margin: 0; border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; font-size: 16px; line-height: 1.5; min-height: 3em; }
+.lab-todos { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; margin: 0; font-size: 14px; }
+.lab-todos dt { color: var(--muted); } .lab-todos dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); }
+.lab-mas { border-top: 0; padding-top: 0; }
+.lab-mas summary { font-size: 14px; }
+.lab-tabla { display: flex; flex-direction: column; gap: 6px; }
+.lab-tabla-cab { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+.lab-tabla-caja { max-height: 230px; overflow: auto; border: 1px solid var(--rule); }
+.lab-tabla-caja table { font-size: 13px; }
+.lab-tabla-caja th { position: sticky; top: 0; background: var(--paper); }
+.lab-tabla-caja tr.cur td { background: var(--accent-soft); font-weight: 600; }
+.lab-tabla-caja tr.vacia td { color: transparent; }
+.lab-supuestos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.lab-supuestos .sup { border-top: 3px solid var(--s2); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.lab-supuestos .sup2 { border-top-color: var(--s1); }
+.lab-supuestos ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+svg .faint { opacity: .22; }
+svg .mark-txt { font-family: var(--font-body); font-size: 12px; font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 4px; }
+svg .limite { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 3 4; }
+/* Practicar */
+.pr-barra { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; }
+.pr-barra select { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); padding: 7px 8px; min-width: 0; max-width: 100%; }
+.pr-ej { display: flex; flex-direction: column; gap: 12px; }
+.pr-origen { font-size: 13px; color: var(--muted); }
+.pr-enun { font-size: 17px; line-height: 1.55; max-width: 70ch; margin: 0; }
+.pr-ej table { font-size: 15px; }
+.pr-ej td input, .pr-preg input { font: 15px var(--font-mono); width: 6.5em; padding: 5px 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); text-align: right; }
+.pr-ej td input.ok, .pr-preg input.ok, .pr-preg select.ok { border-color: var(--ok); box-shadow: inset 0 0 0 1px var(--ok); }
+.pr-ej td input.bad, .pr-preg input.bad, .pr-preg select.bad { border-color: var(--bad); box-shadow: inset 0 0 0 1px var(--bad); }
+.pr-ej td .sol, .pr-preg .sol { display: block; font-size: 12px; color: var(--accent); font-family: var(--font-mono); }
+.pr-preg { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.pr-preg li { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.pr-preg select { font: 15px var(--font-body); padding: 5px 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); }
+.pr-res { font-weight: 600; }
+.pr-res.ok { color: var(--ok); } .pr-res.bad { color: var(--bad); }
+.pr-pistas { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; font-size: 15px; color: var(--muted); }
+body.obs-proj .lab-cifras b { font-size: 34px; }
+body.obs-proj .lab-frase { font-size: 20px; }
+body.obs-proj .lab-supuestos, body.obs-proj .lab-tabla, body.obs-proj .lab-mas { display: none; }
+
 /* OBS-COMMON-CSS:BEGIN */
 /* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
    Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
@@ -357,6 +421,27 @@ body.obs-proj input[type="range"] { height: 28px; }
 body.obs-proj .stat b { font-size: 36px; }
 body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
 body.obs-proj .obs-tools.keep { display: flex; }
+/* Cabecera compacta (30/10/2026): la herramienta empieza arriba. La entrada (.lede) y la ficha docente
+   pasan al panel «Para el docente», que abre el botón de la barra. */
+header.top { padding-block: 14px 12px !important; gap: 6px !important; border-bottom: 0 !important; }
+header.top h1 { font-size: clamp(26px, 4vw, 36px) !important; }
+header.top h1::after { height: 4px; margin-top: 8px; }
+.obs-docente { border-top: 3px solid var(--accent); background: var(--paper); padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+.obs-docente[hidden] { display: none !important; }
+.obs-docente__h { font-family: var(--font-display); font-size: 17px !important; margin: 6px 0 0; text-transform: none !important; }
+.obs-docente .lede { margin: 0; max-width: 70ch; }
+.obs-docente .obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-docente .obs-ficha dt { color: var(--muted); }
+.obs-docente .obs-ficha dd { margin: 0; min-width: 0; white-space: pre-line; }
+.obs-docente .obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-docente-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 560px) { .obs-docente .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } }
+/* Modo proyector: solo los controles, el gráfico y la frase que explica lo que pasa */
+body.obs-proj header.top .eyebrow, body.obs-proj .obs-docente, body.obs-proj .prose p, body.obs-proj p.small,
+body.obs-proj p.help, body.obs-proj .lede, body.obs-proj .obs-pie { display: none !important; }
+body.obs-proj header.top { padding-block: 8px 4px !important; }
+body.obs-proj header.top h1 { font-size: 28px !important; }
+
 
 /* OBS-COMMON-CSS:END */
 </style>
@@ -370,127 +455,111 @@ body.obs-proj .obs-tools.keep { display: flex; }
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Herramientas" data-i18n-attr="aria-label:aria.tabs">
-    <button role="tab" id="tab-calc" aria-selected="true" data-view="calc"><span class="n">1</span><span data-i18n="tab.1">Calculadora de costes</span></button>
-    <button role="tab" id="tab-dos" aria-selected="false" data-view="dos"><span class="n">2</span><span data-i18n="tab.2">Dos formas de dibujar los costes</span></button>
-    <button role="tab" id="tab-gm" aria-selected="false" data-view="gm"><span class="n">3</span><span data-i18n="tab.3">General Motors, 2009</span></button>
-    <button role="tab" id="tab-fpp" aria-selected="false" data-view="fpp"><span class="n">4</span><span data-i18n="tab.4">Frontera de posibilidades</span></button>
+    <button role="tab" id="tab-lab" aria-selected="true" data-view="lab"><span class="n">1</span><span data-i18n="tab.lab">Laboratorio de costes</span></button>
+    <button role="tab" id="tab-gm" aria-selected="false" data-view="gm"><span class="n">2</span><span data-i18n="tab.3">General Motors, 2009</span></button>
+    <button role="tab" id="tab-fpp" aria-selected="false" data-view="fpp"><span class="n">3</span><span data-i18n="tab.4">Frontera de posibilidades</span></button>
   </nav>
 
-  <!-- ===================== 1 · CALCULADORA ===================== -->
-  <section class="view" id="view-calc" role="tabpanel" aria-labelledby="tab-calc">
-    <div class="block">
-      <div class="prose">
-        <span class="eyebrow" data-i18n="c.eyebrow">1 · Ingresos, costes y beneficio</span>
-        <h2 data-i18n="c.h2">¿Cuándo empieza a ganar dinero una empresa?</h2>
-        <p data-i18n="c.p">Cambia cualquier cifra: los resultados y el gráfico cambian a la vez. La fórmula y el dibujo dicen lo mismo.</p>
+  <!-- ===================== 1 · LABORATORIO DE COSTES (Trastear y Practicar) ===================== -->
+  <section class="view" id="view-lab" role="tabpanel" aria-labelledby="tab-lab">
+    <div class="lab-cab">
+      <h2 data-i18n="lb.h2">¿Cuánto cuesta producir y cuándo se gana dinero?</h2>
+      <div class="seg2" role="group" aria-label="Modo" data-i18n-attr="aria-label:lb.modo">
+        <button type="button" id="lb-m-tr" aria-pressed="true" data-i18n="lb.trastear">Trastear</button>
+        <button type="button" id="lb-m-pr" aria-pressed="false" data-i18n="lb.practicar">Practicar</button>
       </div>
-      <div class="actions">
-        <div class="seg2" role="group" aria-label="Modo" data-i18n-attr="aria-label:c.mode">
-          <button type="button" id="m-simple" aria-pressed="true" data-i18n="c.simple">Calculadora</button>
-          <button type="button" id="m-fn" aria-pressed="false" data-i18n="c.fnmode">Escribe tu función</button>
-        </div>
+    </div>
+
+    <!-- Trastear: proyectado en clase (S3 y S4) y en casa -->
+    <div id="lb-trastear">
+      <div class="lab-ejemplos" role="group" aria-label="Ejemplos" data-i18n-attr="aria-label:lb.ej">
+        <button type="button" class="ej-btn" data-ej="m1" aria-pressed="true" data-i18n="lb.m1">Modelo 1 · empresa neoclásica</button>
+        <button type="button" class="ej-btn" data-ej="m2" aria-pressed="false" data-i18n="lb.m2">Modelo 2 · empresa poskeynesiana</button>
+        <button type="button" class="ej-btn" data-ej="dos" aria-pressed="false" data-i18n="lb.dos">Los dos a la vez</button>
       </div>
-      <div class="calc">
-        <div class="panel">
-          <div class="inputs" id="simple-in">
-            <div class="field"><label for="c-p" data-i18n="c.price">Precio (€ por unidad)</label><input type="number" id="c-p" value="20" step="0.5" min="0"></div>
-            <div class="field"><label for="c-cf" data-i18n="c.cf">Coste fijo (€)</label><input type="number" id="c-cf" value="200" step="10" min="0"></div>
-            <div class="field"><label for="c-cv" data-i18n="c.cvu">Coste por unidad (€)</label><input type="number" id="c-cv" value="15" step="0.5" min="0"></div>
-            <div class="field"><label for="c-qmax" data-i18n="c.qmax">Unidades como máximo en el gráfico</label><input type="number" id="c-qmax" value="100" step="10" min="1"></div>
-          </div>
-          <div class="panel" id="fn-in" hidden>
-            <div class="field"><label for="f-ct" data-i18n="c.fct">Costes totales: CT(q) =</label><input type="text" id="f-ct" class="fn" value="200 + 15q" spellcheck="false" autocomplete="off"></div>
-            <div class="field"><label for="f-it" data-i18n="c.fit">Ingresos totales: IT(q) =</label><input type="text" id="f-it" class="fn" value="20q" spellcheck="false" autocomplete="off"></div>
-            <div class="field"><label for="f-qmax" data-i18n="c.qmax">Unidades como máximo en el gráfico</label><input type="number" id="f-qmax" value="100" step="1" min="1"></div>
-            <div class="err" id="f-err" aria-live="polite"></div>
-            <p class="small" data-i18n="c.syntax">Se escribe con q: 200 + 15q · 640 + 200q − 40q^2 + 5q^3 · (30 − 0,1q)·q. Valen la coma y el punto decimal.</p>
-            <div class="examples">
-              <button type="button" class="btn quiet small" data-ex="lin" data-i18n="c.ex1">Lineal (Excel)</button>
-              <button type="button" class="btn quiet small" data-ex="u" data-i18n="c.ex2">Curva en U (manual)</button>
-              <button type="button" class="btn quiet small" data-ex="mono" data-i18n="c.ex3">Monopolio</button>
+      <div class="lab">
+        <div class="lab-izq">
+          <div class="lab-datos" id="lb-datos">
+            <div class="field"><label for="lb-ct" data-i18n="lb.ct">Costes totales: CT(q) =</label><input type="text" id="lb-ct" class="fn" spellcheck="false" autocomplete="off"></div>
+            <div class="lab-fila">
+              <div class="field"><label for="lb-ing" data-i18n="lb.ing">Ingreso</label>
+                <select id="lb-ing"><option value="p" data-i18n="lb.ing.p">Precio dado</option><option value="it" data-i18n="lb.ing.it">Función de ingresos</option></select></div>
+              <div class="field" id="lb-p-f"><label for="lb-p" data-i18n="lb.p">Precio (€ por unidad)</label><input type="number" id="lb-p" step="0.5" min="0"></div>
+              <div class="field" id="lb-it-f" hidden><label for="lb-it" data-i18n="lb.it">Ingresos totales: IT(q) =</label><input type="text" id="lb-it" class="fn" spellcheck="false" autocomplete="off"></div>
             </div>
+            <div class="lab-fila">
+              <div class="field"><label for="lb-cap" data-i18n="lb.cap">Capacidad (unidades)</label><input type="number" id="lb-cap" step="1" min="1"></div>
+              <div class="field"><label for="lb-dem" data-i18n="lb.dem">Clientes como máximo</label><input type="number" id="lb-dem" step="1" min="0" placeholder="sin límite" data-i18n-attr="placeholder:lb.dem.ph"></div>
+            </div>
+            <div class="err" id="lb-err" aria-live="polite"></div>
+            <details class="lab-mas"><summary data-i18n="lb.sint">Cómo se escribe una función</summary><p class="small" data-i18n="lb.sintx"></p></details>
+          </div>
+          <div class="lab-datos" id="lb-datos-dos" hidden>
+            <p class="small" data-i18n="lb.dos.fns"></p>
+            <div class="field"><label for="lb-p2" data-i18n="lb.p">Precio (€ por unidad)</label><input type="number" id="lb-p2" step="0.5" min="0" value="20"></div>
+          </div>
+          <div class="lab-play">
+            <button type="button" class="btn" id="lb-play" data-i18n="lb.play">Reproducir</button>
+            <label class="lab-vel"><span data-i18n="lb.vel">Velocidad</span>
+              <select id="lb-vel"><option value="24" data-i18n="lb.v1">Lenta</option><option value="12" selected data-i18n="lb.v2">Normal</option><option value="6" data-i18n="lb.v3">Rápida</option></select></label>
           </div>
           <div class="slider">
-            <div class="lab"><label for="c-q" data-i18n="c.q">Unidades vendidas (q)</label><output id="c-q-out" for="c-q"></output></div>
-            <input type="range" id="c-q" min="0" max="100" step="1" value="60">
+            <div class="lab"><label for="lb-q" data-i18n="lb.q">Unidad</label><output id="lb-q-out" for="lb-q"></output></div>
+            <input type="range" id="lb-q" min="0" step="1" value="0">
           </div>
-          <div class="results" id="c-res" aria-live="polite"></div>
+          <div class="lab-cifras" id="lb-cifras" aria-live="polite"></div>
+          <p class="lab-frase" id="lb-frase" aria-live="polite"></p>
+          <details class="lab-mas"><summary data-i18n="lb.todos">Todos los valores de esta unidad</summary><dl class="lab-todos" id="lb-todos"></dl></details>
         </div>
-        <div class="panel">
+        <div class="lab-der">
           <figure>
-            <figcaption data-i18n="c.ch1">Ingresos y costes totales</figcaption>
-            <div class="legend">
-              <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.it">Ingresos totales (IT)</span></span>
-              <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ct">Costes totales (CT)</span></span>
-              <span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="lg.cf">Coste fijo (CF)</span></span>
-            </div>
-            <div class="plot"><svg class="chart" id="c-tot" role="img" data-i18n-attr="aria-label:c.ch1"></svg><div class="tip" id="c-tot-tip" hidden></div></div>
+            <figcaption data-i18n="lb.ch1">Costes e ingresos totales</figcaption>
+            <div class="legend" id="lb-lg1"></div>
+            <div class="plot"><svg class="chart" id="lb-tot" role="img" data-i18n-attr="aria-label:lb.ch1"></svg><div class="tip" id="lb-tot-tip" hidden></div></div>
           </figure>
           <figure>
-            <figcaption data-i18n="c.ch2">Por unidad: coste medio, coste marginal e ingreso marginal</figcaption>
-            <div class="legend">
-              <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.cme">Coste medio (CMe)</span></span>
-              <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">Coste marginal (CMg)</span></span>
-              <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.img">Ingreso marginal (IMg)</span></span>
-            </div>
-            <div class="plot"><svg class="chart" id="c-uni" role="img" data-i18n-attr="aria-label:c.ch2"></svg><div class="tip" id="c-uni-tip" hidden></div></div>
+            <figcaption data-i18n="lb.ch2">Por unidad</figcaption>
+            <div class="legend" id="lb-lg2"></div>
+            <div class="plot"><svg class="chart" id="lb-uni" role="img" data-i18n-attr="aria-label:lb.ch2"></svg><div class="tip" id="lb-uni-tip" hidden></div></div>
           </figure>
+          <div class="lab-tabla">
+            <div class="lab-tabla-cab"><span data-i18n="lb.tabla">Tabla unidad a unidad</span><button type="button" class="btn quiet small" id="lb-dl" data-i18n="lb.dl">Descargar la tabla (Excel)</button></div>
+            <div class="scroll lab-tabla-caja" id="lb-tabla-caja"><table id="lb-tabla"></table></div>
+            <span class="small" id="lb-dl-st" aria-live="polite"></span>
+          </div>
         </div>
       </div>
-      <div class="notice" id="c-note"></div>
-      <details>
-        <summary data-i18n="c.table">Ver la tabla y descargarla para Excel</summary>
-        <div class="scroll"><table id="c-table"></table></div>
-        <div class="actions" style="margin-top:10px">
-          <button type="button" class="btn ghost small" id="c-dl" data-i18n="c.dl">Descargar la tabla (Excel)</button>
-          <span class="small" id="c-dl-status" aria-live="polite"></span>
-        </div>
-      </details>
+      <div class="lab-supuestos" id="lb-supuestos">
+        <div class="sup sup1"><h3 data-i18n="lb.sup.h1">Modelo 1 · la empresa neoclásica (Marshall, 1890)</h3>
+          <ul><li data-i18n="lb.sup.1a"></li><li data-i18n="lb.sup.1b"></li><li data-i18n="lb.sup.1c"></li></ul></div>
+        <div class="sup sup2"><h3 data-i18n="lb.sup.h2">Modelo 2 · la empresa poskeynesiana (Kalecki, 1954)</h3>
+          <ul><li data-i18n="lb.sup.2a"></li><li data-i18n="lb.sup.2b"></li><li data-i18n="lb.sup.2c"></li></ul>
+          <p class="small" data-i18n="lb.sup.nota"></p></div>
+      </div>
+      <p class="small" data-i18n="lb.sup.src"></p>
     </div>
-  </section>
 
-  <!-- ===================== 2 · DOS FORMAS ===================== -->
-  <section class="view" id="view-dos" role="tabpanel" aria-labelledby="tab-dos" hidden>
-    <div class="block">
-      <div class="prose">
-        <span class="eyebrow" data-i18n="d.eyebrow">2 · Dos supuestos sobre los costes</span>
-        <h2 data-i18n="d.h2">¿Sube el coste de cada unidad más?</h2>
-        <p data-i18n="d.p1">El manual supone rendimientos decrecientes: a partir de cierto punto, cada unidad más cuesta más que la anterior y las curvas tienen forma de U. Otra tradición (Sraffa, Shaikh y los postkeynesianos) observa que en muchas fábricas cada unidad cuesta lo mismo hasta llegar a la capacidad. Las dos empresas tienen el mismo coste fijo, 200 € a la semana.</p>
+    <!-- Practicar: en casa, prepara la prueba de la S12 -->
+    <div id="lb-practicar" hidden>
+      <div class="pr-barra">
+        <label class="field"><span data-i18n="pr.tipo">Tipo de ejercicio</span>
+          <select id="pr-tipo">
+            <option value="0" data-i18n="pr.t0">Todos</option>
+            <option value="1" data-i18n="pr.t1">Costes fijos, variables y totales</option>
+            <option value="2" data-i18n="pr.t2">Coste medio y coste marginal</option>
+            <option value="3" data-i18n="pr.t3">Ingresos, beneficio y umbral</option>
+            <option value="4" data-i18n="pr.t4">Eficiencia técnica y económica</option>
+          </select></label>
+        <button type="button" class="btn ghost" id="pr-otro" data-i18n="pr.otro">Otro ejercicio</button>
       </div>
-      <div class="controls">
-        <div class="slider">
-          <div class="lab"><label for="d-p" data-i18n="d.price">Precio de venta</label><output id="d-p-out" for="d-p"></output></div>
-          <input type="range" id="d-p" min="8" max="32" step="0.5" value="20">
-        </div>
+      <article class="pr-ej" id="pr-ej" aria-live="polite"></article>
+      <div class="actions">
+        <button type="button" class="btn" id="pr-comprobar" data-i18n="pr.comprobar">Comprobar</button>
+        <button type="button" class="btn quiet" id="pr-sol" data-i18n="pr.sol">Ver la solución</button>
+        <span class="pr-res" id="pr-res" aria-live="polite"></span>
       </div>
-      <div class="cards" id="d-cards"></div>
-      <div class="charts">
-        <figure>
-          <figcaption data-i18n="d.ch1">Rendimientos decrecientes (curvas en U)</figcaption>
-          <div class="legend">
-            <span><i style="border-color:var(--s1)"></i>CMg</span>
-            <span><i style="border-color:var(--s2)"></i>CMe</span>
-            <span><i style="border-color:var(--s3)"></i>CVMe</span>
-            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.p">Precio</span></span>
-          </div>
-          <div class="plot"><svg class="chart" id="d-u" role="img" data-i18n-attr="aria-label:d.ch1"></svg><div class="tip" id="d-u-tip" hidden></div></div>
-        </figure>
-        <figure>
-          <figcaption data-i18n="d.ch2">Coste por unidad constante hasta la capacidad</figcaption>
-          <div class="legend">
-            <span><i style="border-color:var(--s1)"></i>CMg = CVMe</span>
-            <span><i style="border-color:var(--s2)"></i>CMe</span>
-            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.p">Precio</span></span>
-          </div>
-          <div class="plot"><svg class="chart" id="d-l" role="img" data-i18n-attr="aria-label:d.ch2"></svg><div class="tip" id="d-l-tip" hidden></div></div>
-        </figure>
-      </div>
-      <div class="notice" id="d-note"></div>
-      <details>
-        <summary data-i18n="d.table">Ver las dos tablas de costes</summary>
-        <div class="scroll"><table id="d-table"></table></div>
-      </details>
-      <p class="small" data-i18n="d.src">Supuesto de partida de la segunda empresa: Sraffa (1926), «Las leyes de los rendimientos en condiciones de competencia»; Shaikh, Capitalismo: competencia, conflicto y crisis (FCE, 2023), cap. 7. Cifras inventadas para el aula.</p>
+      <ul class="pr-pistas" id="pr-pistas"></ul>
+      <p class="small" data-i18n="pr.priv"></p>
     </div>
   </section>
 
@@ -698,12 +767,12 @@ window.OBS = (() => {
     document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
   }
   register({
-    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente", "obs.docente": "Para el docente", "obs.sobre": "Sobre esta herramienta",
       "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
       "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
       "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
       "obs.saved": "Archivo descargado." },
-    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent", "obs.docente": "Per al docent", "obs.sobre": "Sobre esta ferramenta",
       "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
       "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
       "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
@@ -720,13 +789,16 @@ window.OBS = (() => {
     const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
     const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
     box.replaceChildren(
-      h("summary", { text: t("obs.ficha") }),
+      h("h2", { class: "obs-docente__h", text: t("obs.ficha") }),
       h("dl", {},
         ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
         ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
         ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
         ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
   }
+  /* Barra de una línea: «← Panel», idioma, modo proyector y «Para el docente».
+     El panel «Para el docente» (cerrado al empezar) recoge la entrada de la cabecera (.lede) y la ficha docente,
+     para que la herramienta empiece arriba. */
   function mountBar(container, opts = {}) {
     const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
     const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
@@ -737,17 +809,23 @@ window.OBS = (() => {
     pj.addEventListener("click", () => setProj(!proj));
     const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
     pjKeep.addEventListener("click", () => setProj(!proj));
-    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // Panel «Para el docente»
+    const cabecera = container.closest("header") || document.querySelector("header.top") || document.querySelector("header");
+    const lede = cabecera ? cabecera.querySelector(".lede") : null;
+    const panel = h("div", { class: "obs-docente", id: "obs-docente", hidden: true });
+    if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
+    let fichaBox = null;
+    if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
+    const hayPanel = !!(lede || opts.ficha);
+    const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
+    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
+      h("div", { class: "obs-tools" }, seg, pj, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    if (hayPanel) (cabecera || container).after(panel);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
     document.head.append(style);
-    if (opts.ficha) {
-      const box = h("details", { class: "obs-ficha" });
-      (opts.fichaContainer || container).after(box);
-      renderFicha(box, opts.ficha);
-      onLang(() => renderFicha(box, opts.ficha));
-    }
     setProj(proj);
   }
   const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
@@ -776,23 +854,121 @@ window.OBS = (() => {
   "use strict";
   OBS.register({
     es: {
+      "tab.lab": "Laboratorio de costes",
+      "lb.h2": "¿Cuánto cuesta producir y cuándo se gana dinero?",
+      "lb.modo": "Modo",
+      "lb.trastear": "Trastear",
+      "lb.practicar": "Practicar",
+      "lb.ej": "Ejemplos",
+      "lb.m1": "Modelo 1 · empresa neoclásica",
+      "lb.m2": "Modelo 2 · empresa poskeynesiana",
+      "lb.dos": "Los dos a la vez",
+      "lb.ct": "Costes totales: CT(q) =",
+      "lb.ing": "Ingreso",
+      "lb.ing.p": "Precio dado",
+      "lb.ing.it": "Función de ingresos",
+      "lb.p": "Precio (€ por unidad)",
+      "lb.it": "Ingresos totales: IT(q) =",
+      "lb.cap": "Capacidad (unidades)",
+      "lb.dem": "Clientes como máximo",
+      "lb.dem.ph": "sin límite",
+      "lb.sint": "Cómo se escribe una función",
+      "lb.sintx": "Con q para la cantidad: 200 + 15q · 200 + 5q + 5q^2 · 640 + 200q − 40q^2 + 5q^3. Valen la coma y el punto decimal; q^2 y q² son lo mismo.",
+      "lb.dos.fns": "La misma empresa, con el mismo coste fijo (200 €) y el mismo precio, con los dos supuestos. Modelo 1: CT = 200 + 20q − 0,3q² + 0,0025q³. Modelo 2: CT = 200 + 15q, con capacidad para 100 unidades.",
+      "lb.play": "Reproducir",
+      "lb.pause": "Pausa",
+      "lb.vel": "Velocidad",
+      "lb.v1": "Lenta",
+      "lb.v2": "Normal",
+      "lb.v3": "Rápida",
+      "lb.q": "Unidad",
+      "lb.qv": "{q} de {n}",
+      "lb.ct.k": "Coste total",
+      "lb.it.k": "Ingreso total",
+      "lb.b.k": "Beneficio",
+      "lb.per.k": "Pérdida",
+      "lb.b1.k": "Beneficio · modelo 1",
+      "lb.b2.k": "Beneficio · modelo 2",
+      "lb.todos": "Todos los valores de esta unidad",
+      "lb.ch1": "Costes e ingresos totales",
+      "lb.ch2": "Por unidad",
+      "lb.tabla": "Tabla unidad a unidad",
+      "lb.dl": "Descargar la tabla (Excel)",
+      "lb.file": "laboratorio-de-costes.csv",
+      "lb.umbral": "umbral: unidad {q}",
+      "lb.para.mg": "se para aquí: CMg ≥ IMg",
+      "lb.para.cap": "se para aquí: capacidad",
+      "lb.para.dem": "se para aquí: no hay más clientes",
+      "lb.para1": "modelo 1 se para",
+      "lb.para2": "modelo 2 se para",
+      "lb.capl": "capacidad",
+      "lb.deml": "clientes",
+      "lb.ct1": "Coste total · modelo 1",
+      "lb.ct2": "Coste total · modelo 2",
+      "lb.cme1": "Coste medio · modelo 1",
+      "lb.cme2": "Coste medio · modelo 2",
+      "lb.cmg12": "Coste marginal (punteado)",
+      "lb.f0": "Sin producir nada, la empresa ya paga {cf} de costes fijos.",
+      "lb.f.gana": "La unidad {q} cuesta {cmg} y aporta {img}: producirla suma {d} al beneficio.",
+      "lb.f.pierde": "La unidad {q} cuesta {cmg} y solo aporta {img}: producirla resta {d}.",
+      "lb.f.igual": "La unidad {q} cuesta lo mismo que aporta: {cmg}.",
+      "lb.f.ben": " Ya hay beneficio.",
+      "lb.f.perd": " Todavía hay pérdidas.",
+      "lb.f.para.mg": "Aquí se para: la unidad siguiente costaría más de lo que aporta.",
+      "lb.f.para.cap": "Aquí se para: la fábrica no da para más.",
+      "lb.f.para.dem": "Aquí se para: no hay más clientes.",
+      "lb.f.lim": "Más allá de la unidad {q} no se puede vender ({r}).",
+      "lb.r.cap": "falta capacidad",
+      "lb.r.dem": "no hay más clientes",
+      "lb.f.dos": "En la unidad {q}, el modelo 1 {b1} y el modelo 2 {b2}.",
+      "lb.f.dos.cap": "En la unidad {q}, el modelo 1 {b1}; el modelo 2 no pasa de {c} unidades.",
+      "lb.f.dos.para": "El modelo 1 se para en {p1}; el modelo 2, en {p2}.",
+      "lb.gana": "gana {v}",
+      "lb.pierde": "pierde {v}",
+      "lb.sup.h1": "Modelo 1 · la empresa neoclásica (Marshall, 1890)",
+      "lb.sup.1a": "La fábrica es fija a corto plazo y solo cambia el trabajo.",
+      "lb.sup.1b": "A partir de cierto punto, cada unidad más cuesta más (rendimientos decrecientes): el coste medio dibuja una U.",
+      "lb.sup.1c": "La empresa se para donde el coste marginal alcanza al ingreso marginal.",
+      "lb.sup.h2": "Modelo 2 · la empresa poskeynesiana (Kalecki, 1954)",
+      "lb.sup.2a": "Cada unidad cuesta lo mismo hasta llenar la fábrica: el coste marginal es plano.",
+      "lb.sup.2b": "Al producir más, el coste medio siempre baja: los costes fijos se reparten entre más unidades.",
+      "lb.sup.2c": "La empresa no se para por los costes: la frenan la capacidad o la falta de clientes.",
+      "lb.sup.nota": "Simplificación: el precio está dado. En la versión completa, la empresa fija el precio sumando un margen a su coste por unidad.",
+      "lb.sup.src": "Modelo 2: modelo de empresa poskeynesiano (Kalecki, 1954; Lavoie, 2005; evidencia: encuesta de Eiteman y Guthrie, 1952). Cifras inventadas para el aula.",
+      "lg.cv": "Coste variable (CV)",
+      "lg.cvme": "Coste variable medio (CVMe)",
+      "v.CF": "Coste fijo (CF)",
+      "v.CV": "Coste variable (CV)",
+      "v.CT": "Coste total (CT)",
+      "v.CMe": "Coste medio (CMe)",
+      "v.CVMe": "Coste variable medio (CVMe)",
+      "v.CMg": "Coste marginal (CMg)",
+      "v.IT": "Ingreso total (IT)",
+      "v.IMg": "Ingreso marginal (IMg)",
+      "v.B": "Beneficio (B)",
+      "pr.tipo": "Tipo de ejercicio",
+      "pr.t0": "Todos",
+      "pr.t1": "Costes fijos, variables y totales",
+      "pr.t2": "Coste medio y coste marginal",
+      "pr.t3": "Ingresos, beneficio y umbral",
+      "pr.t4": "Eficiencia técnica y económica",
+      "pr.otro": "Otro ejercicio",
+      "pr.comprobar": "Comprobar",
+      "pr.sol": "Ver la solución",
+      "pr.ocultar": "Ocultar la solución",
+      "pr.elige": "Elige",
+      "pr.origen.j": "Ejercicio de clase · {o}",
+      "pr.origen.n": "Ejercicio nuevo, con la solución calculada por la herramienta",
+      "pr.res": "{b} de {n} bien.",
+      "pr.todo": "¡Todo bien!",
+      "pr.vacio": "Rellena las casillas y pulsa «Comprobar».",
+      "pr.priv": "No se guarda nada: ni nombres ni respuestas. Al recargar la página, empiezas de nuevo.",
       "doc.title": "Observatorio · SA 3",
       "hd.eyebrow": "Observatorio · SA 3 · La producción",
       "hd.h1": "Costes y producción",
-      "hd.lede": "Herramientas para proyectar en clase y para que el alumnado pruebe sus propias cifras: cuánto cuesta producir, cuándo se gana dinero, por qué una empresa enorme puede quebrar y cómo se dibuja lo que una economía puede producir.",
+      "hd.lede": "Herramientas para proyectar en clase y practicar en casa: cuánto cuesta producir y cuándo se gana dinero con los dos modelos de empresa, por qué una empresa enorme puede quebrar y cómo se dibuja lo que una economía puede producir.",
       "aria.tabs": "Herramientas",
       "tab.1": "Calculadora de costes", "tab.2": "Dos formas de dibujar los costes", "tab.3": "General Motors, 2009", "tab.4": "Frontera de posibilidades",
-      "c.eyebrow": "1 · Ingresos, costes y beneficio",
-      "c.h2": "¿Cuándo empieza a ganar dinero una empresa?",
-      "c.p": "Cambia cualquier cifra: los resultados y el gráfico cambian a la vez. La fórmula y el dibujo dicen lo mismo.",
-      "c.mode": "Modo", "c.simple": "Calculadora", "c.fnmode": "Escribe tu función",
-      "c.price": "Precio (€ por unidad)", "c.cf": "Coste fijo (€)", "c.cvu": "Coste por unidad (€)", "c.qmax": "Unidades como máximo en el gráfico",
-      "c.fct": "Costes totales: CT(q) =", "c.fit": "Ingresos totales: IT(q) =",
-      "c.syntax": "Se escribe con q: 200 + 15q · 640 + 200q − 40q^2 + 5q^3 · (30 − 0,1q)·q. Valen la coma y el punto decimal.",
-      "c.ex1": "Lineal (Excel)", "c.ex2": "Curva en U (manual)", "c.ex3": "Monopolio",
-      "c.q": "Unidades vendidas (q)", "c.units": "{q} unidades",
-      "c.ch1": "Ingresos y costes totales", "c.ch2": "Por unidad: coste medio, coste marginal e ingreso marginal",
-      "c.table": "Ver la tabla y descargarla para Excel", "c.dl": "Descargar la tabla (Excel)",
       "lg.it": "Ingresos totales (IT)", "lg.ct": "Costes totales (CT)", "lg.cf": "Coste fijo (CF)",
       "lg.cme": "Coste medio (CMe)", "lg.cmg": "Coste marginal (CMg)", "lg.img": "Ingreso marginal (IMg)", "lg.p": "Precio",
       "lg.ben": "Beneficio", "lg.per": "Pérdida",
@@ -825,26 +1001,6 @@ window.OBS = (() => {
       "tip.q": "q = {q}", "tip.be": "Umbral: q = {q}", "tip.max": "Máximo: q = {q}",
       "lbl.ben": "Beneficio {v}", "lbl.per": "Pérdida {v}", "lbl.be": "Umbral {q}", "lbl.max": "Máximo {q}",
       "dl.file": "costes-sa3.csv",
-      "d.eyebrow": "2 · Dos supuestos sobre los costes",
-      "d.h2": "¿Sube el coste de cada unidad más?",
-      "d.p1": "El manual supone rendimientos decrecientes: a partir de cierto punto, cada unidad más cuesta más que la anterior y las curvas tienen forma de U. Otra tradición (Sraffa, Shaikh y los postkeynesianos) observa que en muchas fábricas cada unidad cuesta lo mismo hasta llegar a la capacidad. Las dos empresas tienen el mismo coste fijo, 200 € a la semana.",
-      "d.price": "Precio de venta", "d.ch1": "Rendimientos decrecientes (curvas en U)", "d.ch2": "Coste por unidad constante hasta la capacidad",
-      "d.table": "Ver las dos tablas de costes",
-      "d.src": "Supuesto de partida de la segunda empresa: Sraffa (1926), «Las leyes de los rendimientos en condiciones de competencia»; Shaikh, Capitalismo: competencia, conflicto y crisis (FCE, 2023), cap. 7. Cifras inventadas para el aula.",
-      "d.k1": "Rendimientos decrecientes", "d.k2": "Coste constante hasta la capacidad",
-      "d.u.stop": "Se para en {q} unidades", "d.u.none": "No le conviene producir",
-      "d.u.l1": "Produce hasta que el coste marginal iguala al precio (P = CMg).",
-      "d.u.l2": "Umbral de rentabilidad: precio de {p} € (mínimo del coste medio).",
-      "d.u.l3": "Punto de cierre: precio por debajo de {p} € (mínimo del coste variable medio).",
-      "d.u.l4": "Resultado a este precio: {b} a la semana.",
-      "d.l.go": "Quiere vender hasta su capacidad ({cap})", "d.l.none": "No le conviene producir",
-      "d.l.l1": "Cada unidad cuesta {c} €: el coste marginal no sube y nada la frena antes de la capacidad.",
-      "d.l.l2": "Umbral de rentabilidad: vender {q} unidades a este precio.",
-      "d.l.l2b": "A este precio no llega al umbral ni con toda la capacidad.",
-      "d.l.l3": "Punto de cierre: precio por debajo de {c} € (su coste por unidad).",
-      "d.l.l4": "Resultado vendiendo toda la capacidad: {b} a la semana.",
-      "d.note": "En la empresa de curvas en U, **el coste marginal frena la producción**: se para donde una unidad más cuesta lo que vale. En la de coste constante **no hay freno**: su límite son los clientes que consiga, y por eso compite por ellos (pestaña de competencia real de la SA 4).",
-      "d.cap": "capacidad", "d.th.u": "Rendimientos decrecientes", "d.th.l": "Coste constante",
       "g.eyebrow": "3 · El peso de los costes fijos", "g.h2": "¿Cómo puede quebrar una empresa enorme?",
       "g.p1": "General Motors fue durante décadas la mayor fabricante de coches del mundo. En 2009 sus ventas en Estados Unidos cayeron un 30 % y en junio se declaró en quiebra. Fábricas, plantillas, pensiones y deudas siguen costando lo mismo aunque se vendan menos coches.",
       "g.p2": "Cifras ilustrativas de una empresa «como GM», no sus cuentas reales: solo la caída del 30 % de 2009 es un dato real.",
@@ -890,23 +1046,121 @@ window.OBS = (() => {
       "ft.1": "Cifras de los ejemplos inventadas para el aula, salvo las indicadas en la pestaña de General Motors. La calculadora parte del Excel del Tema 3 (coste fijo 200 €, coste por unidad 15 €, precio 20 €)."
     },
     va: {
+      "tab.lab": "Laboratori de costos",
+      "lb.h2": "Quant costa produir i quan es guanyen diners?",
+      "lb.modo": "Mode",
+      "lb.trastear": "Trastejar",
+      "lb.practicar": "Practicar",
+      "lb.ej": "Exemples",
+      "lb.m1": "Model 1 · empresa neoclàssica",
+      "lb.m2": "Model 2 · empresa postkeynesiana",
+      "lb.dos": "Els dos alhora",
+      "lb.ct": "Costos totals: CT(q) =",
+      "lb.ing": "Ingrés",
+      "lb.ing.p": "Preu donat",
+      "lb.ing.it": "Funció d'ingressos",
+      "lb.p": "Preu (€ per unitat)",
+      "lb.it": "Ingressos totals: IT(q) =",
+      "lb.cap": "Capacitat (unitats)",
+      "lb.dem": "Clients com a màxim",
+      "lb.dem.ph": "sense límit",
+      "lb.sint": "Com s'escriu una funció",
+      "lb.sintx": "Amb q per a la quantitat: 200 + 15q · 200 + 5q + 5q^2 · 640 + 200q − 40q^2 + 5q^3. Valen la coma i el punt decimal; q^2 i q² són el mateix.",
+      "lb.dos.fns": "La mateixa empresa, amb el mateix cost fix (200 €) i el mateix preu, amb els dos supòsits. Model 1: CT = 200 + 20q − 0,3q² + 0,0025q³. Model 2: CT = 200 + 15q, amb capacitat per a 100 unitats.",
+      "lb.play": "Reproduir",
+      "lb.pause": "Pausa",
+      "lb.vel": "Velocitat",
+      "lb.v1": "Lenta",
+      "lb.v2": "Normal",
+      "lb.v3": "Ràpida",
+      "lb.q": "Unitat",
+      "lb.qv": "{q} de {n}",
+      "lb.ct.k": "Cost total",
+      "lb.it.k": "Ingrés total",
+      "lb.b.k": "Benefici",
+      "lb.per.k": "Pèrdua",
+      "lb.b1.k": "Benefici · model 1",
+      "lb.b2.k": "Benefici · model 2",
+      "lb.todos": "Tots els valors d'esta unitat",
+      "lb.ch1": "Costos i ingressos totals",
+      "lb.ch2": "Per unitat",
+      "lb.tabla": "Taula unitat a unitat",
+      "lb.dl": "Descarregar la taula (Excel)",
+      "lb.file": "laboratori-de-costos.csv",
+      "lb.umbral": "llindar: unitat {q}",
+      "lb.para.mg": "s'atura ací: CMg ≥ IMg",
+      "lb.para.cap": "s'atura ací: capacitat",
+      "lb.para.dem": "s'atura ací: no hi ha més clients",
+      "lb.para1": "el model 1 s'atura",
+      "lb.para2": "el model 2 s'atura",
+      "lb.capl": "capacitat",
+      "lb.deml": "clients",
+      "lb.ct1": "Cost total · model 1",
+      "lb.ct2": "Cost total · model 2",
+      "lb.cme1": "Cost mitjà · model 1",
+      "lb.cme2": "Cost mitjà · model 2",
+      "lb.cmg12": "Cost marginal (puntejat)",
+      "lb.f0": "Sense produir res, l'empresa ja paga {cf} de costos fixos.",
+      "lb.f.gana": "La unitat {q} costa {cmg} i aporta {img}: produir-la suma {d} al benefici.",
+      "lb.f.pierde": "La unitat {q} costa {cmg} i només aporta {img}: produir-la resta {d}.",
+      "lb.f.igual": "La unitat {q} costa el mateix que aporta: {cmg}.",
+      "lb.f.ben": " Ja hi ha benefici.",
+      "lb.f.perd": " Encara hi ha pèrdues.",
+      "lb.f.para.mg": "Ací s'atura: la unitat següent costaria més del que aporta.",
+      "lb.f.para.cap": "Ací s'atura: la fàbrica no dona per a més.",
+      "lb.f.para.dem": "Ací s'atura: no hi ha més clients.",
+      "lb.f.lim": "Més enllà de la unitat {q} no es pot vendre ({r}).",
+      "lb.r.cap": "falta capacitat",
+      "lb.r.dem": "no hi ha més clients",
+      "lb.f.dos": "En la unitat {q}, el model 1 {b1} i el model 2 {b2}.",
+      "lb.f.dos.cap": "En la unitat {q}, el model 1 {b1}; el model 2 no passa de {c} unitats.",
+      "lb.f.dos.para": "El model 1 s'atura en {p1}; el model 2, en {p2}.",
+      "lb.gana": "guanya {v}",
+      "lb.pierde": "perd {v}",
+      "lb.sup.h1": "Model 1 · l'empresa neoclàssica (Marshall, 1890)",
+      "lb.sup.1a": "La fàbrica és fixa a curt termini i només canvia el treball.",
+      "lb.sup.1b": "A partir d'un cert punt, cada unitat més costa més (rendiments decreixents): el cost mitjà dibuixa una U.",
+      "lb.sup.1c": "L'empresa s'atura on el cost marginal arriba a l'ingrés marginal.",
+      "lb.sup.h2": "Model 2 · l'empresa postkeynesiana (Kalecki, 1954)",
+      "lb.sup.2a": "Cada unitat costa el mateix fins a omplir la fàbrica: el cost marginal és pla.",
+      "lb.sup.2b": "En produir més, el cost mitjà sempre baixa: els costos fixos es repartixen entre més unitats.",
+      "lb.sup.2c": "L'empresa no s'atura pels costos: la frenen la capacitat o la falta de clients.",
+      "lb.sup.nota": "Simplificació: el preu està donat. En la versió completa, l'empresa fixa el preu sumant un marge al seu cost per unitat.",
+      "lb.sup.src": "Model 2: model d'empresa postkeynesià (Kalecki, 1954; Lavoie, 2005; evidència: enquesta d'Eiteman i Guthrie, 1952). Xifres inventades per a l'aula.",
+      "lg.cv": "Cost variable (CV)",
+      "lg.cvme": "Cost variable mitjà (CVMe)",
+      "v.CF": "Cost fix (CF)",
+      "v.CV": "Cost variable (CV)",
+      "v.CT": "Cost total (CT)",
+      "v.CMe": "Cost mitjà (CMe)",
+      "v.CVMe": "Cost variable mitjà (CVMe)",
+      "v.CMg": "Cost marginal (CMg)",
+      "v.IT": "Ingrés total (IT)",
+      "v.IMg": "Ingrés marginal (IMg)",
+      "v.B": "Benefici (B)",
+      "pr.tipo": "Tipus d'exercici",
+      "pr.t0": "Tots",
+      "pr.t1": "Costos fixos, variables i totals",
+      "pr.t2": "Cost mitjà i cost marginal",
+      "pr.t3": "Ingressos, benefici i llindar",
+      "pr.t4": "Eficiència tècnica i econòmica",
+      "pr.otro": "Un altre exercici",
+      "pr.comprobar": "Comprovar",
+      "pr.sol": "Veure la solució",
+      "pr.ocultar": "Amagar la solució",
+      "pr.elige": "Tria",
+      "pr.origen.j": "Exercici de classe · {o}",
+      "pr.origen.n": "Exercici nou, amb la solució calculada per la ferramenta",
+      "pr.res": "{b} de {n} bé.",
+      "pr.todo": "Tot bé!",
+      "pr.vacio": "Ompli les caselles i prem «Comprovar».",
+      "pr.priv": "No es guarda res: ni noms ni respostes. En tornar a carregar la pàgina, comences de nou.",
       "doc.title": "Observatori · SA 3",
       "hd.eyebrow": "Observatori · SA 3 · La producció",
       "hd.h1": "Costos i producció",
-      "hd.lede": "Ferramentes per a projectar en classe i perquè l'alumnat prove les seues pròpies xifres: quant costa produir, quan es guanyen diners, per què una empresa enorme pot fer fallida i com es dibuixa el que una economia pot produir.",
+      "hd.lede": "Ferramentes per a projectar a classe i practicar a casa: quant costa produir i quan es guanyen diners amb els dos models d'empresa, per què una empresa enorme pot fer fallida i com es dibuixa el que una economia pot produir.",
       "aria.tabs": "Ferramentes",
       "tab.1": "Calculadora de costos", "tab.2": "Dues maneres de dibuixar els costos", "tab.3": "General Motors, 2009", "tab.4": "Frontera de possibilitats",
-      "c.eyebrow": "1 · Ingressos, costos i benefici",
-      "c.h2": "Quan comença a guanyar diners una empresa?",
-      "c.p": "Canvia qualsevol xifra: els resultats i el gràfic canvien alhora. La fórmula i el dibuix diuen el mateix.",
-      "c.mode": "Mode", "c.simple": "Calculadora", "c.fnmode": "Escriu la teua funció",
-      "c.price": "Preu (€ per unitat)", "c.cf": "Cost fix (€)", "c.cvu": "Cost per unitat (€)", "c.qmax": "Unitats com a màxim en el gràfic",
-      "c.fct": "Costos totals: CT(q) =", "c.fit": "Ingressos totals: IT(q) =",
-      "c.syntax": "S'escriu amb q: 200 + 15q · 640 + 200q − 40q^2 + 5q^3 · (30 − 0,1q)·q. Valen la coma i el punt decimal.",
-      "c.ex1": "Lineal (Excel)", "c.ex2": "Corba en U (manual)", "c.ex3": "Monopoli",
-      "c.q": "Unitats venudes (q)", "c.units": "{q} unitats",
-      "c.ch1": "Ingressos i costos totals", "c.ch2": "Per unitat: cost mitjà, cost marginal i ingrés marginal",
-      "c.table": "Veure la taula i descarregar-la per a Excel", "c.dl": "Descarregar la taula (Excel)",
       "lg.it": "Ingressos totals (IT)", "lg.ct": "Costos totals (CT)", "lg.cf": "Cost fix (CF)",
       "lg.cme": "Cost mitjà (CMe)", "lg.cmg": "Cost marginal (CMg)", "lg.img": "Ingrés marginal (IMg)", "lg.p": "Preu",
       "lg.ben": "Benefici", "lg.per": "Pèrdua",
@@ -939,26 +1193,6 @@ window.OBS = (() => {
       "tip.q": "q = {q}", "tip.be": "Llindar: q = {q}", "tip.max": "Màxim: q = {q}",
       "lbl.ben": "Benefici {v}", "lbl.per": "Pèrdua {v}", "lbl.be": "Llindar {q}", "lbl.max": "Màxim {q}",
       "dl.file": "costos-sa3.csv",
-      "d.eyebrow": "2 · Dos supòsits sobre els costos",
-      "d.h2": "Puja el cost de cada unitat més?",
-      "d.p1": "El manual suposa rendiments decreixents: a partir d'un cert punt, cada unitat més costa més que l'anterior i les corbes tenen forma de U. Una altra tradició (Sraffa, Shaikh i els postkeynesians) observa que en moltes fàbriques cada unitat costa el mateix fins a arribar a la capacitat. Les dues empreses tenen el mateix cost fix, 200 € a la setmana.",
-      "d.price": "Preu de venda", "d.ch1": "Rendiments decreixents (corbes en U)", "d.ch2": "Cost per unitat constant fins a la capacitat",
-      "d.table": "Veure les dues taules de costos",
-      "d.src": "Supòsit de partida de la segona empresa: Sraffa (1926), «Les lleis dels rendiments en condicions de competència»; Shaikh, Capitalismo: competencia, conflicto y crisis (FCE, 2023), cap. 7. Xifres inventades per a l'aula.",
-      "d.k1": "Rendiments decreixents", "d.k2": "Cost constant fins a la capacitat",
-      "d.u.stop": "Para en {q} unitats", "d.u.none": "No li convé produir",
-      "d.u.l1": "Produïx fins que el cost marginal iguala el preu (P = CMg).",
-      "d.u.l2": "Llindar de rendibilitat: preu de {p} € (mínim del cost mitjà).",
-      "d.u.l3": "Punt de tancament: preu per davall de {p} € (mínim del cost variable mitjà).",
-      "d.u.l4": "Resultat a este preu: {b} a la setmana.",
-      "d.l.go": "Vol vendre fins a la seua capacitat ({cap})", "d.l.none": "No li convé produir",
-      "d.l.l1": "Cada unitat costa {c} €: el cost marginal no puja i res no la frena abans de la capacitat.",
-      "d.l.l2": "Llindar de rendibilitat: vendre {q} unitats a este preu.",
-      "d.l.l2b": "A este preu no arriba al llindar ni amb tota la capacitat.",
-      "d.l.l3": "Punt de tancament: preu per davall de {c} € (el seu cost per unitat).",
-      "d.l.l4": "Resultat venent tota la capacitat: {b} a la setmana.",
-      "d.note": "En l'empresa de corbes en U, **el cost marginal frena la producció**: para on una unitat més costa el que val. En la de cost constant **no hi ha fre**: el seu límit són els clients que aconseguisca, i per això competix per ells (pestanya de competència real de la SA 4).",
-      "d.cap": "capacitat", "d.th.u": "Rendiments decreixents", "d.th.l": "Cost constant",
       "g.eyebrow": "3 · El pes dels costos fixos", "g.h2": "Com pot fer fallida una empresa enorme?",
       "g.p1": "General Motors va ser durant dècades la major fabricant de cotxes del món. En 2009 les seues vendes als Estats Units van caure un 30 % i al juny es va declarar en fallida. Fàbriques, plantilles, pensions i deutes continuen costant el mateix encara que es venguen menys cotxes.",
       "g.p2": "Xifres il·lustratives d'una empresa «com GM», no els seus comptes reals: només la caiguda del 30 % de 2009 és una dada real.",
@@ -1020,8 +1254,8 @@ window.OBS = (() => {
       { code: "6.1", es: "Plantear soluciones socioeconómicas que respondan a necesidades individuales y colectivas investigando y explorando la realidad económica teniendo en cuenta diversos factores y aplicando las herramientas propias del ámbito de la economía.", va: "Plantejar solucions socioeconòmiques que responguen a necessitats individuals i col·lectives, investigant i explorant la realitat econòmica, tenint en compte diversos factors i aplicant les ferramentes pròpies de l'àmbit de l'economia." }
     ],
     uso: {
-      es: "1 · Calculadora de costes (A6, A10, B3): ingresos, costes, beneficio, coste medio y marginal y umbral de rentabilidad; el alumnado puede escribir sus propias funciones y descargar la tabla para Excel.\n2 · Dos formas de dibujar los costes (A3, A6, A10): rendimientos decrecientes frente a coste constante hasta la capacidad.\n3 · General Motors, 2009 (A6, A14): el peso de los costes fijos cuando se hunden las ventas.\n4 · Frontera de posibilidades (A4, A14): la construye la clase con sus tarjetas; coste de oportunidad creciente, ineficiencia, acumulación de capital y progreso técnico.",
-      va: "1 · Calculadora de costos (A6, A10, B3): ingressos, costos, benefici, cost mitjà i marginal i llindar de rendibilitat; l'alumnat pot escriure les seues pròpies funcions i descarregar la taula per a Excel.\n2 · Dues maneres de dibuixar els costos (A3, A6, A10): rendiments decreixents davant de cost constant fins a la capacitat.\n3 · General Motors, 2009 (A6, A14): el pes dels costos fixos quan s'enfonsen les vendes.\n4 · Frontera de possibilitats (A4, A14): la construïx la classe amb les seues targetes; cost d'oportunitat creixent, ineficiència, acumulació de capital i progrés tècnic."
+      es: "1 · Laboratorio de costes (A6, A10, A14, A3). Trastear, proyectado en S3 y S4: la función de costes se escribe (ejemplos del modelo 1, empresa neoclásica, y del modelo 2, empresa poskeynesiana), «Reproducir» sube la cantidad unidad a unidad y en pausa el deslizador deja la unidad que se quiera comentar; «Los dos a la vez» compara los dos supuestos. Practicar, en casa: ejercicios de clase del Tema 3 y otros nuevos, con corrección casilla a casilla; no guarda nada.\n2 · General Motors, 2009 (A6, A14): el peso de los costes fijos cuando se hunden las ventas.\n3 · Frontera de posibilidades (A4, A14): la construye la clase con sus tarjetas; coste de oportunidad creciente, ineficiencia, acumulación de capital y progreso técnico.",
+      va: "1 · Laboratori de costos (A6, A10, A14, A3). Trastejar, projectat en S3 i S4: la funció de costos s'escriu (exemples del model 1, empresa neoclàssica, i del model 2, empresa postkeynesiana), «Reproduir» puja la quantitat unitat a unitat i en pausa el lliscador deixa la unitat que es vulga comentar; «Els dos alhora» compara els dos supòsits. Practicar, a casa: exercicis de classe del Tema 3 i altres de nous, amb correcció casella a casella; no guarda res.\n2 · General Motors, 2009 (A6, A14): el pes dels costos fixos quan s'enfonsen les vendes.\n3 · Frontera de possibilitats (A4, A14): la construïx la classe amb les seues targetes; cost d'oportunitat creixent, ineficiència, acumulació de capital i progrés tècnic."
     }
   };
   const $ = id => document.getElementById(id);
@@ -1045,9 +1279,10 @@ window.OBS = (() => {
   (async () => { try { if (window.claude && window.claude.use) downloads = await window.claude.use("downloads"); } catch { downloads = null; } })();
 
   // ---------- Pestañas ----------
-  const VIEWS = ["calc", "dos", "gm", "fpp"];
+  const VIEWS = ["lab", "gm", "fpp"];
   function show(view) {
-    if (!VIEWS.includes(view)) view = "calc";
+    if (view === "calc" || view === "dos") view = "lab";   // direcciones antiguas
+    if (!VIEWS.includes(view)) view = "lab";
     for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
@@ -1215,228 +1450,401 @@ window.OBS = (() => {
   };
 
   // =====================================================================
-  // 1 · CALCULADORA
+  // 1 · LABORATORIO DE COSTES (30/10/2026)
+  // Trastear: la función se escribe (con un ejemplo de cada modelo), «Reproducir» sube la cantidad unidad a unidad,
+  // y en pausa el deslizador deja la cantidad en la unidad que se quiera comentar.
+  // Practicar: ejercicios con huecos (primero los de clase, del Tema 3; después, otros inventados) y corrección casilla a casilla.
+  // Los valores son por unidades enteras, como en los apuntes: CMg(q) = CT(q) − CT(q − 1).
   // =====================================================================
-  let mode = "simple";
-  const EXAMPLES = {
-    lin: { ct: "200 + 15q", it: "20q", qmax: 100 },
-    u: { ct: "640 + 200q - 40q^2 + 5q^3", it: "320q", qmax: 8 },
-    mono: { ct: "200 + 15q", it: "(50 - 0,2q)·q", qmax: 200 }
+  const EJ = {
+    // Modelo 1: término al cuadrado; con P = 85 € el umbral cae entre la 3.ª y la 4.ª unidad y el máximo en la 8.ª (como la tabla en U de los apuntes)
+    m1: { ct: "200 + 5q + 5q^2", p: 85, cap: 12 },
+    // Modelo 2: coste por unidad constante hasta la capacidad (tabla plana de los apuntes: umbral en 40)
+    m2: { ct: "200 + 15q", p: 20, cap: 100 }
   };
-  function model() {
-    if (mode === "simple") {
-      const P = +$("c-p").value || 0, CF = Math.max(0, +$("c-cf").value || 0), c = Math.max(0, +$("c-cv").value || 0);
-      const qmax = Math.max(1, Math.round(+$("c-qmax").value || 100));
-      return { ok: true, simple: true, P, CF, c, qmax, CT: q => CF + c * q, IT: q => P * q, errs: [] };
+  // «Los dos a la vez»: la misma empresa con los dos supuestos (mismo coste fijo, mismo precio)
+  const DOS = { m1: q => 200 + 20 * q - 0.3 * q * q + 0.0025 * q ** 3, m2: q => 200 + 15 * q, cap: 100, qmax: 120 };
+  const lb = { ej: "m1", modo: "tr", reloj: null };
+  const num = v => { const x = parseFloat(String(v).replace(",", ".")); return isFinite(x) ? x : NaN; };
+
+  function cargarEjemplo(k) {
+    lb.ej = k;
+    document.querySelectorAll(".ej-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.ej === k)));
+    if (k !== "dos") { const e = EJ[k]; $("lb-ct").value = e.ct; $("lb-ing").value = "p"; $("lb-p").value = e.p; $("lb-it").value = e.p + "q"; $("lb-cap").value = e.cap; $("lb-dem").value = ""; }
+    lbParar();
+    const m = lbModelo();
+    $("lb-q").value = String(m.ok ? m.parada : 0);
+    renderLab();
+  }
+
+  // Modelo de la empresa a partir de lo escrito: CT, IT, capacidad, clientes, tabla unidad a unidad, umbral y parada
+  function lbModelo() {
+    if (lb.ej === "dos") {
+      const P = Math.max(0, num($("lb-p2").value) || 0), qmax = DOS.qmax, paso = 1;
+      const filas1 = tablaDe(DOS.m1, q => P * q, qmax, paso), filas2 = tablaDe(DOS.m2, q => P * q, DOS.cap, paso);
+      return { ok: true, dos: true, P, qmax, paso, cap: DOS.cap, filas1, filas2, f1: resumen(filas1, qmax), f2: resumen(filas2, DOS.cap) };
     }
     const errs = []; let CT = null, IT = null;
-    const sct = $("f-ct").value, sit = $("f-it").value;
+    const sct = $("lb-ct").value;
     try { CT = parseFn(sct); } catch (e) { errs.push(fnError(e, "CT", sct)); }
-    try { IT = parseFn(sit); } catch (e) { errs.push(fnError(e, "IT", sit)); }
-    const qmax = Math.max(0.1, +$("f-qmax").value || 10);
-    return { ok: !errs.length, simple: false, CT, IT, qmax, errs };
+    if ($("lb-ing").value === "it") { const sit = $("lb-it").value; try { IT = parseFn(sit); } catch (e) { errs.push(fnError(e, "IT", sit)); } }
+    else { const P = Math.max(0, num($("lb-p").value) || 0); IT = q => P * q; }
+    const cap = Math.max(1, Math.round(num($("lb-cap").value) || 10));
+    const demV = num($("lb-dem").value), dem = isFinite(demV) && demV >= 0 ? demV : Infinity;
+    if (errs.length) return { ok: false, errs };
+    const paso = cap <= 150 ? 1 : Math.ceil(cap / 150);
+    const filas = tablaDe(CT, IT, cap, paso);
+    const limite = Math.min(cap, Math.floor(dem / paso) * paso);
+    const r = resumen(filas, limite);
+    const malas = filas.some(f => !isFinite(f.CT) || !isFinite(f.IT));
+    return { ok: true, dos: false, CT, IT, cap, dem, limite, paso, qmax: cap, filas, ...r, avisos: malas ? [t("e.nan", { q: fmtA(filas.find(f => !isFinite(f.CT) || !isFinite(f.IT)).q) })] : [] };
   }
-  function analyse(m) {
-    const N = 600, h = m.qmax / 4000, qs = [];
-    for (let i = 0; i <= N; i++) qs.push(m.qmax * i / N);
-    const ct = qs.map(m.CT), it = qs.map(m.IT), ben = qs.map((q, i) => it[i] - ct[i]);
-    const der = (f, q) => q - h < 0 ? (f(q + h) - f(q)) / h : (f(q + h) - f(q - h)) / (2 * h);
-    const cmg = qs.map(q => der(m.CT, q)), img = qs.map(q => der(m.IT, q));
-    const cme = qs.map((q, i) => q > 0 ? ct[i] / q : NaN);
-    let nanAt = null, huge = false;
-    qs.forEach((q, i) => { if (!isFinite(ct[i]) || !isFinite(it[i])) { if (nanAt == null) nanAt = q; } if ((isFinite(ct[i]) && Math.abs(ct[i]) > 1e12) || (isFinite(it[i]) && Math.abs(it[i]) > 1e12)) huge = true; });
-    const bisect = (f, a, b) => { let fa = f(a); for (let j = 0; j < 40; j++) { const mid = (a + b) / 2, fm = f(mid); if ((fm < 0) === (fa < 0)) { a = mid; fa = fm; } else b = mid; } return (a + b) / 2; };
-    const prof = q => m.IT(q) - m.CT(q);
-    const bes = [];
-    for (let i = 1; i <= N; i++) { if (!isFinite(ben[i - 1]) || !isFinite(ben[i]) || qs[i] <= 0) continue; if (ben[i] === 0) { bes.push(qs[i]); continue; } if (ben[i - 1] !== 0 && qs[i - 1] > 0 && (ben[i - 1] < 0) !== (ben[i] < 0)) bes.push(bisect(prof, qs[i - 1], qs[i])); }
-    let bi = -1; for (let i = 1; i <= N; i++) if (isFinite(ben[i]) && (bi < 0 || ben[i] > ben[bi])) bi = i;
-    let qmaxB = bi >= 0 ? qs[bi] : NaN;
-    if (bi > 0 && bi < N) { let a = qs[bi - 1], b = qs[bi + 1]; for (let j = 0; j < 60; j++) { const m1 = a + (b - a) / 3, m2 = b - (b - a) / 3; if (prof(m1) < prof(m2)) a = m1; else b = m2; } qmaxB = (a + b) / 2; }
-    const interior = bi > 0 && bi < N;
-    return { qs, ct, it, ben, cmg, img, cme, bes, qmaxB, benMax: prof(qmaxB), interior, nanAt, huge, der };
+  function tablaDe(CT, IT, qmax, paso) {
+    const filas = [], CF = CT(0);
+    for (let q = 0; q <= qmax + 1e-9; q += paso) {
+      const ct = CT(q), it = IT(q), prev = filas[filas.length - 1];
+      filas.push({ q, CF, CV: ct - CF, CT: ct, CMe: q > 0 ? ct / q : NaN, CVMe: q > 0 ? (ct - CF) / q : NaN,
+        CMg: prev ? (ct - prev.CT) / paso : NaN, IT: it, IMg: prev ? (it - prev.IT) / paso : NaN, B: it - ct });
+    }
+    return filas;
   }
-  const resRow = (nameKey, fx, val, cls = "", key = false) => el("div", { class: "res" + (key ? " key" : "") }, el("span", { class: "nm", text: t(nameKey) }), el("span", { class: "fx", text: fx }), el("span", { class: "v" + (cls ? " " + cls : ""), text: val }));
-  function renderCalc() {
-    const m = model();
-    $("simple-in").hidden = mode !== "simple"; $("fn-in").hidden = mode === "simple";
-    $("m-simple").setAttribute("aria-pressed", String(mode === "simple")); $("m-fn").setAttribute("aria-pressed", String(mode !== "simple"));
-    const qIn = $("c-q");
-    const qmax = m.qmax;
-    qIn.max = String(qmax); qIn.step = String(m.simple || qmax >= 50 ? 1 : qmax / 100);
-    if (+qIn.value > qmax) qIn.value = String(qmax);
-    const q = +qIn.value;
-    $("c-q-out").textContent = t("c.units", { q: fmtA(q) });
-    $("f-err").textContent = m.errs.join("\n\n");
-    if (!m.ok) {
-      $("c-res").replaceChildren(); $("c-note").replaceChildren(); ["c-tot", "c-uni"].forEach(id => $(id).replaceChildren()); $("c-table").replaceChildren();
-      return;
-    }
-    const A = analyse(m);
-    const warn = [];
-    if (A.nanAt != null) warn.push(t("e.nan", { q: fmtA(A.nanAt) }));
-    if (A.huge) warn.push(t("e.huge"));
-    if (!m.simple) $("f-err").textContent = warn.join("\n");
-    const CTq = m.CT(q), ITq = m.IT(q), CF = m.CT(0), CV = CTq - CF, B = ITq - CTq, CMe = q > 0 ? CTq / q : NaN;
-    const CMgq = m.simple ? m.c : m.CT(q + 1) - CTq;
-    // Resultados con su fórmula
-    const rows = [];
-    if (m.simple) {
-      const mrg = m.P - m.c, be = mrg > 0 ? m.CF / mrg : Infinity;
-      rows.push(resRow("r.it", t("f.it", { p: fmtA(m.P), q: fmtA(q) }), eur(ITq)));
-      rows.push(resRow("r.cf", t("f.cf"), eur(m.CF)));
-      rows.push(resRow("r.cv", t("f.cv", { c: fmtA(m.c), q: fmtA(q) }), eur(CV)));
-      rows.push(resRow("r.ct", t("f.ct", { cf: fmtA(m.CF), cv: fmtA(CV) }), eur(CTq)));
-      rows.push(resRow(B >= 0 ? "r.ben" : "r.per", t("f.ben", { it: fmtA(ITq), ct: fmtA(CTq) }), signed(B), B >= 0 ? "pos" : "neg", true));
-      rows.push(resRow("r.cme", t("f.cme", { ct: fmtA(CTq), q: fmtA(q) }), eur(CMe)));
-      rows.push(resRow("r.cmg", t("f.cmg", { c: fmtA(m.c) }), eur(m.c)));
-      rows.push(resRow("r.be", mrg > 0 ? t("f.be", { cf: fmtA(m.CF), m: fmtA(mrg) }) : "P ≤ " + fmtA(m.c) + " €", isFinite(be) ? t("v.units", { q: fmtA(be) }) : t("v.none")));
-      $("c-note").replaceChildren(mrg > 0 ? rich("n.simple.ok", { m: fmtA(mrg), be: fmtA(be), cf: fmtA(m.CF) }) : rich("n.simple.bad", { c: fmtA(m.c) }));
-    } else {
-      rows.push(resRow("r.it", t("f.itfn", { q: fmtA(q) }), eur(ITq)));
-      rows.push(resRow("r.cf", t("f.cffn"), eur(CF)));
-      rows.push(resRow("r.cv", t("f.cvfn", { q: fmtA(q) }), eur(CV)));
-      rows.push(resRow("r.ct", t("f.ctfn", { q: fmtA(q) }), eur(CTq)));
-      rows.push(resRow(B >= 0 ? "r.ben" : "r.per", t("f.ben", { it: fmtA(ITq), ct: fmtA(CTq) }), signed(B), B >= 0 ? "pos" : "neg", true));
-      rows.push(resRow("r.cme", t("f.cme", { ct: fmtA(CTq), q: fmtA(q) }), eur(CMe)));
-      rows.push(resRow("r.cmg", t("f.cmgfn"), eur(A.der(m.CT, q))));
-      rows.push(resRow("r.be", t("f.befn"), A.bes.length ? A.bes.map(b => t("v.units", { q: fmtA(b) })).join(" · ") : t("v.none")));
-      rows.push(resRow("r.max", A.interior ? t("f.maxfn") : "—", A.interior ? t("v.units", { q: fmtA(A.qmaxB) }) : t("v.nomax")));
-      const notes = [];
-      if (!A.interior && A.benMax > 0) notes.push(rich("n.fn.edge"));
-      else if (A.benMax <= 0) notes.push(rich("n.fn.loss"));
-      else notes.push(rich("n.fn.max", { q: fmtA(A.qmaxB), ben: signed(A.benMax) }));
-      if (A.bes.length) notes.push(rich("n.fn.be", { list: A.bes.map(b => "q ≈ " + fmtA(b)).join(", ") }));
-      $("c-note").replaceChildren(...notes);
-    }
-    $("c-res").replaceChildren(...rows);
+  // Umbral: primera unidad con beneficio ≥ 0. Parada: la de más beneficio hasta el límite (capacidad o clientes) y por qué
+  function resumen(filas, limite) {
+    const dentro = filas.filter(f => f.q <= limite + 1e-9);
+    const umb = dentro.find(f => f.q > 0 && f.B >= -1e-9);
+    let best = dentro[0];
+    dentro.forEach(f => { if (f.B > best.B + 1e-9) best = f; });
+    // ¿Por qué se para ahí? Si la unidad siguiente todavía sumaría beneficio, la frena el límite
+    // (la capacidad o los clientes); si no, la regla marginal: la siguiente costaría más de lo que aporta.
+    const sig = filas.find(f => f.q > best.q + 1e-9);
+    let razon = "mg";
+    if (best.q >= limite - 1e-9 && (!sig || sig.IMg > sig.CMg + 1e-9)) razon = limite < filas[filas.length - 1].q - 1e-9 ? "dem" : "cap";
+    return { umbral: umb ? umb.q : null, parada: best.q, Bmax: best.B, razon };
+  }
 
+  // Leyendas
+  const ley = (items) => items.map(([c, txt, dash]) => el("span", {}, el("i", { class: dash ? "dash" : null, style: "border-color:" + c }), txt));
+
+  function renderLab() {
+    $("lb-trastear").hidden = lb.modo !== "tr"; $("lb-practicar").hidden = lb.modo !== "pr";
+    $("lb-m-tr").setAttribute("aria-pressed", String(lb.modo === "tr")); $("lb-m-pr").setAttribute("aria-pressed", String(lb.modo === "pr"));
+    if (lb.modo !== "tr") return;
+    const dos = lb.ej === "dos";
+    $("lb-datos").hidden = dos; $("lb-datos-dos").hidden = !dos;
+    $("lb-p-f").hidden = $("lb-ing").value !== "p"; $("lb-it-f").hidden = $("lb-ing").value !== "it";
+    document.querySelector(".sup1").hidden = lb.ej === "m2"; document.querySelector(".sup2").hidden = lb.ej === "m1";
+    const m = lbModelo();
+    $("lb-err").textContent = m.ok ? (m.avisos || []).join("\n") : m.errs.join("\n\n");
+    if (!m.ok) { ["lb-tot", "lb-uni"].forEach(id => $(id).replaceChildren()); $("lb-cifras").replaceChildren(); $("lb-frase").textContent = ""; $("lb-tabla").replaceChildren(); return; }
+    const qIn = $("lb-q");
+    qIn.max = String(m.qmax); qIn.step = String(m.paso);
+    let q = Math.min(+qIn.value, m.qmax); q = Math.round(q / m.paso) * m.paso; qIn.value = String(q);
+    $("lb-q-out").textContent = t("lb.qv", { q: fmtA(q), n: fmtA(m.qmax) });
+    if (dos) renderDos2(m, q); else renderUno(m, q);
+  }
+
+  function filaDe(filas, q) { return filas.find(f => Math.abs(f.q - q) < 1e-9) || filas[filas.length - 1]; }
+  const cifra = (k, v, cls) => el("div", {}, el("b", { class: cls || null, text: v }), el("span", { text: t(k) }));
+
+  function renderUno(m, q) {
+    const f = filaDe(m.filas, q), fuera = q > m.limite + 1e-9;
+    $("lb-cifras").replaceChildren(cifra("lb.ct.k", eur(f.CT)), cifra("lb.it.k", eur(f.IT)), cifra(f.B >= 0 ? "lb.b.k" : "lb.per.k", signed(f.B), f.B >= 0 ? "pos" : "neg"));
+    // La frase: qué pasa con esta unidad
+    let frase;
+    if (q === 0) frase = t("lb.f0", { cf: eur(f.CF) });
+    else if (fuera) frase = t("lb.f.lim", { q: fmtA(m.limite), r: t(m.razon === "dem" ? "lb.r.dem" : "lb.r.cap") });
+    else {
+      const d = f.IMg - f.CMg;
+      frase = (Math.abs(d) < 1e-9 ? t("lb.f.igual", { q: fmtA(q), cmg: eur(f.CMg) }) : d > 0 ? t("lb.f.gana", { q: fmtA(q), cmg: eur(f.CMg), img: eur(f.IMg), d: eur(d) }) : t("lb.f.pierde", { q: fmtA(q), cmg: eur(f.CMg), img: eur(f.IMg), d: eur(-d) }))
+        + t(f.B >= 0 ? "lb.f.ben" : "lb.f.perd");
+      if (Math.abs(q - m.parada) < 1e-9) frase += " " + t(m.razon === "mg" ? "lb.f.para.mg" : m.razon === "dem" ? "lb.f.para.dem" : "lb.f.para.cap");
+    }
+    $("lb-frase").textContent = frase;
+    todos(f);
     // Gráfico de totales
-    const fin = arr => arr.filter(v => isFinite(v));
-    const allT = fin([...A.ct, ...A.it, 0]);
-    const yT = nice(Math.min(...allT), Math.max(...allT));
-    const xT = nice(0, qmax);
-    const F = frame($("c-tot"), { xMax: qmax, xTicks: xT.ticks.filter(v => v <= qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
-    line(F, A.qs.map(x => [x, CF]), "curve", { style: "stroke:var(--muted);stroke-dasharray:5 4" });
-    line(F, A.qs.map((x, i) => [x, A.ct[i]]), "curve c-s2");
-    line(F, A.qs.map((x, i) => [x, A.it[i]]), "curve c-ink");
-    label(F, qmax * 0.02, CF, "CF", "start", "lbl", -6);
-    if (isFinite(ITq) && isFinite(CTq)) {
-      F.plot.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(Math.min(0, yT.lo) < 0 ? 0 : yT.lo), y2: F.sy(Math.min(ITq, CTq)), class: "guide" }));
-      F.top.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(ITq), y2: F.sy(CTq), class: B >= 0 ? "gap-ok" : "gap-bad" }));
-      F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(ITq), r: 5, class: "dot ink" }));
-      F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(CTq), r: 5, class: "dot", style: "fill:var(--s2)" }));
-      label(F, q, (ITq + CTq) / 2, t(B >= 0 ? "lbl.ben" : "lbl.per", { v: signed(B) }), q > qmax * 0.6 ? "end" : "start", "lbl", 4);
-    }
-    A.bes.forEach(b => { const y = m.CT(b); F.top.append(sv("circle", { cx: F.sx(b), cy: F.sy(y), r: 6, class: "dot", style: "fill:var(--accent)" })); label(F, b, y, t("lbl.be", { q: fmtA(b) }), "end", "lbl", -10); });
-    const itE = A.it[A.it.length - 1], ctE = A.ct[A.ct.length - 1];
-    label(F, qmax * 0.97, itE, "IT", "end", "lbl", itE >= ctE ? -10 : 20);
-    label(F, qmax * 0.97, ctE, "CT", "end", "lbl", ctE > itE ? -10 : 20);
-    hover($("c-tot"), $("c-tot-tip"), F, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.ink, "IT", eur(m.IT(x))], [C.s2, "CT", eur(m.CT(x))], [B >= 0 ? C.ok : C.bad, t("t.ben"), signed(m.IT(x) - m.CT(x))]] }));
-
-    // Gráfico por unidad
-    const from = Math.floor(A.qs.length * 0.12);
-    const uvals = fin([...A.cme.slice(from), ...A.cmg, ...A.img]).sort((a, b) => a - b);
-    const hiU = uvals.length ? uvals[Math.floor(uvals.length * 0.97)] : 1;
-    const yU = nice(Math.min(0, uvals[0] ?? 0), hiU * 1.1);
-    const G = frame($("c-uni"), { xMax: qmax, xTicks: xT.ticks.filter(v => v <= qmax + 1e-9), yMin: yU.lo, yMax: yU.hi, yTicks: yU.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") });
-    line(G, A.qs.map((x, i) => [x, A.img[i]]), "pline");
-    line(G, A.qs.map((x, i) => [x, A.cme[i]]), "curve c-s2");
-    line(G, A.qs.map((x, i) => [x, A.cmg[i]]), "curve c-s1");
-    const mgE = A.cmg[A.cmg.length - 1], meE = A.cme[A.cme.length - 1];
-    label(G, qmax * 0.97, mgE, "CMg", "end", "lbl", mgE > meE ? -10 : 20);
-    label(G, qmax * 0.97, meE, "CMe", "end", "lbl", meE >= mgE ? -10 : 20);
-    label(G, qmax * 0.02, A.img[1], "IMg", "start", "lbl", -8);
-    G.plot.append(sv("line", { x1: G.sx(q), x2: G.sx(q), y1: G.sy(yU.lo), y2: G.sy(yU.hi), class: "guide" }));
-    if (!m.simple && A.interior) { const yq = A.der(m.CT, A.qmaxB); G.top.append(sv("circle", { cx: G.sx(A.qmaxB), cy: G.sy(yq), r: 6, class: "dot", style: "fill:var(--accent)" })); label(G, A.qmaxB, yq, t("lbl.max", { q: fmtA(A.qmaxB) }), "start", "lbl", -10); }
-    hover($("c-uni"), $("c-uni-tip"), G, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.s2, "CMe", x > 0 ? eur(m.CT(x) / x) : "—"], [C.s1, "CMg", eur(A.der(m.CT, x))], [C.ink, "IMg", eur(A.der(m.IT, x))]] }));
-
-    // Tabla
-    const step = m.simple ? Math.max(1, Math.round(qmax / 10)) : qmax / 10;
-    const tq = []; for (let v = 0; v <= qmax + 1e-9; v += step) tq.push(+v.toFixed(6));
-    tableRows = tq.map(x => { const ctx = m.CT(x), itx = m.IT(x), cf = m.CT(0); return [x, cf, ctx - cf, ctx, itx, itx - ctx, x > 0 ? ctx / x : NaN, m.simple ? m.c : A.der(m.CT, x)]; });
-    const head = ["t.q", "t.cf", "t.cv", "t.ct", "t.it", "t.ben", "t.cme", "t.cmg"].map(k => t(k));
-    $("c-table").replaceChildren(el("thead", {}, el("tr", {}, head.map(h => el("th", { text: h })))),
-      el("tbody", {}, tableRows.map(r => el("tr", {}, r.map((v, j) => el("td", { class: j === 5 ? (v >= 0 ? "pos" : "neg") : null, text: j === 5 ? signed(v, "") : fmtA(v) }))))));
+    const fs = m.filas, xs = fs.map(r => r.q), xT = nice(0, m.qmax);
+    const yT = nice(Math.min(0, ...fs.map(r => Math.min(r.CT, r.IT)).filter(isFinite)), Math.max(...fs.map(r => Math.max(r.CT, r.IT)).filter(isFinite)));
+    const F = frame($("lb-tot"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
+    const dibuja = (G, campo, cls, extra = {}) => {
+      line(G, fs.map(r => [r.q, r[campo]]), "curve faint " + cls, extra);
+      line(G, fs.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra);
+    };
+    dibuja(F, "CF", "", { style: "stroke:var(--muted);stroke-dasharray:5 4" });
+    dibuja(F, "CV", "c-s3"); dibuja(F, "CT", "c-s2"); dibuja(F, "IT", "c-ink");
+    limites(F, m, yT);
+    F.top.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(f.IT), y2: F.sy(f.CT), class: f.B >= 0 ? "gap-ok" : "gap-bad" }));
+    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(f.CT), r: 5, class: "dot", style: "fill:var(--s2)" }));
+    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(f.IT), r: 5, class: "dot ink" }));
+    marcas(F, m, r => r.CT, yT);
+    hover($("lb-tot"), $("lb-tot-tip"), F, x => { const r = filaDe(fs, Math.round(x / m.paso) * m.paso); return { head: t("tip.q", { q: fmtA(r.q) }), rows: [[C.ink, "IT", eur(r.IT)], [C.s2, "CT", eur(r.CT)], [C.s3, "CV", eur(r.CV)], [r.B >= 0 ? C.ok : C.bad, t("t.ben"), signed(r.B)]] }; });
+    $("lb-lg1").replaceChildren(...ley([[C.ink, t("lg.it")], [C.s2, t("lg.ct")], [C.s3, t("lg.cv")], [C.muted, t("lg.cf"), true]]));
+    // Gráfico por unidad (desde la unidad 1)
+    const fu = fs.filter(r => r.q > 0), vals = fu.flatMap(r => [r.CMe, r.CVMe, r.CMg, r.IMg]).filter(isFinite).sort((a, b) => a - b);
+    const yU = nice(Math.min(0, vals[0] ?? 0), (vals[Math.floor(vals.length * 0.95)] ?? 1) * 1.12);
+    const G = frame($("lb-uni"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yU.lo, yMax: yU.hi, yTicks: yU.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") });
+    const dibujaU = (campo, cls, extra = {}) => { line(G, fu.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, fu.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra); };
+    dibujaU("IMg", "", { style: "stroke:var(--ink);stroke-dasharray:6 4" }); dibujaU("CMe", "c-s2"); dibujaU("CVMe", "c-s3"); dibujaU("CMg", "c-s1");
+    limites(G, m, yU);
+    if (q > 0) { G.top.append(sv("circle", { cx: G.sx(q), cy: G.sy(f.CMg), r: 5, class: "dot s1" })); G.top.append(sv("circle", { cx: G.sx(q), cy: G.sy(f.IMg), r: 5, class: "dot ink" })); }
+    marcas(G, m, r => r.CMg, yU, true);
+    hover($("lb-uni"), $("lb-uni-tip"), G, x => { const r = filaDe(fs, Math.max(m.paso, Math.round(x / m.paso) * m.paso)); return { head: t("tip.q", { q: fmtA(r.q) }), rows: [[C.s2, "CMe", eur(r.CMe)], [C.s3, "CVMe", eur(r.CVMe)], [C.s1, "CMg", eur(r.CMg)], [C.ink, "IMg", eur(r.IMg)]] }; });
+    $("lb-lg2").replaceChildren(...ley([[C.s2, t("lg.cme")], [C.s3, t("lg.cvme")], [C.s1, t("lg.cmg")], [C.ink, t("lg.img"), true]]));
+    tabla(["q", "CF", "CV", "CT", "CMe", "CVMe", "CMg", "IT", "IMg", "B"], fs, q);
   }
-  let tableRows = [];
-  $("c-dl").addEventListener("click", async () => {
-    const head = ["t.q", "t.cf", "t.cv", "t.ct", "t.it", "t.ben", "t.cme", "t.cmg"].map(k => t(k));
-    const num = v => isFinite(v) ? String(Math.round(v * 1000) / 1000).replace(".", ",") : "";
-    const csv = OBS.csv([head, ...tableRows.map(r => r.map(num))]);
-    $("c-dl-status").textContent = await OBS.download(t("dl.file"), csv, "text/csv;charset=utf-8", { downloads });
+  // Capacidad y clientes, como líneas verticales
+  function limites(F, m, y) {
+    if (m.dos) return;
+    if (isFinite(m.dem) && m.dem < m.cap) { F.plot.append(sv("line", { x1: F.sx(m.limite), x2: F.sx(m.limite), y1: F.sy(y.lo), y2: F.sy(y.hi), class: "limite" })); label(F, m.limite, y.hi, t("lb.deml"), "end", "mark-txt", 14); }
+  }
+  // Umbral de rentabilidad y punto en que se para la empresa
+  function marcas(F, m, campo, y, porUnidad) {
+    const fu = filaDe(m.filas, m.parada);
+    if (!porUnidad && m.umbral != null) { const fr = filaDe(m.filas, m.umbral); F.top.append(sv("circle", { cx: F.sx(fr.q), cy: F.sy(fr.CT), r: 6, class: "dot", style: "fill:var(--accent)" })); label(F, fr.q, fr.CT, t("lb.umbral", { q: fmtA(fr.q) }), "start", "mark-txt", -12); }
+    if (m.parada > 0) {
+      const yv = campo(fu); if (!isFinite(yv)) return;
+      F.top.append(sv("circle", { cx: F.sx(fu.q), cy: F.sy(yv), r: 7, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" }));
+      if (porUnidad) label(F, fu.q, yv, t(m.razon === "mg" ? "lb.para.mg" : m.razon === "dem" ? "lb.para.dem" : "lb.para.cap"), fu.q > m.qmax * 0.6 ? "end" : "start", "mark-txt", -14);
+    }
+  }
+  function todos(f) {
+    const v = [["v.CF", eur(f.CF)], ["v.CV", eur(f.CV)], ["v.CT", eur(f.CT)], ["v.CMe", eur(f.CMe)], ["v.CVMe", eur(f.CVMe)], ["v.CMg", eur(f.CMg)], ["v.IT", eur(f.IT)], ["v.IMg", eur(f.IMg)], ["v.B", signed(f.B)]];
+    $("lb-todos").replaceChildren(...v.flatMap(([k, x]) => [el("dt", { text: t(k) }), el("dd", { text: x })]));
+  }
+  // La tabla se rellena fila a fila hasta la unidad en curso
+  let lbFilasCSV = [];
+  function tabla(campos, filas, q, cab) {
+    const cabecera = cab || campos;
+    lbFilasCSV = [cabecera, ...filas.map(r => campos.map(c => isFinite(r[c]) ? String(Math.round(r[c] * 100) / 100).replace(".", ",") : ""))];
+    const fmtC = (c, v) => !isFinite(v) ? "—" : c === "q" ? fmtA(v) : (c.startsWith("B") ? signed(v, "") : fmtA(v));
+    const rows = filas.map(r => el("tr", { class: Math.abs(r.q - q) < 1e-9 ? "cur" : r.q > q + 1e-9 ? "vacia" : null },
+      campos.map(c => el("td", { class: c.startsWith("B") && isFinite(r[c]) ? (r[c] >= 0 ? "pos" : "neg") : null, text: r.q > q + 1e-9 ? "" : fmtC(c, r[c]) }))));
+    $("lb-tabla").replaceChildren(el("thead", {}, el("tr", {}, cabecera.map(h => el("th", { text: h })))), el("tbody", {}, rows));
+    const cur = $("lb-tabla").querySelector("tr.cur"), caja = $("lb-tabla-caja");
+    if (cur) { const top = cur.offsetTop - caja.clientHeight / 2; caja.scrollTop = Math.max(0, top); }
+  }
+
+  // «Los dos a la vez»: la misma empresa con los dos supuestos
+  function renderDos2(m, q) {
+    const a = filaDe(m.filas1, q), bIn = q <= m.cap + 1e-9, b = bIn ? filaDe(m.filas2, q) : null;
+    const bTxt = r => r.B >= 0 ? t("lb.gana", { v: eur(r.B) }) : t("lb.pierde", { v: eur(-r.B) });
+    $("lb-cifras").replaceChildren(cifra("lb.it.k", eur(a.IT)), cifra("lb.b1.k", signed(a.B), a.B >= 0 ? "pos" : "neg"), b ? cifra("lb.b2.k", signed(b.B), b.B >= 0 ? "pos" : "neg") : cifra("lb.b2.k", "—"));
+    let frase = q === 0 ? t("lb.f0", { cf: eur(a.CF) }) : b ? t("lb.f.dos", { q: fmtA(q), b1: bTxt(a), b2: bTxt(b) }) : t("lb.f.dos.cap", { q: fmtA(q), b1: bTxt(a), c: fmtA(m.cap) });
+    if (q > 0) frase += " " + t("lb.f.dos.para", { p1: fmtA(m.f1.parada), p2: fmtA(m.f2.parada) });
+    $("lb-frase").textContent = frase;
+    todos(a);
+    const xT = nice(0, m.qmax), all = [...m.filas1, ...m.filas2];
+    const yT = nice(0, Math.max(...all.map(r => Math.max(r.CT, r.IT)).filter(isFinite)));
+    const F = frame($("lb-tot"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
+    const dib = (G, fs, campo, cls, extra = {}) => { line(G, fs.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, fs.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra); };
+    dib(F, m.filas1, "IT", "c-ink"); dib(F, m.filas1, "CT", "c-s2"); dib(F, m.filas2, "CT", "c-s1");
+    F.plot.append(sv("line", { x1: F.sx(m.cap), x2: F.sx(m.cap), y1: F.sy(yT.lo), y2: F.sy(yT.hi), class: "limite" })); label(F, m.cap, yT.hi, t("lb.capl"), "end", "mark-txt", 14);
+    $("lb-lg1").replaceChildren(...ley([[C.ink, t("lg.it")], [C.s2, t("lb.ct1")], [C.s1, t("lb.ct2")]]));
+    const f1 = m.filas1.filter(r => r.q > 0), f2 = m.filas2.filter(r => r.q > 0);
+    const yU = nice(0, Math.max(40, m.P * 1.4));
+    const G = frame($("lb-uni"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: 0, yMax: yU.hi, yTicks: yU.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") });
+    dib(G, f1, "IMg", "", { style: "stroke:var(--ink);stroke-dasharray:6 4" });
+    dib(G, f1, "CMe", "c-s2"); dib(G, f1, "CMg", "c-s2", { style: "stroke-dasharray:2 3;stroke-width:2.5" });
+    dib(G, f2, "CMe", "c-s1"); dib(G, f2, "CMg", "c-s1", { style: "stroke-dasharray:2 3;stroke-width:2.5" });
+    G.plot.append(sv("line", { x1: G.sx(m.cap), x2: G.sx(m.cap), y1: G.sy(0), y2: G.sy(yU.hi), class: "limite" }));
+    [[m.f1, m.filas1, "lb.para1"], [m.f2, m.filas2, "lb.para2"]].forEach(([r, fs, k]) => { const fr = filaDe(fs, r.parada); if (r.parada > 0) { G.top.append(sv("circle", { cx: G.sx(fr.q), cy: G.sy(fr.CMg), r: 6, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" })); label(G, fr.q, fr.CMg, t(k), "end", "mark-txt", -12); } });
+    $("lb-lg2").replaceChildren(...ley([[C.s2, t("lb.cme1")], [C.s1, t("lb.cme2")], [C.muted, t("lb.cmg12"), true], [C.ink, t("lg.img"), true]]));
+    const comb = m.filas1.map(r => { const s = m.filas2.find(x => Math.abs(x.q - r.q) < 1e-9); return { q: r.q, CT1: r.CT, CMe1: r.CMe, CMg1: r.CMg, B1: r.B, CT2: s ? s.CT : NaN, CMe2: s ? s.CMe : NaN, CMg2: s ? s.CMg : NaN, B2: s ? s.B : NaN }; });
+    tabla(["q", "CT1", "CMe1", "CMg1", "B1", "CT2", "CMe2", "CMg2", "B2"], comb, q, ["q", "CT·1", "CMe·1", "CMg·1", "B·1", "CT·2", "CMe·2", "CMg·2", "B·2"]);
+  }
+
+  // Reproducir y pausa
+  function lbParar() { if (lb.reloj) { clearInterval(lb.reloj); lb.reloj = null; } $("lb-play").textContent = t("lb.play"); }
+  $("lb-play").addEventListener("click", () => {
+    if (lb.reloj) { lbParar(); return; }
+    const m = lbModelo(); if (!m.ok) return;
+    if (+$("lb-q").value >= m.qmax) $("lb-q").value = "0";
+    const pasos = Math.max(1, Math.round(m.qmax / m.paso)), dur = +$("lb-vel").value * 1000;
+    const cada = Math.min(1200, Math.max(40, dur / pasos));
+    $("lb-play").textContent = t("lb.pause");
+    renderLab();
+    lb.reloj = setInterval(() => {
+      const v = +$("lb-q").value + m.paso;
+      if (v > m.qmax + 1e-9) { lbParar(); return; }
+      $("lb-q").value = String(v); renderLab();
+    }, cada);
   });
-  ["c-p", "c-cf", "c-cv", "c-qmax", "f-qmax", "c-q"].forEach(id => $(id).addEventListener("input", renderCalc));
-  ["f-ct", "f-it"].forEach(id => $(id).addEventListener("input", renderCalc));
-  $("m-simple").addEventListener("click", () => { mode = "simple"; $("c-q").value = "60"; renderCalc(); });
-  $("m-fn").addEventListener("click", () => { mode = "fn"; renderCalc(); });
-  document.querySelectorAll("[data-ex]").forEach(b => b.addEventListener("click", () => {
-    const ex = EXAMPLES[b.dataset.ex]; $("f-ct").value = ex.ct; $("f-it").value = ex.it; $("f-qmax").value = ex.qmax;
-    $("c-q").value = String(ex.qmax / 2); renderCalc();
+  $("lb-q").addEventListener("input", () => { lbParar(); renderLab(); });
+  ["lb-ct", "lb-it", "lb-p", "lb-cap", "lb-dem", "lb-p2"].forEach(id => $(id).addEventListener("input", () => { lbParar(); renderLab(); }));
+  $("lb-ing").addEventListener("change", () => { lbParar(); renderLab(); });
+  document.querySelectorAll(".ej-btn").forEach(b => b.addEventListener("click", () => {
+    if (b.dataset.ej === "dos") { lb.ej = "dos"; document.querySelectorAll(".ej-btn").forEach(x => x.setAttribute("aria-pressed", String(x === b))); lbParar(); $("lb-q").value = "0"; renderLab(); }
+    else cargarEjemplo(b.dataset.ej);
   }));
+  $("lb-dl").addEventListener("click", async () => { $("lb-dl-st").textContent = await OBS.download(t("lb.file"), OBS.csv(lbFilasCSV), "text/csv;charset=utf-8", { downloads }); });
+  $("lb-m-tr").addEventListener("click", () => { lb.modo = "tr"; renderLab(); });
+  $("lb-m-pr").addEventListener("click", () => { lb.modo = "pr"; lbParar(); renderLab(); if (!pr.actual) prOtro(); });
 
   // =====================================================================
-  // 2 · DOS FORMAS DE DIBUJAR LOS COSTES
+  // Practicar: ejercicios con huecos, corrección casilla a casilla. No se guarda nada.
   // =====================================================================
-  const U = {
-    CT: q => 200 + 20 * q - 0.3 * q * q + 0.0025 * q ** 3,
-    CMg: q => 20 - 0.6 * q + 0.0075 * q * q,
-    CVMe: q => 20 - 0.3 * q + 0.0025 * q * q,
-    CMe: q => q > 0 ? 200 / q + 20 - 0.3 * q + 0.0025 * q * q : Infinity,
-    q: P => P < 11 ? 0 : (0.6 + Math.sqrt(0.36 - 0.03 * (20 - P))) / 0.015
+  const BANCO = /*BANCO: ejercicios de clase del Tema 3 (transcritos y recalculados el 30/10/2026)*/[{"id": "enunciats-1a", "origen": "Enunciats exercicis Tema 3, exercici 1 (apartat a)", "tipo": 1, "enunciado": {"va": "Una fusteria fabrica cadires artesanals. Per fer cada cadira necessita 4 kg de fusta, que compra a 2,50 €/kg, i 3 hores de treball d'un oficial, a qui paga 15 €/hora. L'empresa paga un lloguer mensual del taller de 1.200 €. Gener: produeix 100 cadires i en ven 80 a 80 €/unitat. Febrer: produeix 120 i en ven 100 a 75 €/unitat. Març: produeix 150 i en ven 150 a 70 €/unitat. Calcula per a cada mes els costos fixos (CF), variables (CV) i totals (CT), el cost variable mitjà (CVMe) i el cost mitjà (CMe).", "es": "Una carpintería fabrica sillas artesanales. Para hacer cada silla necesita 4 kg de madera, que compra a 2,50 €/kg, y 3 horas de trabajo de un oficial, al que paga 15 €/hora. La empresa paga un alquiler mensual del taller de 1.200 €. Enero: produce 100 sillas y vende 80 a 80 €/unidad. Febrero: produce 120 y vende 100 a 75 €/unidad. Marzo: produce 150 y vende 150 a 70 €/unidad. Calcula para cada mes los costes fijos (CF), variables (CV) y totales (CT), el coste variable medio (CVMe) y el coste medio (CMe)."}, "tabla": {"columnas": [{"clave": "mes", "va": "Mes", "es": "Mes", "dato": true}, {"clave": "q", "va": "Quantitat produïda", "es": "Cantidad producida", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}], "filas": [{"mes": "Gener", "q": 100, "CF": 1200, "CV": 5500, "CT": 6700, "CVMe": 55, "CMe": 67}, {"mes": "Febrer", "q": 120, "CF": 1200, "CV": 6600, "CT": 7800, "CVMe": 55, "CMe": 65}, {"mes": "Març", "q": 150, "CF": 1200, "CV": 8250, "CT": 9450, "CVMe": 55, "CMe": 63}]}, "preguntas": [{"id": "cvu", "va": "Quin és el cost variable de cada unitat?", "es": "¿Cuál es el coste variable de cada unidad?", "respuesta": 55, "unidad": {"va": "€/unitat", "es": "€/unidad"}}], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CV": {"va": "Cost variable unitari × unitats produïdes (no les venudes).", "es": "Coste variable unitario × unidades producidas (no las vendidas)."}, "cvu": {"va": "Suma el cost de la fusta i el de la mà d'obra d'una cadira.", "es": "Suma el coste de la madera y el de la mano de obra de una silla."}}}, {"id": "enunciats-1b", "origen": "Enunciats exercicis Tema 3, exercici 1 (apartat b)", "tipo": 3, "enunciado": {"va": "Una fusteria fabrica cadires artesanals. Per fer cada cadira necessita 4 kg de fusta, que compra a 2,50 €/kg, i 3 hores de treball d'un oficial, a qui paga 15 €/hora. L'empresa paga un lloguer mensual del taller de 1.200 €. Gener: produeix 100 cadires i en ven 80 a 80 €/unitat. Febrer: produeix 120 i en ven 100 a 75 €/unitat. Març: produeix 150 i en ven 150 a 70 €/unitat. Calcula per a cada mes els ingressos totals (IT) i el benefici (B). El cost total és el de l'apartat a.", "es": "Una carpintería fabrica sillas artesanales. Para hacer cada silla necesita 4 kg de madera, que compra a 2,50 €/kg, y 3 horas de trabajo de un oficial, al que paga 15 €/hora. La empresa paga un alquiler mensual del taller de 1.200 €. Enero: produce 100 sillas y vende 80 a 80 €/unidad. Febrero: produce 120 y vende 100 a 75 €/unidad. Marzo: produce 150 y vende 150 a 70 €/unidad. Calcula para cada mes los ingresos totales (IT) y el beneficio (B). El coste total es el del apartado a."}, "tabla": {"columnas": [{"clave": "mes", "va": "Mes", "es": "Mes", "dato": true}, {"clave": "q", "va": "Quantitat venuda", "es": "Cantidad vendida", "dato": true}, {"clave": "P", "va": "Preu (P)", "es": "Precio (P)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}], "filas": [{"mes": "Gener", "q": 80, "P": 80, "CT": 6700, "IT": 6400, "B": -300}, {"mes": "Febrer", "q": 100, "P": 75, "CT": 7800, "IT": 7500, "B": -300}, {"mes": "Març", "q": 150, "P": 70, "CT": 9450, "IT": 10500, "B": 1050}]}, "preguntas": [], "pistas": {"IT": {"va": "Preu × unitats venudes (no les produïdes).", "es": "Precio × unidades vendidas (no las producidas)."}, "B": {"va": "B = IT − CT, amb el cost total de tot el que s'ha produït.", "es": "B = IT − CT, con el coste total de todo lo producido."}}}, {"id": "enunciats-2a", "origen": "Enunciats exercicis Tema 3, exercici 2 (apartat a)", "tipo": 1, "enunciado": {"va": "Una empresa acobla tauletes electròniques. Per cada unitat utilitza un kit de components que costa 50 € i 0,5 hores de feina d'un tècnic que cobra 20 €/hora. Té uns costos fixos mensuals de 5.000 €. Abril: produeix 500 tauletes i en ven 500 a 120 €. Maig: produeix 800 i en ven 600 a 110 €. Juny: produeix 1.000 i en ven 900 a 100 €. Calcula per a cada mes els costos fixos (CF), variables (CV) i totals (CT), el cost variable mitjà (CVMe) i el cost mitjà (CMe).", "es": "Una empresa ensambla tabletas electrónicas. Por cada unidad utiliza un kit de componentes que cuesta 50 € y 0,5 horas de trabajo de un técnico que cobra 20 €/hora. Tiene unos costes fijos mensuales de 5.000 €. Abril: produce 500 tabletas y vende 500 a 120 €. Mayo: produce 800 y vende 600 a 110 €. Junio: produce 1.000 y vende 900 a 100 €. Calcula para cada mes los costes fijos (CF), variables (CV) y totales (CT), el coste variable medio (CVMe) y el coste medio (CMe)."}, "tabla": {"columnas": [{"clave": "mes", "va": "Mes", "es": "Mes", "dato": true}, {"clave": "q", "va": "Quantitat produïda", "es": "Cantidad producida", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}], "filas": [{"mes": "Abril", "q": 500, "CF": 5000, "CV": 30000, "CT": 35000, "CVMe": 60, "CMe": 70}, {"mes": "Maig", "q": 800, "CF": 5000, "CV": 48000, "CT": 53000, "CVMe": 60, "CMe": 66.25}, {"mes": "Juny", "q": 1000, "CF": 5000, "CV": 60000, "CT": 65000, "CVMe": 60, "CMe": 65}]}, "preguntas": [{"id": "cvu", "va": "Quin és el cost variable de cada unitat?", "es": "¿Cuál es el coste variable de cada unidad?", "respuesta": 60, "unidad": {"va": "€/unitat", "es": "€/unidad"}}], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CV": {"va": "Cost variable unitari × unitats produïdes (no les venudes).", "es": "Coste variable unitario × unidades producidas (no las vendidas)."}, "cvu": {"va": "Suma el preu del kit i el cost de mitja hora de treball del tècnic.", "es": "Suma el precio del kit y el coste de media hora de trabajo del técnico."}}}, {"id": "enunciats-2b", "origen": "Enunciats exercicis Tema 3, exercici 2 (apartat b)", "tipo": 3, "enunciado": {"va": "Una empresa acobla tauletes electròniques. Per cada unitat utilitza un kit de components que costa 50 € i 0,5 hores de feina d'un tècnic que cobra 20 €/hora. Té uns costos fixos mensuals de 5.000 €. Abril: produeix 500 tauletes i en ven 500 a 120 €. Maig: produeix 800 i en ven 600 a 110 €. Juny: produeix 1.000 i en ven 900 a 100 €. Calcula per a cada mes els ingressos totals (IT) i el benefici (B). El cost total és el de l'apartat a.", "es": "Una empresa ensambla tabletas electrónicas. Por cada unidad utiliza un kit de componentes que cuesta 50 € y 0,5 horas de trabajo de un técnico que cobra 20 €/hora. Tiene unos costes fijos mensuales de 5.000 €. Abril: produce 500 tabletas y vende 500 a 120 €. Mayo: produce 800 y vende 600 a 110 €. Junio: produce 1.000 y vende 900 a 100 €. Calcula para cada mes los ingresos totales (IT) y el beneficio (B). El coste total es el del apartado a."}, "tabla": {"columnas": [{"clave": "mes", "va": "Mes", "es": "Mes", "dato": true}, {"clave": "q", "va": "Quantitat venuda", "es": "Cantidad vendida", "dato": true}, {"clave": "P", "va": "Preu (P)", "es": "Precio (P)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}], "filas": [{"mes": "Abril", "q": 500, "P": 120, "CT": 35000, "IT": 60000, "B": 25000}, {"mes": "Maig", "q": 600, "P": 110, "CT": 53000, "IT": 66000, "B": 13000}, {"mes": "Juny", "q": 900, "P": 100, "CT": 65000, "IT": 90000, "B": 25000}]}, "preguntas": [], "pistas": {"IT": {"va": "Preu × unitats venudes (no les produïdes).", "es": "Precio × unidades vendidas (no las producidas)."}, "B": {"va": "B = IT − CT, amb el cost total de tot el que s'ha produït.", "es": "B = IT − CT, con el coste total de todo lo producido."}}}, {"id": "enunciats-3-costos", "origen": "Enunciats exercicis Tema 3, exercici 3 (apartat a, part de costos)", "tipo": 2, "enunciado": {"va": "La cooperativa «L'Horta Fresca» contracta temporers per a recollir maduixes. Amb 1, 2, 3 i 4 temporers recull 200, 380, 540 i 680 kg, amb uns costos variables totals de 3.000, 6.200, 9.600 i 13.200 €. Ven la maduixa a 25 €/kg i té uns costos fixos de 1.500 €. Completa la taula de costos.", "es": "La cooperativa «L'Horta Fresca» contrata temporeros para recoger fresas. Con 1, 2, 3 y 4 temporeros recoge 200, 380, 540 y 680 kg, con unos costes variables totales de 3.000, 6.200, 9.600 y 13.200 €. Vende la fresa a 25 €/kg y tiene unos costes fijos de 1.500 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "L", "va": "Temporers (L)", "es": "Temporeros (L)", "dato": true}, {"clave": "q", "va": "Maduixes (Q, kg)", "es": "Fresas (Q, kg)", "dato": true}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CV": 0, "CF": 1500, "CT": 1500}, {"L": 1, "q": 200, "CV": 3000, "CF": 1500, "CT": 4500, "CMe": 22.5, "CMg": 15}, {"L": 2, "q": 380, "CV": 6200, "CF": 1500, "CT": 7700, "CMe": 20.26, "CMg": 17.78}, {"L": 3, "q": 540, "CV": 9600, "CF": 1500, "CT": 11100, "CMe": 20.56, "CMg": 21.25}, {"L": 4, "q": 680, "CV": 13200, "CF": 1500, "CT": 14700, "CMe": 21.62, "CMg": 25.71}]}, "preguntas": [], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}}}, {"id": "enunciats-3-benefici", "origen": "Enunciats exercicis Tema 3, exercici 3 (apartats a i b, part d'ingressos i decisió)", "tipo": 3, "enunciado": {"va": "La cooperativa «L'Horta Fresca» contracta temporers per a recollir maduixes. Amb 1, 2, 3 i 4 temporers recull 200, 380, 540 i 680 kg, amb uns costos variables totals de 3.000, 6.200, 9.600 i 13.200 €. Ven la maduixa a 25 €/kg i té uns costos fixos de 1.500 €. A partir del cost total i del cost marginal, completa els ingressos i el benefici i decideix fins on produirà l'empresa.", "es": "La cooperativa «L'Horta Fresca» contrata temporeros para recoger fresas. Con 1, 2, 3 y 4 temporeros recoge 200, 380, 540 y 680 kg, con unos costes variables totales de 3.000, 6.200, 9.600 y 13.200 €. Vende la fresa a 25 €/kg y tiene unos costes fijos de 1.500 €. A partir del coste total y del coste marginal, completa los ingresos y el beneficio y decide hasta dónde producirá la empresa."}, "tabla": {"columnas": [{"clave": "L", "va": "Temporers (L)", "es": "Temporeros (L)", "dato": true}, {"clave": "q", "va": "Maduixes (Q, kg)", "es": "Fresas (Q, kg)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CT": 1500, "IT": 0, "B": -1500}, {"L": 1, "q": 200, "CT": 4500, "CMg": 15, "IT": 5000, "B": 500, "IMg": 25, "RMg": 10}, {"L": 2, "q": 380, "CT": 7700, "CMg": 17.78, "IT": 9500, "B": 1800, "IMg": 25, "RMg": 7.22}, {"L": 3, "q": 540, "CT": 11100, "CMg": 21.25, "IT": 13500, "B": 2400, "IMg": 25, "RMg": 3.75}, {"L": 4, "q": 680, "CT": 14700, "CMg": 25.71, "IT": 17000, "B": 2300, "IMg": 25, "RMg": -0.71}]}, "preguntas": [{"id": "q_optima", "va": "D'acord amb la teoria neoclàssica (produir mentre IMg ≥ CMg), fins a quina quantitat produirà l'empresa?", "es": "Según la teoría neoclásica (producir mientras IMg ≥ CMg), ¿hasta qué cantidad producirá la empresa?", "respuesta": 540, "unidad": {"va": "kg", "es": "kg"}}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "q_optima": {"va": "Busca l'última fila on el cost marginal encara no supera l'ingrés marginal.", "es": "Busca la última fila en la que el coste marginal todavía no supera el ingreso marginal."}}}, {"id": "enunciats-4-costos", "origen": "Enunciats exercicis Tema 3, exercici 4 (apartat a, part de costos)", "tipo": 2, "enunciado": {"va": "Una agència de publicitat contracta comercials per vendre paquets de publicitat web. Amb 1, 2, 3 i 4 comercials ven 10, 22, 32 i 40 paquets, amb uns costos variables totals de 1.500, 3.100, 4.900 i 7.000 €. Cada paquet es ven a 300 € i els costos fixos de l'oficina són de 2.000 €. Completa la taula de costos.", "es": "Una agencia de publicidad contrata comerciales para vender paquetes de publicidad web. Con 1, 2, 3 y 4 comerciales vende 10, 22, 32 y 40 paquetes, con unos costes variables totales de 1.500, 3.100, 4.900 y 7.000 €. Cada paquete se vende a 300 € y los costes fijos de la oficina son de 2.000 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "L", "va": "Comercials (L)", "es": "Comerciales (L)", "dato": true}, {"clave": "q", "va": "Paquets venuts (Q)", "es": "Paquetes vendidos (Q)", "dato": true}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CV": 0, "CF": 2000, "CT": 2000}, {"L": 1, "q": 10, "CV": 1500, "CF": 2000, "CT": 3500, "CMe": 350, "CMg": 150}, {"L": 2, "q": 22, "CV": 3100, "CF": 2000, "CT": 5100, "CMe": 231.82, "CMg": 133.33}, {"L": 3, "q": 32, "CV": 4900, "CF": 2000, "CT": 6900, "CMe": 215.63, "CMg": 180}, {"L": 4, "q": 40, "CV": 7000, "CF": 2000, "CT": 9000, "CMe": 225, "CMg": 262.5}]}, "preguntas": [], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}}}, {"id": "enunciats-4-benefici", "origen": "Enunciats exercicis Tema 3, exercici 4 (apartats a i b, part d'ingressos i decisió)", "tipo": 3, "enunciado": {"va": "Una agència de publicitat contracta comercials per vendre paquets de publicitat web. Amb 1, 2, 3 i 4 comercials ven 10, 22, 32 i 40 paquets, amb uns costos variables totals de 1.500, 3.100, 4.900 i 7.000 €. Cada paquet es ven a 300 € i els costos fixos de l'oficina són de 2.000 €. A partir del cost total i del cost marginal, completa els ingressos i el benefici i decideix fins on produirà l'empresa.", "es": "Una agencia de publicidad contrata comerciales para vender paquetes de publicidad web. Con 1, 2, 3 y 4 comerciales vende 10, 22, 32 y 40 paquetes, con unos costes variables totales de 1.500, 3.100, 4.900 y 7.000 €. Cada paquete se vende a 300 € y los costes fijos de la oficina son de 2.000 €. A partir del coste total y del coste marginal, completa los ingresos y el beneficio y decide hasta dónde producirá la empresa."}, "tabla": {"columnas": [{"clave": "L", "va": "Comercials (L)", "es": "Comerciales (L)", "dato": true}, {"clave": "q", "va": "Paquets venuts (Q)", "es": "Paquetes vendidos (Q)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CT": 2000, "IT": 0, "B": -2000}, {"L": 1, "q": 10, "CT": 3500, "CMg": 150, "IT": 3000, "B": -500, "IMg": 300, "RMg": 150}, {"L": 2, "q": 22, "CT": 5100, "CMg": 133.33, "IT": 6600, "B": 1500, "IMg": 300, "RMg": 166.67}, {"L": 3, "q": 32, "CT": 6900, "CMg": 180, "IT": 9600, "B": 2700, "IMg": 300, "RMg": 120}, {"L": 4, "q": 40, "CT": 9000, "CMg": 262.5, "IT": 12000, "B": 3000, "IMg": 300, "RMg": 37.5}]}, "preguntas": [{"id": "q_optima", "va": "D'acord amb la teoria neoclàssica (produir mentre IMg ≥ CMg), fins a quina quantitat produirà l'empresa?", "es": "Según la teoría neoclásica (producir mientras IMg ≥ CMg), ¿hasta qué cantidad producirá la empresa?", "respuesta": 40, "unidad": {"va": "paquets", "es": "paquetes"}}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "q_optima": {"va": "Busca l'última fila on el cost marginal encara no supera l'ingrés marginal.", "es": "Busca la última fila en la que el coste marginal todavía no supera el ingreso marginal."}}}, {"id": "enunciats-5-costos", "origen": "Enunciats exercicis Tema 3, exercici 5 (apartat a, part de costos)", "tipo": 2, "enunciado": {"va": "La fàbrica MOTOR S.A. munta motors elèctrics que ven a 100 € cadascun. La nau té uns costos fixos de 5.000 €. Amb 1, 2, 3 i 4 operaris produeix 40, 90, 130 i 160 motors, amb uns costos variables totals de 2.000, 4.000, 7.200 i 11.400 €. Completa la taula de costos.", "es": "La fábrica MOTOR S.A. monta motores eléctricos que vende a 100 € cada uno. La nave tiene unos costes fijos de 5.000 €. Con 1, 2, 3 y 4 operarios produce 40, 90, 130 y 160 motores, con unos costes variables totales de 2.000, 4.000, 7.200 y 11.400 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "L", "va": "Operaris (L)", "es": "Operarios (L)", "dato": true}, {"clave": "q", "va": "Motors (Q)", "es": "Motores (Q)", "dato": true}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CV": 0, "CF": 5000, "CT": 5000}, {"L": 1, "q": 40, "CV": 2000, "CF": 5000, "CT": 7000, "CMe": 175, "CMg": 50}, {"L": 2, "q": 90, "CV": 4000, "CF": 5000, "CT": 9000, "CMe": 100, "CMg": 40}, {"L": 3, "q": 130, "CV": 7200, "CF": 5000, "CT": 12200, "CMe": 93.85, "CMg": 80}, {"L": 4, "q": 160, "CV": 11400, "CF": 5000, "CT": 16400, "CMe": 102.5, "CMg": 140}]}, "preguntas": [], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}}}, {"id": "enunciats-5-benefici", "origen": "Enunciats exercicis Tema 3, exercici 5 (apartats a i b, part d'ingressos i decisió)", "tipo": 3, "enunciado": {"va": "La fàbrica MOTOR S.A. munta motors elèctrics que ven a 100 € cadascun. La nau té uns costos fixos de 5.000 €. Amb 1, 2, 3 i 4 operaris produeix 40, 90, 130 i 160 motors, amb uns costos variables totals de 2.000, 4.000, 7.200 i 11.400 €. A partir del cost total i del cost marginal, completa els ingressos i el benefici i decideix fins on produirà l'empresa.", "es": "La fábrica MOTOR S.A. monta motores eléctricos que vende a 100 € cada uno. La nave tiene unos costes fijos de 5.000 €. Con 1, 2, 3 y 4 operarios produce 40, 90, 130 y 160 motores, con unos costes variables totales de 2.000, 4.000, 7.200 y 11.400 €. A partir del coste total y del coste marginal, completa los ingresos y el beneficio y decide hasta dónde producirá la empresa."}, "tabla": {"columnas": [{"clave": "L", "va": "Operaris (L)", "es": "Operarios (L)", "dato": true}, {"clave": "q", "va": "Motors (Q)", "es": "Motores (Q)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CT": 5000, "IT": 0, "B": -5000}, {"L": 1, "q": 40, "CT": 7000, "CMg": 50, "IT": 4000, "B": -3000, "IMg": 100, "RMg": 50}, {"L": 2, "q": 90, "CT": 9000, "CMg": 40, "IT": 9000, "B": 0, "IMg": 100, "RMg": 60}, {"L": 3, "q": 130, "CT": 12200, "CMg": 80, "IT": 13000, "B": 800, "IMg": 100, "RMg": 20}, {"L": 4, "q": 160, "CT": 16400, "CMg": 140, "IT": 16000, "B": -400, "IMg": 100, "RMg": -40}]}, "preguntas": [{"id": "q_optima", "va": "D'acord amb la teoria neoclàssica (produir mentre IMg ≥ CMg), fins a quina quantitat produirà l'empresa?", "es": "Según la teoría neoclásica (producir mientras IMg ≥ CMg), ¿hasta qué cantidad producirá la empresa?", "respuesta": 130, "unidad": {"va": "motors", "es": "motores"}}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "q_optima": {"va": "Busca l'última fila on el cost marginal encara no supera l'ingrés marginal.", "es": "Busca la última fila en la que el coste marginal todavía no supera el ingreso marginal."}}}, {"id": "enunciats-6-costos", "origen": "Enunciats exercicis Tema 3, exercici 6 (apartat a, part de costos)", "tipo": 2, "enunciado": {"va": "Una planta embotella aigua mineral en palets que ven a 50 € cadascun. Té uns costos fixos de manteniment de 2.000 €. Amb 1, 2, 3 i 4 torns produeix 100, 220, 320 i 380 palets, amb uns costos variables totals de 3.000, 6.600, 10.600 i 14.200 €. Completa la taula de costos.", "es": "Una planta embotella agua mineral en palés que vende a 50 € cada uno. Tiene unos costes fijos de mantenimiento de 2.000 €. Con 1, 2, 3 y 4 turnos produce 100, 220, 320 y 380 palés, con unos costes variables totales de 3.000, 6.600, 10.600 y 14.200 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "L", "va": "Torns (L)", "es": "Turnos (L)", "dato": true}, {"clave": "q", "va": "Palets (Q)", "es": "Palés (Q)", "dato": true}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CV": 0, "CF": 2000, "CT": 2000}, {"L": 1, "q": 100, "CV": 3000, "CF": 2000, "CT": 5000, "CMe": 50, "CMg": 30}, {"L": 2, "q": 220, "CV": 6600, "CF": 2000, "CT": 8600, "CMe": 39.09, "CMg": 30}, {"L": 3, "q": 320, "CV": 10600, "CF": 2000, "CT": 12600, "CMe": 39.38, "CMg": 40}, {"L": 4, "q": 380, "CV": 14200, "CF": 2000, "CT": 16200, "CMe": 42.63, "CMg": 60}]}, "preguntas": [], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}}}, {"id": "enunciats-6-benefici", "origen": "Enunciats exercicis Tema 3, exercici 6 (apartats a i b, part d'ingressos i decisió)", "tipo": 3, "enunciado": {"va": "Una planta embotella aigua mineral en palets que ven a 50 € cadascun. Té uns costos fixos de manteniment de 2.000 €. Amb 1, 2, 3 i 4 torns produeix 100, 220, 320 i 380 palets, amb uns costos variables totals de 3.000, 6.600, 10.600 i 14.200 €. A partir del cost total i del cost marginal, completa els ingressos i el benefici i decideix fins on produirà l'empresa.", "es": "Una planta embotella agua mineral en palés que vende a 50 € cada uno. Tiene unos costes fijos de mantenimiento de 2.000 €. Con 1, 2, 3 y 4 turnos produce 100, 220, 320 y 380 palés, con unos costes variables totales de 3.000, 6.600, 10.600 y 14.200 €. A partir del coste total y del coste marginal, completa los ingresos y el beneficio y decide hasta dónde producirá la empresa."}, "tabla": {"columnas": [{"clave": "L", "va": "Torns (L)", "es": "Turnos (L)", "dato": true}, {"clave": "q", "va": "Palets (Q)", "es": "Palés (Q)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"L": 0, "q": 0, "CT": 2000, "IT": 0, "B": -2000}, {"L": 1, "q": 100, "CT": 5000, "CMg": 30, "IT": 5000, "B": 0, "IMg": 50, "RMg": 20}, {"L": 2, "q": 220, "CT": 8600, "CMg": 30, "IT": 11000, "B": 2400, "IMg": 50, "RMg": 20}, {"L": 3, "q": 320, "CT": 12600, "CMg": 40, "IT": 16000, "B": 3400, "IMg": 50, "RMg": 10}, {"L": 4, "q": 380, "CT": 16200, "CMg": 60, "IT": 19000, "B": 2800, "IMg": 50, "RMg": -10}]}, "preguntas": [{"id": "q_optima", "va": "D'acord amb la teoria neoclàssica (produir mentre IMg ≥ CMg), fins a quina quantitat produirà l'empresa?", "es": "Según la teoría neoclásica (producir mientras IMg ≥ CMg), ¿hasta qué cantidad producirá la empresa?", "respuesta": 320, "unidad": {"va": "palets", "es": "palés"}}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "q_optima": {"va": "Busca l'última fila on el cost marginal encara no supera l'ingrés marginal.", "es": "Busca la última fila en la que el coste marginal todavía no supera el ingreso marginal."}}}, {"id": "enunciats-7-costos", "origen": "Enunciats exercicis Tema 3, exercici 7 (a i b) (apartat a, part de costos)", "tipo": 2, "enunciado": {"va": "Bikelon, l'empresa de bicicletes de Melón Fusk, ven cada bicicleta a 200 € i paga un lloguer de 1.000 €. El cost variable total per a 1, 2, 3, 4 i 5 bicicletes és de 150, 320, 520, 800 i 1.200 €. Completa la taula de costos.", "es": "Bikelon, la empresa de bicicletas de Melón Fusk, vende cada bicicleta a 200 € y paga un alquiler de 1.000 €. El coste variable total para 1, 2, 3, 4 y 5 bicicletas es de 150, 320, 520, 800 y 1.200 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}], "filas": [{"q": 0, "CV": 0, "CF": 1000, "CT": 1000}, {"q": 1, "CV": 150, "CF": 1000, "CT": 1150, "CVMe": 150, "CMe": 1150, "CMg": 150}, {"q": 2, "CV": 320, "CF": 1000, "CT": 1320, "CVMe": 160, "CMe": 660, "CMg": 170}, {"q": 3, "CV": 520, "CF": 1000, "CT": 1520, "CVMe": 173.33, "CMe": 506.67, "CMg": 200}, {"q": 4, "CV": 800, "CF": 1000, "CT": 1800, "CVMe": 200, "CMe": 450, "CMg": 280}, {"q": 5, "CV": 1200, "CF": 1000, "CT": 2200, "CVMe": 240, "CMe": 440, "CMg": 400}]}, "preguntas": [], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}}}, {"id": "enunciats-7-benefici", "origen": "Enunciats exercicis Tema 3, exercici 7 (a i b) (apartats a i b, part d'ingressos i decisió)", "tipo": 3, "enunciado": {"va": "Bikelon, l'empresa de bicicletes de Melón Fusk, ven cada bicicleta a 200 € i paga un lloguer de 1.000 €. El cost variable total per a 1, 2, 3, 4 i 5 bicicletes és de 150, 320, 520, 800 i 1.200 €. A partir del cost total i del cost marginal, completa els ingressos i el benefici i decideix fins on produirà l'empresa.", "es": "Bikelon, la empresa de bicicletas de Melón Fusk, vende cada bicicleta a 200 € y paga un alquiler de 1.000 €. El coste variable total para 1, 2, 3, 4 y 5 bicicletas es de 150, 320, 520, 800 y 1.200 €. A partir del coste total y del coste marginal, completa los ingresos y el beneficio y decide hasta dónde producirá la empresa."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"q": 0, "CT": 1000, "IT": 0, "B": -1000}, {"q": 1, "CT": 1150, "CMg": 150, "IT": 200, "B": -950, "IMg": 200, "RMg": 50}, {"q": 2, "CT": 1320, "CMg": 170, "IT": 400, "B": -920, "IMg": 200, "RMg": 30}, {"q": 3, "CT": 1520, "CMg": 200, "IT": 600, "B": -920, "IMg": 200, "RMg": 0}, {"q": 4, "CT": 1800, "CMg": 280, "IT": 800, "B": -1000, "IMg": 200, "RMg": -80}, {"q": 5, "CT": 2200, "CMg": 400, "IT": 1000, "B": -1200, "IMg": 200, "RMg": -200}]}, "preguntas": [{"id": "q_optima", "va": "D'acord amb la teoria neoclàssica (produir mentre IMg ≥ CMg), fins a quina quantitat produirà l'empresa?", "es": "Según la teoría neoclásica (producir mientras IMg ≥ CMg), ¿hasta qué cantidad producirá la empresa?", "respuesta": 3, "unidad": {"va": "bicicletes", "es": "bicicletas"}}, {"id": "beneficis", "va": "Amb aquestes dades, l'empresa obté beneficis positius en algun nivell de producció?", "es": "Con estos datos, ¿obtiene la empresa beneficios positivos en algún nivel de producción?", "opciones": ["Sí", "No"], "respuesta": "No"}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "q_optima": {"va": "Busca l'última fila on el cost marginal encara no supera l'ingrés marginal.", "es": "Busca la última fila en la que el coste marginal todavía no supera el ingreso marginal."}}}, {"id": "enunciats-7c", "origen": "Enunciats exercicis Tema 3, exercici 7 (apartat c)", "tipo": 3, "enunciado": {"va": "Bikelon ven cada bicicleta a 200 € i paga un lloguer de 1.000 €. Després d'ampliar la fàbrica, el cost variable unitari és constant: 150 € per bicicleta. Elabora de nou la taula de costos i ingressos (de 0 a 5 bicicletes) i interpreta el resultat.", "es": "Bikelon vende cada bicicleta a 200 € y paga un alquiler de 1.000 €. Tras ampliar la fábrica, el coste variable unitario es constante: 150 € por bicicleta. Elabora de nuevo la tabla de costes e ingresos (de 0 a 5 bicicletas) e interpreta el resultado."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"q": 0, "CF": 1000, "CV": 0, "CT": 1000, "IT": 0, "B": -1000}, {"q": 1, "CF": 1000, "CV": 150, "CVMe": 150, "CT": 1150, "CMe": 1150, "IT": 200, "B": -950, "IMg": 200, "CMg": 150, "RMg": 50}, {"q": 2, "CF": 1000, "CV": 300, "CVMe": 150, "CT": 1300, "CMe": 650, "IT": 400, "B": -900, "IMg": 200, "CMg": 150, "RMg": 50}, {"q": 3, "CF": 1000, "CV": 450, "CVMe": 150, "CT": 1450, "CMe": 483.33, "IT": 600, "B": -850, "IMg": 200, "CMg": 150, "RMg": 50}, {"q": 4, "CF": 1000, "CV": 600, "CVMe": 150, "CT": 1600, "CMe": 400, "IT": 800, "B": -800, "IMg": 200, "CMg": 150, "RMg": 50}, {"q": 5, "CF": 1000, "CV": 750, "CVMe": 150, "CT": 1750, "CMe": 350, "IT": 1000, "B": -750, "IMg": 200, "CMg": 150, "RMg": 50}]}, "preguntas": [{"id": "umbral", "va": "Quin és el llindar de rendibilitat (unitats amb què el benefici és zero)?", "es": "¿Cuál es el umbral de rentabilidad (unidades con las que el beneficio es cero)?", "respuesta": 20, "unidad": {"va": "bicicletes", "es": "bicicletas"}}, {"id": "fins_on", "va": "Fins on li interessa produir a aquesta empresa?", "es": "¿Hasta dónde le interesa producir a esta empresa?", "opciones": [{"id": "cmg", "va": "Fins on el cost marginal iguala l'ingrés marginal", "es": "Hasta donde el coste marginal iguala al ingreso marginal"}, {"id": "capacitat", "va": "Fins al límit de la seua capacitat (o de la demanda): cada unitat deixa el mateix marge", "es": "Hasta el límite de su capacidad (o de la demanda): cada unidad deja el mismo margen"}, {"id": "umbral", "va": "Just fins al llindar de rendibilitat", "es": "Justo hasta el umbral de rentabilidad"}], "respuesta": "capacitat"}], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CV": {"va": "Multiplica el cost variable de cada unitat per les unitats produïdes.", "es": "Multiplica el coste variable de cada unidad por las unidades producidas."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "umbral": {"va": "Cada unitat deixa un marge de preu menys cost variable unitari: quantes en calen per cobrir el cost fix?", "es": "Cada unidad deja un margen de precio menos coste variable unitario: ¿cuántas hacen falta para cubrir el coste fijo?"}, "fins_on": {"va": "Mira si el cost marginal arriba mai a superar el preu.", "es": "Fíjate en si el coste marginal llega alguna vez a superar el precio."}}}, {"id": "examen-2-costos", "origen": "Examen T.3, exercici 2 (a i b) (apartat a, part de costos)", "tipo": 2, "enunciado": {"va": "Amasdron fabrica drons de repartiment que ven a 150 € cadascun. Lloga una nau per 200 €. Per la menuda grandària de la nau, el cost variable total creix així: 1 dron, 80 €; 2, 170 €; 3, 270 €; 4, 380 €; 5, 500 €; 6, 650 €; 7, 850 €. Completa la taula de costos.", "es": "Amasdron fabrica drones de reparto que vende a 150 € cada uno. Alquila una nave por 200 €. Por el pequeño tamaño de la nave, el coste variable total crece así: 1 dron, 80 €; 2, 170 €; 3, 270 €; 4, 380 €; 5, 500 €; 6, 650 €; 7, 850 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}], "filas": [{"q": 0, "CV": 0, "CF": 200, "CT": 200}, {"q": 1, "CV": 80, "CF": 200, "CVMe": 80, "CT": 280, "CMe": 280, "CMg": 80}, {"q": 2, "CV": 170, "CF": 200, "CVMe": 85, "CT": 370, "CMe": 185, "CMg": 90}, {"q": 3, "CV": 270, "CF": 200, "CVMe": 90, "CT": 470, "CMe": 156.67, "CMg": 100}, {"q": 4, "CV": 380, "CF": 200, "CVMe": 95, "CT": 580, "CMe": 145, "CMg": 110}, {"q": 5, "CV": 500, "CF": 200, "CVMe": 100, "CT": 700, "CMe": 140, "CMg": 120}, {"q": 6, "CV": 650, "CF": 200, "CVMe": 108.33, "CT": 850, "CMe": 141.67, "CMg": 150}, {"q": 7, "CV": 850, "CF": 200, "CVMe": 121.43, "CT": 1050, "CMe": 150, "CMg": 200}]}, "preguntas": [], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}}}, {"id": "examen-2-benefici", "origen": "Examen T.3, exercici 2 (a i b) (apartats a i b, part d'ingressos i decisió)", "tipo": 3, "enunciado": {"va": "Amasdron fabrica drons de repartiment que ven a 150 € cadascun. Lloga una nau per 200 €. Per la menuda grandària de la nau, el cost variable total creix així: 1 dron, 80 €; 2, 170 €; 3, 270 €; 4, 380 €; 5, 500 €; 6, 650 €; 7, 850 €. A partir del cost total i del cost marginal, completa els ingressos i el benefici i decideix fins on produirà l'empresa.", "es": "Amasdron fabrica drones de reparto que vende a 150 € cada uno. Alquila una nave por 200 €. Por el pequeño tamaño de la nave, el coste variable total crece así: 1 dron, 80 €; 2, 170 €; 3, 270 €; 4, 380 €; 5, 500 €; 6, 650 €; 7, 850 €. A partir del coste total y del coste marginal, completa los ingresos y el beneficio y decide hasta dónde producirá la empresa."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"q": 0, "CT": 200, "IT": 0, "B": -200}, {"q": 1, "CT": 280, "CMg": 80, "IT": 150, "B": -130, "IMg": 150, "RMg": 70}, {"q": 2, "CT": 370, "CMg": 90, "IT": 300, "B": -70, "IMg": 150, "RMg": 60}, {"q": 3, "CT": 470, "CMg": 100, "IT": 450, "B": -20, "IMg": 150, "RMg": 50}, {"q": 4, "CT": 580, "CMg": 110, "IT": 600, "B": 20, "IMg": 150, "RMg": 40}, {"q": 5, "CT": 700, "CMg": 120, "IT": 750, "B": 50, "IMg": 150, "RMg": 30}, {"q": 6, "CT": 850, "CMg": 150, "IT": 900, "B": 50, "IMg": 150, "RMg": 0}, {"q": 7, "CT": 1050, "CMg": 200, "IT": 1050, "B": 0, "IMg": 150, "RMg": -50}]}, "preguntas": [{"id": "q_optima", "va": "D'acord amb la teoria neoclàssica (produir mentre IMg ≥ CMg), fins a quina quantitat produirà l'empresa?", "es": "Según la teoría neoclásica (producir mientras IMg ≥ CMg), ¿hasta qué cantidad producirá la empresa?", "respuesta": 6, "unidad": {"va": "drons", "es": "drones"}}, {"id": "b_max", "va": "Quin és el benefici màxim?", "es": "¿Cuál es el beneficio máximo?", "respuesta": 50, "unidad": {"va": "€", "es": "€"}}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "q_optima": {"va": "Busca l'última fila on el cost marginal encara no supera l'ingrés marginal.", "es": "Busca la última fila en la que el coste marginal todavía no supera el ingreso marginal."}}}, {"id": "examen-2c", "origen": "Examen T.3, exercici 2 (apartat c)", "tipo": 3, "enunciado": {"va": "Amasdron es muda a una nau sense problemes d'espai i té subministrament constant de maquinària. El cost variable unitari passa a ser constant: 100 € per dron, i el cost marginal també és de 100 €. Els costos fixos (200 €) i el preu (150 €) no canvien. Elabora de nou la taula (de 0 a 7 drons) i interpreta el resultat.", "es": "Amasdron se traslada a una nave sin problemas de espacio y tiene suministro constante de maquinaria. El coste variable unitario pasa a ser constante: 100 € por dron, y el coste marginal también es de 100 €. Los costes fijos (200 €) y el precio (150 €) no cambian. Elabora de nuevo la tabla (de 0 a 7 drones) e interpreta el resultado."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}], "filas": [{"q": 0, "CF": 200, "CV": 0, "CT": 200, "IT": 0, "B": -200}, {"q": 1, "CF": 200, "CV": 100, "CVMe": 100, "CT": 300, "CMe": 300, "IT": 150, "B": -150, "IMg": 150, "CMg": 100, "RMg": 50}, {"q": 2, "CF": 200, "CV": 200, "CVMe": 100, "CT": 400, "CMe": 200, "IT": 300, "B": -100, "IMg": 150, "CMg": 100, "RMg": 50}, {"q": 3, "CF": 200, "CV": 300, "CVMe": 100, "CT": 500, "CMe": 166.67, "IT": 450, "B": -50, "IMg": 150, "CMg": 100, "RMg": 50}, {"q": 4, "CF": 200, "CV": 400, "CVMe": 100, "CT": 600, "CMe": 150, "IT": 600, "B": 0, "IMg": 150, "CMg": 100, "RMg": 50}, {"q": 5, "CF": 200, "CV": 500, "CVMe": 100, "CT": 700, "CMe": 140, "IT": 750, "B": 50, "IMg": 150, "CMg": 100, "RMg": 50}, {"q": 6, "CF": 200, "CV": 600, "CVMe": 100, "CT": 800, "CMe": 133.33, "IT": 900, "B": 100, "IMg": 150, "CMg": 100, "RMg": 50}, {"q": 7, "CF": 200, "CV": 700, "CVMe": 100, "CT": 900, "CMe": 128.57, "IT": 1050, "B": 150, "IMg": 150, "CMg": 100, "RMg": 50}]}, "preguntas": [{"id": "umbral", "va": "Quin és el llindar de rendibilitat (unitats amb què el benefici és zero)?", "es": "¿Cuál es el umbral de rentabilidad (unidades con las que el beneficio es cero)?", "respuesta": 4, "unidad": {"va": "drons", "es": "drones"}}, {"id": "fins_on", "va": "Fins on li interessa produir a aquesta empresa?", "es": "¿Hasta dónde le interesa producir a esta empresa?", "opciones": [{"id": "cmg", "va": "Fins on el cost marginal iguala l'ingrés marginal", "es": "Hasta donde el coste marginal iguala al ingreso marginal"}, {"id": "capacitat", "va": "Fins al límit de la seua capacitat (o de la demanda): cada unitat deixa el mateix marge", "es": "Hasta el límite de su capacidad (o de la demanda): cada unidad deja el mismo margen"}, {"id": "umbral", "va": "Just fins al llindar de rendibilitat", "es": "Justo hasta el umbral de rentabilidad"}], "respuesta": "capacitat"}], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CV": {"va": "Multiplica el cost variable de cada unitat per les unitats produïdes.", "es": "Multiplica el coste variable de cada unidad por las unidades producidas."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "umbral": {"va": "Cada unitat deixa un marge de preu menys cost variable unitari: quantes en calen per cobrir el cost fix?", "es": "Cada unidad deja un margen de precio menos coste variable unitario: ¿cuántas hacen falta para cubrir el coste fijo?"}, "fins_on": {"va": "Mira si el cost marginal arriba mai a superar el preu.", "es": "Fíjate en si el coste marginal llega alguna vez a superar el precio."}}}, {"id": "apunts-neoclassica-costos", "origen": "Tema 3 (apunts revisats), 4.1.b: quadre de costos de l'empresa neoclàssica", "tipo": 2, "enunciado": {"va": "Una empresa ven el seu producte a un preu de mercat de 85 €. Té uns costos fixos de 200 € i el cost variable total per a 1, 2, …, 10 unitats és de 41, 68, 87, 104, 125, 156, 203, 272, 369 i 500 €. Completa la taula de costos.", "es": "Una empresa vende su producto a un precio de mercado de 85 €. Tiene unos costes fijos de 200 € y el coste variable total para 1, 2, …, 10 unidades es de 41, 68, 87, 104, 125, 156, 203, 272, 369 y 500 €. Completa la tabla de costes."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}, {"clave": "CFMe", "va": "Cost fix mitjà (CFMe)", "es": "Coste fijo medio (CFMe)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}], "filas": [{"q": 0, "CF": 200, "CV": 0, "CT": 200}, {"q": 1, "CF": 200, "CV": 41, "CT": 241, "CMg": 41, "CFMe": 200, "CVMe": 41, "CMe": 241}, {"q": 2, "CF": 200, "CV": 68, "CT": 268, "CMg": 27, "CFMe": 100, "CVMe": 34, "CMe": 134}, {"q": 3, "CF": 200, "CV": 87, "CT": 287, "CMg": 19, "CFMe": 66.67, "CVMe": 29, "CMe": 95.67}, {"q": 4, "CF": 200, "CV": 104, "CT": 304, "CMg": 17, "CFMe": 50, "CVMe": 26, "CMe": 76}, {"q": 5, "CF": 200, "CV": 125, "CT": 325, "CMg": 21, "CFMe": 40, "CVMe": 25, "CMe": 65}, {"q": 6, "CF": 200, "CV": 156, "CT": 356, "CMg": 31, "CFMe": 33.33, "CVMe": 26, "CMe": 59.33}, {"q": 7, "CF": 200, "CV": 203, "CT": 403, "CMg": 47, "CFMe": 28.57, "CVMe": 29, "CMe": 57.57}, {"q": 8, "CF": 200, "CV": 272, "CT": 472, "CMg": 69, "CFMe": 25, "CVMe": 34, "CMe": 59}, {"q": 9, "CF": 200, "CV": 369, "CT": 569, "CMg": 97, "CFMe": 22.22, "CVMe": 41, "CMe": 63.22}, {"q": 10, "CF": 200, "CV": 500, "CT": 700, "CMg": 131, "CFMe": 20, "CVMe": 50, "CMe": 70}]}, "preguntas": [{"id": "cme_min", "va": "Amb quina quantitat el cost total mitjà és mínim?", "es": "¿Con qué cantidad el coste total medio es mínimo?", "respuesta": 7, "unidad": {"va": "unitats", "es": "unidades"}}], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CMg": {"va": "Quant augmenta el cost total respecte de la fila anterior, dividit entre les unitats que augmenta la producció.", "es": "Cuánto aumenta el coste total respecto a la fila anterior, dividido entre las unidades que aumenta la producción."}, "CFMe": {"va": "Divideix el cost fix entre la quantitat produïda.", "es": "Divide el coste fijo entre la cantidad producida."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "cme_min": {"va": "Busca la fila on la columna CMe deixa de baixar i comença a pujar.", "es": "Busca la fila en la que la columna CMe deja de bajar y empieza a subir."}}}, {"id": "apunts-neoclassica-benefici", "origen": "Tema 3 (apunts revisats), 4.1.b: quadre de costos de l'empresa neoclàssica", "tipo": 3, "enunciado": {"va": "Amb la mateixa empresa (preu 85 €, CF 200 €), completa els ingressos i el benefici i digues fins on produirà segons la teoria neoclàssica.", "es": "Con la misma empresa (precio 85 €, CF 200 €), completa los ingresos y el beneficio y di hasta dónde producirá según la teoría neoclásica."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": true}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": true}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}], "filas": [{"q": 0, "CT": 200, "IT": 0, "B": -200}, {"q": 1, "CT": 241, "CMg": 41, "IT": 85, "IMg": 85, "RMg": 44, "B": -156}, {"q": 2, "CT": 268, "CMg": 27, "IT": 170, "IMg": 85, "RMg": 58, "B": -98}, {"q": 3, "CT": 287, "CMg": 19, "IT": 255, "IMg": 85, "RMg": 66, "B": -32}, {"q": 4, "CT": 304, "CMg": 17, "IT": 340, "IMg": 85, "RMg": 68, "B": 36}, {"q": 5, "CT": 325, "CMg": 21, "IT": 425, "IMg": 85, "RMg": 64, "B": 100}, {"q": 6, "CT": 356, "CMg": 31, "IT": 510, "IMg": 85, "RMg": 54, "B": 154}, {"q": 7, "CT": 403, "CMg": 47, "IT": 595, "IMg": 85, "RMg": 38, "B": 192}, {"q": 8, "CT": 472, "CMg": 69, "IT": 680, "IMg": 85, "RMg": 16, "B": 208}, {"q": 9, "CT": 569, "CMg": 97, "IT": 765, "IMg": 85, "RMg": -12, "B": 196}, {"q": 10, "CT": 700, "CMg": 131, "IT": 850, "IMg": 85, "RMg": -46, "B": 150}]}, "preguntas": [{"id": "q_optima", "va": "Fins a quina quantitat produirà l'empresa?", "es": "¿Hasta qué cantidad producirá la empresa?", "respuesta": 8, "unidad": {"va": "unitats", "es": "unidades"}}, {"id": "b_max", "va": "Quin és el benefici màxim?", "es": "¿Cuál es el beneficio máximo?", "respuesta": 208, "unidad": {"va": "€", "es": "€"}}], "pistas": {"IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "q_optima": {"va": "Produeix mentre el rendiment marginal (IMg − CMg) siga positiu.", "es": "Produce mientras el rendimiento marginal (IMg − CMg) sea positivo."}, "b_max": {"va": "Mira la columna B a la quantitat òptima.", "es": "Mira la columna B en la cantidad óptima."}}}, {"id": "apunts-economia-politica", "origen": "Tema 3 (apunts revisats), 4.2.b: quadre de costos segons l'economia política", "tipo": 3, "enunciado": {"va": "Una empresa ven el seu producte a 20 €. Té uns costos fixos de 200 € i un cost variable de 15 € per unitat, constant. Completa la taula per a 0, 10, 20, …, 100 unitats.", "es": "Una empresa vende su producto a 20 €. Tiene unos costes fijos de 200 € y un coste variable de 15 € por unidad, constante. Completa la tabla para 0, 10, 20, …, 100 unidades."}, "tabla": {"columnas": [{"clave": "q", "va": "Quantitat (Q)", "es": "Cantidad (Q)", "dato": true}, {"clave": "CF", "va": "Cost fix (CF)", "es": "Coste fijo (CF)", "dato": false}, {"clave": "CV", "va": "Cost variable (CV)", "es": "Coste variable (CV)", "dato": false}, {"clave": "CT", "va": "Cost total (CT)", "es": "Coste total (CT)", "dato": false}, {"clave": "CMg", "va": "Cost marginal (CMg)", "es": "Coste marginal (CMg)", "dato": false}, {"clave": "CFMe", "va": "Cost fix mitjà (CFMe)", "es": "Coste fijo medio (CFMe)", "dato": false}, {"clave": "CVMe", "va": "Cost variable mitjà (CVMe)", "es": "Coste variable medio (CVMe)", "dato": false}, {"clave": "CMe", "va": "Cost total mitjà (CMe)", "es": "Coste total medio (CMe)", "dato": false}, {"clave": "IT", "va": "Ingrés total (IT)", "es": "Ingreso total (IT)", "dato": false}, {"clave": "IMg", "va": "Ingrés marginal (IMg)", "es": "Ingreso marginal (IMg)", "dato": false}, {"clave": "RMg", "va": "Rendiment marginal (IMg − CMg)", "es": "Rendimiento marginal (IMg − CMg)", "dato": false}, {"clave": "B", "va": "Benefici (B)", "es": "Beneficio (B)", "dato": false}], "filas": [{"q": 0, "CF": 200, "CV": 0, "CT": 200, "IT": 0, "B": -200}, {"q": 10, "CF": 200, "CV": 150, "CT": 350, "CMg": 15, "CFMe": 20, "CVMe": 15, "CMe": 35, "IT": 200, "IMg": 20, "RMg": 5, "B": -150}, {"q": 20, "CF": 200, "CV": 300, "CT": 500, "CMg": 15, "CFMe": 10, "CVMe": 15, "CMe": 25, "IT": 400, "IMg": 20, "RMg": 5, "B": -100}, {"q": 30, "CF": 200, "CV": 450, "CT": 650, "CMg": 15, "CFMe": 6.67, "CVMe": 15, "CMe": 21.67, "IT": 600, "IMg": 20, "RMg": 5, "B": -50}, {"q": 40, "CF": 200, "CV": 600, "CT": 800, "CMg": 15, "CFMe": 5, "CVMe": 15, "CMe": 20, "IT": 800, "IMg": 20, "RMg": 5, "B": 0}, {"q": 50, "CF": 200, "CV": 750, "CT": 950, "CMg": 15, "CFMe": 4, "CVMe": 15, "CMe": 19, "IT": 1000, "IMg": 20, "RMg": 5, "B": 50}, {"q": 60, "CF": 200, "CV": 900, "CT": 1100, "CMg": 15, "CFMe": 3.33, "CVMe": 15, "CMe": 18.33, "IT": 1200, "IMg": 20, "RMg": 5, "B": 100}, {"q": 70, "CF": 200, "CV": 1050, "CT": 1250, "CMg": 15, "CFMe": 2.86, "CVMe": 15, "CMe": 17.86, "IT": 1400, "IMg": 20, "RMg": 5, "B": 150}, {"q": 80, "CF": 200, "CV": 1200, "CT": 1400, "CMg": 15, "CFMe": 2.5, "CVMe": 15, "CMe": 17.5, "IT": 1600, "IMg": 20, "RMg": 5, "B": 200}, {"q": 90, "CF": 200, "CV": 1350, "CT": 1550, "CMg": 15, "CFMe": 2.22, "CVMe": 15, "CMe": 17.22, "IT": 1800, "IMg": 20, "RMg": 5, "B": 250}, {"q": 100, "CF": 200, "CV": 1500, "CT": 1700, "CMg": 15, "CFMe": 2, "CVMe": 15, "CMe": 17, "IT": 2000, "IMg": 20, "RMg": 5, "B": 300}]}, "preguntas": [{"id": "umbral", "va": "Quin és el llindar de rendibilitat?", "es": "¿Cuál es el umbral de rentabilidad?", "respuesta": 40, "unidad": {"va": "unitats", "es": "unidades"}}, {"id": "fins_on", "va": "Fins on li interessa produir a aquesta empresa?", "es": "¿Hasta dónde le interesa producir a esta empresa?", "opciones": [{"id": "cmg", "va": "Fins on el cost marginal iguala l'ingrés marginal", "es": "Hasta donde el coste marginal iguala al ingreso marginal"}, {"id": "capacitat", "va": "Fins al límit de la seua capacitat (o de la demanda): cada unitat deixa el mateix marge", "es": "Hasta el límite de su capacidad (o de la demanda): cada unidad deja el mismo margen"}, {"id": "umbral", "va": "Just fins al llindar de rendibilitat", "es": "Justo hasta el umbral de rentabilidad"}], "respuesta": "capacitat"}], "pistas": {"CF": {"va": "El cost fix no canvia amb la quantitat produïda; també existeix quan Q = 0.", "es": "El coste fijo no cambia con la cantidad producida; también existe cuando Q = 0."}, "CV": {"va": "Multiplica el cost variable de cada unitat per les unitats produïdes.", "es": "Multiplica el coste variable de cada unidad por las unidades producidas."}, "CT": {"va": "CT = CF + CV.", "es": "CT = CF + CV."}, "CFMe": {"va": "Divideix el cost fix entre la quantitat produïda.", "es": "Divide el coste fijo entre la cantidad producida."}, "CVMe": {"va": "Divideix el cost variable entre la quantitat produïda.", "es": "Divide el coste variable entre la cantidad producida."}, "CMe": {"va": "Divideix el cost total entre la quantitat produïda.", "es": "Divide el coste total entre la cantidad producida."}, "IT": {"va": "Multiplica el preu per les unitats venudes.", "es": "Multiplica el precio por las unidades vendidas."}, "IMg": {"va": "L'empresa accepta el preu: cada unitat addicional aporta sempre el mateix ingrés.", "es": "La empresa acepta el precio: cada unidad adicional aporta siempre el mismo ingreso."}, "RMg": {"va": "Resta el cost marginal a l'ingrés marginal de la mateixa fila.", "es": "Resta el coste marginal al ingreso marginal de la misma fila."}, "B": {"va": "B = IT − CT.", "es": "B = IT − CT."}, "CMg": {"va": "Les files van de 10 en 10: divideix l'augment del cost total entre 10.", "es": "Las filas van de 10 en 10: divide el aumento del coste total entre 10."}, "umbral": {"va": "Busca la quantitat on el benefici passa a ser zero.", "es": "Busca la cantidad en la que el beneficio pasa a ser cero."}, "fins_on": {"va": "Mira si el cost marginal arriba mai a superar el preu.", "es": "Fíjate en si el coste marginal llega alguna vez a superar el precio."}}}, {"id": "enunciats-ef1", "origen": "Enunciats exercicis Tema 3, eficiència tècnica i econòmica, exercici 1 (Metallfort)", "tipo": 4, "enunciado": {"va": "L'empresa Metallfort vol produir 1.000 peces metàl·liques. Té quatre tecnologies: A (4 treballadors, 8 màquines), B (6, 5), C (5, 9) i D (3, 10). El cost del treball és de 30 €/hora i el de la màquina, de 50 €/hora. a) Quines tecnologies són tècnicament ineficients? b) Calcula el cost de les eficients i digues quina ha de triar l'empresa. c) Si el preu de les màquines baixa a 10 €/hora, canvia la tecnologia escollida?", "es": "La empresa Metallfort quiere producir 1.000 piezas metálicas. Tiene cuatro tecnologías: A (4 trabajadores, 8 máquinas), B (6, 5), C (5, 9) y D (3, 10). El coste del trabajo es de 30 €/hora y el de la máquina, de 50 €/hora. a) ¿Qué tecnologías son técnicamente ineficientes? b) Calcula el coste de las eficientes y di cuál debe elegir la empresa. c) Si el precio de las máquinas baja a 10 €/hora, ¿cambia la tecnología elegida?"}, "tabla": {"columnas": [{"clave": "tecnologia", "va": "Tecnologia", "es": "Tecnología", "dato": true}, {"clave": "L", "va": "Treball (L)", "es": "Trabajo (L)", "dato": true}, {"clave": "K", "va": "Capital (K)", "es": "Capital (K)", "dato": true}, {"clave": "coste", "va": "Cost total (w = 30 €, r = 50 €)", "es": "Coste total (w = 30 €, r = 50 €)", "dato": false}, {"clave": "coste2", "va": "Cost total (w = 30 €, r = 10 €)", "es": "Coste total (w = 30 €, r = 10 €)", "dato": false}], "filas": [{"tecnologia": "A", "L": 4, "K": 8, "coste": 520, "coste2": 200}, {"tecnologia": "B", "L": 6, "K": 5, "coste": 430, "coste2": 230}, {"tecnologia": "C", "L": 5, "K": 9, "coste": 600, "coste2": 240}, {"tecnologia": "D", "L": 3, "K": 10, "coste": 590, "coste2": 190}]}, "preguntas": [{"id": "ineficients", "va": "Quines tecnologies són tècnicament ineficients?", "es": "¿Qué tecnologías son técnicamente ineficientes?", "opciones": ["A", "B", "C", "D"], "multiple": true, "respuesta": ["C"]}, {"id": "eficient_economica", "va": "Quina tecnologia és econòmicament eficient (w = 30 €, r = 50 €)?", "es": "¿Qué tecnología es económicamente eficiente (w = 30 €, r = 50 €)?", "opciones": ["A", "B", "D"], "respuesta": "B"}, {"id": "eficient_economica2", "va": "Si el preu de la màquina baixa a 10 €/hora (el treball continua a 30 €), quina tecnologia és ara econòmicament eficient?", "es": "Si el precio de la máquina baja a 10 €/hora (el trabajo sigue a 30 €), ¿qué tecnología es ahora económicamente eficiente?", "opciones": ["A", "B", "D"], "respuesta": "D"}], "pistas": {"ineficients": {"va": "Una tecnologia és ineficient si una altra n'obté almenys la mateixa producció amb menys d'un factor i no més de l'altre.", "es": "Una tecnología es ineficiente si otra obtiene al menos la misma producción con menos de un factor y no más del otro."}, "eficient_economica": {"va": "Entre les tècnicament eficients, tria la de cost total més baix.", "es": "Entre las técnicamente eficientes, elige la de coste total más bajo."}, "coste": {"va": "Cost = salari × L + preu del capital × K.", "es": "Coste = salario × L + precio del capital × K."}, "coste2": {"va": "Torna a calcular el cost amb els preus nous dels factors.", "es": "Vuelve a calcular el coste con los nuevos precios de los factores."}, "eficient_economica2": {"va": "Compara només les tecnologies tècnicament eficients amb els preus nous.", "es": "Compara solo las tecnologías técnicamente eficientes con los nuevos precios."}}}, {"id": "enunciats-ef2", "origen": "Enunciats exercicis Tema 3, eficiència tècnica i econòmica, exercici 2 (Paquetràpid)", "tipo": 4, "enunciado": {"va": "L'empresa Paquetràpid ha de processar 500 comandes al dia. Combinacions possibles (hores de treball L, hores de robot K): A (100, 20), B (80, 25), C (110, 22), D (60, 50), E (90, 25). El salari és de 15 €/hora i el robot costa 40 €/hora. Identifica les tecnologies tècnicament ineficients, calcula el cost de les eficients i digues quina és econòmicament eficient. Què passa si el salari puja a 30 €/hora?", "es": "La empresa Paquetràpid tiene que procesar 500 pedidos al día. Combinaciones posibles (horas de trabajo L, horas de robot K): A (100, 20), B (80, 25), C (110, 22), D (60, 50), E (90, 25). El salario es de 15 €/hora y el robot cuesta 40 €/hora. Identifica las tecnologías técnicamente ineficientes, calcula el coste de las eficientes y di cuál es económicamente eficiente. ¿Qué pasa si el salario sube a 30 €/hora?"}, "tabla": {"columnas": [{"clave": "tecnologia", "va": "Tecnologia", "es": "Tecnología", "dato": true}, {"clave": "L", "va": "Treball (L)", "es": "Trabajo (L)", "dato": true}, {"clave": "K", "va": "Capital (K)", "es": "Capital (K)", "dato": true}, {"clave": "coste", "va": "Cost total (w = 15 €, r = 40 €)", "es": "Coste total (w = 15 €, r = 40 €)", "dato": false}, {"clave": "coste2", "va": "Cost total (w = 30 €, r = 40 €)", "es": "Coste total (w = 30 €, r = 40 €)", "dato": false}], "filas": [{"tecnologia": "A", "L": 100, "K": 20, "coste": 2300, "coste2": 3800}, {"tecnologia": "B", "L": 80, "K": 25, "coste": 2200, "coste2": 3400}, {"tecnologia": "C", "L": 110, "K": 22, "coste": 2530, "coste2": 4180}, {"tecnologia": "D", "L": 60, "K": 50, "coste": 2900, "coste2": 3800}, {"tecnologia": "E", "L": 90, "K": 25, "coste": 2350, "coste2": 3700}]}, "preguntas": [{"id": "ineficients", "va": "Quines tecnologies són tècnicament ineficients?", "es": "¿Qué tecnologías son técnicamente ineficientes?", "opciones": ["A", "B", "C", "D", "E"], "multiple": true, "respuesta": ["C", "E"]}, {"id": "eficient_economica", "va": "Quina tecnologia és econòmicament eficient (w = 15 €, r = 40 €)?", "es": "¿Qué tecnología es económicamente eficiente (w = 15 €, r = 40 €)?", "opciones": ["A", "B", "D"], "respuesta": "B"}, {"id": "eficient_economica2", "va": "Si el salari puja a 30 €/hora (el robot continua a 40 €), quina tecnologia és ara econòmicament eficient?", "es": "Si el salario sube a 30 €/hora (el robot sigue a 40 €), ¿qué tecnología es ahora económicamente eficiente?", "opciones": ["A", "B", "D"], "respuesta": "B"}], "pistas": {"ineficients": {"va": "Una tecnologia és ineficient si una altra n'obté almenys la mateixa producció amb menys d'un factor i no més de l'altre.", "es": "Una tecnología es ineficiente si otra obtiene al menos la misma producción con menos de un factor y no más del otro."}, "eficient_economica": {"va": "Entre les tècnicament eficients, tria la de cost total més baix.", "es": "Entre las técnicamente eficientes, elige la de coste total más bajo."}, "coste": {"va": "Cost = salari × L + preu del capital × K.", "es": "Coste = salario × L + precio del capital × K."}, "coste2": {"va": "Torna a calcular el cost amb els preus nous dels factors.", "es": "Vuelve a calcular el coste con los nuevos precios de los factores."}, "eficient_economica2": {"va": "Compara només les tecnologies tècnicament eficients amb els preus nous.", "es": "Compara solo las tecnologías técnicamente eficientes con los nuevos precios."}}}, {"id": "examen-3", "origen": "Examen T.3, exercici 3 (Delícies del Nord)", "tipo": 4, "enunciado": {"va": "L'empresa «Delícies del Nord» ha de processar i enllaunar 1.000 kg de tonyina al dia. Tecnologies (treballadors L, màquines K): A (150, 20), B (100, 40), C (110, 50), D (50, 90), E (160, 20). El salari és de 10 € per treballador i el cost d'ús de la màquina, de 50 €. Identifica les tecnologies tècnicament ineficients, calcula el cost de les eficients i digues quina és econòmicament eficient. Després d'una vaga, el salari puja a 60 €: quina és ara la més eficient econòmicament?", "es": "La empresa «Delícies del Nord» tiene que procesar y enlatar 1.000 kg de atún al día. Tecnologías (trabajadores L, máquinas K): A (150, 20), B (100, 40), C (110, 50), D (50, 90), E (160, 20). El salario es de 10 € por trabajador y el coste de uso de la máquina, de 50 €. Identifica las tecnologías técnicamente ineficientes, calcula el coste de las eficientes y di cuál es económicamente eficiente. Tras una huelga, el salario sube a 60 €: ¿cuál es ahora la más eficiente económicamente?"}, "tabla": {"columnas": [{"clave": "tecnologia", "va": "Tecnologia", "es": "Tecnología", "dato": true}, {"clave": "L", "va": "Treball (L)", "es": "Trabajo (L)", "dato": true}, {"clave": "K", "va": "Capital (K)", "es": "Capital (K)", "dato": true}, {"clave": "coste", "va": "Cost total (w = 10 €, r = 50 €)", "es": "Coste total (w = 10 €, r = 50 €)", "dato": false}, {"clave": "coste2", "va": "Cost total (w = 60 €, r = 50 €)", "es": "Coste total (w = 60 €, r = 50 €)", "dato": false}], "filas": [{"tecnologia": "A", "L": 150, "K": 20, "coste": 2500, "coste2": 10000}, {"tecnologia": "B", "L": 100, "K": 40, "coste": 3000, "coste2": 8000}, {"tecnologia": "C", "L": 110, "K": 50, "coste": 3600, "coste2": 9100}, {"tecnologia": "D", "L": 50, "K": 90, "coste": 5000, "coste2": 7500}, {"tecnologia": "E", "L": 160, "K": 20, "coste": 2600, "coste2": 10600}]}, "preguntas": [{"id": "ineficients", "va": "Quines tecnologies són tècnicament ineficients?", "es": "¿Qué tecnologías son técnicamente ineficientes?", "opciones": ["A", "B", "C", "D", "E"], "multiple": true, "respuesta": ["C", "E"]}, {"id": "eficient_economica", "va": "Quina tecnologia és econòmicament eficient (w = 10 €, r = 50 €)?", "es": "¿Qué tecnología es económicamente eficiente (w = 10 €, r = 50 €)?", "opciones": ["A", "B", "D"], "respuesta": "A"}, {"id": "eficient_economica2", "va": "Si el salari puja a 60 € (la màquina continua a 50 €), quina tecnologia és ara econòmicament eficient?", "es": "Si el salario sube a 60 € (la máquina sigue a 50 €), ¿qué tecnología es ahora económicamente eficiente?", "opciones": ["A", "B", "D"], "respuesta": "D"}], "pistas": {"ineficients": {"va": "Una tecnologia és ineficient si una altra n'obté almenys la mateixa producció amb menys d'un factor i no més de l'altre.", "es": "Una tecnología es ineficiente si otra obtiene al menos la misma producción con menos de un factor y no más del otro."}, "eficient_economica": {"va": "Entre les tècnicament eficients, tria la de cost total més baix.", "es": "Entre las técnicamente eficientes, elige la de coste total más bajo."}, "coste": {"va": "Cost = salari × L + preu del capital × K.", "es": "Coste = salario × L + precio del capital × K."}, "coste2": {"va": "Torna a calcular el cost amb els preus nous dels factors.", "es": "Vuelve a calcular el coste con los nuevos precios de los factores."}, "eficient_economica2": {"va": "Compara només les tecnologies tècnicament eficients amb els preus nous.", "es": "Compara solo las tecnologías técnicamente eficientes con los nuevos precios."}}}, {"id": "apunts-bioclean", "origen": "Tema 3 (apunts revisats), 3: exemple BioClean S.A.", "tipo": 4, "enunciado": {"va": "BioClean S.A. fabrica gels desinfectants i valora cinc tecnologies (treball, capital, producció): A (10, 3, 1.000), B (10, 3, 1.000), C (10, 3, 1.500), D (8, 3, 1.500), E (10, 2, 1.500). Quines són tècnicament eficients? Amb un salari de 100 €/treballador i un cost del capital de 80 €/màquina, quina és econòmicament eficient? Calcula la productivitat dels factors de la tecnologia econòmicament eficient.", "es": "BioClean S.A. fabrica geles desinfectantes y valora cinco tecnologías (trabajo, capital, producción): A (10, 3, 1.000), B (10, 3, 1.000), C (10, 3, 1.500), D (8, 3, 1.500), E (10, 2, 1.500). ¿Cuáles son técnicamente eficientes? Con un salario de 100 €/trabajador y un coste del capital de 80 €/máquina, ¿cuál es económicamente eficiente? Calcula la productividad de los factores de la tecnología económicamente eficiente."}, "tabla": {"columnas": [{"clave": "tecnologia", "va": "Tecnologia", "es": "Tecnología", "dato": true}, {"clave": "L", "va": "Treball (L)", "es": "Trabajo (L)", "dato": true}, {"clave": "K", "va": "Capital (K)", "es": "Capital (K)", "dato": true}, {"clave": "coste", "va": "Cost total (w = 100 €, r = 80 €)", "es": "Coste total (w = 100 €, r = 80 €)", "dato": false}], "filas": [{"tecnologia": "A", "L": 10, "K": 3, "coste": 1240}, {"tecnologia": "B", "L": 10, "K": 3, "coste": 1240}, {"tecnologia": "C", "L": 10, "K": 3, "coste": 1240}, {"tecnologia": "D", "L": 8, "K": 3, "coste": 1040}, {"tecnologia": "E", "L": 10, "K": 2, "coste": 1160}]}, "preguntas": [{"id": "ineficients", "va": "Quines tecnologies són tècnicament ineficients?", "es": "¿Qué tecnologías son técnicamente ineficientes?", "opciones": ["A", "B", "C", "D", "E"], "multiple": true, "respuesta": ["A", "B", "C"]}, {"id": "eficient_economica", "va": "Quina tecnologia és econòmicament eficient (w = 100 €, r = 80 €)?", "es": "¿Qué tecnología es económicamente eficiente (w = 100 €, r = 80 €)?", "opciones": ["D", "E"], "respuesta": "D"}, {"id": "PL", "va": "Productivitat del treball de la tecnologia econòmicament eficient", "es": "Productividad del trabajo de la tecnología económicamente eficiente", "respuesta": 187.5, "unidad": {"va": "gels/treballador", "es": "geles/trabajador"}}, {"id": "PK", "va": "Productivitat del capital de la tecnologia econòmicament eficient", "es": "Productividad del capital de la tecnología económicamente eficiente", "respuesta": 500, "unidad": {"va": "gels/màquina", "es": "geles/máquina"}}], "pistas": {"ineficients": {"va": "Una tecnologia és ineficient si una altra n'obté almenys la mateixa producció amb menys d'un factor i no més de l'altre.", "es": "Una tecnología es ineficiente si otra obtiene al menos la misma producción con menos de un factor y no más del otro."}, "eficient_economica": {"va": "Entre les tècnicament eficients, tria la de cost total més baix.", "es": "Entre las técnicamente eficientes, elige la de coste total más bajo."}, "coste": {"va": "Cost = salari × L + preu del capital × K.", "es": "Coste = salario × L + precio del capital × K."}, "PL": {"va": "Divideix la producció entre el nombre de treballadors.", "es": "Divide la producción entre el número de trabajadores."}, "PK": {"va": "Divideix la producció entre el nombre de màquines.", "es": "Divide la producción entre el número de máquinas."}}}, {"id": "activitat-1", "origen": "Activitat Ampliació T.3, activitat 1 (grandària i productivitat)", "tipo": 4, "enunciado": {"va": "La taula compara les empreses d'Espanya i d'Alemanya segons la grandària: persones ocupades (milers) i valor afegit brut (milions d'euros). Calcula la productivitat mitjana (€ per empleat) de cada tipus d'empresa i digues quina relació hi ha entre la grandària i la productivitat.", "es": "La tabla compara las empresas de España y de Alemania según su tamaño: personas ocupadas (miles) y valor añadido bruto (millones de euros). Calcula la productividad media (€ por empleado) de cada tipo de empresa y di qué relación hay entre el tamaño y la productividad."}, "tabla": {"columnas": [{"clave": "tipus", "va": "Tipus d'empresa (treballadors)", "es": "Tipo de empresa (trabajadores)", "dato": true}, {"clave": "pais", "va": "País", "es": "País", "dato": true}, {"clave": "L", "va": "Ocupats (milers)", "es": "Ocupados (miles)", "dato": true}, {"clave": "Q", "va": "Valor afegit brut (milions €)", "es": "Valor añadido bruto (millones €)", "dato": true}, {"clave": "PL", "va": "Productivitat mitjana (€/empleat)", "es": "Productividad media (€/empleado)", "dato": false}], "filas": [{"tipus": "Microempresa (0-9)", "pais": "Espanya", "L": 3300, "Q": 72600, "PL": 22000}, {"tipus": "Microempresa (0-9)", "pais": "Alemanya", "L": 4100, "Q": 172200, "PL": 42000}, {"tipus": "Menuda (10-49)", "pais": "Espanya", "L": 2500, "Q": 115000, "PL": 46000}, {"tipus": "Menuda (10-49)", "pais": "Alemanya", "L": 4800, "Q": 292800, "PL": 61000}, {"tipus": "Mitjana (50-249)", "pais": "Espanya", "L": 1800, "Q": 113400, "PL": 63000}, {"tipus": "Mitjana (50-249)", "pais": "Alemanya", "L": 5200, "Q": 405600, "PL": 78000}, {"tipus": "Gran (+250)", "pais": "Espanya", "L": 3100, "Q": 241800, "PL": 78000}, {"tipus": "Gran (+250)", "pais": "Alemanya", "L": 10500, "Q": 966000, "PL": 92000}]}, "preguntas": [{"id": "relacio", "va": "Quina relació hi ha entre la grandària de l'empresa i la seua productivitat?", "es": "¿Qué relación hay entre el tamaño de la empresa y su productividad?", "opciones": [{"id": "positiva", "va": "Com més gran és l'empresa, més productiva és", "es": "Cuanto más grande es la empresa, más productiva es"}, {"id": "negativa", "va": "Com més gran és l'empresa, menys productiva és", "es": "Cuanto más grande es la empresa, menos productiva es"}, {"id": "cap", "va": "No hi ha cap relació clara", "es": "No hay ninguna relación clara"}], "respuesta": "positiva"}], "pistas": {"PL": {"va": "Divideix el valor afegit entre els ocupats i compte amb les unitats: milions entre milers.", "es": "Divide el valor añadido entre los ocupados y ten en cuenta las unidades: millones entre miles."}, "relacio": {"va": "Compara la productivitat de la microempresa i de la gran empresa en cada país.", "es": "Compara la productividad de la microempresa y de la gran empresa en cada país."}}}]/*FIN-BANCO*/;
+  const pr = { actual: null, vistos: new Set(), sol: false };
+  const L2 = o => o == null ? "" : typeof o === "string" ? o : (o[OBS.lang()] || o.es || o.va || "");
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const rellena = (txt, v) => String(txt).replace(/\{(\w+)\}/g, (m, k) => v[k] != null ? v[k] : m);
+  // Textos de los ejercicios inventados, en los dos idiomas (cada ejercicio lleva los dos, como los de clase)
+  const TXT_COL = {
+    es: { q: "Cantidad (q)", CT: "Coste total (CT)", CF: "Coste fijo (CF)", CV: "Coste variable (CV)", CVMe: "Coste variable medio (CVMe)", CMe: "Coste medio (CMe)", CMg: "Coste marginal (CMg)", IT: "Ingreso total (IT)", B: "Beneficio (B)", tecnologia: "Tecnología", L: "Trabajadores (L)", K: "Máquinas (K)", coste: "Coste al día (€)" },
+    va: { q: "Quantitat (q)", CT: "Cost total (CT)", CF: "Cost fix (CF)", CV: "Cost variable (CV)", CVMe: "Cost variable mitjà (CVMe)", CMe: "Cost mitjà (CMe)", CMg: "Cost marginal (CMg)", IT: "Ingrés total (IT)", B: "Benefici (B)", tecnologia: "Tecnologia", L: "Treballadors (L)", K: "Màquines (K)", coste: "Cost diari (€)" }
   };
-  let U_MIN_CME = Infinity, U_Q_MIN = 0;
-  for (let q = 1; q <= 120; q += 0.01) { const v = U.CMe(q); if (v < U_MIN_CME) { U_MIN_CME = v; U_Q_MIN = q; } }
-  const L = { F: 200, c: 15, cap: 100, CT: q => 200 + 15 * q, CMe: q => q > 0 ? 200 / q + 15 : Infinity };
-  function renderDos() {
-    const P = +$("d-p").value;
-    $("d-p-out").textContent = fmtA(P) + " €";
-    const ax = { w: 520, h: 340, xMax: 120, yMax: 40, xTicks: [0, 20, 40, 60, 80, 100, 120], yTicks: [0, 10, 20, 30, 40], xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") };
-    // Empresa en U
-    const qu = U.q(P), bu = qu > 0 ? P * qu - U.CT(qu) : -200;
-    const F = frame($("d-u"), ax);
-    curve(F, U.CVMe, 0, 120, "c-s3"); curve(F, U.CMe, 4, 120, "c-s2"); curve(F, U.CMg, 0, 120, "c-s1");
-    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(120), y1: F.sy(P), y2: F.sy(P), class: "pline" }));
-    label(F, 2, P, "P = " + fmtA(P) + " €", "start");
-    label(F, 103, U.CMg(103), "CMg", "end"); label(F, 120, U.CMe(120), "CMe", "end", "lbl", 18); label(F, 120, U.CVMe(120), "CVMe", "end", "lbl", 18);
-    if (qu > 0) {
-      const ac = U.CMe(qu);
-      poly(F, [[0, Math.min(P, ac)], [qu, Math.min(P, ac)], [qu, Math.max(P, ac)], [0, Math.max(P, ac)]], P >= ac ? "a-ok" : "a-bad");
-      F.top.append(sv("circle", { cx: F.sx(qu), cy: F.sy(P), r: 6, class: "dot s1" }));
+  const TXT_G = {
+    es: { en1: "Una empresa tiene estos costes totales para cada cantidad. Completa el coste fijo, el coste variable y el coste variable medio.",
+      en2: "Una empresa tiene estos costes totales para cada cantidad. Completa el coste medio y el coste marginal de cada unidad.",
+      en3: "Una empresa vende cada unidad a {p} € y tiene estos costes totales. Completa los ingresos y el beneficio, y contesta las preguntas.",
+      en4: "Para fabricar {Q} unidades al día, una empresa puede elegir entre estas cuatro tecnologías. Cada trabajador cuesta {pl} € al día y cada máquina, {pk} €. Completa el coste de cada tecnología y contesta las preguntas.",
+      q31: "¿A partir de qué unidad empieza a ganar dinero (umbral de rentabilidad)?", q32: "Según el modelo 1, ¿cuántas unidades le conviene producir (máximo beneficio)?",
+      q41: "¿Qué tecnología es técnicamente ineficiente?", q42: "¿Cuál es económicamente eficiente (la más barata)?", q43: "Productividad del trabajo con la tecnología {x} (unidades por trabajador)" },
+    va: { en1: "Una empresa té estos costos totals per a cada quantitat. Completa el cost fix, el cost variable i el cost variable mitjà.",
+      en2: "Una empresa té estos costos totals per a cada quantitat. Completa el cost mitjà i el cost marginal de cada unitat.",
+      en3: "Una empresa ven cada unitat a {p} € i té estos costos totals. Completa els ingressos i el benefici, i contesta les preguntes.",
+      en4: "Per a fabricar {Q} unitats al dia, una empresa pot triar entre estes quatre tecnologies. Cada treballador costa {pl} € al dia i cada màquina, {pk} €. Completa el cost de cada tecnologia i contesta les preguntes.",
+      q31: "A partir de quina unitat comença a guanyar diners (llindar de rendibilitat)?", q32: "Segons el model 1, quantes unitats li convé produir (màxim benefici)?",
+      q41: "Quina tecnologia és tècnicament ineficient?", q42: "Quina és econòmicament eficient (la més barata)?", q43: "Productivitat del treball amb la tecnologia {x} (unitats per treballador)" }
+  };
+  const TXT_P = {
+    es: { CF: "El coste fijo se paga aunque no se produzca nada: es el coste total cuando q = 0.", CV: "Coste variable = coste total − coste fijo.", CVMe: "Coste variable medio = coste variable ÷ cantidad.",
+      CMe: "Coste medio = coste total ÷ cantidad.", CMg: "Coste marginal = lo que sube el coste total al producir una unidad más.", IT: "Ingreso total = precio × cantidad.", B: "Beneficio = ingreso total − coste total.",
+      umbral: "Busca la primera fila en la que el beneficio ya no es negativo.", max: "Busca la fila con el beneficio más alto.",
+      coste: "Coste = trabajadores × salario + máquinas × coste de cada máquina.", ine: "Es técnicamente ineficiente si otra tecnología produce lo mismo con menos de algún factor y no más de ninguno.",
+      barata: "Entre las técnicamente eficientes, la de menor coste.", prod: "Productividad del trabajo = producción ÷ número de trabajadores." },
+    va: { CF: "El cost fix es paga encara que no es produïsca res: és el cost total quan q = 0.", CV: "Cost variable = cost total − cost fix.", CVMe: "Cost variable mitjà = cost variable ÷ quantitat.",
+      CMe: "Cost mitjà = cost total ÷ quantitat.", CMg: "Cost marginal = el que puja el cost total en produir una unitat més.", IT: "Ingrés total = preu × quantitat.", B: "Benefici = ingrés total − cost total.",
+      umbral: "Busca la primera fila en què el benefici ja no és negatiu.", max: "Busca la fila amb el benefici més alt.",
+      coste: "Cost = treballadors × salari + màquines × cost de cada màquina.", ine: "És tècnicament ineficient si una altra tecnologia produïx el mateix amb menys d'algun factor i no més de cap.",
+      barata: "Entre les tècnicament eficients, la de menor cost.", prod: "Productivitat del treball = producció ÷ nombre de treballadors." }
+  };
+
+  // Ejercicios inventados, con números redondos y la solución calculada aquí
+  function inventar(tipo) {
+    const etq = k => ({ es: TXT_COL.es[k], va: TXT_COL.va[k] });
+    const col = (k, dato) => Object.assign({ clave: k, dato }, etq(k));
+    if (tipo === 4) {
+      for (;;) {
+        const Q = pick([100, 200, 500, 1000]), PL = pick([20, 25, 30, 40, 50]), PK = pick([10, 20, 30, 50, 60]);
+        const base = [[rnd(2, 4), rnd(6, 9)], [rnd(5, 7), rnd(3, 5)], [rnd(8, 10), rnd(1, 2)]];
+        const dom = base[rnd(0, 2)], ine = [dom[0] + rnd(0, 2), dom[1] + rnd(1, 2)];
+        const tec = [...base, ine].map((x, i) => ({ tecnologia: "ABCD"[i], L: x[0], K: x[1] }));
+        const orden = [0, 1, 2, 3].sort(() => Math.random() - 0.5); const T = orden.map((o, i) => Object.assign({}, tec[o], { tecnologia: "ABCD"[i] }));
+        const malas = T.filter(a => T.some(b => b !== a && b.L <= a.L && b.K <= a.K && (b.L < a.L || b.K < a.K))).map(a => a.tecnologia);
+        if (malas.length !== 1) continue;
+        T.forEach(r => { r.coste = r.L * PL + r.K * PK; });
+        const buenas = T.filter(r => !malas.includes(r.tecnologia)).sort((a, b) => a.coste - b.coste);
+        if (buenas[0].coste === buenas[1].coste) continue;
+        const x = pick(T.filter(r => !malas.includes(r.tecnologia)));
+        return { id: "nuevo-4-" + Date.now(), tipo: 4, origen: null,
+          enunciado: { es: rellena(TXT_G.es.en4, { Q: fmt(Q), pl: PL, pk: PK }), va: rellena(TXT_G.va.en4, { Q: fmt(Q), pl: PL, pk: PK }) },
+          tabla: { columnas: [col("tecnologia", true), col("L", true), col("K", true), col("coste", false)], filas: T },
+          preguntas: [
+            { id: "ine", es: TXT_G.es.q41, va: TXT_G.va.q41, opciones: ["A", "B", "C", "D"], respuesta: malas[0] },
+            { id: "barata", es: TXT_G.es.q42, va: TXT_G.va.q42, opciones: ["A", "B", "C", "D"], respuesta: buenas[0].tecnologia },
+            { id: "prod", es: TXT_G.es.q43.replace("{x}", x.tecnologia), va: TXT_G.va.q43.replace("{x}", x.tecnologia), respuesta: Math.round(Q / x.L * 100) / 100 }],
+          pistas: { coste: { es: TXT_P.es.coste, va: TXT_P.va.coste }, ine: { es: TXT_P.es.ine, va: TXT_P.va.ine }, barata: { es: TXT_P.es.barata, va: TXT_P.va.barata }, prod: { es: TXT_P.es.prod, va: TXT_P.va.prod } } };
+      }
     }
-    F.top.append(sv("circle", { cx: F.sx(60), cy: F.sy(11), r: 4, class: "dot", style: "fill:var(--s3)" }));
-    F.top.append(sv("circle", { cx: F.sx(U_Q_MIN), cy: F.sy(U_MIN_CME), r: 4, class: "dot", style: "fill:var(--s2)" }));
-    hover($("d-u"), $("d-u-tip"), F, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.s1, "CMg", eur(U.CMg(x))], [C.s2, "CMe", x > 1 ? eur(U.CMe(x)) : "—"], [C.s3, "CVMe", eur(U.CVMe(x))]] }));
-    // Empresa de coste constante
-    const be = P > L.c ? L.F / (P - L.c) : Infinity, bl = P > L.c ? P * L.cap - L.CT(L.cap) : -200;
-    const G = frame($("d-l"), ax);
-    curve(G, L.CMe, 4, 120, "c-s2");
-    G.plot.append(sv("path", { d: path([[G.sx(0), G.sy(L.c)], [G.sx(L.cap), G.sy(L.c)]]), class: "curve c-s1" }));
-    G.plot.append(sv("path", { d: path([[G.sx(L.cap), G.sy(L.c)], [G.sx(L.cap), G.sy(40)]]), class: "curve c-s1", "stroke-dasharray": "4 4" }));
-    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(120), y1: G.sy(P), y2: G.sy(P), class: "pline" }));
-    label(G, 2, P, "P = " + fmtA(P) + " €", "start");
-    label(G, L.cap, 36, t("d.cap"), "start", "lbl", 0);
-    label(G, L.cap - 2, L.c, "CMg = CVMe = 15 €", "end", "lbl", 18); label(G, 120, L.CMe(120), "CMe", "end", "lbl", -8);
-    if (P > L.c) {
-      const ac = L.CMe(L.cap);
-      poly(G, [[0, Math.min(P, ac)], [L.cap, Math.min(P, ac)], [L.cap, Math.max(P, ac)], [0, Math.max(P, ac)]], P >= ac ? "a-ok" : "a-bad");
-      G.top.append(sv("circle", { cx: G.sx(L.cap), cy: G.sy(P), r: 6, class: "dot s1" }));
-      if (be <= 120) G.top.append(sv("circle", { cx: G.sx(be), cy: G.sy(P), r: 5, class: "dot", style: "fill:var(--accent)" }));
+    for (;;) {
+      const CF = pick([100, 150, 200, 240, 300]), a = pick([5, 10, 15, 20]), b = tipo === 3 ? pick([2, 4, 5]) : pick([0, 1, 2, 3]);
+      const n = tipo === 3 ? 10 : 6, P = tipo === 3 ? pick([40, 50, 60, 70, 80]) : 0;
+      const filas = []; for (let q = 0; q <= n; q++) { const CT = CF + a * q + b * q * q; const f = { q, CT }; if (tipo === 1) { f.CF = CF; f.CV = CT - CF; if (q) f.CVMe = Math.round((CT - CF) / q * 100) / 100; } if (tipo === 2) { if (q) { f.CMe = Math.round(CT / q * 100) / 100; f.CMg = CT - filas[q - 1].CT; } } if (tipo === 3) { f.IT = P * q; f.B = P * q - CT; } filas.push(f); }
+      if (tipo === 3) {
+        const umb = filas.find(f => f.q > 0 && f.B >= 0); let best = filas[0]; filas.forEach(f => { if (f.B > best.B) best = f; });
+        if (!umb || best.q === 0 || best.q === n || filas.filter(f => f.B === best.B).length > 1) continue;
+        return { id: "nuevo-3-" + Date.now(), tipo: 3, origen: null,
+          enunciado: { es: rellena(TXT_G.es.en3, { p: P }), va: rellena(TXT_G.va.en3, { p: P }) },
+          tabla: { columnas: [col("q", true), col("CT", true), col("IT", false), col("B", false)], filas },
+          preguntas: [{ id: "umbral", es: TXT_G.es.q31, va: TXT_G.va.q31, respuesta: umb.q }, { id: "max", es: TXT_G.es.q32, va: TXT_G.va.q32, respuesta: best.q }],
+          pistas: { IT: { es: TXT_P.es.IT, va: TXT_P.va.IT }, B: { es: TXT_P.es.B, va: TXT_P.va.B }, umbral: { es: TXT_P.es.umbral, va: TXT_P.va.umbral }, max: { es: TXT_P.es.max, va: TXT_P.va.max } } };
+      }
+      const cols = tipo === 1 ? [col("q", true), col("CT", true), col("CF", false), col("CV", false), col("CVMe", false)] : [col("q", true), col("CT", true), col("CMe", false), col("CMg", false)];
+      const pis = {}; cols.filter(c => !c.dato).forEach(c => { pis[c.clave] = { es: TXT_P.es[c.clave], va: TXT_P.va[c.clave] }; });
+      return { id: "nuevo-" + tipo + "-" + Date.now(), tipo, origen: null, enunciado: { es: TXT_G.es["en" + tipo], va: TXT_G.va["en" + tipo] }, tabla: { columnas: cols, filas }, preguntas: [], pistas: pis };
     }
-    hover($("d-l"), $("d-l-tip"), G, x => ({ head: t("tip.q", { q: fmtA(x) }), rows: [[C.s1, "CMg", x <= L.cap ? eur(L.c) : "—"], [C.s2, "CMe", x > 1 ? eur(L.CMe(x)) : "—"]] }));
-    // Tarjetas
-    const card = (k, pick, items) => el("div", { class: "card" }, el("span", { class: "k", text: k }), el("span", { class: "pick", text: pick }), el("ul", {}, items.map(x => el("li", { text: x }))));
-    $("d-cards").replaceChildren(
-      card(t("d.k1"), qu > 0 ? t("d.u.stop", { q: fmtA(qu) }) : t("d.u.none"), [t("d.u.l1"), t("d.u.l2", { p: fmtA(U_MIN_CME) }), t("d.u.l3", { p: fmtA(11) }), t("d.u.l4", { b: signed(bu) })]),
-      card(t("d.k2"), P > L.c ? t("d.l.go", { cap: L.cap }) : t("d.l.none"), [t("d.l.l1", { c: fmtA(L.c) }), be <= L.cap ? t("d.l.l2", { q: fmtA(Math.ceil(be)) }) : t("d.l.l2b"), t("d.l.l3", { c: fmtA(L.c) }), t("d.l.l4", { b: signed(bl) })]));
-    $("d-note").replaceChildren(rich("d.note"));
-    // Tabla
-    const head = el("tr", {}, el("th", { text: "q" }), ["CT", "CMe", "CVMe", "CMg"].map(h => el("th", { text: t("d.th.u") + " · " + h })), ["CT", "CMe", "CMg"].map(h => el("th", { text: t("d.th.l") + " · " + h })));
-    const rows = []; for (let q = 0; q <= 120; q += 10) rows.push(el("tr", {}, el("td", { text: fmt(q) }),
-      [U.CT(q), q ? U.CMe(q) : NaN, U.CVMe(q), U.CMg(q)].map(v => el("td", { text: fmtA(v) })),
-      [q <= L.cap ? L.CT(q) : NaN, q && q <= L.cap ? L.CMe(q) : NaN, q <= L.cap ? L.c : NaN].map(v => el("td", { text: fmtA(v) }))));
-    $("d-table").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
   }
-  $("d-p").addEventListener("input", renderDos);
+
+  function prOtro() {
+    const tipo = +$("pr-tipo").value;
+    const deClase = BANCO.filter(e => (!tipo || e.tipo === tipo) && !pr.vistos.has(e.id));
+    let ej;
+    if (deClase.length) { ej = deClase[0]; pr.vistos.add(ej.id); }
+    else ej = inventar(tipo || rnd(1, 4));
+    pr.actual = ej; pr.sol = false;
+    prPintar();
+  }
+  function prPintar() {
+    const ej = pr.actual; if (!ej) return;
+    const cont = [];
+    cont.push(el("p", { class: "pr-origen", text: ej.origen ? t("pr.origen.j", { o: ej.origen }) : t("pr.origen.n") }));
+    cont.push(el("p", { class: "pr-enun", text: L2(ej.enunciado) }));
+    if (ej.tabla) {
+      const cols = ej.tabla.columnas;
+      const head = el("tr", {}, cols.map(c => el("th", { text: L2(c) })));
+      const body = ej.tabla.filas.map((f, i) => el("tr", {}, cols.map(c => {
+        const v = f[c.clave];
+        if (c.dato) return el("td", { text: v == null ? "—" : typeof v === "number" ? fmtA(v) : L2(v) });
+        if (v == null) return el("td", { text: "—" });
+        const inp = el("input", { type: "text", inputmode: "decimal", "data-k": c.clave, "data-i": i, "aria-label": L2(c) + " · " + (f.q ?? f.tecnologia ?? f.mes ?? i + 1) });
+        const cel = el("td", {}, inp);
+        if (pr.sol) cel.append(el("span", { class: "sol", text: fmtA(v) }));
+        return cel;
+      })));
+      cont.push(el("div", { class: "scroll" }, el("table", {}, el("thead", {}, head), el("tbody", {}, body))));
+    }
+    if ((ej.preguntas || []).length) {
+      cont.push(el("ol", { class: "pr-preg" }, ej.preguntas.map((p, j) => {
+        let campo;
+        if (p.opciones) {
+          const ops = p.opciones.map(o => typeof o === "string" ? { id: o, es: o, va: o } : o);
+          if (p.multiple) campo = el("span", { class: "pr-multi", "data-p": j }, ops.map(o => el("label", { class: "check" }, el("input", { type: "checkbox", value: o.id }), " " + L2(o))));
+          else campo = el("select", { "data-p": j }, el("option", { value: "", text: t("pr.elige") }), ops.map(o => el("option", { value: o.id, text: L2(o) })));
+        } else campo = el("input", { type: "text", inputmode: "decimal", "data-p": j, "aria-label": L2(p) });
+        const li = el("li", {}, el("span", { text: L2(p) }), campo, p.unidad ? el("span", { class: "small", text: L2(p.unidad) }) : null);
+        if (pr.sol) li.append(el("span", { class: "sol", text: solTxt(p) }));
+        return li;
+      })));
+    }
+    $("pr-ej").replaceChildren(...cont);
+    $("pr-res").textContent = ""; $("pr-res").className = "pr-res"; $("pr-pistas").replaceChildren();
+    $("pr-sol").textContent = t(pr.sol ? "pr.ocultar" : "pr.sol");
+  }
+  const solTxt = p => {
+    const ops = (p.opciones || []).map(o => typeof o === "string" ? { id: o, es: o, va: o } : o);
+    const nom = id => L2(ops.find(o => o.id === id) || id);
+    return Array.isArray(p.respuesta) ? p.respuesta.map(nom).join(", ") : p.opciones ? nom(p.respuesta) : fmtA(p.respuesta);
+  };
+  const igual = (x, v) => { const n = num(x); return isFinite(n) && Math.abs(n - v) <= Math.max(0.011, Math.abs(v) * 0.005); };
+  function prComprobar() {
+    const ej = pr.actual; if (!ej) return;
+    let bien = 0, total = 0, vacias = 0; const fallos = new Set();
+    $("pr-ej").querySelectorAll("td input").forEach(inp => {
+      total++; const v = ej.tabla.filas[+inp.dataset.i][inp.dataset.k];
+      if (!inp.value.trim()) { vacias++; inp.className = ""; return; }
+      const ok = igual(inp.value, v); inp.className = ok ? "ok" : "bad"; if (ok) bien++; else fallos.add(inp.dataset.k);
+    });
+    (ej.preguntas || []).forEach((p, j) => {
+      total++; const nodo = $("pr-ej").querySelector('[data-p="' + j + '"]');
+      let ok = false, vacio = false;
+      if (p.multiple) { const sel = [...nodo.querySelectorAll("input:checked")].map(x => x.value).sort(); vacio = !sel.length; ok = JSON.stringify(sel) === JSON.stringify([...p.respuesta].sort()); }
+      else if (p.opciones) { vacio = !nodo.value; ok = nodo.value === String(p.respuesta); }
+      else { vacio = !nodo.value.trim(); ok = igual(nodo.value, p.respuesta); }
+      if (vacio) { vacias++; nodo.className = ""; return; }
+      nodo.classList.toggle("ok", ok); nodo.classList.toggle("bad", !ok); if (ok) bien++; else fallos.add(p.id);
+    });
+    const r = $("pr-res");
+    if (vacias === total) { r.textContent = t("pr.vacio"); r.className = "pr-res"; }
+    else if (bien === total) { r.textContent = t("pr.todo"); r.className = "pr-res ok"; }
+    else { r.textContent = t("pr.res", { b: bien, n: total }); r.className = "pr-res bad"; }
+    const pistas = [...fallos].map(k => ej.pistas && ej.pistas[k] ? L2(ej.pistas[k]) : null).filter(Boolean);
+    $("pr-pistas").replaceChildren(...[...new Set(pistas)].map(x => el("li", { text: x })));
+  }
+  $("pr-otro").addEventListener("click", prOtro);
+  $("pr-tipo").addEventListener("change", prOtro);
+  $("pr-comprobar").addEventListener("click", prComprobar);
+  $("pr-sol").addEventListener("click", () => { pr.sol = !pr.sol; prPintar(); });
 
   // =====================================================================
   // 3 · GENERAL MOTORS (cifras ilustrativas; caída real del 30 % en 2009)
@@ -1639,9 +2047,8 @@ window.OBS = (() => {
   // ---------- Barra común, idioma y arranque ----------
   OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
   OBS.apply();
-  OBS.onLang(() => { renderCalc(); renderDos(); renderGM(); buildWorkerCards(); renderFPP(); });
-  renderCalc();
-  renderDos();
+  OBS.onLang(() => { lbParar(); renderLab(); if (pr.actual) prPintar(); renderGM(); buildWorkerCards(); renderFPP(); });
+  cargarEjemplo("m1");
   renderGM();
   resetClass();
   show(location.hash.slice(1));

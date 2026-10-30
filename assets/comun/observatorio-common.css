@@ -77,3 +77,24 @@ body.obs-proj input[type="range"] { height: 28px; }
 body.obs-proj .stat b { font-size: 36px; }
 body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
 body.obs-proj .obs-tools.keep { display: flex; }
+/* Cabecera compacta (30/10/2026): la herramienta empieza arriba. La entrada (.lede) y la ficha docente
+   pasan al panel «Para el docente», que abre el botón de la barra. */
+header.top { padding-block: 14px 12px !important; gap: 6px !important; border-bottom: 0 !important; }
+header.top h1 { font-size: clamp(26px, 4vw, 36px) !important; }
+header.top h1::after { height: 4px; margin-top: 8px; }
+.obs-docente { border-top: 3px solid var(--accent); background: var(--paper); padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+.obs-docente[hidden] { display: none !important; }
+.obs-docente__h { font-family: var(--font-display); font-size: 17px !important; margin: 6px 0 0; text-transform: none !important; }
+.obs-docente .lede { margin: 0; max-width: 70ch; }
+.obs-docente .obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-docente .obs-ficha dt { color: var(--muted); }
+.obs-docente .obs-ficha dd { margin: 0; min-width: 0; white-space: pre-line; }
+.obs-docente .obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-docente-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 560px) { .obs-docente .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } }
+/* Modo proyector: solo los controles, el gráfico y la frase que explica lo que pasa */
+body.obs-proj header.top .eyebrow, body.obs-proj .obs-docente, body.obs-proj .prose p, body.obs-proj p.small,
+body.obs-proj p.help, body.obs-proj .lede, body.obs-proj .obs-pie { display: none !important; }
+body.obs-proj header.top { padding-block: 8px 4px !important; }
+body.obs-proj header.top h1 { font-size: 28px !important; }
+

@@ -212,6 +212,27 @@ body.obs-proj input[type="range"] { height: 28px; }
 body.obs-proj .stat b { font-size: 36px; }
 body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
 body.obs-proj .obs-tools.keep { display: flex; }
+/* Cabecera compacta (30/10/2026): la herramienta empieza arriba. La entrada (.lede) y la ficha docente
+   pasan al panel «Para el docente», que abre el botón de la barra. */
+header.top { padding-block: 14px 12px !important; gap: 6px !important; border-bottom: 0 !important; }
+header.top h1 { font-size: clamp(26px, 4vw, 36px) !important; }
+header.top h1::after { height: 4px; margin-top: 8px; }
+.obs-docente { border-top: 3px solid var(--accent); background: var(--paper); padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+.obs-docente[hidden] { display: none !important; }
+.obs-docente__h { font-family: var(--font-display); font-size: 17px !important; margin: 6px 0 0; text-transform: none !important; }
+.obs-docente .lede { margin: 0; max-width: 70ch; }
+.obs-docente .obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-docente .obs-ficha dt { color: var(--muted); }
+.obs-docente .obs-ficha dd { margin: 0; min-width: 0; white-space: pre-line; }
+.obs-docente .obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-docente-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 560px) { .obs-docente .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } }
+/* Modo proyector: solo los controles, el gráfico y la frase que explica lo que pasa */
+body.obs-proj header.top .eyebrow, body.obs-proj .obs-docente, body.obs-proj .prose p, body.obs-proj p.small,
+body.obs-proj p.help, body.obs-proj .lede, body.obs-proj .obs-pie { display: none !important; }
+body.obs-proj header.top { padding-block: 8px 4px !important; }
+body.obs-proj header.top h1 { font-size: 28px !important; }
+
 
 /* OBS-COMMON-CSS:END */
 </style>
@@ -394,12 +415,12 @@ window.OBS = (() => {
     document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
   }
   register({
-    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente", "obs.docente": "Para el docente", "obs.sobre": "Sobre esta herramienta",
       "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
       "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
       "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
       "obs.saved": "Archivo descargado." },
-    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent", "obs.docente": "Per al docent", "obs.sobre": "Sobre esta ferramenta",
       "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
       "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
       "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
@@ -416,13 +437,16 @@ window.OBS = (() => {
     const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
     const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
     box.replaceChildren(
-      h("summary", { text: t("obs.ficha") }),
+      h("h2", { class: "obs-docente__h", text: t("obs.ficha") }),
       h("dl", {},
         ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
         ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
         ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
         ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
   }
+  /* Barra de una línea: «← Panel», idioma, modo proyector y «Para el docente».
+     El panel «Para el docente» (cerrado al empezar) recoge la entrada de la cabecera (.lede) y la ficha docente,
+     para que la herramienta empiece arriba. */
   function mountBar(container, opts = {}) {
     const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
     const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
@@ -433,17 +457,23 @@ window.OBS = (() => {
     pj.addEventListener("click", () => setProj(!proj));
     const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
     pjKeep.addEventListener("click", () => setProj(!proj));
-    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // Panel «Para el docente»
+    const cabecera = container.closest("header") || document.querySelector("header.top") || document.querySelector("header");
+    const lede = cabecera ? cabecera.querySelector(".lede") : null;
+    const panel = h("div", { class: "obs-docente", id: "obs-docente", hidden: true });
+    if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
+    let fichaBox = null;
+    if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
+    const hayPanel = !!(lede || opts.ficha);
+    const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
+    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
+      h("div", { class: "obs-tools" }, seg, pj, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    if (hayPanel) (cabecera || container).after(panel);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
     document.head.append(style);
-    if (opts.ficha) {
-      const box = h("details", { class: "obs-ficha" });
-      (opts.fichaContainer || container).after(box);
-      renderFicha(box, opts.ficha);
-      onLang(() => renderFicha(box, opts.ficha));
-    }
     setProj(proj);
   }
   const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };

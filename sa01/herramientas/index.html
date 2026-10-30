@@ -327,6 +327,27 @@ body.obs-proj input[type="range"] { height: 28px; }
 body.obs-proj .stat b { font-size: 36px; }
 body.obs-proj .obs-ficha, body.obs-proj .obs-tools, body.obs-proj footer { display: none; }
 body.obs-proj .obs-tools.keep { display: flex; }
+/* Cabecera compacta (30/10/2026): la herramienta empieza arriba. La entrada (.lede) y la ficha docente
+   pasan al panel «Para el docente», que abre el botón de la barra. */
+header.top { padding-block: 14px 12px !important; gap: 6px !important; border-bottom: 0 !important; }
+header.top h1 { font-size: clamp(26px, 4vw, 36px) !important; }
+header.top h1::after { height: 4px; margin-top: 8px; }
+.obs-docente { border-top: 3px solid var(--accent); background: var(--paper); padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+.obs-docente[hidden] { display: none !important; }
+.obs-docente__h { font-family: var(--font-display); font-size: 17px !important; margin: 6px 0 0; text-transform: none !important; }
+.obs-docente .lede { margin: 0; max-width: 70ch; }
+.obs-docente .obs-ficha dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.obs-docente .obs-ficha dt { color: var(--muted); }
+.obs-docente .obs-ficha dd { margin: 0; min-width: 0; white-space: pre-line; }
+.obs-docente .obs-ficha ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 3px; }
+.obs-docente-btn[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+@media (max-width: 560px) { .obs-docente .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } }
+/* Modo proyector: solo los controles, el gráfico y la frase que explica lo que pasa */
+body.obs-proj header.top .eyebrow, body.obs-proj .obs-docente, body.obs-proj .prose p, body.obs-proj p.small,
+body.obs-proj p.help, body.obs-proj .lede, body.obs-proj .obs-pie { display: none !important; }
+body.obs-proj header.top { padding-block: 8px 4px !important; }
+body.obs-proj header.top h1 { font-size: 28px !important; }
+
 
 /* OBS-COMMON-CSS:END */
 body.obs-proj .roundbar .rk { font-size: 34px; }
@@ -483,9 +504,6 @@ body.obs-proj table { font-size: 17px; }
     </div>
   </section>
 
-  <!-- ===================== FLUJO · SIMPLE y AMPLIADO (misma estructura) ===================== -->
-  <section class="view" id="view-flujo-simple" role="tabpanel" hidden></section>
-  <section class="view" id="view-flujo-ampliado" role="tabpanel" hidden></section>
 
   <footer>
     <span data-i18n-html="foot.arroz">Juego del arroz: reglas, rentas y raciones del material de la SA 1 (sesión 1). Las cifras son del juego, no datos históricos; reproducen el patrón que describe Amartya Sen en <em>Poverty and Famines</em> (1981), cap. 6.</span>
@@ -551,12 +569,12 @@ window.OBS = (() => {
     document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
   }
   register({
-    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente",
+    es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente", "obs.docente": "Para el docente", "obs.sobre": "Sobre esta herramienta",
       "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
       "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
       "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
       "obs.saved": "Archivo descargado." },
-    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent",
+    va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent", "obs.docente": "Per al docent", "obs.sobre": "Sobre esta ferramenta",
       "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
       "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
       "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
@@ -573,13 +591,16 @@ window.OBS = (() => {
     const L = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
     const list = arr => h("ul", {}, (arr || []).map(x => h("li", {}, x.code ? h("span", { class: "code", text: x.code }) : null, L(x))));
     box.replaceChildren(
-      h("summary", { text: t("obs.ficha") }),
+      h("h2", { class: "obs-docente__h", text: t("obs.ficha") }),
       h("dl", {},
         ficha.sesiones ? [h("dt", { text: t("obs.sessions") }), h("dd", { text: L(ficha.sesiones) })] : null,
         ficha.saberes ? [h("dt", { text: t("obs.saberes") }), h("dd", {}, list(ficha.saberes))] : null,
         ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
         ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
   }
+  /* Barra de una línea: «← Panel», idioma, modo proyector y «Para el docente».
+     El panel «Para el docente» (cerrado al empezar) recoge la entrada de la cabecera (.lede) y la ficha docente,
+     para que la herramienta empiece arriba. */
   function mountBar(container, opts = {}) {
     const back = h("a", { class: "back", href: opts.panelUrl || PANEL_URL, "data-i18n": "obs.back", text: t("obs.back") });
     const seg = h("div", { class: "obs-seg", role: "group", "aria-label": t("obs.lang") },
@@ -590,17 +611,23 @@ window.OBS = (() => {
     pj.addEventListener("click", () => setProj(!proj));
     const pjKeep = h("button", { type: "button", class: "obs-toggle", "data-proj": "1", "aria-pressed": String(proj), "data-i18n": "obs.proj", text: t("obs.proj") });
     pjKeep.addEventListener("click", () => setProj(!proj));
-    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back, h("div", { class: "obs-tools" }, seg, pj), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    // Panel «Para el docente»
+    const cabecera = container.closest("header") || document.querySelector("header.top") || document.querySelector("header");
+    const lede = cabecera ? cabecera.querySelector(".lede") : null;
+    const panel = h("div", { class: "obs-docente", id: "obs-docente", hidden: true });
+    if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
+    let fichaBox = null;
+    if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
+    const hayPanel = !!(lede || opts.ficha);
+    const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
+    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
+    container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
+      h("div", { class: "obs-tools" }, seg, pj, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+    if (hayPanel) (cabecera || container).after(panel);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
     document.head.append(style);
-    if (opts.ficha) {
-      const box = h("details", { class: "obs-ficha" });
-      (opts.fichaContainer || container).after(box);
-      renderFicha(box, opts.ficha);
-      onLang(() => renderFicha(box, opts.ficha));
-    }
     setProj(proj);
   }
   const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
@@ -1125,8 +1152,8 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "arroz.h1": "El juego del arroz",
       "arroz.lede": "Bengala, 1943: ¿faltó comida? En «Mercado» se escriben las pujas de cada equipo y la herramienta reparte, cobra y proyecta quién come. En «Votaciones», tres preguntas rápidas con Plickers. El arroz, las tarjetas y las pujas siguen en papel.",
       "flujo.h1": "El flujo de la renta",
-      "flujo.lede": "Cómo circulan el dinero, los bienes y el trabajo entre las empresas y las familias. En el flujo simple, el circuito se repite igual cada vuelta; en el ampliado, una parte del excedente se reinvierte y el circuito crece.",
-      "tab.mercado": "Mercado", "tab.votar": "Votaciones", "tab.pizarra": "Pizarra", "tab.simple": "Flujo de la renta simple", "tab.ampliado": "Flujo de la renta ampliado",
+      "flujo.lede": "Cómo circulan el dinero, los bienes y el trabajo entre las empresas y las familias. En la pizarra se dibuja el circuito y, con «Jugar», se pone a dar vueltas.",
+      "tab.mercado": "Mercado", "tab.votar": "Votaciones", "tab.pizarra": "Pizarra",
       "round.prev": "Ronda anterior", "round.next": "Ronda siguiente", "round.of": "Ronda {n} de 3", "round.go": "Ir a la ronda {n}",
       "round.k1": "Ronda 1", "round.k2": "Ronda 2", "round.k3": "Ronda 3",
       "round.t1": "1942", "round.t2": "Primavera de 1943", "round.t3": "Verano de 1943",
@@ -1178,46 +1205,14 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "foot.flujo": "Flujo de la renta: cifras inventadas para el aula, en millones de euros.",
       "foot.store": "Lo que se escribe aquí se guarda solo en este navegador, para no perderlo si se recarga la página.",
       // Flujo de la renta
-      "f.secI": "Sector de maquinaria y materiales", "f.secII": "Sector de bienes de consumo", "f.fam": "Familias trabajadoras", "f.own": "Propietarios",
       "f.secI.s": "Maquinaria y materiales", "f.secII.s": "Bienes de consumo",
-      "f.mat": "Materiales y desgaste", "f.sal": "Salarios", "f.exc": "Excedente", "f.prod": "Lo que produce", "f.reinv": "Reinversión", "f.cons": "Consumo de los propietarios",
-      "f.simple.note": "Todo el excedente se gasta en consumo: la vuelta siguiente es igual que esta.",
-      "f.simple.h": "El circuito que se repite", "f.amp.h": "El circuito que crece",
-      "f.simple.p": "Dos sectores producen todo lo que se necesita: uno hace maquinaria y materiales; el otro, bienes de consumo. Con lo que venden pagan los materiales y el desgaste, los salarios y queda un excedente. Aquí los propietarios gastan todo el excedente en consumo: cada vuelta el circuito se repite igual.",
-      "f.amp.p": "Ahora los propietarios del sector de maquinaria reinvierten una parte del excedente: compran más materiales y contratan a más gente. El sector de bienes de consumo reinvierte lo necesario para usar la maquinaria nueva. El circuito crece vuelta a vuelta.",
-      "f.vuelta": "Vuelta {n}", "f.vueltas": "Vueltas", "f.play": "Reproducir", "f.pause": "Pausa", "f.reset": "Volver a la vuelta 1",
-      "f.a": "Parte del excedente del sector de maquinaria que se reinvierte",
-      "f.leg.money": "Dinero", "f.leg.goods": "Maquinaria y bienes", "f.leg.work": "Trabajo", "f.leg.reinv": "Reinversión (lo que se acumula)",
-      "f.g.h": "Lo que se produce en cada vuelta", "f.g.y": "Total producido",
-      "f.g.p.simple": "Todas las barras son iguales: los propietarios consumen todo el excedente y el circuito se repite igual vuelta tras vuelta.",
-      "f.g.p.amp": "La parte verde es el excedente que se reinvierte: en la vuelta siguiente se convierte en más materiales y más salarios, y la barra crece. Eso es la acumulación.",
-      "f.g.p.zero": "Con un 0 % no se reinvierte nada: no hay parte verde y todas las barras son iguales, como en el flujo simple.",
-      "f.selfnew": "maquinaria nueva",
-      "f.flowsH": "Lo que circula en esta vuelta",
-      "f.fl.matI": "Materiales que el sector de maquinaria se fabrica a sí mismo: {x}",
-      "f.fl.ItoII": "Maquinaria y materiales del sector de maquinaria al de consumo: {x} (y el mismo dinero en sentido contrario)",
-      "f.fl.wages": "Salarios a las familias trabajadoras: {x} (las familias los gastan en bienes de consumo)",
-      "f.fl.exc": "Excedente para los propietarios: {x}",
-      "f.fl.cons": "Gasto de los propietarios en bienes de consumo: {x}",
-      "f.fl.reinv": "Reinversión: {x} (más materiales y más salarios para la vuelta siguiente)",
-      "f.check.h": "Condición para que el circuito funcione",
-      "f.check.simple": "Lo que el sector de maquinaria vende al de consumo ({a}) tiene que ser igual a lo que este necesita para reponer sus materiales y su desgaste ({b}).",
-      "f.check.amp": "Lo que el sector de maquinaria vende al de consumo ({a}) tiene que ser igual a lo que este necesita para reponer y ampliar su maquinaria ({b}).",
-      "f.ok": "cuadra", "f.bad": "no cuadra",
-      "f.falta": "Al sector de bienes de consumo le llega menos maquinaria de la que necesita para reponer la gastada (faltan {x}): tiene que producir menos en la vuelta siguiente.",
-      "f.sobra": "El sector de maquinaria produce más de lo que el de consumo puede comprar (sobran {x}).",
-      "f.zero": "Con un 0 % nadie reinvierte y el circuito parte de las mismas cifras que el flujo simple (sector de maquinaria 4.000 + 1.000 + 1.000; sector de consumo 2.000 + 500 + 500): se repite igual en todas las vueltas. Al subir la reinversión, parte de otras cifras (sector de consumo 1.500 + 750 + 750), que dejan sitio para crecer.",
-      "f.grow": "Con un {a} % reinvertido, el total producido crece un {g} % en la última vuelta.",
-      "f.table": "Vuelta a vuelta", "f.download": "Descargar la tabla (Excel)",
-      "f.col.v": "Vuelta", "f.col.Ip": "Maquinaria: produce", "f.col.Im": "Materiales y desgaste", "f.col.Is": "Salarios", "f.col.Ie": "Excedente", "f.col.Ir": "Reinversión",
-      "f.col.IIp": "Consumo: produce", "f.col.IIm": "Materiales y desgaste", "f.col.IIs": "Salarios", "f.col.IIe": "Excedente", "f.col.IIr": "Reinversión", "f.col.tot": "Total producido", "f.col.g": "Crecimiento",
-      "f.csv.I": "Sector de maquinaria", "f.csv.II": "Sector de bienes de consumo",
-      "f.units": "Millones de euros de cada vuelta.",
+      "f.exc": "Excedente", 
+      "f.g.y": "Total producido",
       // Ficha docente
       "fi.arroz.ses": "Sesión 1 (La pista). Evaluación inicial, sin nota.",
       "fi.arroz.uso": "El docente o la persona responsable del material copia cada tarjeta de puja; la herramienta reparte, cobra y proyecta quién come. Las votaciones con Plickers se hacen antes de las reglas, antes de la ronda 3 y en el cierre.",
-      "fi.flujo.ses": "Sesión 4 (Las herramientas: el modelo de la reproducción y el flujo circular de la renta).",
-      "fi.flujo.uso": "Se proyecta después de construir el ciclo en la pizarra: primero el flujo simple (la condición para que se repita) y después el ampliado (qué pasa si se reinvierte el excedente). La tabla se puede descargar para comprobar los cálculos en una hoja de cálculo."
+      "fi.flujo.ses": "Sin sesión fija: apoyo para dibujar el flujo circular de la renta (saber C1).",
+      "fi.flujo.uso": "Pizarra para dibujar en clase el circuito entre familias y empresas (y, si se quiere, Estado, bancos, exterior y excedente) y ponerlo a dar vueltas. Los ejemplos y los tres retos sirven de guía; el dibujo se guarda en el navegador y se puede copiar o descargar."
     },
     va: {
       "page.title": "Observatori · SA 1",
@@ -1226,8 +1221,8 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "arroz.h1": "El joc de l'arròs",
       "arroz.lede": "Bengala, 1943: va faltar menjar? En «Mercat» s'escriuen les pujes de cada equip i la ferramenta reparteix, cobra i projecta qui menja. En «Votacions», tres preguntes ràpides amb Plickers. L'arròs, les targetes i les pujes continuen en paper.",
       "flujo.h1": "El flux de la renda",
-      "flujo.lede": "Com circulen els diners, els béns i el treball entre les empreses i les famílies. En el flux simple, el circuit es repetix igual a cada volta; en l'ampliat, una part de l'excedent es reinvertix i el circuit creix.",
-      "tab.mercado": "Mercat", "tab.votar": "Votacions", "tab.pizarra": "Pissarra", "tab.simple": "Flux de la renda simple", "tab.ampliado": "Flux de la renda ampliat",
+      "flujo.lede": "Com circulen els diners, els béns i el treball entre les empreses i les famílies. En la pissarra es dibuixa el circuit i, amb «Jugar», es posa a donar voltes.",
+      "tab.mercado": "Mercat", "tab.votar": "Votacions", "tab.pizarra": "Pissarra",
       "round.prev": "Ronda anterior", "round.next": "Ronda següent", "round.of": "Ronda {n} de 3", "round.go": "Anar a la ronda {n}",
       "round.k1": "Ronda 1", "round.k2": "Ronda 2", "round.k3": "Ronda 3",
       "round.t1": "1942", "round.t2": "Primavera de 1943", "round.t3": "Estiu de 1943",
@@ -1278,45 +1273,13 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "foot.arroz": "Joc de l'arròs: regles, rendes i racions del material de la SA 1 (sessió 1). Les xifres són del joc, no dades històriques; reproduïxen el patró que descriu Amartya Sen en <em>Poverty and Famines</em> (1981), cap. 6.",
       "foot.flujo": "Flux de la renda: xifres inventades per a l'aula, en milions d'euros.",
       "foot.store": "El que s'escriu ací només es guarda en este navegador, per a no perdre-ho si es recarrega la pàgina.",
-      "f.secI": "Sector de maquinària i materials", "f.secII": "Sector de béns de consum", "f.fam": "Famílies treballadores", "f.own": "Propietaris",
       "f.secI.s": "Maquinària i materials", "f.secII.s": "Béns de consum",
-      "f.mat": "Materials i desgast", "f.sal": "Salaris", "f.exc": "Excedent", "f.prod": "El que produïx", "f.reinv": "Reinversió", "f.cons": "Consum dels propietaris",
-      "f.simple.note": "Tot l'excedent es gasta en consum: la volta següent és igual que esta.",
-      "f.simple.h": "El circuit que es repetix", "f.amp.h": "El circuit que creix",
-      "f.simple.p": "Dos sectors produïxen tot el que es necessita: un fa maquinària i materials; l'altre, béns de consum. Amb el que venen paguen els materials i el desgast, els salaris i queda un excedent. Ací els propietaris gasten tot l'excedent en consum: a cada volta el circuit es repetix igual.",
-      "f.amp.p": "Ara els propietaris del sector de maquinària reinvertixen una part de l'excedent: compren més materials i contracten més gent. El sector de béns de consum reinvertix el que cal per a utilitzar la maquinària nova. El circuit creix volta a volta.",
-      "f.vuelta": "Volta {n}", "f.vueltas": "Voltes", "f.play": "Reproduir", "f.pause": "Pausa", "f.reset": "Tornar a la volta 1",
-      "f.a": "Part de l'excedent del sector de maquinària que es reinvertix",
-      "f.leg.money": "Diners", "f.leg.goods": "Maquinària i béns", "f.leg.work": "Treball", "f.leg.reinv": "Reinversió (el que s'acumula)",
-      "f.g.h": "El que es produïx a cada volta", "f.g.y": "Total produït",
-      "f.g.p.simple": "Totes les barres són iguals: els propietaris consumixen tot l'excedent i el circuit es repetix igual volta rere volta.",
-      "f.g.p.amp": "La part verda és l'excedent que es reinvertix: en la volta següent es convertix en més materials i més salaris, i la barra creix. Això és l'acumulació.",
-      "f.g.p.zero": "Amb un 0 % no es reinvertix res: no hi ha part verda i totes les barres són iguals, com en el flux simple.",
-      "f.selfnew": "maquinària nova",
-      "f.flowsH": "El que circula en esta volta",
-      "f.fl.matI": "Materials que el sector de maquinària es fabrica a si mateix: {x}",
-      "f.fl.ItoII": "Maquinària i materials del sector de maquinària al de consum: {x} (i els mateixos diners en sentit contrari)",
-      "f.fl.wages": "Salaris per a les famílies treballadores: {x} (les famílies els gasten en béns de consum)",
-      "f.fl.exc": "Excedent per als propietaris: {x}",
-      "f.fl.cons": "Despesa dels propietaris en béns de consum: {x}",
-      "f.fl.reinv": "Reinversió: {x} (més materials i més salaris per a la volta següent)",
-      "f.check.h": "Condició perquè el circuit funcione",
-      "f.check.simple": "El que el sector de maquinària ven al de consum ({a}) ha de ser igual al que este necessita per a reposar els seus materials i el seu desgast ({b}).",
-      "f.check.amp": "El que el sector de maquinària ven al de consum ({a}) ha de ser igual al que este necessita per a reposar i ampliar la seua maquinària ({b}).",
-      "f.ok": "quadra", "f.bad": "no quadra",
-      "f.falta": "Al sector de béns de consum li arriba menys maquinària de la que necessita per a reposar la gastada (en falten {x}): ha de produir menys en la volta següent.",
-      "f.sobra": "El sector de maquinària produïx més del que el de consum pot comprar (en sobren {x}).",
-      "f.zero": "Amb un 0 % ningú reinvertix i el circuit partix de les mateixes xifres que el flux simple (sector de maquinària 4.000 + 1.000 + 1.000; sector de consum 2.000 + 500 + 500): es repetix igual en totes les voltes. En pujar la reinversió, partix d'altres xifres (sector de consum 1.500 + 750 + 750), que deixen lloc per a créixer.",
-      "f.grow": "Amb un {a} % reinvertit, el total produït creix un {g} % en l'última volta.",
-      "f.table": "Volta a volta", "f.download": "Descarregar la taula (Excel)",
-      "f.col.v": "Volta", "f.col.Ip": "Maquinària: produïx", "f.col.Im": "Materials i desgast", "f.col.Is": "Salaris", "f.col.Ie": "Excedent", "f.col.Ir": "Reinversió",
-      "f.col.IIp": "Consum: produïx", "f.col.IIm": "Materials i desgast", "f.col.IIs": "Salaris", "f.col.IIe": "Excedent", "f.col.IIr": "Reinversió", "f.col.tot": "Total produït", "f.col.g": "Creixement",
-      "f.csv.I": "Sector de maquinària", "f.csv.II": "Sector de béns de consum",
-      "f.units": "Milions d'euros de cada volta.",
+      "f.exc": "Excedent", 
+      "f.g.y": "Total produït",
       "fi.arroz.ses": "Sessió 1 (La pista). Avaluació inicial, sense nota.",
       "fi.arroz.uso": "El docent o la persona responsable del material copia cada targeta de puja; la ferramenta reparteix, cobra i projecta qui menja. Les votacions amb Plickers es fan abans de les regles, abans de la ronda 3 i en el tancament.",
-      "fi.flujo.ses": "Sessió 4 (Les ferramentes: el model de la reproducció i el flux circular de la renda).",
-      "fi.flujo.uso": "Es projecta després de construir el cicle en la pissarra: primer el flux simple (la condició perquè es repetisca) i després l'ampliat (què passa si es reinvertix l'excedent). La taula es pot descarregar per a comprovar els càlculs en un full de càlcul."
+      "fi.flujo.ses": "Sense sessió fixa: suport per a dibuixar el flux circular de la renda (saber C1).",
+      "fi.flujo.uso": "Pissarra per a dibuixar en classe el circuit entre famílies i empreses (i, si es vol, Estat, bancs, exterior i excedent) i posar-lo a donar voltes. Els exemples i els tres reptes servixen de guia; el dibuix es guarda en el navegador i es pot copiar o descarregar."
     }
   });
 
@@ -1365,21 +1328,21 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
   // =====================================================================
   // NAVEGACIÓN: herramienta (desplegable) → pestañas
   // =====================================================================
-  const TOOLS = { arroz: ["mercado", "votar"], flujo: ["pizarra", "simple", "ampliado"] };
-  const TABKEY = { mercado: "tab.mercado", votar: "tab.votar", pizarra: "tab.pizarra", simple: "tab.simple", ampliado: "tab.ampliado" };
+  const TOOLS = { arroz: ["mercado", "votar"], flujo: ["pizarra"] };
+  const TABKEY = { mercado: "tab.mercado", votar: "tab.votar", pizarra: "tab.pizarra" };
   const ALLVIEWS = Object.entries(TOOLS).flatMap(([t, vs]) => vs.map(v => t + "-" + v));
   let tool = "arroz", tab = "mercado";
-  const lastTab = store.get("sa1-lasttab") || { arroz: "mercado", flujo: "simple" };
+  const lastTab = store.get("sa1-lasttab") || { arroz: "mercado", flujo: "pizarra" };
   function route() {
-    const h = location.hash.slice(1);
+    let h = location.hash.slice(1);
+    if (h === "flujo-simple" || h === "flujo-ampliado") h = "flujo-pizarra";   // pestañas retiradas el 30/10
     if (ALLVIEWS.includes(h)) { [tool, tab] = h.split("-"); }
-    else if (TOOLS[h]) { tool = h; tab = lastTab[h] || TOOLS[h][0]; }
-    else { tool = store.get("sa1-tool") || "arroz"; if (!TOOLS[tool]) tool = "arroz"; tab = lastTab[tool] || TOOLS[tool][0]; }
+    else if (TOOLS[h]) { tool = h; tab = TOOLS[h].includes(lastTab[h]) ? lastTab[h] : TOOLS[h][0]; }
+    else { tool = store.get("sa1-tool") || "arroz"; if (!TOOLS[tool]) tool = "arroz"; tab = TOOLS[tool].includes(lastTab[tool]) ? lastTab[tool] : TOOLS[tool][0]; }
     lastTab[tool] = tab; store.set("sa1-lasttab", lastTab); store.set("sa1-tool", tool);
     $("tool").value = tool;
     for (const v of ALLVIEWS) $("view-" + v).hidden = v !== tool + "-" + tab;
     renderTabs(); renderHead(); renderFicha();
-    if (tool === "flujo" && (tab === "simple" || tab === "ampliado")) FLOWUI[tab].show(); else stopAllFlows();
   }
   function renderTabs() {
     $("tabs").setAttribute("aria-label", T("tool." + tool));
@@ -1633,303 +1596,20 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
   twoStep($("clear-votes"), () => { votes = QKEYS.map(() => ["", "", "", ""]); store.set("arroz-votos", votes); buildVotes(); });
 
   // =====================================================================
-  // FLUJO DE LA RENTA · motor (funciones puras, sin dibujo)
-  // Por debajo: esquemas de reproducción simple y ampliada de Marx (El capital, libro II).
-  // c = «materiales y desgaste», v = «salarios», s = «excedente»; sector I = maquinaria y materiales; sector II = bienes de consumo.
-  // Ejemplos clásicos: simple I 4000c+1000v+1000s, II 2000c+500v+500s; ampliada I 4000c+1000v+1000s, II 1500c+750v+750s.
-  // =====================================================================
-  const FLOW = {
-    start: {
-      simple: { e: 1, I: { c: 4000, v: 1000 }, II: { c: 2000, v: 500 } },
-      ampliado: { e: 1, I: { c: 4000, v: 1000 }, II: { c: 1500, v: 750 } }
-    },
-    // Una vuelta: a = parte del excedente del sector I que se reinvierte (composición constante en cada sector)
-    vuelta(st, a) {
-      const I = st.I, II = st.II, e = st.e;
-      const s1 = e * I.v, s2 = e * II.v, kI = I.c / I.v, kII = II.c / II.v;
-      const acc1 = a * s1, dc1 = acc1 * kI / (1 + kI), dv1 = acc1 / (1 + kI), cons1 = s1 - acc1;
-      const ventaI = I.v + dv1 + cons1;               // lo que el sector I vende al II: I(v + Δv + consumo)
-      let dc2 = ventaI - II.c, dv2 = dc2 / kII, cons2 = s2 - dc2 - dv2, sobra = 0, falta = 0;
-      if (cons2 < 0) { dc2 = s2 * kII / (1 + kII); dv2 = s2 / (1 + kII); cons2 = 0; sobra = ventaI - (II.c + dc2); }
-      if (dc2 < 0) { falta = -dc2; cons2 = s2; }
-      return {
-        I: { c: I.c, v: I.v, s: s1, p: I.c + I.v + s1, dc: dc1, dv: dv1, acc: acc1, cons: cons1 },
-        II: { c: II.c, v: II.v, s: s2, p: II.c + II.v + s2, dc: dc2, dv: dv2, acc: dc2 + dv2, cons: cons2 },
-        ventaI, necesitaII: II.c + Math.max(dc2, -II.c), sobra, falta,
-        next: { e, I: { c: I.c + dc1, v: I.v + dv1 }, II: { c: Math.max(0, II.c + dc2), v: Math.max(0, II.v + dv2) } }
-      };
-    },
-    // Punto de partida: con 0 % de reinversión se parte de las cifras equilibradas del esquema simple,
-    // para que el circuito se repita igual desde la primera vuelta; con más de 0 %, del ejemplo clásico de la ampliada.
-    startFor(kind, a) { return kind === "ampliado" && a > 0 ? FLOW.start.ampliado : FLOW.start.simple; },
-    series(start, a, n) {
-      const out = []; let st = start;
-      for (let i = 0; i < n; i++) { const r = FLOW.vuelta(st, a); out.push(r); st = r.next; }
-      return out;
-    }
-  };
-
-  // =====================================================================
-  // FLUJO DE LA RENTA · interfaz (circuito animado tipo Loopy + tabla)
-  // =====================================================================
-  const NV = 10;   // vueltas
-  function makeFlowUI(kind) {
-    const root = $("view-flujo-" + kind);
-    const S = { k: 1, a: kind === "ampliado" ? (store.get("sa1-a") ?? 0.5) : 0, playing: null, raf: null, tokens: [], last: 0, acc: {} };
-    const ids = p => "f" + kind[0] + "-" + p;
-    root.innerHTML = `
-      <div class="prose"><h2 id="${ids("h")}"></h2><p id="${ids("p")}"></p></div>
-      ${kind === "ampliado" ? `<div class="slider"><div class="lab"><label for="${ids("a")}" id="${ids("al")}"></label><output id="${ids("ao")}" for="${ids("a")}"></output></div><input type="range" id="${ids("a")}" min="0" max="100" step="5"></div>` : ""}
-      <div class="vbar">
-        <span class="vk" id="${ids("vk")}"></span>
-        <div class="slider"><div class="lab"><label for="${ids("v")}" id="${ids("vl")}"></label><output id="${ids("vo")}" for="${ids("v")}"></output></div><input type="range" id="${ids("v")}" min="1" max="${NV}" step="1" value="1"></div>
-        <button type="button" class="btn" id="${ids("play")}"></button>
-        <button type="button" class="btn quiet small" id="${ids("reset")}"></button>
-      </div>
-      <div class="legend"><span><i class="dot"></i><span id="${ids("lm")}"></span></span><span><i class="dot goods"></i><span id="${ids("lg")}"></span></span><span><i class="dot work"></i><span id="${ids("lw")}"></span></span>${kind === "ampliado" ? `<span><i class="dot reinv"></i><span id="${ids("lr")}"></span></span>` : ""}</div>
-      <div class="circuit"><svg id="${ids("svg")}" viewBox="0 0 640 430" role="img"></svg></div>
-      <figure style="margin:0;display:flex;flex-direction:column;gap:8px">
-        <figcaption><h3 id="${ids("gh")}"></h3></figcaption>
-        <div class="legend"><span><i class="c-mat"></i><span id="${ids("g1")}"></span></span><span><i class="c-sal"></i><span id="${ids("g2")}"></span></span>${kind === "ampliado" ? `<span><i class="reinv"></i><span id="${ids("g3")}"></span></span>` : ""}<span><i class="c-cons"></i><span id="${ids("g4")}"></span></span></div>
-        <div class="growth"><svg id="${ids("grow")}" viewBox="0 0 640 240" role="img"></svg></div>
-        <p class="small" id="${ids("gp")}"></p>
-      </figure>
-      <div class="check" id="${ids("check")}"></div>
-      <div class="notice" id="${ids("note")}" aria-live="polite"></div>
-      <div><h3 id="${ids("flh")}" style="margin-bottom:6px"></h3><ul class="flows" id="${ids("flows")}"></ul></div>
-      <div class="block" style="gap:10px">
-        <div class="actions" style="justify-content:space-between"><h3 id="${ids("th")}"></h3><button type="button" class="btn ghost small" id="${ids("dl")}"></button></div>
-        <p class="small" id="${ids("units")}"></p>
-        <div class="scroll"><table class="flow" id="${ids("tbl")}"></table></div>
-        <p class="small" id="${ids("dlmsg")}" aria-live="polite"></p>
-      </div>`;
-    const q = p => $(ids(p));
-    if (kind === "ampliado") {
-      q("a").value = Math.round(S.a * 100);
-      q("a").addEventListener("input", () => { S.a = +q("a").value / 100; store.set("sa1-a", S.a); render(); });
-    }
-    q("v").addEventListener("input", () => { stop(); S.k = +q("v").value; render(); });
-    q("play").addEventListener("click", () => { if (S.playing) stop(); else play(); });
-    q("reset").addEventListener("click", () => { stop(); S.k = 1; q("v").value = 1; render(); });
-    q("dl").addEventListener("click", async () => {
-      const ser = FLOW.series(FLOW.startFor(kind, S.a), S.a, NV);
-      const head = [T("f.col.v"), T("f.csv.I") + " · " + T("f.mat"), T("f.csv.I") + " · " + T("f.sal"), T("f.csv.I") + " · " + T("f.exc"), T("f.csv.I") + " · " + T("f.prod"), T("f.csv.I") + " · " + T("f.reinv"),
-        T("f.csv.II") + " · " + T("f.mat"), T("f.csv.II") + " · " + T("f.sal"), T("f.csv.II") + " · " + T("f.exc"), T("f.csv.II") + " · " + T("f.prod"), T("f.csv.II") + " · " + T("f.reinv"), T("f.col.tot")];
-      const n2 = v => String(Math.round(v * 100) / 100).replace(".", ",");
-      const rows = ser.map((r, i) => [i + 1, n2(r.I.c), n2(r.I.v), n2(r.I.s), n2(r.I.p), n2(r.I.acc), n2(r.II.c), n2(r.II.v), n2(r.II.s), n2(r.II.p), n2(r.II.acc), n2(r.I.p + r.II.p)]);
-      q("dlmsg").textContent = await OBS.download("flujo-renta-" + kind + ".csv", OBS.csv([head, ...rows]), "text/csv;charset=utf-8");
-    });
-
-    // Geometría del circuito
-    const POS = { I: [170, 105], II: [490, 105], F: [170, 335], O: [490, 335] };
-    function radius(val, max) { return 30 + 34 * Math.sqrt(Math.max(0, val) / max); }
-    function streamsOf(r) {
-      // [desde, hasta, tipo, cantidad]
-      const st = [
-        ["I", "II", "goods", r.ventaI], ["II", "I", "money", r.ventaI],
-        ["I", "F", "money", r.I.v], ["F", "I", "work", r.I.v],
-        ["II", "F", "money", r.II.v], ["F", "II", "work", r.II.v],
-        ["F", "II", "money", r.I.v + r.II.v], ["II", "F", "goods", r.I.v + r.II.v],
-        ["I", "O", "money", r.I.s], ["II", "O", "money", r.II.s],
-        ["O", "II", "money", r.I.cons + r.II.cons], ["II", "O", "goods", r.I.cons + r.II.cons]
-      ];
-      if (r.I.acc > 0.5) st.push(["O", "I", "reinv", r.I.acc]);
-      if (r.II.acc > 0.5) st.push(["O", "II", "reinv", r.II.acc]);
-      return st.filter(s => s[3] > 0.5);
-    }
-    function lineFor(a, b, rad) {
-      const [x1, y1] = POS[a], [x2, y2] = POS[b];
-      const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
-      const off = 7, nx = -uy * off, ny = ux * off;         // cada sentido va por su carril
-      return { x1: x1 + ux * rad[a] + nx, y1: y1 + uy * rad[a] + ny, x2: x2 - ux * rad[b] + nx, y2: y2 - uy * rad[b] + ny };
-    }
-    let current = null;
-    function draw(r, maxP) {
-      const svg = q("svg"); svg.replaceChildren();
-      svg.setAttribute("aria-label", T("f.flowsH"));
-      const rad = { I: radius(r.I.p, maxP), II: radius(r.II.p, maxP), F: radius((r.I.v + r.II.v) * 3, maxP), O: radius((r.I.s + r.II.s) * 3, maxP) };
-      const gL = sv("g"), gT = sv("g"), gN = sv("g");
-      // enlaces (grosor según lo que circula)
-      const pairs = [["I", "II"], ["I", "F"], ["II", "F"], ["I", "O"], ["II", "O"]];
-      const tot = {}; streamsOf(r).forEach(([a, b, , v]) => { const k = [a, b].sort().join(""); tot[k] = (tot[k] || 0) + v; });
-      pairs.forEach(([a, b]) => {
-        const k = [a, b].sort().join(""); if (!tot[k]) return;
-        const [x1, y1] = POS[a], [x2, y2] = POS[b];
-        gL.append(sv("line", { x1, y1, x2, y2, class: "link", "stroke-width": (4 + 18 * Math.sqrt(tot[k] / maxP)).toFixed(1) }));
-      });
-      // reinversión: el excedente que vuelve a los sectores, en verde y con su rótulo
-      streamsOf(r).filter(s => s[2] === "reinv").forEach(([a, b, , v]) => {
-        const g = lineFor(a, b, { I: 0, II: 0, F: 0, O: 0 });
-        gL.append(sv("line", { x1: g.x1, y1: g.y1, x2: g.x2, y2: g.y2, class: "link reinv", "stroke-width": (3 + 14 * Math.sqrt(v / maxP)).toFixed(1) }));
-        // rótulo: hacia el sector I, en la diagonal cerca de los propietarios; hacia el II, a la derecha de la vertical
-        const lx = b === "I" ? POS.O[0] + (POS.I[0] - POS.O[0]) * 0.3 - 10 : POS.II[0] + 18;
-        const ly = b === "I" ? POS.O[1] + (POS.I[1] - POS.O[1]) * 0.3 - 8 : (POS.II[1] + POS.O[1]) / 2;
-        gL.append(sv("text", { x: lx, y: ly, "text-anchor": b === "I" ? "end" : "start", class: "rlabel" }, T("f.reinv").toLowerCase() + " " + fmt(v)));
-      });
-      // autoconsumo del sector I (materiales que se repone a sí mismo) y, en verde, la maquinaria nueva que se queda
-      const [ix, iy] = POS.I;
-      gL.append(sv("circle", { cx: ix - rad.I - 16, cy: iy, r: 18, class: "loop", "stroke-width": (3 + 12 * Math.sqrt((r.I.c + r.I.dc) / maxP)).toFixed(1) }));
-      if (r.I.dc > 0.5) {
-        const lb = sv("text", { x: 8, y: iy + 40, class: "rlabel", style: "font-size:12px" });
-        lb.append(sv("tspan", { x: 8 }, "+" + fmt(r.I.dc)), sv("tspan", { x: 8, dy: 15 }, T("f.selfnew")));
-        gL.append(lb);
-      }
-      // nodos
-      const node = (key, cls, name, val, sub) => {
-        const [x, y] = POS[key];
-        gN.append(sv("circle", { cx: x, cy: y, r: rad[key], class: "node " + cls }));
-        gN.append(sv("text", { x, y: y - 4, "text-anchor": "middle", class: "nval" }, fmt(val)));
-        gN.append(sv("text", { x, y: y + 13, "text-anchor": "middle", class: "nsub" }, sub));
-        const below = key === "F" || key === "O";
-        gN.append(sv("text", { x, y: below ? y + rad[key] + 20 : y - rad[key] - 12, "text-anchor": "middle", class: "nname" }, name));
-      };
-      node("I", "sec", T("f.secI"), r.I.p, T("f.prod").toLowerCase());
-      node("II", "sec", T("f.secII"), r.II.p, T("f.prod").toLowerCase());
-      node("F", "fam", T("f.fam"), r.I.v + r.II.v, T("f.sal").toLowerCase());
-      node("O", "own", T("f.own"), r.I.s + r.II.s, T("f.exc").toLowerCase());
-      svg.append(gL, gT, gN);
-      current = { r, rad, gT, streams: streamsOf(r).map(([a, b, kind2, v]) => ({ a, b, kind: kind2, v, geo: lineFor(a, b, rad) })), self: { cx: ix - rad.I - 16, cy: iy, v: r.I.c + r.I.dc, nuevo: r.I.dc / (r.I.c + r.I.dc) } };
-      S.tokens = []; S.acc = {};
-      if (reduced()) drawStaticTokens(maxP);
-    }
-    function drawStaticTokens(maxP) {
-      // Sin animación: un punto fijo por sentido, en la mitad de cada carril
-      current.streams.forEach(s => {
-        const g = s.geo, t = s.kind === "work" ? 0.35 : s.kind === "goods" ? 0.5 : 0.65;
-        current.gT.append(sv("circle", { cx: g.x1 + (g.x2 - g.x1) * t, cy: g.y1 + (g.y2 - g.y1) * t, r: 4.5, class: "tk-" + s.kind }));
-      });
-    }
-    function frame(ts) {
-      S.raf = requestAnimationFrame(frame);
-      if (!current || root.hidden || document.hidden) { S.last = ts; return; }
-      const dt = Math.min(0.1, (ts - (S.last || ts)) / 1000); S.last = ts;
-      const maxV = 8000;
-      current.streams.forEach((s, i) => {
-        S.acc[i] = (S.acc[i] || 0) + dt * (0.6 + 4.5 * s.v / maxV);
-        while (S.acc[i] >= 1) { S.acc[i] -= 1; S.tokens.push({ i, t: 0 }); }
-      });
-      S.acc.self = (S.acc.self || 0) + dt * (0.5 + 3 * current.self.v / maxV);
-      // de cada diez fichas del bucle, las que corresponden a maquinaria nueva van en verde
-      while (S.acc.self >= 1) { S.acc.self -= 1; S.selfN = (S.selfN || 0) + 1; S.tokens.push({ i: "self", t: 0, nuevo: S.selfN % 10 < Math.round(current.self.nuevo * 10) }); }
-      const speed = 0.38;
-      S.tokens.forEach(k => { k.t += dt * speed; });
-      S.tokens = S.tokens.filter(k => k.t < 1).slice(-160);
-      const g = current.gT; g.replaceChildren();
-      S.tokens.forEach(k => {
-        if (k.i === "self") {
-          const ang = -Math.PI / 2 + k.t * 2 * Math.PI, c = current.self;
-          g.append(sv("circle", { cx: c.cx + 18 * Math.cos(ang), cy: c.cy + 18 * Math.sin(ang), r: 4, class: k.nuevo ? "tk-reinv" : "tk-goods" }));
-          return;
-        }
-        const s = current.streams[k.i]; if (!s) return; const G = s.geo;
-        g.append(sv("circle", { cx: G.x1 + (G.x2 - G.x1) * k.t, cy: G.y1 + (G.y2 - G.y1) * k.t, r: s.kind === "money" ? 4 : 4.5, class: "tk-" + s.kind }));
-      });
-    }
-    // Barras de lo producido en cada vuelta (las dos ramas juntas), con escala fija desde 0 para que se vea crecer
-    function drawGrowth(ser) {
-      const svg = q("grow"); svg.replaceChildren();
-      svg.setAttribute("aria-label", T("f.g.h"));
-      const L = 56, R = 12, Tp = 22, B = 30, W = 640, H = 240, pw = W - L - R, ph = H - Tp - B;
-      const parts = x => {
-        const s = x.I.s + x.II.s, cons = Math.min(s, x.I.cons + x.II.cons);
-        return [["bar-c", x.I.c + x.II.c], ["bar-v", x.I.v + x.II.v], ["bar-r", s - cons], ["bar-k", cons]];
-      };
-      const max = Math.max(...ser.map(x => x.I.p + x.II.p));
-      const step = max > 20000 ? 10000 : 5000, top = Math.ceil(max / step) * step;
-      const sy = v => Tp + ph - v / top * ph;
-      for (let v = 0; v <= top; v += step) {
-        svg.append(sv("line", { x1: L, x2: W - R, y1: sy(v), y2: sy(v), stroke: "var(--rule)", "stroke-width": 1 }));
-        svg.append(sv("text", { x: L - 6, y: sy(v) + 4, "text-anchor": "end" }, fmt(v)));
-      }
-      const bw = pw / ser.length;
-      ser.forEach((x, i) => {
-        const g = sv("g", { class: i === S.k - 1 ? "" : "other" });
-        let acc = 0;
-        parts(x).forEach(([cls, v]) => {
-          if (v <= 0.5) return;
-          g.append(sv("rect", { x: L + i * bw + bw * 0.18, y: sy(acc + v), width: bw * 0.64, height: Math.max(0, sy(acc) - sy(acc + v)), class: cls }));
-          acc += v;
-        });
-        svg.append(g);
-        svg.append(sv("text", { x: L + i * bw + bw / 2, y: H - B + 18, "text-anchor": "middle" }, i + 1));
-        if (i === S.k - 1) svg.append(sv("text", { x: L + i * bw + bw / 2, y: sy(acc) - 6, "text-anchor": "middle", class: "tot" }, fmt(acc)));
-      });
-    }
-    function startAnim() { if (!S.raf && !reduced()) S.raf = requestAnimationFrame(frame); }
-    function stopAnim() { if (S.raf) cancelAnimationFrame(S.raf); S.raf = null; }
-    function play() {
-      if (S.k >= NV) S.k = 1;
-      q("play").textContent = T("f.pause");
-      render();
-      S.playing = setInterval(() => { if (S.k >= NV) { stop(); return; } S.k++; q("v").value = S.k; render(); }, 1600);
-    }
-    function stop() { if (S.playing) clearInterval(S.playing); S.playing = null; q("play").textContent = T("f.play"); }
-
-    function render() {
-      const ser = FLOW.series(FLOW.startFor(kind, S.a), S.a, NV);
-      const r = ser[S.k - 1];
-      const maxP = Math.max(...ser.map(x => Math.max(x.I.p, x.II.p, (x.I.v + x.II.v) * 3, (x.I.s + x.II.s) * 3)));
-      q("h").textContent = T(kind === "simple" ? "f.simple.h" : "f.amp.h");
-      q("p").textContent = T(kind === "simple" ? "f.simple.p" : "f.amp.p");
-      if (kind === "ampliado") { q("al").textContent = T("f.a"); q("ao").textContent = Math.round(S.a * 100) + " %"; }
-      q("vk").textContent = T("f.vuelta", { n: S.k }); q("vl").textContent = T("f.vueltas"); q("vo").textContent = S.k + " / " + NV;
-      q("play").textContent = T(S.playing ? "f.pause" : "f.play"); q("reset").textContent = T("f.reset");
-      q("lm").textContent = T("f.leg.money"); q("lg").textContent = T("f.leg.goods"); q("lw").textContent = T("f.leg.work");
-      if (kind === "ampliado") { q("lr").textContent = T("f.leg.reinv"); q("g3").textContent = T("f.reinv"); }
-      q("gh").textContent = T("f.g.h"); q("g1").textContent = T("f.mat"); q("g2").textContent = T("f.sal"); q("g4").textContent = T("f.cons");
-      q("gp").textContent = T(kind === "simple" ? "f.g.p.simple" : S.a === 0 ? "f.g.p.zero" : "f.g.p.amp");
-      draw(r, maxP);
-      drawGrowth(ser);
-      // Condición de equilibrio
-      const okc = Math.abs(r.ventaI - r.necesitaII) < 0.5 && !r.sobra && !r.falta;
-      q("check").replaceChildren(el("span", { class: "mark " + (okc ? "ok" : "bad"), text: T(okc ? "f.ok" : "f.bad") }),
-        el("div", {}, el("strong", { text: T("f.check.h") + ". " }),
-          T(kind === "simple" ? "f.check.simple" : "f.check.amp", { a: fmt(r.ventaI), b: fmt(kind === "simple" ? r.II.c : r.II.c + Math.max(0, r.II.dc)) })));
-      const notes = [];
-      if (r.falta) notes.push(T("f.falta", { x: fmt(r.falta) }));
-      if (r.sobra) notes.push(T("f.sobra", { x: fmt(r.sobra) }));
-      if (kind === "ampliado") {
-        if (S.a === 0) notes.push(T("f.zero"));
-        else { const L = ser[NV - 1], P = ser[NV - 2]; const g = ((L.I.p + L.II.p) / (P.I.p + P.II.p) - 1) * 100; notes.push(T("f.grow", { a: Math.round(S.a * 100), g: fmt(g, 1) })); }
-      } else notes.push(T("f.simple.note"));
-      q("note").replaceChildren(...notes.map(n => el("span", { text: n })));
-      // Flujos de la vuelta (texto accesible)
-      q("flh").textContent = T("f.flowsH");
-      const fl = [T("f.fl.matI", { x: fmt(r.I.c) }), T("f.fl.ItoII", { x: fmt(r.ventaI) }), T("f.fl.wages", { x: fmt(r.I.v + r.II.v) }), T("f.fl.exc", { x: fmt(r.I.s + r.II.s) }), T("f.fl.cons", { x: fmt(r.I.cons + r.II.cons) })];
-      if (r.I.acc + r.II.acc > 0.5) fl.push(T("f.fl.reinv", { x: fmt(r.I.acc + r.II.acc) }));
-      q("flows").replaceChildren(...fl.map(t => el("li", { text: t })));
-      // Tabla
-      q("th").textContent = T("f.table"); q("dl").textContent = T("f.download"); q("units").textContent = T("f.units");
-      const head = el("tr", {}, ["f.col.v", "f.col.Ip", "f.col.Im", "f.col.Is", "f.col.Ie", "f.col.Ir", "f.col.IIp", "f.col.IIm", "f.col.IIs", "f.col.IIe", "f.col.IIr", "f.col.tot", "f.col.g"].map(k => el("th", { text: T(k) })));
-      const rows = ser.map((x, i) => {
-        const tot = x.I.p + x.II.p, prev = i ? ser[i - 1].I.p + ser[i - 1].II.p : NaN;
-        return el("tr", { class: i === S.k - 1 ? "cur" : null },
-          el("td", { text: i + 1 }), el("td", { text: fmt(x.I.p) }), el("td", { text: fmt(x.I.c) }), el("td", { text: fmt(x.I.v) }), el("td", { text: fmt(x.I.s) }), el("td", { text: fmt(x.I.acc) }),
-          el("td", { text: fmt(x.II.p) }), el("td", { text: fmt(x.II.c) }), el("td", { text: fmt(x.II.v) }), el("td", { text: fmt(x.II.s) }), el("td", { text: fmt(x.II.acc) }),
-          el("td", { text: fmt(tot) }), el("td", { text: i ? fmt((tot / prev - 1) * 100, 1) + " %" : "—" }));
-      });
-      q("tbl").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
-    }
-    return { show() { render(); startAnim(); }, stop() { stop(); stopAnim(); }, render };
-  }
-  const FLOWUI = { simple: makeFlowUI("simple"), ampliado: makeFlowUI("ampliado") };
-  function stopAllFlows() { FLOWUI.simple.stop(); FLOWUI.ampliado.stop(); }
-
-  // =====================================================================
   // ARRANQUE
   // =====================================================================
   const bar = $("obs-bar");
   OBS.mountBar(bar, {});
-  bar.after(fichaBox);
+  // la ficha va dentro del panel «Para el docente» (cabecera compacta, 30/10)
+  if ($("obs-docente")) { fichaBox.open = true; $("obs-docente").append(fichaBox); } else bar.after(fichaBox);
   OBS.onLang(() => {
     renderRoundBar(); buildBids(); renderArroz(); buildVotes(); renderTabs(); renderHead(); renderFicha();
-    if (tool === "flujo" && (tab === "simple" || tab === "ampliado")) FLOWUI[tab].render();
   });
   OBS.apply();
   renderRoundBar(); buildBids(); renderArroz(); buildVotes();
   route();
   // Para comprobar el motor desde la consola o en pruebas
-  window.SA1 = { playAll, toBids, EXAMPLES, FLOW };
+  window.SA1 = { playAll, toBids, EXAMPLES };
 })();
 </script>
 <script>
