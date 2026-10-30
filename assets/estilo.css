@@ -280,3 +280,4 @@ figure .plot { background: transparent; }
 .obs-page .wrap > #obs-bar { margin-bottom: -26px; padding-bottom: 26px; }
 .obs-page .hero { padding-bottom: 30px; max-width: none; }
 .obs-page .hero > * { max-width: 760px; }
+.wrap > #obs-bar { margin-bottom: -26px; padding-bottom: 26px; }

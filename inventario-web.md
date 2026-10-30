@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-10-30 19:20
-- Commit de partida: `a884af4`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 14
+- Generado: 2026-10-30 19:24
+- Commit de partida: `73c6e29`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 5
 
 ## Interruptores de la web
 
@@ -16,7 +16,7 @@
 ### sa01 · SA 1 · ¿Qué es la economía?
 
 - Web: `sa01/herramientas/index.html`
-- Vault: `SA01-que-es-la-economia/material/observatorio-sa1.html` (2026-10-30 19:19, 128 KB)
+- Vault: `SA01-que-es-la-economia/material/observatorio-sa1.html` (2026-10-30 19:22, 129 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -36,7 +36,7 @@
 ### sa02 · SA 2 · El comportamiento humano en la actividad económica
 
 - Web: `sa02/index.html`
-- Vault: `SA02-el-comportamiento-humano/material/SA2-herramientas.html` (2026-10-30 19:19, 99 KB)
+- Vault: `SA02-el-comportamiento-humano/material/SA2-herramientas.html` (2026-10-30 19:23, 101 KB)
 - Copia: ✓ copiada
 - En el menú: estado `open`, oculta: no
 - Pestañas:

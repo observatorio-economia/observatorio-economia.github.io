@@ -247,6 +247,19 @@ details.fp-share textarea { width: 100%; min-height: 120px; font: 13px var(--fon
 body.obs-proj .fp-mode button { font-size: 19px; padding: 12px 22px; }
 body.obs-proj .fp-chip { font-size: 18px; padding: 8px 16px; }
 body.obs-proj .fp-help { font-size: 19px; }
+/* Despejado (30/10): una pantalla por pestaña. Pujas y resultado lado a lado; ayudas plegadas; los ejemplos, en el panel docente */
+.wrap { max-width: 1180px; }
+.arroz-dos { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 22px 32px; align-items: start; }
+.arroz-dos > .block + .block { border-top: 0; padding-top: 0; }
+@media (max-width: 1000px) { .arroz-dos { grid-template-columns: minmax(0, 1fr); } }
+.arroz-dos .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.arroz-dos .plates { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+details.ayuda { border-top: 0; padding-top: 0; font-size: 14px; color: var(--muted); max-width: 72ch; }
+details.ayuda > summary { font-size: 14px; }
+details.ayuda p { margin-top: 6px; }
+.obs-docente .ex-docente { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+body.obs-proj details.ayuda, body.obs-proj .fp-retos, body.obs-proj #clear-round, body.obs-proj #clear-all, body.obs-proj #clear-votes { display: none !important; }
+
 /* OBS-COMMON-CSS:BEGIN */
 /* ===== Línea gráfica del Observatorio, con la paleta vigente de Econplebs (tema 4.7, W-28; al día el 30/10): papel #F4F3EF, blanco, grafito y un único acento rojo.
    Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
@@ -386,10 +399,11 @@ body.obs-proj table { font-size: 17px; }
     </div>
     <div class="notice" id="round-info" aria-live="polite"></div>
 
+    <div class="arroz-dos">
     <div class="block">
       <div class="prose">
         <h2 data-i18n="bids.h">Pujas de la ronda</h2>
-        <p class="small" data-i18n="bids.help">Copia de cada tarjeta de puja las raciones que pide el equipo (como máximo 5) y lo que ofrece por cada una. La reserva inicial viene de la ronda anterior. Si dos equipos ofrecen lo mismo, sortéalo y escribe en «Sorteo» quién va antes (1 = primero).</p>
+        <details class="ayuda"><summary data-i18n="ay.rellenar">Cómo se rellena</summary><p data-i18n="bids.help">Copia de cada tarjeta de puja las raciones que pide el equipo (como máximo 5) y lo que ofrece por cada una. La reserva inicial viene de la ronda anterior. Si dos equipos ofrecen lo mismo, sortéalo y escribe en «Sorteo» quién va antes (1 = primero).</p></details>
       </div>
       <div class="scroll"><table class="bids" id="bids"></table></div>
       <div class="actions">
@@ -402,6 +416,7 @@ body.obs-proj table { font-size: 17px; }
     <div class="block">
       <div class="prose"><h2 data-i18n="res.h">Qué ha pasado</h2></div>
       <div class="stats" id="stats"></div>
+      <p class="small" id="stats2"></p>
       <div class="legend">
         <span><i></i><span data-i18n="leg.cons">Ración consumida</span></span>
         <span><i class="res"></i><span data-i18n="leg.res">Ración guardada como reserva</span></span>
@@ -413,6 +428,7 @@ body.obs-proj table { font-size: 17px; }
         <div class="scroll" style="margin-top:10px"><table class="result" id="result"></table></div>
       </details>
     </div>
+    </div>
 
     <div class="block">
       <div class="prose">
@@ -423,7 +439,7 @@ body.obs-proj table { font-size: 17px; }
       <p id="summary-note"></p>
     </div>
 
-    <div class="block">
+    <div class="block ex-docente" id="ex-block">
       <div class="prose">
         <h3 data-i18n="ex.h">Para probar la herramienta antes de clase</h3>
         <p class="small" data-i18n="ex.help">Cargan pujas inventadas en las tres rondas. Borran lo que haya escrito.</p>
@@ -441,7 +457,7 @@ body.obs-proj table { font-size: 17px; }
     <div class="prose">
       <h2 data-i18n="vote.h">Lo que espera la clase</h2>
       <p data-i18n-html="vote.p">Cada alumno o alumna vota con su tarjeta de <a href="https://www.plickers.com/" target="_blank" rel="noopener">Plickers</a> (o a mano alzada). Escribe cuántas personas eligen cada letra. Es evaluación inicial: no puntúa.</p>
-      <p class="small" data-i18n="vote.when">La primera pregunta va después de la explicación inicial y antes de las reglas; la segunda, justo después de leer la tarjeta de la ronda 3; la tercera, en el cierre.</p>
+      <details class="ayuda"><summary data-i18n="ay.cuando">Cuándo se vota</summary><p data-i18n="vote.when">La primera pregunta va después de la explicación inicial y antes de las reglas; la segunda, justo después de leer la tarjeta de la ronda 3; la tercera, en el cierre.</p></details>
     </div>
     <div class="qcards" id="qcards"></div>
     <div class="notice" id="vote-note"></div>
@@ -472,7 +488,7 @@ body.obs-proj table { font-size: 17px; }
         <button type="button" class="btn quiet small" id="fp-clear" data-i18n="pz.clear">Borrar la pizarra</button>
       </div>
       <div class="fp-pal" id="fp-pal"></div>
-      <p class="fp-help" id="fp-help"></p>
+      <details class="ayuda"><summary data-i18n="fp.howto">Cómo se dibuja</summary><p class="fp-help" id="fp-help"></p></details>
       <div id="fp-board"></div>
       <div class="fp-legend">
         <span><span class="sym m">●</span><span data-i18n="fp.l.money">dinero</span></span>
@@ -480,14 +496,14 @@ body.obs-proj table { font-size: 17px; }
         <span><span class="sym">◯</span><span data-i18n="fp.l.agent">agente</span></span>
         <span><span class="sym">▭</span><span data-i18n="fp.l.fund">fondo: lo que se acumula o se reparte</span></span>
       </div>
-      <div class="block">
-        <h3 data-i18n="fp.try">Prueba esto</h3>
+      <details class="block fp-retos">
+        <summary><h3 data-i18n="fp.try" style="display:inline">Prueba esto</h3></summary>
         <ol class="fp-tries">
           <li><span class="k" data-i18n="fp.k1">Reto 1</span><span data-i18n="fp.q1">Con «Dos agentes», sigue el dinero y luego los bienes y el trabajo.</span><span class="a" data-i18n="fp.a1">¿Van en el mismo sentido? ¿Por qué el circuito podría repetirse siempre igual?</span></li>
           <li><span class="k" data-i18n="fp.k2">Reto 2</span><span data-i18n="fp.q2">Carga «Con Estado, bancos y exterior».</span><span class="a" data-i18n="fp.a2">¿Qué flechas sacan dinero del circuito entre familias y empresas, y cuáles lo devuelven?</span></li>
           <li><span class="k" data-i18n="fp.k3">Reto 3</span><span data-i18n="fp.q3">Carga «Con excedente» y borra la flecha de reinversión.</span><span class="a" data-i18n="fp.a3">¿Qué le pasa a la producción de la vuelta siguiente? ¿Y si todo el excedente se reinvierte?</span></li>
         </ol>
-      </div>
+      </details>
       <details class="fp-share">
         <summary data-i18n="fp.s.title">Guardar o compartir el dibujo</summary>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -1163,6 +1179,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "team.jor": "Jornalero agrícola", "team.pes": "Pescador", "team.cam": "Campesino propietario", "team.com": "Comerciante de arroz", "team.ind": "Industria de guerra (Calcuta)",
       "team.short.jor": "Jornalero", "team.short.pes": "Pescador", "team.short.cam": "Campesino", "team.short.com": "Comerciante", "team.short.ind": "Industria",
       "bids.h": "Pujas de la ronda",
+      "ay.rellenar": "Cómo se rellena", "ay.cuando": "Cuándo se vota",
       "bids.help": "Copia de cada tarjeta de puja las raciones que pide el equipo (como máximo 5) y lo que ofrece por cada una. La reserva inicial viene de la ronda anterior. Si dos equipos ofrecen lo mismo, sortéalo y escribe en «Sorteo» quién va antes (1 = primero).",
       "bids.clearRound": "Borrar esta ronda", "bids.clearAll": "Borrar el juego", "bids.again": "Pulsa otra vez para borrar",
       "col.team": "Equipo", "col.renta": "Renta", "col.ini": "Reserva inicial", "col.pide": "Pide", "col.oferta": "Oferta por ración", "col.sorteo": "Sorteo",
@@ -1231,6 +1248,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "team.jor": "Jornaler agrícola", "team.pes": "Pescador", "team.cam": "Llaurador propietari", "team.com": "Comerciant d'arròs", "team.ind": "Indústria de guerra (Calcuta)",
       "team.short.jor": "Jornaler", "team.short.pes": "Pescador", "team.short.cam": "Llaurador", "team.short.com": "Comerciant", "team.short.ind": "Indústria",
       "bids.h": "Pujes de la ronda",
+      "ay.rellenar": "Com s'emplena", "ay.cuando": "Quan es vota",
       "bids.help": "Copia de cada targeta de puja les racions que demana l'equip (com a màxim 5) i el que oferix per cada una. La reserva inicial ve de la ronda anterior. Si dos equips oferixen el mateix, sorteja-ho i escriu en «Sorteig» qui va abans (1 = primer).",
       "bids.clearRound": "Esborrar esta ronda", "bids.clearAll": "Esborrar el joc", "bids.again": "Torna a prémer per a esborrar",
       "col.team": "Equip", "col.renta": "Renda", "col.ini": "Reserva inicial", "col.pide": "Demana", "col.oferta": "Oferta per ració", "col.sorteo": "Sorteig",
@@ -1480,10 +1498,10 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
     const hungry = o.hungry.length;
     $("stats").replaceChildren(
       el("div", { class: "stat" }, el("b", { text: fmt(o.R.supply) }), el("span", { text: T(round === 2 ? "st.rice3" : "st.rice") })),
-      el("div", { class: "stat" }, el("b", { text: fmt(o.sold) + (round === 2 ? " + 6" : "") }), el("span", { text: T("st.sold") })),
-      el("div", { class: "stat" }, el("b", { text: isFinite(o.avg) ? fmt(o.avg, 1) : "—" }), el("span", { text: T("st.avg") })),
       el("div", { class: "stat" }, el("b", { text: fmt(o.reserves) }), el("span", { text: T("st.res") })),
       el("div", { class: "stat" }, el("b", { class: o.entered ? (hungry ? "neg" : "pos") : "", text: o.entered ? fmt(hungry) : "—" }), el("span", { text: T("st.hungry") })));
+    // tres cifras grandes (hay arroz, se guarda, hay hambre); lo vendido y el precio medio, en una línea pequeña
+    $("stats2").textContent = T("st.sold") + ": " + fmt(o.sold) + (round === 2 ? " + 6" : "") + " · " + T("st.avg") + ": " + (isFinite(o.avg) ? fmt(o.avg, 1) : "—");
 
     $("plates").replaceChildren(...o.rows.map(x => {
       const sq = [];
@@ -1598,7 +1616,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
   const bar = $("obs-bar");
   OBS.mountBar(bar, {});
   // la ficha va dentro del panel «Para el docente» (cabecera compacta, 30/10)
-  if ($("obs-docente")) { fichaBox.open = true; $("obs-docente").append(fichaBox); } else bar.after(fichaBox);
+  if ($("obs-docente")) { fichaBox.open = true; $("obs-docente").append(fichaBox, $("ex-block")); } else bar.after(fichaBox);
   OBS.onLang(() => {
     renderRoundBar(); buildBids(); renderArroz(); buildVotes(); renderTabs(); renderHead(); renderFicha();
   });
@@ -1623,7 +1641,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "fp.help.draw": "<b>Dibujar.</b> Pulsa un agente o un fondo de la lista para añadirlo, o haz doble clic en un hueco. Arrastra desde el «+» azul de un elemento hasta otro para crear una flecha y escribe qué circula: elige si es <b>dinero</b> o <b>bienes o trabajo</b>. Toca una flecha o un elemento para cambiarlo o borrarlo.",
       "fp.help.play": "<b>Jugar.</b> Las fichas recorren el circuito: los círculos son dinero y los cuadrados, bienes o trabajo. Toca un elemento para lanzar una tanda desde él.",
       "fp.l.money": "dinero", "fp.l.real": "bienes o trabajo (flecha discontinua)", "fp.l.agent": "agente", "fp.l.fund": "fondo: lo que se acumula o se reparte",
-      "fp.try": "Prueba esto", "fp.k1": "Reto 1", "fp.q1": "Con «Dos agentes», sigue el dinero y luego los bienes y el trabajo.", "fp.a1": "¿Van en el mismo sentido? ¿Por qué el circuito podría repetirse siempre igual?",
+      "fp.howto": "Cómo se dibuja", "fp.try": "Prueba esto", "fp.k1": "Reto 1", "fp.q1": "Con «Dos agentes», sigue el dinero y luego los bienes y el trabajo.", "fp.a1": "¿Van en el mismo sentido? ¿Por qué el circuito podría repetirse siempre igual?",
       "fp.k2": "Reto 2", "fp.q2": "Carga «Con Estado, bancos y exterior».", "fp.a2": "¿Qué flechas sacan dinero del circuito entre familias y empresas, y cuáles lo devuelven?",
       "fp.k3": "Reto 3", "fp.q3": "Carga «Con excedente» y borra la flecha de reinversión.", "fp.a3": "¿Qué le pasa a la producción de la vuelta siguiente? ¿Y si todo el excedente se reinvierte?",
       "fp.s.title": "Guardar o compartir el dibujo", "fp.s.help": "El dibujo se guarda solo en este navegador. Para pasarlo a otro ordenador, copia este texto o descárgalo, y pégalo allí con «Cargar el texto».",
@@ -1641,7 +1659,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "fp.help.draw": "<b>Dibuixar.</b> Prem un agent o un fons de la llista per a afegir-lo, o fes doble clic en un buit. Arrossega des del «+» blau d'un element fins a un altre per a crear una fletxa i escriu què circula: tria si són <b>diners</b> o <b>béns o treball</b>. Toca una fletxa o un element per a canviar-lo o esborrar-lo.",
       "fp.help.play": "<b>Jugar.</b> Les fitxes recorren el circuit: els cercles són diners i els quadrats, béns o treball. Toca un element per a llançar una tanda des d'ell.",
       "fp.l.money": "diners", "fp.l.real": "béns o treball (fletxa discontínua)", "fp.l.agent": "agent", "fp.l.fund": "fons: el que s'acumula o es reparteix",
-      "fp.try": "Prova açò", "fp.k1": "Repte 1", "fp.q1": "Amb «Dos agents», seguix els diners i després els béns i el treball.", "fp.a1": "Van en el mateix sentit? Per què el circuit podria repetir-se sempre igual?",
+      "fp.howto": "Com es dibuixa", "fp.try": "Prova açò", "fp.k1": "Repte 1", "fp.q1": "Amb «Dos agents», seguix els diners i després els béns i el treball.", "fp.a1": "Van en el mateix sentit? Per què el circuit podria repetir-se sempre igual?",
       "fp.k2": "Repte 2", "fp.q2": "Carrega «Amb Estat, bancs i exterior».", "fp.a2": "Quines fletxes trauen diners del circuit entre famílies i empreses, i quines els tornen?",
       "fp.k3": "Repte 3", "fp.q3": "Carrega «Amb excedent» i esborra la fletxa de reinversió.", "fp.a3": "Què li passa a la producció de la volta següent? I si tot l'excedent es reinvertix?",
       "fp.s.title": "Guardar o compartir el dibuix", "fp.s.help": "El dibuix només es guarda en este navegador. Per a passar-lo a un altre ordinador, copia este text o descarrega'l, i apega'l allí amb «Carregar el text».",

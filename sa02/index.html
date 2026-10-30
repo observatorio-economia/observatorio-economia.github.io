@@ -177,6 +177,18 @@ body.obs-proj .big { font-size: 38px; }
 body.obs-proj table.payoff { font-size: 18px; }
 body.obs-proj .stats .stat b { font-size: 40px; }
 @media (max-width: 640px) { body.obs-proj .bar { grid-template-columns: minmax(0, 1fr) 5em; } }
+/* Despejado (30/10): avisos y ajustes plegados; resultados de la encuesta A en dos columnas */
+details.ayuda { border-top: 0; padding-top: 0; font-size: 14px; color: var(--muted); max-width: 72ch; }
+details.ayuda > summary { font-size: 14px; }
+details.ayuda[open] > summary { margin-bottom: 8px; }
+.qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 12px; }
+@media (max-width: 560px) { .qgrid { grid-template-columns: minmax(0, 1fr); } }
+body.obs-proj details.ayuda, body.obs-proj #m-reset { display: none !important; }
+
+.res-seg { align-self: flex-start; }
+.res-seg button { font-size: 14px; padding: 7px 12px; }
+#results { display: flex; flex-direction: column; gap: 16px; }
+
 /* OBS-COMMON-CSS:BEGIN */
 /* ===== Línea gráfica del Observatorio, con la paleta vigente de Econplebs (tema 4.7, W-28; al día el 30/10): papel #F4F3EF, blanco, grafito y un único acento rojo.
    Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
@@ -391,18 +403,20 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
       <h2 data-i18n="m.title">¿Compras lo normal o compras de más?</h2>
       <p class="small" data-i18n-html="m.help">Para proyectar en la sesión 4.</p>
     </div>
+    <details class="ayuda"><summary data-i18n="m.ajustes">Ajustes de la clase</summary>
     <div class="params">
       <div class="field"><label for="m-n" data-i18n="m.n">Hogares (alumnado que vota)</label><input type="text" id="m-n" inputmode="numeric" value="28"></div>
       <div class="field"><label for="m-s" data-i18n="m.s">Paquetes en la tienda</label><input type="text" id="m-s" inputmode="numeric" value="34"></div>
       <div class="field"><label for="m-a" data-i18n="m.a">Paquetes de quien compra de más</label><input type="text" id="m-a" inputmode="numeric" value="3"></div>
     </div>
     <p class="small" id="m-note"></p>
+    </details>
     <div class="rounds" id="m-rounds"></div>
     <div class="actions"><button type="button" class="btn quiet small" id="m-reset" data-i18n="m.reset">Borrar las rondas</button></div>
     <div class="qres">
       <span class="eyebrow" data-i18n="m.after">Después de votar</span>
       <h3 data-i18n="m.payoff">La matriz de pagos</h3>
-      <p class="small" data-i18n="m.payoff.help">Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.</p>
+      <details class="ayuda"><summary data-i18n="m.lee">Cómo se lee</summary><p data-i18n="m.payoff.help">Lo que le pasa a un hogar según lo que haga y lo que hagan los demás. Si creo que los demás comprarán de más, me conviene comprar de más; si todos pensamos igual, la estantería se vacía aunque se fabrique lo de siempre.</p></details>
       <div class="parsed">
         <table class="payoff">
           <thead><tr><th></th><th data-i18n="m.col1">Los demás compran lo normal</th><th data-i18n="m.col2">Los demás compran de más</th></tr></thead>
@@ -644,9 +658,11 @@ window.OBS = (() => {
     "res.lim": "Antes de sacar conclusiones", "res.lim1": "Unos pocos hogares de una clase no son una muestra representativa de España.",
     "res.lim2": "El INE da la media de un día cualquiera (laborables y fines de semana) de toda la población de 10 años o más, y sus datos son de 2009-2010; nosotros preguntamos por «ayer».",
     "res.lim3": "Las horas son las que recuerda y declara cada familia: la memoria y lo que nos parece bien decir también cuentan.",
+    "res.part": "Encuesta", "res.partB": "Encuesta B · horas de cuidados", "res.partA": "Encuesta A · decisiones en 2020",
     "res.A.eye": "Encuesta A · {n} hogares", "res.A.title": "Qué decidieron nuestras familias en 2020",
     "res.A.help": "Para cada respuesta, preguntaos con qué modelo se explica mejor: el cálculo, una desviación de la racionalidad o una respuesta razonable cuando nadie sabe lo que va a pasar.",
     "m.title": "¿Compras lo normal o compras de más?",
+    "m.ajustes": "Ajustes de la clase", "m.lee": "Cómo se lee",
     "m.help": "Para proyectar en la sesión 4. Se vota con <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--accent)\">Plickers</a> (A = compro lo normal; B = compro de más) o, si falla, a mano alzada o en papel. Apunta aquí cuántas personas eligen «compro de más» en cada ronda y la herramienta calcula qué pasa en la estantería.",
     "m.n": "Hogares (alumnado que vota)", "m.s": "Paquetes en la tienda", "m.a": "Paquetes de quien compra de más",
     "m.note": "En un día normal cada hogar se lleva 1 paquete: hacen falta {n} y hay {s}. Se fabrica lo de siempre o más.",
@@ -703,9 +719,11 @@ window.OBS = (() => {
     "res.lim": "Abans de traure conclusions", "res.lim1": "Unes poques llars d'una classe no són una mostra representativa d'Espanya.",
     "res.lim2": "L'INE dona la mitjana d'un dia qualsevol (feiners i caps de setmana) de tota la població de 10 anys o més, i les seues dades són de 2009-2010; nosaltres preguntem per «ahir».",
     "res.lim3": "Les hores són les que recorda i declara cada família: la memòria i el que ens sembla bé dir també compten.",
+    "res.part": "Enquesta", "res.partB": "Enquesta B · hores de cures", "res.partA": "Enquesta A · decisions en 2020",
     "res.A.eye": "Enquesta A · {n} llars", "res.A.title": "Què van decidir les nostres famílies en 2020",
     "res.A.help": "Per a cada resposta, pregunteu-vos amb quin model s'explica millor: el càlcul, una desviació de la racionalitat o una resposta raonable quan ningú sap què passarà.",
     "m.title": "Compres el normal o compres de més?",
+    "m.ajustes": "Ajustos de la classe", "m.lee": "Com es llig",
     "m.help": "Per a projectar en la sessió 4. Es vota amb <a href=\"https://www.plickers.com/\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--accent)\">Plickers</a> (A = compre el normal; B = compre de més) o, si falla, a mà alçada o en paper. Apunta ací quantes persones trien «compre de més» en cada ronda i la ferramenta calcula què passa en el prestatge.",
     "m.n": "Llars (alumnat que vota)", "m.s": "Paquets en la botiga", "m.a": "Paquets de qui compra de més",
     "m.note": "En un dia normal cada llar s'emporta 1 paquet: en calen {n} i n'hi ha {s}. Es fabrica el mateix de sempre o més.",
@@ -1102,6 +1120,7 @@ window.OBS = (() => {
       el("span", { class: "track", "aria-hidden": "true" }, el("span", { class: "fill" + (r.ref ? " ref" : ""), style: "width:" + (100 * r.v / max).toFixed(1) + "%" })),
       el("span", { class: "val", text: r.text }))));
   }
+  let resPart = "B";
   function renderResults() {
     const src = $("res-source").value;
     let rows = [];
@@ -1147,7 +1166,8 @@ window.OBS = (() => {
       return el("div", { class: "cgroup" }, el("h3", { text: T(titleKey) }), bars(r));
     };
     const gapC = mean(aM, "hogar") - mean(aH, "hogar"), gapI = INE.hogar.M - INE.hogar.H;
-    kids.push(el("div", { class: "qres" },
+    const partB = el("div", { class: "res-part", hidden: resPart !== "B" });
+    partB.append(el("div", { class: "qres" },
       el("span", { class: "eyebrow", text: T("res.B.eye") }),
       el("h2", { text: T("res.B.title") }),
       el("div", { class: "legend" }, el("span", {}, el("i"), T("res.leg.class")), el("span", {}, el("i", { class: "ref" }), T("res.leg.ine"))),
@@ -1162,8 +1182,8 @@ window.OBS = (() => {
             { label: T("res.girls", { n: yM.length }), v: mean(yM, "hogar") || 0, text: fmtH(mean(yM, "hogar")) },
             { label: T("res.boys", { n: yH.length }), v: mean(yH, "hogar") || 0, text: fmtH(mean(yH, "hogar")) }
           ]))),
-      el("div", { class: "limits" },
-        el("strong", { text: T("res.lim") }),
+      el("details", { class: "limits ayuda" },
+        el("summary", { text: T("res.lim") }),
         el("ul", {}, el("li", { text: T("res.lim1") }), el("li", { text: T("res.lim2") }), el("li", { text: T("res.lim3") })))));
 
     // Encuesta A: recuentos
@@ -1174,11 +1194,18 @@ window.OBS = (() => {
         el("div", { class: "qhead" }, el("span", { class: "qnum", text: "A" + (i + 1) }), el("span", { class: "qtext", text: T("qa." + i + ".t") })),
         bars(counts.map((c, j) => ({ label: T("qa." + i + ".o." + j), v: c, text: c + " · " + pct(c, A.length) }))));
     });
-    kids.push(el("div", { class: "qres", style: "border-top:2px solid var(--ink)" },
+    const partA = el("div", { class: "res-part", hidden: resPart !== "A" });
+    partA.append(el("div", { class: "qres", style: "border-top:2px solid var(--ink)" },
       el("span", { class: "eyebrow", text: T("res.A.eye", { n: A.length }) }),
       el("h2", { text: T("res.A.title") }),
       el("p", { class: "small", text: T("res.A.help") })));
-    kids.push(...qblocks);
+    partA.append(el("div", { class: "qgrid" }, ...qblocks));
+    // una encuesta por pantalla: se elige con el selector
+    const seg = el("div", { class: "obs-seg res-seg", role: "group", "aria-label": T("res.part") },
+      el("button", { type: "button", "aria-pressed": String(resPart === "B"), text: T("res.partB"), "data-part": "B" }),
+      el("button", { type: "button", "aria-pressed": String(resPart === "A"), text: T("res.partA", { n: A.length }), "data-part": "A" }));
+    seg.addEventListener("click", e => { const b = e.target.closest("button[data-part]"); if (!b) return; resPart = b.dataset.part; partA.hidden = resPart !== "A"; partB.hidden = resPart !== "B"; seg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); });
+    kids.push(seg, partB, partA);
     out.replaceChildren(...kids);
   }
   $("res-source").addEventListener("change", () => { userPicked = true; const v = $("res-source").value; if (v.startsWith("g:")) subscribeGroup(v.slice(2)); renderResults(); });
