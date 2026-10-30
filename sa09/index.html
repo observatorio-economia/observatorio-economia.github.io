@@ -243,24 +243,24 @@ body.obs-proj svg text.lbl, body.obs-proj svg text.axl { font-size: 16px; }
 body.obs-proj .share { height: 40px; } body.obs-proj .share span { font-size: 16px; }
 body.obs-proj table { font-size: 17px; }
 /* OBS-COMMON-CSS:BEGIN */
-/* ===== Línea gráfica del Observatorio (29/10), adaptada de Econplebs: hormigón, esmalte, grafito y un único acento rojo.
+/* ===== Línea gráfica del Observatorio, con la paleta vigente de Econplebs (tema 4.7, W-28; al día el 30/10): papel #F4F3EF, blanco, grafito y un único acento rojo.
    Archivo Narrow 700 en mayúsculas para titulares, IBM Plex Mono para rótulos, IBM Plex Sans para la interfaz y Source Serif 4 para leer.
    Sobrescribe los tokens de cada página: va después de ellos y con los mismos selectores. ===== */
 :root {
-  --bg: #E6E7E3; --paper: #EFEFEC; --ink: #1F2224; --band: #16181A; --muted: #5E6260; --rule: #B9BCB8; --grid: #D6D8D3;
-  --accent: #C8412F; --accent-soft: #F2DCD7; --ref: #8E9290; --ok: #2D6A4F; --bad: #A4372C;
+  --bg: #F4F3EF; --paper: #FFFFFF; --ink: #1F2224; --band: #16181A; --muted: #6B6F6D; --rule: #D5D4CE; --grid: #E7E6E1;
+  --accent: #C8412F; --accent-soft: #F7E3DF; --ref: #9A9E9B; --ok: #2D6A4F; --bad: #A4372C;
   --s1: #2f4f8a; --s2: #b35c1e; --s3: #0f8a6c;
   --font-read: "Source Serif 4", Georgia, "Times New Roman", serif; --on-series: #FFFFFF;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+    --bg: #16181A; --paper: #1F2224; --ink: #E9E8E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
     --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
     --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #16181A; --paper: #1F2224; --ink: #E6E7E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
+  --bg: #16181A; --paper: #1F2224; --ink: #E9E8E3; --band: #0E0F10; --muted: #A3A7A4; --rule: #3A3E40; --grid: #2A2D2F;
   --accent: #E0614D; --accent-soft: #3A2320; --ref: #6E7270; --ok: #7CC4A0; --bad: #E8877B;
   --s1: #5b84d6; --s2: #cf7034; --s3: #1fa383; --on-series: #16181A; color-scheme: dark;
 }

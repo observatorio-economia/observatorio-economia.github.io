@@ -1,5 +1,5 @@
 {
- "generado": "2026-10-30T18:10:58.725837+00:00",
+ "generado": "2026-10-30T18:20:14.273129+00:00",
  "comentadas": [],
  "carrusel": [
   {
@@ -95,7 +95,7 @@
      "imagen": "https://e00-expansion.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933480633885.jpg"
     }
    ],
-   "leido": "2026-10-30T18:10:57.481923+00:00"
+   "leido": "2026-10-30T18:20:13.073518+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -132,7 +132,7 @@
      "imagen": "https://imagenes.elpais.com/resizer/v2/6MMEXXO2ZZG2JFWAJAVCXT3XGE.jpg?auth=21b70af9352a2ca0ec8c216f4c3f7c2cb0ebd1f5289d749cae2153bff10ac6d1"
     }
    ],
-   "leido": "2026-10-30T18:10:57.629455+00:00"
+   "leido": "2026-10-30T18:20:13.195250+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -169,7 +169,7 @@
      "imagen": "https://s3.elespanol.com/k/imgp/cms/elespanol/10400999.jpg?p=w:1706/h:960&h=26Q8SIqm"
     }
    ],
-   "leido": "2026-10-30T18:10:57.863802+00:00"
+   "leido": "2026-10-30T18:20:13.522966+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -188,7 +188,7 @@
      "imagen": ""
     }
    ],
-   "leido": "2026-10-30T18:10:57.954947+00:00"
+   "leido": "2026-10-30T18:20:13.611598+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -225,7 +225,7 @@
      "imagen": "https://imagenes.elpais.com/resizer/v2/77AU7X3XKFJL7FTLKSDXMERU5U.jpg?auth=e154c454f5809b7ce5c39bf224d6ac7295983dde246c3de443e99109620a982d"
     }
    ],
-   "leido": "2026-10-30T18:10:58.068942+00:00"
+   "leido": "2026-10-30T18:20:13.724517+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -262,12 +262,18 @@
      "imagen": "https://static.eldiario.es/clip/2dd92995-cbf7-4e99-8fe2-120ea4d13f27_16-9-discover-aspect-ratio_default_0.jpg"
     }
    ],
-   "leido": "2026-10-30T18:10:58.176824+00:00"
+   "leido": "2026-10-30T18:20:13.819674+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "El testimonio de un italoargentino tras el choque de trenes en Toledo: \"Mi hermana estaba a mi lado. La vi muerta, ya no tengo esperanza de encontrarla\"",
+     "enlace": "https://www.elmundo.es/economia/2026/10/30/6ae4bddfe4d4d82f498b4593.html",
+     "fecha": "2026-10-30T18:15:17+00:00",
+     "imagen": "https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933752013793.png"
+    },
     {
      "titulo": "La factura de la IA hunde a las tecnológicas en bolsa",
      "enlace": "https://www.elmundo.es/economia/2026/10/30/6ae4b54ae4d4d89f568b4584.html",
@@ -279,12 +285,6 @@
      "enlace": "https://www.elmundo.es/economia/macroeconomia/2026/10/30/6ae4d5e9e85ece522c8b457a.html",
      "fecha": "2026-10-30T17:41:53+00:00",
      "imagen": "https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933820779645.jpg"
-    },
-    {
-     "titulo": "El testimonio de un italoargentino tras el choque de trenes en Toledo: \"Mi hermana estaba a mi lado. La vi muerta, ya no tengo esperanza de encontrarla\"",
-     "enlace": "https://www.elmundo.es/economia/2026/10/30/6ae4bddfe4d4d82f498b4593.html",
-     "fecha": "2026-10-30T15:55:13+00:00",
-     "imagen": "https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933752013793.png"
     },
     {
      "titulo": "El Gobierno anuncia que se plantea cortar la línea de alta velocidad Madrid Barcelona para acometer obras y Aragón pide \"avales\" que justifiquen la decisión",
@@ -299,7 +299,7 @@
      "imagen": "https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2026/10/30/17933610722095.jpg"
     }
    ],
-   "leido": "2026-10-30T18:10:58.384937+00:00"
+   "leido": "2026-10-30T18:20:13.934697+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -336,7 +336,7 @@
      "imagen": "https://s1.abcstatics.com/abc/www/multimedia/economia/2026/10/30/binance-kiT-U4090000975hXB-1200x840@diario_abc.JPG"
     }
    ],
-   "leido": "2026-10-30T18:10:58.508737+00:00"
+   "leido": "2026-10-30T18:20:14.052894+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -373,7 +373,7 @@
      "imagen": ""
     }
    ],
-   "leido": "2026-10-30T18:10:58.725760+00:00"
+   "leido": "2026-10-30T18:20:14.273067+00:00"
   }
  ]
 }

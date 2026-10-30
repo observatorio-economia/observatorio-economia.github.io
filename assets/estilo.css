@@ -256,3 +256,27 @@ body.obs-page .obs-menu, .obs-menu { box-shadow: none; }
 @media (max-width: 640px) {
   .obs-menu__home { flex: 1 1 auto; flex-basis: auto; margin-right: 0; }
 }
+
+/* ---------- Proporción de Econplebs (30/10, petición de Jordi): manda el blanco ----------
+   Mismos colores que el tema 4.7 de Econplebs; lo que cambia es el reparto. La franja de arriba (menú, cabecera
+   de la herramienta o portada) es blanca de lado a lado, y el contenido va en tarjetas blancas con filete fino
+   y raya de grafito arriba; el papel #F4F3EF solo asoma entre ellas. */
+.wrap > #obs-bar, .wrap > header.top, .wrap > .obs-docente, .wrap > nav.tabs, .obs-page .hero {
+  background: var(--paper); box-shadow: 0 0 0 100vmax var(--paper); clip-path: inset(0 -100vmax);
+}
+.wrap > #obs-bar { padding-top: 10px; }
+.wrap > header.top { border-bottom: 0; }
+/* sin hueco de papel entre las piezas de la franja blanca */
+.wrap > header.top, .wrap > .obs-docente { margin-bottom: -28px; padding-bottom: 28px; }
+.wrap > nav.tabs { padding-top: 4px; }
+/* tarjetas como las de Econplebs */
+figure, .obs-page .camino-caja, .obs-page .sit-lista, .obs-page .act-destacada, .obs-page .act-fuente,
+.qres, .cgroup, .round, .world, .rule, .plate, .qcard, .codebox, .lab-tabla-caja, .pr-ej {
+  background: var(--paper); border: 1px solid var(--rule); border-top: 2px solid var(--ink);
+}
+figure, .qres, .cgroup, .pr-ej { padding: 12px 14px; }
+figure .plot { background: transparent; }
+.obs-page .act-destacada { border-top-color: var(--accent); }
+.obs-page .wrap > #obs-bar { margin-bottom: -26px; padding-bottom: 26px; }
+.obs-page .hero { padding-bottom: 30px; max-width: none; }
+.obs-page .hero > * { max-width: 760px; }
