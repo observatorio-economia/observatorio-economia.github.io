@@ -423,10 +423,11 @@ for d in sorted(vault.glob("SA[0-9][0-9]-*/web")):
     SAS[clave] = {"meta": meta, "cuerpo": cuerpo, "sesiones": ses}
 
 # ---------------------------------------------------------------- 3 · Herramientas
+COPIAS = {}   # carpeta → resultado de la copia, para el inventario
 for carpeta, origen in HERRAMIENTAS:
     src = vault / origen
     if not src.is_file():
-        aviso(False, f"{carpeta}: no encuentro {src}"); continue
+        aviso(False, f"{carpeta}: no encuentro {src}"); COPIAS[carpeta] = "✗ no se encuentra en el vault"; continue
     dentro = carpeta in SAS                       # con página de SA, la herramienta baja un nivel
     prefijo = "../../" if dentro else "../"
     destino = web / carpeta / ("herramientas" if dentro else "") / "index.html"
@@ -439,6 +440,7 @@ for carpeta, origen in HERRAMIENTAS:
         aviso(False, f"{carpeta}: NO copiado. El archivo del vault ({len(s) // 1024} KB) parece una versión más antigua que la de la web "
                      f"({len(antes) // 1024} KB){', sin las piezas comunes' if 'OBS-COMMON-JS:BEGIN' not in s else ''}. "
                      f"Revisa {src} (y su artefacto); si de verdad es la buena: FORZAR=1 sh actualizar.sh")
+        COPIAS[carpeta] = "✗ bloqueada por la protección contra versiones antiguas"
         continue
     s, n = PANEL_HTML.subn(f'href="{prefijo}index.html"', s)
     n += s.count(PANEL_JS)
@@ -457,6 +459,7 @@ for carpeta, origen in HERRAMIENTAS:
     otros = len(re.findall(r"claude\.ai/artifact/", s))
     extra = (f"  ⚠ quedan {otros} enlaces a claude.ai" if otros else "") + ("" if n else "  ⚠ no he encontrado el enlace al panel")
     aviso(True, f"{destino.relative_to(web)}  ← {origen}{extra}")
+    COPIAS[carpeta] = "✓ copiada" + (" (forzada con FORZAR=1)" if retrocede else "")
 
 # ---------------------------------------------------------------- 4 · Páginas de SA y de sesión
 def nombre_sesion(m):
@@ -588,5 +591,146 @@ aviso(True, f"libro/index.html  ({len(SAS)} SA con apuntes)")
 # (interruptor MOSTRAR_LIBRO en menu.js); la portada enseña la actualidad.
 publicados = sum(publicada(sm, sc) for sa in SAS.values() for sm, sc in sa["sesiones"])
 escribir_estado(publicados, actualidad(vault))
+
+# ---------------------------------------------------------------- 7 · Inventario de lo publicado
+def inventario():
+    """inventario-web.md: lo que hay publicado, para comprobar desde el chat que la web va con la programación
+    sin leer el HTML. Determinista (mismo orden siempre) y sin escribir nada en el vault."""
+    import subprocess
+    from datetime import datetime
+
+    def git(*a):
+        try:
+            return subprocess.run(["git", "-C", str(web), *a], capture_output=True, text=True, timeout=10).stdout.strip()
+        except Exception:
+            return ""
+
+    def sin_etiquetas(x):
+        return html.unescape(re.sub(r"<[^>]+>", "", x)).strip()
+
+    menu = (web / "assets" / "menu.js").read_text(encoding="utf-8") if (web / "assets" / "menu.js").is_file() else ""
+    sa_menu = {}
+    for m in re.finditer(r'\{ n: (\d+),(.*?)\n    \}?(?=\{ n: |\s*\];)', menu, re.S):
+        bloque = m.group(2)
+        ruta = re.search(r'ruta: "([^"]+)"', bloque)
+        if ruta:
+            tit = re.search(r't: \{ es: "([^"]*)"', bloque)
+            est = re.search(r'estado: "([^"]+)"', bloque)
+            sa_menu[ruta.group(1).strip("/")] = {"n": int(m.group(1)), "t": tit.group(1) if tit else "",
+                                                 "estado": est.group(1) if est else "—", "oculta": bool(re.search(r"oculta:\s*true", bloque))}
+    interruptores = re.findall(r"^\s*const (MOSTRAR_[A-Z_]+|OCULTAR_[A-Z_]+)\s*=\s*([^;]+);", menu, re.M)
+
+    # reglas de la capa de la web que esconden piezas concretas de las herramientas (con #id)
+    ocultos_web = []
+    for hoja in ("observatorio.css", "estilo.css"):
+        f = web / "assets" / hoja
+        if f.is_file():
+            for sel, cuerpo in re.findall(r"([^{}]+)\{([^{}]*)\}", f.read_text(encoding="utf-8")):
+                if re.search(r"display:\s*none", cuerpo) and "#" in sel and "obs-" not in sel:
+                    ocultos_web.append(f"`{' '.join(sel.split())}` ({hoja})")
+
+    ahora = datetime.now().strftime("%Y-%m-%d %H:%M")
+    pendientes = [l for l in git("status", "--porcelain").splitlines() if not l.endswith("inventario-web.md")]
+    L = ["# Inventario de la web del Observatorio", "",
+         "> Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.", "",
+         f"- Generado: {ahora}",
+         f"- Commit de partida: `{git('rev-parse', '--short', 'HEAD') or '—'}`",
+         f"- Cambios sin confirmar en el repositorio (sin contar este archivo): {len(pendientes)}", ""]
+
+    L += ["## Interruptores de la web", ""]
+    L += [f"- `{k}` = `{v.strip()}` (assets/menu.js)" for k, v in interruptores] or ["- (ninguno)"]
+    L += [f"- `ESTILO_WEB` = `{ESTILO_WEB}` (scripts/actualizar.py)", ""]
+
+    L += ["## Herramientas", ""]
+    for carpeta, origen in HERRAMIENTAS:
+        src = vault / origen
+        dentro = carpeta in SAS
+        info = sa_menu.get(carpeta, {})
+        L.append(f"### {carpeta}" + (f" · SA {info['n']} · {info['t']}" if info else ""))
+        L.append("")
+        L.append(f"- Web: `{carpeta}/{'herramientas/' if dentro else ''}index.html`")
+        if src.is_file():
+            st = src.stat()
+            L.append(f"- Vault: `{origen}` ({datetime.fromtimestamp(st.st_mtime).strftime('%Y-%m-%d %H:%M')}, {st.st_size // 1024} KB)")
+        else:
+            L.append(f"- Vault: `{origen}` (no existe)")
+        L.append(f"- Copia: {COPIAS.get(carpeta, '—')}")
+        if info:
+            L.append(f"- En el menú: estado `{info['estado']}`, oculta: {'sí' if info['oculta'] else 'no'}")
+        elif carpeta != "datos":
+            L.append("- En el menú: no aparece")
+        if not src.is_file():
+            L.append(""); continue
+        s = src.read_text(encoding="utf-8")
+        # textos: la primera aparición de cada clave es la castellana (cada página registra es y luego va)
+        es = {}
+        for k, v in re.findall(r'"([a-zA-Z][\w.-]*)":\s*"((?:[^"\\]|\\.)*)"', s):
+            es.setdefault(k, v)
+        tx = lambda k: sin_etiquetas(json.loads('"' + es[k] + '"')) if k in es else None
+        tiene_va = bool(re.search(r"\bva:\s*\{", s))
+        cuerpo_html = s.split("<script", 1)[0]
+
+        def h2_de(fragmento):
+            out = []
+            for attrs, txt in re.findall(r"<h2([^>]*)>(.*?)</h2>", fragmento, re.S):
+                k = re.search(r'data-i18n(?:-html)?="([^"]+)"', attrs)
+                t2 = (tx(k.group(1)) if k else None) or sin_etiquetas(txt)
+                if t2:
+                    out.append(t2)
+            return out
+
+        pestanas = []
+        for attrs, dentro_btn in re.findall(r'<button[^>]*?role="tab"([^>]*)>(.*?)</button>', cuerpo_html, re.S):
+            vista = re.search(r'data-view="([^"]+)"', attrs)
+            k = re.search(r'data-i18n="([^"]+)"', attrs) or re.search(r'data-i18n="([^"]+)"', dentro_btn)
+            nombre = (tx(k.group(1)) if k else None) or sin_etiquetas(re.sub(r'<span class="n">.*?</span>', "", dentro_btn))
+            sec = ""
+            if vista:
+                ms = re.search(r'<section[^>]*id="view-' + re.escape(vista.group(1)) + r'"[^>]*>(.*?)</section>', cuerpo_html, re.S)
+                sec = ms.group(1) if ms else ""
+            pestanas.append((nombre, h2_de(sec)))
+        if not pestanas:
+            # SA 1: pestañas generadas con JavaScript a partir de TOOLS y TABKEY
+            mt, mk = re.search(r"const TOOLS = (\{.*?\});", s), re.search(r"const TABKEY = (\{.*?\});", s)
+            if mt and mk:
+                tools = re.findall(r'(\w+): \[([^\]]*)\]', mt.group(1)); keys = dict(re.findall(r'(\w+): "([^"]+)"', mk.group(1)))
+                for herr, lista in tools:
+                    for tab in re.findall(r'"(\w+)"', lista):
+                        ms = re.search(r'<section[^>]*id="view-' + herr + "-" + tab + r'"[^>]*>(.*?)</section>', cuerpo_html, re.S)
+                        pestanas.append(((tx("tool." + herr) or herr) + " → " + (tx(keys.get(tab, "")) or tab), h2_de(ms.group(1) if ms else "")))
+        L.append("- Pestañas:" if pestanas else "- Pestañas: ninguna (una sola pantalla)")
+        for nombre, h2s in pestanas:
+            L.append(f"  - **{nombre}**")
+            L += [f"    - {x}" for x in h2s]
+        if not pestanas:
+            L += [f"  - {x}" for x in h2_de(cuerpo_html)]
+        # fuentes: claves con nombre de fuente o referencia, más los textos del pie (<footer>) de la página
+        pie = " ".join(re.findall(r"<footer[^>]*>(.*?)</footer>", cuerpo_html, re.S))
+        claves_pie = set(re.findall(r'data-i18n(?:-html)?="([^"]+)"', pie))
+        claves_fuente = sorted(k for k in es if k in claves_pie or re.search(r"(^|\.)(src\w*|ref\w*|fuentes?|cita|bib\w*|foot\w*)$|^(ft|foot)\.", k))
+        if claves_fuente:
+            L.append("- Fuentes que cita:")
+            L += [f"  - `{k}`: {tx(k)}" for k in claves_fuente]
+        else:
+            L.append("- Fuentes que cita: no se han localizado claves de fuente (`src`, `ref`…); revisar a mano")
+        L.append(f"- Versión en valenciano: {'sí' if tiene_va else 'no'}")
+        L.append("")
+    L += ["### Ocultos por la capa de la web", ""]
+    L += [f"- {x}" for x in sorted(ocultos_web)] or ["- Ninguno: la web no esconde botones ni ejemplos de las herramientas."]
+    L.append("")
+
+    L += ["## Páginas de SA con apuntes", ""]
+    for clave in sorted(SAS):
+        sa = SAS[clave]; m = sa["meta"]
+        L += [f"### {clave} · {m.get('titulo', '')}", "", "| Sesión | Título | Fase | Estado | Herramienta |", "|---|---|---|---|---|"]
+        for sm, sc in sa["sesiones"]:
+            fase = FASES.get(int(sm.get("fase", 0) or 0), ("—",))[0]
+            L.append(f"| {sm.get('sesion', '')} | {sm.get('titulo', '')} | {fase} | {'publicado' if publicada(sm, sc) else 'en elaboración'} | {sm.get('herramienta', '') or '—'} |")
+        L.append("")
+    (web / "inventario-web.md").write_text("\n".join(L).rstrip() + "\n", encoding="utf-8")
+    aviso(True, f"inventario-web.md  ({len(HERRAMIENTAS)} herramientas, {len(SAS)} SA con apuntes)")
+
+
+inventario()
 
 sys.exit(1 if errores else 0)

@@ -15,6 +15,7 @@ sa02/ … sa09/, datos/    Las demás herramientas y la Base de datos
 actualidad/              Actualidad: noticias comentadas y titulares de varios medios (página y datos.json)
 libro/                   Libro del alumnado: los apuntes de todas las SA seguidos, para leer o imprimir
 actualizar.sh            Construye todo desde el vault (llama a scripts/actualizar.py)
+inventario-web.md        Inventario de lo publicado (herramientas, pestañas, fuentes, estado, sesiones e interruptores); lo genera actualizar.sh: no se edita a mano
 LICENSE.md               Licencia CC BY-SA 4.0
 .nojekyll                Para que GitHub Pages sirva los archivos tal cual
 ```

@@ -16,7 +16,7 @@
       d: { es: "Encuestas a las familias, resultados de la clase y matriz de la estantería.", va: "Enquestes a les famílies, resultats de la classe i matriu del prestatge." } },
     { n: 3, ini: "2026-10-28", fin: "2026-11-18", tri: 1,  ruta: "sa03/", estado: "proto",
       t: { es: "La producción", va: "La producció" },
-      d: { es: "Calculadora de costes con el caso de General Motors (2009) y frontera de posibilidades de producción.", va: "Calculadora de costos amb el cas de General Motors (2009) i frontera de possibilitats de producció." } },
+      d: { es: "Laboratorio de costes para trastear y practicar, el caso de General Motors (2009) y la frontera de posibilidades de producción.", va: "Laboratori de costos per a trastejar i practicar, el cas de General Motors (2009) i la frontera de possibilitats de producció." } },
     { n: 4, ini: "2026-11-19", fin: "2026-12-21", tri: 1,  ruta: "sa04/", estado: "proto",
       t: { es: "El mercado", va: "El mercat" },
       d: { es: "Competencia perfecta, monopolio, el dilema de las dos gasolineras y la guerra de precios de la competencia real.", va: "Competència perfecta, monopoli, el dilema de les dues gasolineres i la guerra de preus de la competència real." } },
