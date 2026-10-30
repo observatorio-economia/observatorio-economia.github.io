@@ -281,3 +281,14 @@ figure .plot { background: transparent; }
 .obs-page .hero { padding-bottom: 30px; max-width: none; }
 .obs-page .hero > * { max-width: 760px; }
 .wrap > #obs-bar { margin-bottom: -26px; padding-bottom: 26px; }
+
+/* ---------- Navegación coherente (30/10): «Inicio» en el menú y migas de pan en todas las páginas ----------
+   Los enlaces «← Panel del Observatorio» y «← SA n» de cada página quedan escondidos en la web (siguen en el vault
+   y en los artefactos de Claude): las migas dicen dónde estás y llevan un nivel arriba o al inicio. */
+.obs-migas { border-top: 1px solid var(--rule); }
+.obs-migas ol { list-style: none; margin: 0 auto; padding: 7px 16px; max-width: 1180px; display: flex; flex-wrap: wrap; gap: 2px 0; font: 500 13px var(--font-label); color: var(--muted); }
+.obs-migas li + li::before { content: "›"; margin: 0 8px; color: var(--rule); }
+.obs-migas a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.obs-migas a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.obs-migas [aria-current] { color: var(--muted); }
+#obs-bar a.back, .obs-bar a.back, a.back.obs-volver { display: none; }

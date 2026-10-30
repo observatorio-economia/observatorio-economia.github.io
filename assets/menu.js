@@ -68,7 +68,8 @@
       carr: "carrusel", carrl: "Noticias de la prensa económica", diapo: "noticia", leeren: "Leer en {m}", img: "Imagen: {m}",
       ant: "Noticia anterior", sig: "Noticia siguiente", pausa: "Pausar", seguir: "Reanudar", ir: "Ir a la noticia {n}", comclase: "Comentada en clase",
       lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
-      cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el" },
+      cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el",
+      inicio: "Inicio", migas: "Estás en", herr: "Herramienta", ses: "Sesión {n}" },
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
       open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
       act: "Actualitat", pq: "Per a pensar", actmas: "Més notícies i titulars",
@@ -79,7 +80,8 @@
       carr: "carrusel", carrl: "Notícies de la premsa econòmica", diapo: "notícia", leeren: "Llegir en {m}", img: "Imatge: {m}",
       ant: "Notícia anterior", sig: "Notícia següent", pausa: "Pausar", seguir: "Reprendre", ir: "Anar a la notícia {n}", comclase: "Comentada a classe",
       lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
-      cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el" },
+      cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el",
+      inicio: "Inici", migas: "Estàs en", herr: "Ferramenta", ses: "Sessió {n}" },
   };
   const idioma = () => (window.OBS && OBS.lang && OBS.lang() === "va") ? "va" : "es";
   const tx = k => TXT[idioma()][k];
@@ -143,10 +145,35 @@
       guardar(tema); aplicarTema(); pintarMenu();
       document.querySelector(".obs-menu__tema")?.focus();
     });
-    const home = el("a", { class: "obs-menu__home", href: enlace(""), "aria-current": normaliza(enlace("")) === aqui() ? "page" : null }, el("b", { text: tx("home") }));
-    return el("nav", { class: "obs-menu", "aria-label": tx("menu") },
-      el("div", { class: "obs-menu__in" }, home, el("div", { class: "obs-menu__nav" }, sit, ...extra), boton));
+    const enPortada = normaliza(enlace("")) === aqui();
+    const home = el("a", { class: "obs-menu__home", href: enlace(""), "aria-current": enPortada ? "page" : null }, el("b", { text: tx("home") }));
+    const inicio = el("a", { class: "obs-menu__link", href: enlace(""), "aria-current": enPortada ? "page" : null, text: tx("inicio") });
+    const nav = el("nav", { class: "obs-menu", "aria-label": tx("menu") },
+      el("div", { class: "obs-menu__in" }, home, el("div", { class: "obs-menu__nav" }, inicio, sit, ...extra), boton));
+    const m = migas();
+    if (m) nav.append(m);
+    return nav;
   }
+  // Migas de pan: dónde estoy y cómo vuelvo (sustituyen a los «← Panel» de cada página, que la web esconde)
+  function migas() {
+    const rel = normaliza(location.href).slice(normaliza(raiz.href).length);
+    if (!rel) return null;
+    const pasos = [[tx("inicio"), enlace("")]];
+    const mSA = rel.match(/^sa(\d\d)\/(?:(herramientas)\/|s(\d\d)\.html)?/);
+    if (mSA) {
+      const s = SA.find(x => x.n === +mSA[1]);
+      pasos.push(["SA " + (+mSA[1]) + (s ? " · " + L(s.t) : ""), mSA[2] || mSA[3] ? enlace("sa" + mSA[1] + "/") : null]);
+      if (mSA[2]) pasos.push([tx("herr"), null]);
+      if (mSA[3]) pasos.push([tx("ses").replace("{n}", +mSA[3]), null]);
+    } else {
+      const x = TODAS_EXTRA.find(e => rel.startsWith(e.ruta));
+      if (!x) return null;
+      pasos.push([L(x.t), null]);
+    }
+    return el("div", { class: "obs-migas" }, el("nav", { "aria-label": tx("migas") },
+      el("ol", {}, ...pasos.map(([t, h], i) => el("li", {}, h && i < pasos.length - 1 ? el("a", { href: h, text: t }) : el("span", { "aria-current": "page", text: t }))))));
+  }
+
   // el desplegable se cierra al pulsar fuera o con Escape
   document.addEventListener("click", e => { document.querySelectorAll(".obs-menu__sit[open]").forEach(d => { if (!d.contains(e.target)) d.open = false; }); });
   document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".obs-menu__sit[open]").forEach(d => { d.open = false; d.querySelector("summary").focus(); }); });

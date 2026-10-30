@@ -5,7 +5,7 @@ Web estática del curso: las herramientas digitales, una por situación de apren
 ## Qué hay aquí
 
 ```
-index.html               Panel del Observatorio (portada con las 10 SA, en castellano y valenciano)
+index.html               Inicio (portada con las 10 SA, en castellano y valenciano)
 assets/observatorio.css  Hoja de estilo de la web: portada, páginas de SA y apuntes, menú, pie e impresión
 assets/estilo.css        Línea gráfica de la web (papel, grafito, rojo; Jost, Commissioner, Literata), la última en cargar
 assets/menu.js           Menú común, lista de las 10 SA (la única que hay que mantener), autoría y licencia
@@ -60,6 +60,10 @@ Para empezar los apuntes de otra SA, copia la carpeta `web/` de la SA 1 a la car
 ## Línea gráfica
 
 `assets/estilo.css` da a toda la web el aire de familia de la otra web de Jordi (decisión W-33: tipografía y colores, sin logotipo, cuña ni nombre): fondo papel `#F4F3EF` y tarjetas blancas, grafito `#1F2224`, un único rojo `#C8412F`, títulos en **Jost** y en minúscula, rótulos en **Commissioner** y lectura en **Literata**. Se carga la última en todas las páginas y `actualizar.sh` la añade al final de cada herramienta, así que no cambia ningún archivo del vault (las herramientas publicadas en Claude conservan su estilo). Para volver al estilo anterior: `ESTILO_WEB = False` en `scripts/actualizar.py` y quitar las dos líneas marcadas en `index.html`.
+
+## Navegación
+
+En todas las páginas, el menú de arriba (Inicio, Situaciones, Actualidad, Datos) y, debajo, las migas de pan («Inicio › SA 1 · … › Herramienta»), que genera `assets/menu.js` según la dirección. Los enlaces «← Panel del Observatorio» y «← SA n» que traen las herramientas y las sesiones se esconden en la web (`assets/estilo.css`); siguen en el vault y en los artefactos de Claude, donde no hay menú.
 
 ## Portada
 
