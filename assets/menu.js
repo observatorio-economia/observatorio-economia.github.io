@@ -34,13 +34,21 @@
       d: { es: "Ricardo frente a Shaikh: ventaja comparativa o ventaja absoluta, con déficit y deuda.", va: "Ricardo enfront de Shaikh: avantatge comparatiu o avantatge absolut, amb dèficit i deute." } },
     { n: 10, t: { es: "Las finanzas", va: "Les finances" } },
   ];
+  // Interruptor del libro del alumnado en el menú y la portada (la página libro/ se genera siempre):
+  // "auto" = solo cuando hay algún apunte con «estado: publicado» (lo cuenta actualizar.sh en assets/estado-web.js);
+  // true = siempre; false = nunca. Encargo del 30/10/2026: mientras no haya apuntes publicados, no se enseña.
+  const MOSTRAR_LIBRO = "auto";
+  const hayApuntes = !!(window.OBS_ESTADO && window.OBS_ESTADO.apuntesPublicados > 0);
+  const libroVisible = MOSTRAR_LIBRO === true || (MOSTRAR_LIBRO === "auto" && hayApuntes);
+
   // Páginas comunes a todo el curso (fuera de la lista de SA)
-  const EXTRA = [
+  const TODAS_EXTRA = [
     { ruta: "libro/", num: "¶", t: { es: "Libro del alumnado", va: "Llibre de l'alumnat" }, corto: { es: "Libro", va: "Llibre" },
       d: { es: "Los apuntes de todas las situaciones de aprendizaje, seguidos, para leer o imprimir.", va: "Els apunts de totes les situacions d'aprenentatge, seguits, per a llegir o imprimir." } },
     { ruta: "datos/", num: "∑", t: { es: "Base de datos", va: "Base de dades" }, corto: { es: "Datos", va: "Dades" },
       d: { es: "Series oficiales ya limpias para trabajar en Excel, con su fuente, lo que miden y sus unidades.", va: "Sèries oficials ja netes per a treballar en Excel, amb la seua font, el que mesuren i les seues unitats." } },
   ];
+  const EXTRA = TODAS_EXTRA.filter(x => x.ruta !== "libro/" || libroVisible);
 
   // Autoría y licencia: aparecen al pie de todas las páginas, con la forma de citarlas
   const AUTOR = { nombre: "Jordi Vila Garrido", cita: "Vila Garrido, J." }, ANYO = 2026;

@@ -52,6 +52,8 @@ Los apuntes se escriben **en el vault**, en Markdown, dentro de la carpeta `web/
 
 Para empezar los apuntes de otra SA, copia la carpeta `web/` de la SA 1 a la carpeta de esa SA y cambia las cabeceras.
 
+**El libro en el menú y la portada (oculto por ahora).** La página `libro/` se genera siempre y se puede abrir por su dirección, pero la entrada «Libro» del menú y la fila de la portada solo aparecen cuando hay al menos un apunte con `estado: publicado` (encargo del 30/10/2026). Lo cuenta `actualizar.sh` y lo escribe en `assets/estado-web.js`. El interruptor es `MOSTRAR_LIBRO` al principio de `assets/menu.js`: `"auto"` (así), `true` (mostrarlo siempre) o `false` (no mostrarlo nunca).
+
 ## Autoría, licencia y cómo citar
 
 Todo el material está bajo **CC BY-SA 4.0**: se puede copiar, adaptar y compartir citando la fuente y con la misma licencia. Al pie de cada página aparecen la autoría, la licencia y cómo citar esa página. Para cambiar el nombre o la licencia, edita `AUTOR`, `ANYO` y `LICENCIA` al principio de `assets/menu.js` (y `LICENSE.md`).

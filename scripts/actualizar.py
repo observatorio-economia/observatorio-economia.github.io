@@ -149,6 +149,7 @@ def pagina(prefijo, titulo, cuerpo, textos):
 <link rel="stylesheet" href="{prefijo}assets/observatorio.css">
 <link rel="stylesheet" href="{prefijo}assets/comun/observatorio-common.css">
 <script src="{prefijo}assets/comun/observatorio-common.js"></script>
+<script src="{prefijo}assets/estado-web.js"></script>
 <script src="{prefijo}assets/menu.js"></script>
 </head>
 <body class="obs-page">
@@ -217,6 +218,7 @@ for carpeta, origen in HERRAMIENTAS:
         '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
         "<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->",
         f'<link rel="stylesheet" href="{prefijo}assets/observatorio.css">',
+        f'<script src="{prefijo}assets/estado-web.js"></script>',
         f'<script src="{prefijo}assets/menu.js"></script>', ""])
     destino.parent.mkdir(parents=True, exist_ok=True)
     destino.write_text(cabecera + s, encoding="utf-8")
@@ -348,5 +350,14 @@ cuerpo = f"""  <header class="top">
 (web / "libro").mkdir(exist_ok=True)
 (web / "libro" / "index.html").write_text(pagina("../", "Libro del alumnado", cuerpo, tx), encoding="utf-8")
 aviso(True, f"libro/index.html  ({len(SAS)} SA con apuntes)")
+
+# ---------------------------------------------------------------- 6 · Estado de la publicación
+# Lo lee assets/menu.js: por ejemplo, el libro del alumnado solo se enseña en el menú y en la portada
+# cuando hay al menos un apunte publicado (interruptor MOSTRAR_LIBRO en menu.js).
+publicados = sum(publicada(sm, sc) for sa in SAS.values() for sm, sc in sa["sesiones"])
+(web / "assets" / "estado-web.js").write_text(
+    "/* Generado por actualizar.sh a partir del vault: no editar a mano. */\n"
+    f"window.OBS_ESTADO = {{ apuntesPublicados: {publicados} }};\n", encoding="utf-8")
+aviso(True, f"assets/estado-web.js  ({publicados} apuntes publicados)")
 
 sys.exit(1 if errores else 0)
