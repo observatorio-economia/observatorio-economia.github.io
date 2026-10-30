@@ -60,11 +60,15 @@
     es: { home: "Observatorio", sub: "Economía · 1.º Bach.", nav: "Situaciones de aprendizaje", soon: "próximamente",
       open: "abrir", proto: "prototipo", tema: "Tema", auto: "automático", light: "claro", dark: "oscuro", cambiar: "Cambiar el tema; ahora {v}",
       act: "Actualidad", pq: "Para pensar", actmas: "Más noticias y titulares",
+      carr: "carrusel", carrl: "Noticias de la prensa económica", diapo: "noticia", leeren: "Leer en {m}", img: "Imagen: {m}",
+      ant: "Noticia anterior", sig: "Noticia siguiente", pausa: "Pausar", seguir: "Reanudar", ir: "Ir a la noticia {n}", comclase: "Comentada en clase",
       lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
       cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el" },
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
       open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
       act: "Actualitat", pq: "Per a pensar", actmas: "Més notícies i titulars",
+      carr: "carrusel", carrl: "Notícies de la premsa econòmica", diapo: "notícia", leeren: "Llegir en {m}", img: "Imatge: {m}",
+      ant: "Notícia anterior", sig: "Notícia següent", pausa: "Pausar", seguir: "Reprendre", ir: "Anar a la notícia {n}", comclase: "Comentada a classe",
       lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
       cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el" },
   };
@@ -139,29 +143,96 @@
     barra = nueva;
   }
 
-  // Portada: la noticia comentada más reciente y los últimos titulares (los deja actualizar.sh en estado-web.js)
+  const fechaCorta = f => { const d = new Date(f); return isNaN(d) ? (f || "") : d.toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES", { day: "numeric", month: "short" }); };
+  const EXT = { target: "_blank", rel: "noopener nofollow" };
+
+  // Carrusel de noticias (prensa salmón con imagen). Accesible: botones, contador, puntos, pausa y deslizar con el dedo.
+  // Avanza solo cada 7 segundos, salvo con «reducir movimiento», al pasar el ratón o con el foco dentro.
+  // Las imágenes son las que cada medio pone en su canal: se enlazan (no se copian) y llevan su crédito.
+  function carrusel(caja, items) {
+    if (!caja) return;
+    if (caja._parar) caja._parar();
+    if (!items || !items.length) { caja.hidden = true; return; }
+    const reducir = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let i = 0, reloj = null, pausaUsuario = reducir, encima = false;
+    const slides = items.map((n, k) => {
+      const img = el("img", { src: n.imagen, alt: "", loading: k ? "lazy" : "eager", decoding: "async", referrerpolicy: "no-referrer" });
+      const foto = el("a", Object.assign({ class: "carr-foto", href: n.enlace, tabindex: "-1", "aria-hidden": "true" }, EXT), img);
+      img.addEventListener("error", () => foto.classList.add("sin-foto"));
+      return el("article", { class: "carr-slide", role: "group", "aria-roledescription": tx("diapo"), "aria-label": (k + 1) + " / " + items.length, hidden: k ? "" : null },
+        foto,
+        el("div", { class: "carr-texto" },
+          el("div", { class: "act-meta" }, el("span", { class: "act-sa", text: n.fuente }), el("time", { text: fechaCorta(n.fecha) })),
+          el("h3", {}, el("a", Object.assign({ href: n.enlace, text: n.titulo }, EXT))),
+          el("a", Object.assign({ class: "act-mas", href: n.enlace, text: tx("leeren").replace("{m}", n.fuente) + " ↗" }, EXT)),
+          el("span", { class: "carr-credito", text: tx("img").replace("{m}", n.fuente) })));
+    });
+    const contador = el("span", { class: "carr-num", "aria-hidden": "true" });
+    const puntos = items.map((_, k) => { const b = el("button", { type: "button", class: "carr-punto", "aria-label": tx("ir").replace("{n}", k + 1) }); b.addEventListener("click", () => { ir(k); }); return b; });
+    const ant = el("button", { type: "button", class: "carr-btn", "aria-label": tx("ant"), text: "←" });
+    const sig = el("button", { type: "button", class: "carr-btn", "aria-label": tx("sig"), text: "→" });
+    const pausa = el("button", { type: "button", class: "carr-btn carr-pausa" });
+    ant.addEventListener("click", () => ir(i - 1));
+    sig.addEventListener("click", () => ir(i + 1));
+    pausa.addEventListener("click", () => { pausaUsuario = !pausaUsuario; programar(); rotular(); });
+    const rotular = () => { pausa.textContent = tx(pausaUsuario ? "seguir" : "pausa"); };
+    function ir(k) {
+      i = (k + items.length) % items.length;
+      slides.forEach((s, n) => { s.hidden = n !== i; });
+      puntos.forEach((b, n) => b.setAttribute("aria-current", n === i ? "true" : "false"));
+      contador.textContent = String(i + 1).padStart(2, "0") + " / " + String(items.length).padStart(2, "0");
+      programar();
+    }
+    function programar() {
+      clearTimeout(reloj); reloj = null;
+      if (!pausaUsuario && !encima && items.length > 1) reloj = setTimeout(() => ir(i + 1), 7000);
+    }
+    caja.onmouseenter = () => { encima = true; programar(); };
+    caja.onmouseleave = () => { encima = false; programar(); };
+    caja.onfocusin = () => { encima = true; programar(); };
+    caja.onfocusout = () => { encima = false; programar(); };
+    let x0 = null;
+    caja.ontouchstart = e => { x0 = e.touches[0].clientX; };
+    caja.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) ir(i + (dx < 0 ? 1 : -1)); x0 = null; };
+    caja.setAttribute("role", "region");
+    caja.setAttribute("aria-roledescription", tx("carr"));
+    caja.setAttribute("aria-label", tx("carrl"));
+    caja.replaceChildren(el("div", { class: "carr-pista" }, ...slides),
+      el("div", { class: "carr-mandos" }, contador, ant, el("div", { class: "carr-puntos" }, ...puntos), sig, pausa));
+    caja.hidden = false;
+    caja._parar = () => { clearTimeout(reloj); };
+    rotular(); ir(0);
+  }
+  window.OBS_CARRUSEL = carrusel;
+
+  // Portada: el carrusel de la prensa salmón y la noticia comentada más reciente (los deja actualizar.sh en estado-web.js)
   function portadaActualidad() {
     const caja = document.getElementById("panel-actualidad");
     const a = window.OBS_ESTADO && window.OBS_ESTADO.actualidad;
     if (!caja) return;
-    if (!a || (!a.comentada && !(a.titulares || []).length)) { caja.hidden = true; return; }
-    const fecha = f => { const d = new Date(f); return isNaN(d) ? f : d.toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES", { day: "numeric", month: "short" }); };
-    const ext = { target: "_blank", rel: "noopener nofollow" };
+    const enCarrusel = (a && a.carrusel) || [];
+    if (!a || (!a.comentada && !enCarrusel.length && !(a.titulares || []).length)) { caja.hidden = true; return; }
     const hijos = [el("h2", { text: tx("act") })];
+    if (enCarrusel.length) {
+      const c = el("div", { class: "act-carrusel" });
+      hijos.push(c);
+      setTimeout(() => carrusel(c, enCarrusel), 0);
+    } else if ((a.titulares || []).length) {
+      hijos.push(el("ul", { class: "act-lista" }, ...a.titulares.map(i => el("li", {},
+        el("a", Object.assign({ href: i.enlace }, EXT), i.titulo), el("time", { text: fechaCorta(i.fecha) + " · " + i.fuente })))));
+    }
     const c = a.comentada;
     if (c) {
-      const meta = el("div", { class: "act-meta" }, el("time", { text: c.fecha }), el("span", { text: c.fuente || "" }),
+      const meta = el("div", { class: "act-meta" }, el("span", { text: tx("comclase") }), el("time", { text: c.fecha }), el("span", { text: c.fuente || "" }),
         (c.sa || c.concepto) ? el("span", { class: "act-sa", text: (c.sa ? "SA " + c.sa : "") + (c.sa && c.concepto ? " · " : "") + (c.concepto || "") }) : "");
-      const tit = /^https?:\/\//.test(c.enlace || "") ? el("a", Object.assign({ href: c.enlace }, ext), c.titulo) : document.createTextNode(c.titulo);
+      const tit = /^https?:\/\//.test(c.enlace || "") ? el("a", Object.assign({ href: c.enlace }, EXT), c.titulo) : document.createTextNode(c.titulo);
       const art = el("article", { class: "act-destacada" }, meta, el("h3", {}, tit));
       if (c.pregunta) art.append(el("p", { class: "act-pregunta" }, el("strong", { text: tx("pq") + ": " }), c.pregunta));
       hijos.push(art);
     }
-    if ((a.titulares || []).length) {
-      hijos.push(el("ul", { class: "act-lista" }, ...a.titulares.map(i => el("li", {},
-        el("a", Object.assign({ href: i.enlace }, ext), i.titulo), el("time", { text: fecha(i.fecha) + " · " + i.fuente })))));
-    }
     hijos.push(el("a", { class: "act-mas", href: enlace("actualidad/"), text: tx("actmas") }));
+    const anterior = caja.querySelector(".act-carrusel");
+    if (anterior && anterior._parar) anterior._parar();
     caja.replaceChildren(...hijos);
     caja.hidden = false;
   }

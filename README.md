@@ -62,10 +62,12 @@ Para empezar los apuntes de otra SA, copia la carpeta `web/` de la SA 1 a la car
 
 ## Actualidad
 
-Se ve en el menú («Actualidad»), en la portada (la noticia comentada más reciente y los tres últimos titulares) y en `actualidad/`.
+Se ve en el menú («Actualidad»), en la portada (el carrusel de la prensa salmón y la noticia comentada más reciente) y en `actualidad/` (carrusel, comentadas y titulares por medio).
 
 - **Noticias comentadas:** en el vault, `05-SA/_actualidad/AAAA-MM-DD-palabra-clave.md`, copiando `_plantilla.md`: titular, medio, enlace, SA, concepto y una pregunta para la clase en la cabecera, y dos o tres líneas propias debajo. Solo salen las que tienen `estado: publicado`. No se copia el texto de la noticia: se resume y se enlaza.
 - **Titulares:** los recoge `actualizar.sh` de los canales RSS de `scripts/fuentes-actualidad.json` (medios de líneas editoriales distintas; se pueden quitar o añadir). Solo título, medio, fecha y enlace. Si un canal falla, se conservan sus titulares anteriores y se avisa con ⚠, sin parar la web.
+- **Carrusel de la prensa salmón:** las fuentes marcadas con `"salmon": true` (Expansión, Cinco Días e Invertia) dan las noticias con imagen del carrusel, alternando medios, ocho como máximo (`"carrusel"` en el mismo archivo). Botones de anterior, siguiente y pausa, contador y puntos; se puede deslizar con el dedo; avanza solo cada 7 segundos salvo con «reducir movimiento», con el ratón encima o con el foco dentro. elEconomista no se puede usar: bloquea los lectores automáticos.
+- **Las imágenes** son las que cada medio pone en su propio canal para que se muestren sus noticias: se enlazan desde su servidor (no se copian ni se guardan), llevan el crédito del medio y enlazan a la noticia. Solo se descarga la de la noticia que se está viendo; las de Cinco Días pesan cerca de 1 MB cada una.
 - **Cada día, solos:** cuando la web esté en GitHub, `.github/workflows/titulares.yml` los renueva cada mañana (`--solo-titulares`, sin el vault). En local, se renuevan al ejecutar `actualizar.sh`.
 - Sin comentarios ni foros: la web es solo de lectura.
 - Los titulares automáticos no se revisan uno a uno: pueden colarse noticias poco adecuadas para el aula. Si pasa, se quita ese medio de la lista.

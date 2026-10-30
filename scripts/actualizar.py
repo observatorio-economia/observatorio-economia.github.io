@@ -213,7 +213,8 @@ def fecha_de(texto):
 
 
 def leer_canal(url):
-    """Devuelve [(título, enlace, fecha)] de un canal RSS 2.0 o Atom."""
+    """Devuelve [(título, enlace, fecha, imagen)] de un canal RSS 2.0 o Atom. La imagen es la que el propio medio
+    pone en el canal (media:content, enclosure o media:thumbnail); no se descarga ni se guarda: se enlaza."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Observatorio; lector de titulares)",
                                                "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml"})
     with urllib.request.urlopen(req, timeout=10) as r:
@@ -223,7 +224,11 @@ def leer_canal(url):
     for e in raiz.iter():
         if sin_ns(e) not in ("item", "entry"):
             continue
-        hijos = {sin_ns(h): h for h in e}
+        # el primero de cada nombre: así el título de la noticia no lo pisa el de la foto (media:title)
+        hijos = {}
+        for h in e:
+            if h.tag in ("title", "{http://www.w3.org/2005/Atom}title") or sin_ns(h) != "title":
+                hijos.setdefault(sin_ns(h), h)
         titulo = limpio(hijos["title"].text if "title" in hijos else "")
         enlace = ""
         if "link" in hijos:
@@ -233,8 +238,14 @@ def leer_canal(url):
         for k in ("pubDate", "published", "updated", "date"):
             if k in hijos and hijos[k].text:
                 fecha = fecha_de(hijos[k].text); break
+        imagen = ""
+        for h in e:
+            if sin_ns(h) in ("content", "enclosure", "thumbnail") and h.get("url", "").startswith("https://"):
+                tipo = (h.get("type") or h.get("medium") or "image").lower()
+                if "image" in tipo or sin_ns(h) == "thumbnail":
+                    imagen = h.get("url"); break
         if titulo and enlace.startswith(("http://", "https://")):
-            items.append((titulo[:220], enlace, fecha))
+            items.append((titulo[:220], enlace, fecha, imagen))
     return items
 
 
@@ -275,14 +286,26 @@ def actualidad(vault_dir):
         try:
             items = [i for i in leer_canal(f["url"]) if not i[2] or i[2] >= limite]
             items.sort(key=lambda i: i[2] or limite, reverse=True)
-            lista = [{"titulo": t_, "enlace": e_, "fecha": d_.astimezone(timezone.utc).isoformat() if d_ else ""} for t_, e_, d_ in items[:int(conf.get("por_fuente", 5))]]
-            titulares.append({"nombre": f["nombre"], "items": lista, "leido": datetime.now(timezone.utc).isoformat()})
+            lista = [{"titulo": t_, "enlace": e_, "fecha": d_.astimezone(timezone.utc).isoformat() if d_ else "", "imagen": i_}
+                     for t_, e_, d_, i_ in items[:max(int(conf.get("por_fuente", 5)), int(conf.get("carrusel", 8)) if f.get("salmon") else 0)]]
+            titulares.append({"nombre": f["nombre"], "salmon": bool(f.get("salmon")), "items": lista, "leido": datetime.now(timezone.utc).isoformat()})
         except Exception as ex:  # sin red o canal caído: se conserva lo de la última vez y se avisa, sin parar la web
             viejo = previos.get(f["nombre"])
-            titulares.append(viejo or {"nombre": f["nombre"], "items": [], "leido": ""})
+            titulares.append(viejo or {"nombre": f["nombre"], "salmon": bool(f.get("salmon")), "items": [], "leido": ""})
             print(f"⚠ actualidad: no se ha podido leer «{f['nombre']}» ({type(ex).__name__}); se mantienen los titulares anteriores")
+    # Carrusel: noticias con imagen de la prensa salmón, alternando medios y de la más reciente a la más antigua
+    colas = [[dict(i, fuente=f["nombre"]) for i in f["items"] if i.get("imagen")] for f in titulares if f.get("salmon")]
+    carrusel = []
+    while any(colas) and len(carrusel) < int(conf.get("carrusel", 8)):
+        for c in colas:
+            if c and len(carrusel) < int(conf.get("carrusel", 8)):
+                carrusel.append(c.pop(0))
+    carrusel.sort(key=lambda i: i["fecha"], reverse=True)
+    # en la lista de titulares, cada medio con sus cinco más recientes
+    for f in titulares:
+        f["items"] = f["items"][:int(conf.get("por_fuente", 5))]
     ahora = datetime.now(timezone.utc).isoformat()
-    datos = {"generado": ahora, "comentadas": comentadas, "titulares": titulares}
+    datos = {"generado": ahora, "comentadas": comentadas, "carrusel": carrusel, "titulares": titulares}
     (destino / "datos.json").write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # Página
@@ -315,13 +338,21 @@ def actualidad(vault_dir):
     for f in titulares:
         lis = "".join(f'<li><a href="{esc(i["enlace"])}" target="_blank" rel="noopener nofollow">{esc(i["titulo"])}</a>'
                       f'{"<time datetime=" + chr(34) + esc(i["fecha"]) + chr(34) + "></time>" if i["fecha"] else ""}</li>' for i in f["items"])
-        fuentes.append(f'<section class="act-fuente"><h3>{esc(f["nombre"])}</h3>'
+        fuentes.append(f'<section class="act-fuente{" act-salmon" if f.get("salmon") else ""}"><h3>{esc(f["nombre"])}</h3>'
                        + (f'<ul class="act-lista">{lis}</ul>' if lis else '<p class="small" data-i18n="ac.vacio">Sin titulares recientes.</p>') + "</section>")
+    carrusel_js = json.dumps(carrusel, ensure_ascii=False).replace("</", "<\\/")
     cuerpo = f"""  <header class="top">
     <span class="eyebrow" data-i18n="ac.eyebrow">Economía · 1.º de Bachillerato</span>
     <h1 data-i18n="ac.title">Actualidad</h1>
     <p class="lede" data-i18n="ac.lede"></p>
   </header>
+  <div class="act-carrusel" id="act-carrusel" hidden></div>
+  <script>window.addEventListener("DOMContentLoaded", function () {{
+    var datos = {carrusel_js}, caja = document.getElementById("act-carrusel");
+    if (!window.OBS_CARRUSEL) return;
+    OBS_CARRUSEL(caja, datos);
+    if (window.OBS) OBS.onLang(function () {{ OBS_CARRUSEL(caja, datos); }});
+  }});</script>
   <section class="obs-fase">
     <h2 data-i18n="ac.com">Comentadas en clase</h2>
 {coms}
@@ -349,11 +380,12 @@ def actualidad(vault_dir):
   </script>"""
     (destino / "index.html").write_text(pagina("../", "Actualidad", cuerpo, tx), encoding="utf-8")
     n_tit = sum(len(f["items"]) for f in titulares)
-    aviso(True, f"actualidad/index.html  ({len(comentadas)} comentadas, {n_tit} titulares de {len(titulares)} medios)")
+    aviso(True, f"actualidad/index.html  ({len(comentadas)} comentadas, {len(carrusel)} en el carrusel, {n_tit} titulares de {len(titulares)} medios)")
     # Resumen para la portada: la comentada más reciente y los tres titulares más recientes
     todos = sorted(([i["fecha"], i["titulo"], i["enlace"], f["nombre"]] for f in titulares for i in f["items"] if i["fecha"]), reverse=True)[:3]
     return {"comentada": ({k: comentadas[0][k] for k in ("fecha", "titulo", "fuente", "enlace", "sa", "concepto", "pregunta")} if comentadas else None),
-            "titulares": [{"fecha": a, "titulo": b, "enlace": c, "fuente": d} for a, b, c, d in todos]}
+            "titulares": [{"fecha": a, "titulo": b, "enlace": c, "fuente": d} for a, b, c, d in todos],
+            "carrusel": carrusel}
 
 
 def escribir_estado(publicados, resumen_actualidad):

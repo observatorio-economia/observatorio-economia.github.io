@@ -1,14 +1,17 @@
 {
-  "_nota": "Fuentes de los titulares de la sección Actualidad (canales RSS o Atom). Se eligen de líneas editoriales distintas para que el alumnado contraste. Para quitar una, bórrala de la lista; para añadir otra, copia una entrada con su nombre y su canal. Comprobadas el 30/10/2026.",
+  "_nota": "Fuentes de la sección Actualidad (canales RSS o Atom). Las marcadas con \"salmon\": true son prensa económica: sus noticias con imagen forman el carrusel de la portada y de Actualidad. Las demás, de líneas editoriales distintas, completan la lista de titulares para contrastar. Para quitar una, bórrala; para añadir otra, copia una entrada con su nombre y su canal. elEconomista no se puede leer: bloquea los lectores automáticos. Comprobadas el 30/10/2026.",
   "por_fuente": 5,
   "dias": 10,
+  "carrusel": 8,
   "fuentes": [
+    { "nombre": "Expansión", "url": "https://e00-expansion.uecdn.es/rss/economia.xml", "salmon": true },
+    { "nombre": "Cinco Días", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/cincodias.elpais.com/section/economia/portada", "salmon": true },
+    { "nombre": "Invertia · El Español", "url": "https://www.elespanol.com/rss/invertia/", "salmon": true },
     { "nombre": "The Conversation · Economía", "url": "https://theconversation.com/es/economia/articles.atom" },
     { "nombre": "El País · Economía", "url": "https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/section/economia/portada" },
     { "nombre": "elDiario.es · Economía", "url": "https://www.eldiario.es/rss/economia/" },
     { "nombre": "El Mundo · Economía", "url": "https://e00-elmundo.uecdn.es/elmundo/rss/economia.xml" },
     { "nombre": "ABC · Economía", "url": "https://www.abc.es/rss/2.0/economia/" },
-    { "nombre": "Expansión · Economía", "url": "https://e00-expansion.uecdn.es/rss/economia.xml" },
     { "nombre": "Valencia Plaza · Economía", "url": "https://valenciaplaza.com/rss/economia" }
   ]
 }

@@ -93,4 +93,35 @@ body { background: var(--bg); }
 .obs-page .act-lista a:hover { color: var(--accent); text-decoration: underline; }
 .obs-page .act-lista time { font-family: var(--font-label); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .obs-page .act-portada { display: flex; flex-direction: column; gap: 12px; }
+
+/* ---------- Carrusel de la prensa salmón ---------- */
+.obs-page .act-carrusel { background: var(--paper); border-top: 3px solid var(--accent); display: flex; flex-direction: column; }
+.obs-page .carr-slide { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); min-height: 300px; }
+.obs-page .carr-slide[hidden] { display: none; }
+.obs-page .carr-texto { order: -1; padding: 22px 24px; display: flex; flex-direction: column; gap: 12px; justify-content: center; min-width: 0; }
+.obs-page .carr-texto h3 { font-size: clamp(22px, 3vw, 30px); line-height: 1.12; margin: 0; text-wrap: balance; }
+.obs-page .carr-texto h3 a { color: inherit; text-decoration: none; }
+.obs-page .carr-texto h3 a:hover { color: var(--accent); }
+.obs-page .carr-foto { display: block; position: relative; background: var(--grid); min-height: 220px; overflow: hidden; }
+.obs-page .carr-foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.obs-page .carr-foto.sin-foto img { display: none; }
+.obs-page .carr-credito { font-family: var(--font-label); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+.obs-page .carr-mandos { display: flex; align-items: center; gap: 10px; padding: 12px 24px; border-top: 1px solid var(--rule); flex-wrap: wrap; }
+.obs-page .carr-num { font-family: var(--font-label); font-weight: 600; font-size: 13px; letter-spacing: .08em; font-variant-numeric: tabular-nums; min-width: 4.5em; }
+.obs-page .carr-btn { font: 600 14px var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); min-width: 40px; height: 40px; padding: 0 12px; cursor: pointer; }
+.obs-page .carr-btn:hover { border-color: var(--ink); }
+.obs-page .carr-btn:focus-visible, .obs-page .carr-punto:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.obs-page .carr-pausa { margin-left: auto; font-size: 12px; }
+.obs-page .carr-puntos { display: flex; gap: 6px; align-items: center; }
+.obs-page .carr-punto { width: 28px; height: 24px; padding: 0; border: 0; background: transparent; cursor: pointer; position: relative; }
+.obs-page .carr-punto::after { content: ""; position: absolute; left: 2px; right: 2px; top: 50%; height: 3px; margin-top: -1.5px; background: var(--rule); }
+.obs-page .carr-punto[aria-current="true"]::after { background: var(--accent); }
+.obs-page .act-fuente.act-salmon { border-top-color: var(--accent); }
+@media (max-width: 680px) {
+  .obs-page .carr-slide { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .obs-page .carr-texto { order: 0; padding: 16px 16px 18px; }
+  .obs-page .carr-foto { aspect-ratio: 16 / 9; min-height: 0; }
+  .obs-page .carr-mandos { padding: 10px 16px; }
+  .obs-page .carr-puntos { display: none; }
+}
 .obs-page .act-portada .act-mas { font-family: var(--font-label); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); text-decoration: none; align-self: flex-start; border-bottom: 2px solid var(--accent); }
