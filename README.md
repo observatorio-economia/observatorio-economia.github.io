@@ -14,6 +14,7 @@ sa01/                    SA con apuntes: página de la SA, una página por sesi�
 sa02/ … sa09/, datos/    Las demás herramientas y la Base de datos
 actualidad/              Actualidad: noticias comentadas y titulares de varios medios (página y datos.json)
 libro/                   Libro del alumnado: los apuntes de todas las SA seguidos, para leer o imprimir
+publicar.sh              Publica: trae los titulares automáticos, reconstruye desde el vault y sube a GitHub Pages
 actualizar.sh            Construye todo desde el vault (llama a scripts/actualizar.py)
 manifest.webmanifest     Web instalable: nombre, colores e iconos (assets/icono/) de la app
 sw.js                    Web instalable: guarda la web en el dispositivo para usarla sin conexión; lo genera actualizar.sh
@@ -120,17 +121,10 @@ y entra en <http://localhost:8765/>.
 
 ## Publicar en GitHub Pages
 
-1. Crea en GitHub un repositorio nuevo y **público** (por ejemplo, `observatorio-economia`), vacío.
-2. En esta carpeta:
-   ```bash
-   cd ~/Documents/observatorio-economia
-   git init -b main
-   git add .
-   git commit -m "Primera versión del Observatorio"
-   git remote add origin https://github.com/<tu-usuario>/observatorio-economia.git
-   git push -u origin main
-   ```
-3. En GitHub: *Settings → Pages → Build and deployment → Source: Deploy from a branch*, rama `main`, carpeta `/ (root)`. Guarda.
-4. Al cabo de un par de minutos, la web estará en `https://<tu-usuario>.github.io/observatorio-economia/`.
+La web está en **https://observatorio-economia.github.io/** (organización `observatorio-economia` de GitHub, repositorio `observatorio-economia.github.io`, rama `main`). Para publicar los cambios del vault:
 
-Para publicar cambios más adelante: `sh actualizar.sh`, y después `git add . && git commit -m "…" && git push`.
+```
+sh publicar.sh "Mensaje del cambio"
+```
+
+Trae antes los titulares que GitHub actualiza solo cada mañana (`.github/workflows/titulares.yml`), reconstruye con `actualizar.sh` y sube. Este Mac sube con la herramienta oficial de GitHub (`gh`), autorizada con la cuenta Econplebs; está en `~/Documents/Observatorio-herramientas/gh/` y git la usa para identificarse, así que esa carpeta no se borra.

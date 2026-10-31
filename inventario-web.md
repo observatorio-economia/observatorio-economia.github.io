@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-10-30 20:22
-- Commit de partida: `b68ed73`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 33
+- Generado: 2026-10-31 10:43
+- Commit de partida: `b0ba5ea`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 4
 
 ## Interruptores de la web
 
