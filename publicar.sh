@@ -7,5 +7,5 @@ cd "$(dirname "$0")" || exit 1
 git pull --rebase --autostash -X theirs -q || { echo "✗ No se ha podido traer lo de GitHub: revisa con git status"; exit 1; }
 sh actualizar.sh || { echo "✗ actualizar.sh ha avisado de algún problema: no se publica"; exit 1; }
 git add -A
-git diff --cached --quiet || git commit -q -m "${1:-Actualización de la web}"
+git diff --cached --quiet || git commit -q -m "${1:-Actualización de la web}" -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 git push -q && echo "✓ Publicado en https://observatorio-economia.github.io/ (tarda un minuto en verse)"
