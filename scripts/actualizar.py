@@ -743,7 +743,7 @@ def service_worker():
     import hashlib
     tipos = (".html", ".css", ".js", ".json", ".png", ".webmanifest", ".csv")
     archivos = sorted(str(f.relative_to(web)).replace(os.sep, "/") for f in web.rglob("*")
-                      if f.is_file() and f.suffix in tipos and not any(x.startswith(".") for x in f.relative_to(web).parts)
+                      if f.is_file() and f.suffix in tipos and not any(x.startswith(".") or x == "Claude outputs" for x in f.relative_to(web).parts)
                       and f.relative_to(web).parts[0] not in ("scripts",) and f.name != "sw.js")
     h = hashlib.sha256()
     for a in archivos:

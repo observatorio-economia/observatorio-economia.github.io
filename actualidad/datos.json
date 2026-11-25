@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-25T20:18:00.600205+00:00",
+ "generado": "2026-11-25T20:48:28.136359+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,7 +33,7 @@
      "fecha": "2026-11-25T12:16:51+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:55.833349+00:00"
+   "leido": "2026-11-25T20:48:22.899599+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-25T08:25:29+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:56.538879+00:00"
+   "leido": "2026-11-25T20:48:23.944255+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-25T15:45:15+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:57.163268+00:00"
+   "leido": "2026-11-25T20:48:24.441293+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:57.918344+00:00"
+   "leido": "2026-11-25T20:48:25.233097+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-25T08:25:29+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:58.806282+00:00"
+   "leido": "2026-11-25T20:48:25.817720+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,7 +173,7 @@
      "fecha": "2026-11-25T10:01:26+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:59.312680+00:00"
+   "leido": "2026-11-25T20:48:26.385174+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,7 +205,7 @@
      "fecha": "2026-11-25T14:53:21+00:00"
     }
    ],
-   "leido": "2026-11-25T20:17:59.755305+00:00"
+   "leido": "2026-11-25T20:48:26.974192+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,12 +237,17 @@
      "fecha": "2026-11-25T15:01:16+00:00"
     }
    ],
-   "leido": "2026-11-25T20:18:00.152505+00:00"
+   "leido": "2026-11-25T20:48:27.735786+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Fotogalerías | La manifestación del 25N 2026 en València, en imágenes",
+     "enlace": "https://valenciaplaza.com/galerias/la-manifestacion-del-25n-2026-en-valencia-en-imagenes",
+     "fecha": "2026-11-25T20:32:56+00:00"
+    },
     {
      "titulo": "Comarca y empresa | La chufa valenciana cumple 40 años de Denominación de Origen y como \"seña de identidad\"",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/la-chufa-valenciana-cumple-40-anos-de-denominacion-de-origen-y-como-sena-de-identidad",
@@ -262,14 +267,9 @@
      "titulo": "Comarca y empresa | El PSPV elige Gandia para cerrar la campaña del 29N con Diana Morant, Arcadi España y José Manuel Prieto",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/el-pspv-elige-gandia-para-cerrar-la-campana-del-29n-con-diana-morant-arcadi-espana-y-jose-manuel-prieto",
      "fecha": "2026-11-25T16:17:56+00:00"
-    },
-    {
-     "titulo": "Comunitat Valenciana | Mompó defiende el comercio local como motor económico para retener población: “Hay que cuidar a quienes mantienen los pueblos vivos”",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/mompo-defiende-el-comercio-local-como-motor-economico-para-retener-poblacion-hay-que-cuidar-a-quienes-mantienen-los-pueblos-vivos",
-     "fecha": "2026-11-25T16:12:39+00:00"
     }
    ],
-   "leido": "2026-11-25T20:18:00.600144+00:00"
+   "leido": "2026-11-25T20:48:28.136310+00:00"
   }
  ]
 }
