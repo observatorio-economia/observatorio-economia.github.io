@@ -96,6 +96,21 @@ Piezas comunes en `05-SA/_observatorio-comun/observatorio-common.js` y `.css` (v
 - **Ficha imprimible** (`OBS.imprimir`): «Imprimir ficha» saca la pestaña activa en A4 con Nombre/Equipo, el escenario y huecos para la predicción en lugar de los resultados (en los gráficos quedan los ejes); el profesor puede imprimir con resultados desde su panel.
 - **Marcas de fecha** (`OBS.marcas`): líneas o bandas con texto sobre un gráfico de años. En SA 8, sobre el IPC: 1973, 1977, 1999 y 2021-2023 (casilla «Fechas históricas en los gráficos»).
 
+## Accesibilidad y comprensión (auditoría de Fable, 25/11/2026)
+
+Informe en el vault: `03-metodologia/auditoria-fable-funcionalidad-2026-11-25.md`. Lo aplicado:
+
+- **La barra del alumnado** solo tiene idioma y «Para el docente». Dentro del panel del docente, «Para el aula» (modo proyector, imprimir ficha, imprimir con resultados y «Antes de ver»), los escenarios propios, los parámetros (SA 4), la pestaña «Introducir códigos» (SA 2), la pestaña del modelo 2 de la SA 9, los borrados de la SA 1 y el selector de grupo y las descargas de la SA 2. Un elemento con `data-obs-docente` solo se ve con el panel abierto.
+- **Una pregunta por pantalla:** subpestañas «a / b» (`OBS.subpestanas`) en la SA 4 (pestañas 1 y 2), la SA 3 (frontera) y la SA 9 (pestaña 1). Fuera la parte 3a y la pestaña 4 vacía de la SA 4.
+- **Palabras nuevas** (`OBS.palabras`): un desplegable por bloque con los términos y su explicación de una línea. **Qué mirar** (`OBS.mirar`): una frase encima de cada gráfico principal. Textos reescritos en lenguaje llano (SA 3, 4, 6, 9 y portada); los nombres de autores y escuelas van detrás de la idea.
+- **Fuentes y notas** del pie, plegadas.
+- **Teclado y lector de pantalla:** «Saltar al contenido», flechas entre pestañas, unidad en los deslizadores (`aria-valuetext`), zonas desplazables alcanzables con el tabulador, tabla de datos junto al gráfico en la SA 6 y la calculadora de la SA 8, y la pizarra (SA 5) se puede usar sin arrastrar («Sin arrastrar»: unir y quitar elementos con selectores; `Pizarra.bindUnir`).
+- **Móvil:** menú no fijo, pestañas en una fila, gráficos que se desplazan de lado para que la letra no baje de unos 11 px, controles de 44 px.
+- **Proyector:** todo el ancho y letra de 22 px.
+- **Portada:** fuera la línea del curso; cada situación con su crisis en una línea; la cronología, plegada en el móvil. **Actualidad:** solo las comentadas; los titulares automáticos, plegados «para el docente». **Datos:** cada ficha con lo esencial; el resto, al abrirla. **Sesiones sin apunte:** sin enlace.
+
+Comprobado con axe-core (WCAG 2.1 AA): ninguna infracción en las 13 páginas y sus pestañas, en el ordenador y en el móvil.
+
 ## Autoría, licencia y cómo citar
 
 Todo el material está bajo **CC BY-SA 4.0**: se puede copiar, adaptar y compartir citando la fuente y con la misma licencia. Al pie de cada página aparecen la autoría, la licencia y cómo citar esa página. Para cambiar el nombre o la licencia, edita `AUTOR`, `ANYO` y `LICENCIA` al principio de `assets/menu.js` (y `LICENSE.md`).

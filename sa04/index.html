@@ -305,9 +305,10 @@ details.obs-ficha[open] > summary { margin-bottom: 10px; }
 .obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
 @media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
 /* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
-body.obs-proj { font-size: 19px; }
-body.obs-proj .wrap { max-width: 1240px; }
-body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj { font-size: 22px; }
+body.obs-proj .wrap { max-width: min(1760px, 96vw); }
+body.obs-proj p, body.obs-proj li, body.obs-proj label, body.obs-proj td, body.obs-proj th, body.obs-proj .help, body.obs-proj .obs-mirar { font-size: 22px; line-height: 1.4; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 20px; }
 body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
 body.obs-proj h2 { font-size: 32px; }
 body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
@@ -369,6 +370,7 @@ details.obs-esc > * + * { margin-top: 8px; }
 @media (max-width: 640px) { .obs-esc__lista li { grid-template-columns: minmax(0, 1fr); } .obs-esc__acc { justify-content: flex-start; } }
 .obs-print-head { display: none; }
 @media print {
+  .obs-sub, details.obs-palabras, a.obs-skip, .obs-mirar { display: none !important; }
   @page { size: A4; margin: 12mm; }
   html, body { background: #fff !important; color: #000 !important; }
   body { font-size: 10.5pt; }
@@ -400,6 +402,60 @@ details.obs-esc > * + * { margin-top: 8px; }
 .obs-marca text { font: 500 11px var(--font-mono); fill: var(--accent); }
 body.obs-proj .obs-marca text { font-size: 14px; }
 
+/* ===== Auditoría de accesibilidad y comprensión (25/11/2026) ===== */
+/* Lo del docente solo se ve con el panel «Para el docente» abierto */
+body:not(.obs-docente-on) [data-obs-docente] { display: none !important; }
+.obs-aula__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.obs-docente details.obs-esc, .obs-docente details.obs-params { margin-top: 14px; }
+/* Saltar a la herramienta: invisible hasta que llega el foco */
+a.obs-skip { position: absolute; left: 8px; top: -60px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 4px; font: 600 15px var(--font-body); text-decoration: none; }
+a.obs-skip:focus { top: 8px; }
+/* Fuentes y notas plegadas al pie */
+details.obs-fuentes > summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+details.obs-fuentes[open] > summary { margin-bottom: 8px; }
+details.obs-fuentes > span, details.obs-fuentes > p { display: block; margin: 0 0 6px; }
+/* «Qué mirar»: una frase encima de cada gráfico */
+.obs-mirar { margin: 0 0 6px; font-size: 15px; line-height: 1.45; color: var(--ink); border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; }
+.obs-mirar b { font-weight: 600; }
+/* Palabras nuevas: cada término se abre al tocarlo */
+details.obs-palabras { border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); padding: 8px 12px; font-size: 15px; }
+details.obs-palabras > summary { cursor: pointer; font-weight: 600; }
+.obs-palabras__lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.obs-palabras__lista details { border: 1px solid var(--rule); border-radius: 4px; padding: 4px 10px; background: var(--bg); max-width: 100%; }
+.obs-palabras__lista details[open] { flex-basis: 100%; }
+.obs-palabras__lista summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.obs-palabras__lista p { margin: 4px 0 2px; }
+/* Subpestañas «a / b»: una pregunta por pantalla */
+.obs-sub { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 4px; }
+.obs-sub button { font: 500 14px var(--font-body); background: var(--bg); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 12px; cursor: pointer; text-align: left; }
+.obs-sub button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); font-weight: 600; }
+body.obs-proj .obs-sub button { font-size: 20px; padding: 12px 18px; }
+/* Móvil legible: gráficos con letra suficiente (se desplazan de lado) y controles de 44 px */
+@media (max-width: 640px) {
+  .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .plot > svg.chart { min-width: 600px; }
+  .diagram { overflow-x: auto; }
+  .diagram > svg { min-width: 600px; }
+  input[type="range"] { min-height: 44px; }
+  input[type="checkbox"], input[type="radio"] { width: 22px; height: 22px; }
+  summary { min-height: 44px; padding-block: 11px; box-sizing: border-box; }
+  .btn, .obs-toggle, .obs-seg button, .obs-sub button, nav.tabs button { min-height: 44px; }
+  select, input[type="number"], input[type="text"] { min-height: 44px; }
+}
+@media (max-width: 640px) {
+  nav.tabs { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.tabs button { flex: 0 0 auto; white-space: nowrap; }
+}
+/* Pizarra sin arrastrar */
+details.pz-unir { margin-top: 10px; }
+details.pz-unir > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.pz-u-fila { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin-top: 8px; }
+.pz-u-l { display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: var(--muted); }
+.pz-u-l select { font: inherit; font-size: 15px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 8px; min-width: 9em; }
+ol.pasos { margin: 6px 0 0; padding-left: 1.3em; }
+body.obs-proj .casa { display: none; }
+[hidden] { display: none !important; }
+
 /* OBS-COMMON-CSS:END */
 </style>
 
@@ -415,7 +471,7 @@ body.obs-proj .obs-marca text { font-size: 14px; }
     <button role="tab" id="tab-perfecta" aria-selected="true" data-view="perfecta"><span class="n">1</span><span data-i18n="tab.1">Competencia perfecta</span></button>
     <button role="tab" id="tab-imperfecta" aria-selected="false" data-view="imperfecta"><span class="n">2</span><span data-i18n="tab.2">Competencia imperfecta</span></button>
     <button role="tab" id="tab-real" aria-selected="false" data-view="real"><span class="n">3</span><span data-i18n="tab.3">Competencia real</span></button>
-    <button role="tab" id="tab-supuestos" aria-selected="false" data-view="supuestos" class="soon"><span class="n">4</span><span data-i18n="tab.4">Comparar supuestos</span></button>
+    <button role="tab" id="tab-supuestos" aria-selected="false" data-view="supuestos" class="soon" hidden><span class="n">4</span><span data-i18n="tab.4">Comparar supuestos</span></button>
   </nav>
 
   <!-- ===================== 1 · COMPETENCIA PERFECTA ===================== -->
@@ -488,8 +544,8 @@ body.obs-proj .obs-marca text { font-size: 14px; }
         <figure data-obs-result>
           <figcaption data-i18n="m.fig2">Una explotación</figcaption>
           <div class="legend">
-            <span><i style="border-color:var(--s1)"></i>CMg</span>
-            <span><i style="border-color:var(--s2)"></i>CTMe</span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">CMg</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ctme">CTMe</span></span>
             <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.precio">Precio</span></span>
           </div>
           <div class="plot"><svg class="chart" id="m-firm" viewBox="0 0 640 380" role="img" aria-label="Costes de una explotación y precio del mercado" data-i18n-attr="aria-label:aria.mf"></svg><div class="tip" id="m-firm-tip" hidden></div></div>
@@ -554,6 +610,7 @@ body.obs-proj .obs-marca text { font-size: 14px; }
         <p data-i18n="o.p">Dos gasolineras en el mismo cruce venden el mismo combustible. Si las dos mantienen el precio alto, ganan bien. Si una lo baja, se lleva a los clientes de la otra. Cada alumno o alumna es una gasolinera y decide sin saber qué hará la de enfrente.</p>
         <p class="small" data-i18n-html="o.p2">Se vota con <a href="https://www.plickers.com/" target="_blank" rel="noopener">Plickers</a> (A = mantengo el precio; B = lo bajo) o, si falla, a mano alzada o en papel. Apunta en cada ronda cuántas personas eligen B.</p>
       </div>
+      <details class="o-voto"><summary data-i18n="o.cambiar">Cambiar las ganancias de la tabla</summary>
       <div class="params">
         <div class="field"><label for="o-n" data-i18n="o.n">Alumnado que vota</label><input type="text" id="o-n" inputmode="numeric" value="28"></div>
         <div class="field"><label for="o-aa" data-i18n="o.aa">Las dos mantienen</label><input type="text" id="o-aa" inputmode="numeric" value="8"></div>
@@ -561,20 +618,24 @@ body.obs-proj .obs-marca text { font-size: 14px; }
         <div class="field"><label for="o-ab" data-i18n="o.ab">Yo mantengo, la otra baja</label><input type="text" id="o-ab" inputmode="numeric" value="2"></div>
         <div class="field"><label for="o-bb" data-i18n="o.bb">Las dos bajan</label><input type="text" id="o-bb" inputmode="numeric" value="4"></div>
       </div>
+      </details>
       <p class="small" data-i18n="o.units">Ganancias en miles de euros al mes para cada gasolinera. Se pueden cambiar.</p>
       <div class="scroll">
         <table class="payoff" id="o-matrix"></table>
       </div>
       <p class="small" id="o-dom"></p>
+      <details class="o-voto"><summary data-i18n="o.votacion">Votación en clase: apuntar las rondas</summary>
       <div class="rounds" id="o-rounds"></div>
       <div class="actions"><button type="button" class="btn quiet small" id="o-reset" data-i18n="o.reset">Borrar las rondas</button></div>
+      </details>
       <p class="small" data-i18n="o.foot">Como no sabemos qué gasolinera tiene enfrente cada persona, la ganancia media se calcula emparejando a cada una con todas las demás de la clase.</p>
     </div>
   </section>
 
   <!-- ===================== 3 · COMPETENCIA REAL ===================== -->
   <section class="view" id="view-real" role="tabpanel" aria-labelledby="tab-real" hidden>
-    <div class="block" id="cmp-block" data-obs-scope>
+    <p class="notice" id="c-sa3" data-i18n="c.sa3">Los dos modelos de costes (cada unidad cuesta más que la anterior, o cada unidad cuesta lo mismo hasta llenar la fábrica) se repasan en la SA 3, pestaña «Calculadora de costes».</p>
+    <div class="block" id="cmp-block" data-obs-scope hidden>
       <div class="prose">
         <span class="eyebrow" data-i18n="c.eyebrow">3a · Dos formas de dibujar los costes</span>
         <h2 data-i18n="c.h2">¿Qué cambia si el coste marginal no sube?</h2>
@@ -595,8 +656,8 @@ body.obs-proj .obs-marca text { font-size: 14px; }
         <figure data-obs-result>
           <figcaption data-i18n="c.f1">Competencia perfecta · costes por unidad</figcaption>
           <div class="legend">
-            <span><i style="border-color:var(--s1)"></i>CMg</span>
-            <span><i style="border-color:var(--s2)"></i>CTMe</span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">CMg</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ctme">CTMe</span></span>
             <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.precio">Precio</span></span>
           </div>
           <div class="plot"><svg class="chart" id="c-u-perf" role="img" aria-label="Costes por unidad con coste marginal creciente" data-i18n-attr="aria-label:aria.c1"></svg><div class="tip" id="c-u-perf-tip" hidden></div></div>
@@ -605,7 +666,7 @@ body.obs-proj .obs-marca text { font-size: 14px; }
           <figcaption data-i18n="c.f2">Competencia real · costes por unidad</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmgplano">CMg (plano hasta la capacidad)</span></span>
-            <span><i style="border-color:var(--s2)"></i>CTMe</span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ctme">CTMe</span></span>
             <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.precio">Precio</span></span>
           </div>
           <div class="plot"><svg class="chart" id="c-u-real" role="img" aria-label="Costes por unidad con coste marginal constante" data-i18n-attr="aria-label:aria.c2"></svg><div class="tip" id="c-u-real-tip" hidden></div></div>
@@ -780,12 +841,12 @@ window.OBS = (() => {
       "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
       "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
       "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
-      "obs.saved": "Archivo descargado." },
+      "obs.saved": "Archivo descargado.", "obs.aula": "Para el aula", "obs.fuentes": "Fuentes y notas", "obs.saltar": "Saltar a la herramienta" },
     va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent", "obs.docente": "Per al docent", "obs.sobre": "Sobre esta ferramenta",
       "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
       "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
       "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
-      "obs.saved": "Arxiu descarregat." }
+      "obs.saved": "Arxiu descarregat.", "obs.aula": "Per a l'aula", "obs.fuentes": "Fonts i notes", "obs.saltar": "Saltar a la ferramenta" }
   });
   const h = (tag, attrs = {}, ...kids) => {
     const n = document.createElement(tag);
@@ -805,6 +866,57 @@ window.OBS = (() => {
         ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
         ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
   }
+  /* Fuentes y notas del pie, plegadas: son necesarias, pero no para leerlas en clase (auditoría del 25/11/2026) */
+  function plegarFuentes() {
+    document.querySelectorAll("footer").forEach(f => {
+      if (f.querySelector(":scope > details.obs-fuentes") || !f.children.length) return;
+      const sum = h("summary", { text: t("obs.fuentes") });
+      const det = h("details", { class: "obs-fuentes" }, sum);
+      while (f.firstChild) det.append(f.firstChild);
+      det.prepend(sum); f.append(det);
+      onLang(() => { sum.textContent = t("obs.fuentes"); });
+    });
+  }
+  /* «Saltar a la herramienta»: primer elemento al que llega el tabulador (si la página no tiene ya uno) */
+  function saltoAlContenido(cabecera) {
+    const destino = document.querySelector('[role="tablist"]') || (cabecera && cabecera.nextElementSibling && cabecera.nextElementSibling.id !== "obs-docente" ? cabecera.nextElementSibling : null) || document.querySelector("main, section");
+    if (!destino) return;
+    if (!destino.id) destino.id = "obs-main";
+    if (!destino.hasAttribute("tabindex")) destino.setAttribute("tabindex", "-1");
+    let a = document.querySelector("a.obs-skip");
+    if (!a) { a = h("a", { class: "obs-skip", href: "#" + destino.id, text: t("obs.saltar") }); document.body.prepend(a); onLang(() => { a.textContent = t("obs.saltar"); }); }
+    else a.setAttribute("href", "#" + destino.id);
+  }
+  // Pestañas con las flechas (lo que espera quien usa lector de pantalla) y unidad en los deslizadores
+  document.addEventListener("keydown", e => {
+    const tab = e.target.closest && e.target.closest('[role="tab"]');
+    if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+    const todas = [...tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]')].filter(b => b.offsetParent !== null);
+    let i = todas.indexOf(tab);
+    i = e.key === "Home" ? 0 : e.key === "End" ? todas.length - 1 : (i + (e.key === "ArrowRight" ? 1 : -1) + todas.length) % todas.length;
+    todas[i].focus(); todas[i].click(); e.preventDefault();
+  });
+  function valorTexto(inp) {
+    if (!inp || inp.type !== "range") return;
+    const lab = inp.id && document.querySelector('label[for="' + inp.id + '"]');
+    const out = (inp.id && (document.getElementById(inp.id + "-out") || document.getElementById(inp.id + "-v") || document.getElementById(inp.id + "-val")))
+      || (lab && lab.parentElement && lab.parentElement.querySelector("output, .val, .v"));
+    const txt = out && out.textContent.trim();
+    if (txt) inp.setAttribute("aria-valuetext", txt);
+  }
+  document.addEventListener("input", e => setTimeout(() => valorTexto(e.target), 0));
+  // Zonas que se desplazan de lado (gráficos en el móvil, tablas anchas): alcanzables con el teclado
+  function focoScroll() {
+    document.querySelectorAll(".plot, .scroll, .parsed, .lab-tabla-caja").forEach(n => {
+      const desborda = n.scrollWidth > n.clientWidth + 2 || n.scrollHeight > n.clientHeight + 2;
+      if (desborda && !n.hasAttribute("tabindex")) { n.setAttribute("tabindex", "0"); n.dataset.obsFoco = "1"; }
+      else if (!desborda && n.dataset.obsFoco) { n.removeAttribute("tabindex"); delete n.dataset.obsFoco; }
+    });
+  }
+  let focoT = null; const focoLuego = () => { clearTimeout(focoT); focoT = setTimeout(focoScroll, 250); };
+  ["resize", "click", "input", "toggle"].forEach(ev => document.addEventListener(ev, focoLuego, true));
+  window.addEventListener("load", focoLuego); document.addEventListener("DOMContentLoaded", focoLuego);
+  document.addEventListener("DOMContentLoaded", () => setTimeout(() => document.querySelectorAll('input[type="range"]').forEach(valorTexto), 50));
   /* Barra de una línea: «← Panel», idioma, modo proyector y «Para el docente».
      El panel «Para el docente» (cerrado al empezar) recoge la entrada de la cabecera (.lede) y la ficha docente,
      para que la herramienta empiece arriba. */
@@ -825,6 +937,10 @@ window.OBS = (() => {
     if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
     let fichaBox = null;
     if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
+    // «Para el aula»: modo proyector, imprimir y velo. Es lo primero del panel (25/11/2026: la barra del alumnado queda en idioma + docente)
+    const aula = h("div", { class: "obs-apertura obs-aula" }, h("h2", { class: "obs-docente__h", text: t("obs.aula") }), h("div", { class: "obs-aula__btns" }, pj));
+    panel.prepend(aula);
+    onLang(() => { aula.querySelector("h2").textContent = t("obs.aula"); });
     let impr = null;
     if (opts.apertura) {
       aperturaOn = true;
@@ -833,21 +949,20 @@ window.OBS = (() => {
       sel.addEventListener("change", () => setVeloModo(sel.value));
       const conRes = h("button", { type: "button", class: "obs-toggle", text: t("obs.pr.con") });
       conRes.addEventListener("click", () => imprimir(true));
-      const caja = h("div", { class: "obs-apertura" }, h("h2", { class: "obs-docente__h", text: t("obs.apertura") }),
-        h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel), h("div", {}, conRes));
-      panel.append(caja);
-      onLang(() => { caja.querySelector("h2").textContent = t("obs.apertura"); caja.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); });
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
-      onLang(() => { impr.textContent = t("obs.pr.ficha"); });
+      aula.querySelector(".obs-aula__btns").append(impr, conRes);
+      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
+      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
+        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
-    const hayPanel = !!(lede || opts.ficha || opts.apertura);
+    const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
-    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
+    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); document.body.classList.toggle("obs-docente-on", !panel.hidden); });
     container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
-      h("div", { class: "obs-tools" }, seg, pj, impr, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+      h("div", { class: "obs-tools" }, seg, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
     if (hayPanel) (cabecera || container).after(panel);
+    plegarFuentes(); saltoAlContenido(cabecera);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
@@ -877,7 +992,7 @@ window.OBS = (() => {
   //   data-obs-result · lo que es resultado (cifras, gráficos, tablas de solución, botones que dan la respuesta);
   //   data-obs-prompt · (opcional) dónde va el aviso del bloque; si no lo hay, va delante del primer resultado.
   register({
-    es: { "obs.velo.txt": "¿Qué creéis que pasará? Escribidlo en la ficha antes de verlo.", "obs.velo.ver": "Ver",
+    es: { "obs.velo.txt": "¿Qué creéis que pasará? Pensadlo, o escribidlo, antes de verlo.", "obs.velo.ver": "Ver el resultado",
       "obs.velo.tapar": "Tapar otra vez", "obs.velo.modo": "Antes de ver: tapar los resultados hasta que la clase haya hecho su predicción",
       "obs.velo.proj": "Solo en modo proyector", "obs.velo.on": "Siempre", "obs.velo.off": "Nunca",
       "obs.pr.ficha": "Imprimir ficha", "obs.pr.con": "Imprimir con resultados", "obs.pr.nombre": "Nombre", "obs.pr.equipo": "Equipo",
@@ -895,7 +1010,7 @@ window.OBS = (() => {
       "obs.esc.guardado": "Escenario «{n}» guardado.", "obs.esc.cargado": "Escenario cargado: «{n}».", "obs.esc.borrado": "Escenario borrado.",
       "obs.esc.comparar": "Comparar los escenarios", "obs.esc.col": "Escenario", "obs.esc.vacio": "Todavía no hay escenarios guardados.",
       "obs.esc.guardados": "Guardados en este navegador" },
-    va: { "obs.velo.txt": "Què creieu que passarà? Escriviu-ho en la fitxa abans de veure-ho.", "obs.velo.ver": "Veure",
+    va: { "obs.velo.txt": "Què creieu que passarà? Penseu-ho, o escriviu-ho, abans de veure-ho.", "obs.velo.ver": "Veure el resultat",
       "obs.velo.tapar": "Tapar una altra vegada", "obs.velo.modo": "Abans de veure: tapar els resultats fins que la classe haja fet la seua predicció",
       "obs.velo.proj": "Només en mode projector", "obs.velo.on": "Sempre", "obs.velo.off": "Mai",
       "obs.pr.ficha": "Imprimir fitxa", "obs.pr.con": "Imprimir amb resultats", "obs.pr.nombre": "Nom", "obs.pr.equipo": "Equip",
@@ -1046,7 +1161,9 @@ window.OBS = (() => {
     }
     const yo = { pintar, describeActual: () => cfg.describe ? cfg.describe(cfg.toArray()) : "", mount: cfg.mount };
     box._obsEsc = yo;
-    (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
+    // Desde el 25/11/2026 los escenarios viven en el panel «Para el docente» (si lo hay), no en mitad de la página
+    const panelDoc = document.getElementById("obs-docente");
+    if (panelDoc) panelDoc.append(box); else (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
     pintar();
     onLang(pintar);
     return yo;
@@ -1061,7 +1178,7 @@ window.OBS = (() => {
     const titulo = ((document.querySelector("header h1") || {}).textContent || document.title).trim();
     const eyebrow = ((document.querySelector("header .eyebrow") || {}).textContent || "").trim();
     // el escenario descrito es el del bloque visible (si lo hay)
-    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d.offsetParent !== null);
+    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d._obsEsc && d._obsEsc.mount && d._obsEsc.mount.offsetParent !== null);
     const esc = vis && vis._obsEsc ? vis._obsEsc.describeActual() : "";
     head.replaceChildren(...[
       h("div", { class: "obs-ph-top" }, h("span", { text: eyebrow }), h("span", { text: new Date().toLocaleDateString(lang === "va" ? "ca-ES" : "es-ES") })),
@@ -1109,9 +1226,58 @@ window.OBS = (() => {
     });
   }
 
+  // ================= Comprensión (auditoría del 25/11/2026) =================
+  const Lx = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+  /* OBS.mirar(elemento, {es, va}): una frase encima del gráfico que dice qué mirar (admite <b>) */
+  function mirar(el, txt) {
+    if (!el) return;
+    const fig = el.closest("figure") || el.closest(".plot") || el;
+    const p = h("p", { class: "obs-mirar" });
+    const pinta = () => { p.innerHTML = Lx(txt); };
+    pinta(); onLang(pinta);
+    const cap = fig.tagName === "FIGURE" ? fig.querySelector(":scope > figcaption") : null;
+    if (cap) cap.after(p); else if (fig.tagName === "FIGURE") fig.prepend(p); else fig.before(p);
+    return p;
+  }
+  /* OBS.palabras(contenedor, [{t: {es, va}, d: {es, va}}], {antes: elemento}): «Palabras nuevas», cada una se abre al tocarla */
+  register({ es: { "obs.pal.h": "Palabras nuevas ({n})" }, va: { "obs.pal.h": "Paraules noves ({n})" } });
+  function palabras(cont, lista, opts = {}) {
+    if (!cont || !lista || !lista.length) return;
+    const box = h("details", { class: "obs-palabras" });
+    const pinta = () => {
+      box.replaceChildren(h("summary", { text: t("obs.pal.h", { n: lista.length }) }),
+        h("div", { class: "obs-palabras__lista" }, lista.map(w => h("details", {}, h("summary", { text: Lx(w.t) }), h("p", { text: Lx(w.d) })))));
+    };
+    pinta(); onLang(() => { const ab = box.open; pinta(); box.open = ab; });
+    if (opts.antes) opts.antes.before(box); else cont.prepend(box);
+    return box;
+  }
+  /* OBS.subpestanas(contenedor, [{el, t: {es, va}}]): una pregunta por pantalla; botones «a · …», «b · …» */
+  function subpestanas(cont, partes, opts = {}) {
+    if (!cont || !partes || partes.length < 2) return;
+    const nav = h("div", { class: "obs-sub", role: "group" });
+    let actual = 0;
+    const btns = partes.map((pt, i) => {
+      const b = h("button", { type: "button", "aria-pressed": String(i === 0) });
+      b.addEventListener("click", () => mostrar(i));
+      return b;
+    });
+    const textos = () => { nav.setAttribute("aria-label", t("obs.sub")); btns.forEach((b, i) => { b.textContent = Lx(partes[i].t); }); };
+    function mostrar(i) {
+      actual = i;
+      partes.forEach((pt, j) => { pt.el.hidden = j !== i; btns[j].setAttribute("aria-pressed", String(j === i)); });
+      if (opts.onChange) opts.onChange(i);
+    }
+    nav.append(...btns); textos(); onLang(textos);
+    (opts.antes || partes[0].el).before(nav);
+    mostrar(0);
+    return { mostrar, actual: () => actual };
+  }
+  register({ es: { "obs.sub": "Partes de esta pestaña" }, va: { "obs.sub": "Parts d'esta pestanya" } });
+
   document.addEventListener("DOMContentLoaded", () => apply());
   return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
-    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas };
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas };
 })();
 
 // OBS-COMMON-JS:END
@@ -1136,16 +1302,16 @@ window.OBS = (() => {
 "f.best": "Mostrar la mejor cantidad",
 "f.go": "Vender esa cantidad",
 "f.fig": "Costes por tonelada y precio",
-"lg.cmg": "Coste marginal (CMg)",
-"lg.ctme": "Coste total medio (CTMe)",
-"lg.cvme": "Coste variable medio (CVMe)",
+"lg.cmg": "Lo que cuesta una unidad más (coste marginal, CMg)",
+"lg.ctme": "Lo que cuesta de media cada unidad (coste medio, CTMe)",
+"lg.cvme": "Coste medio sin contar los fijos (CVMe)",
 "lg.pimg": "Precio = ingreso marginal",
 "f.tabla": "Ver la tabla de costes",
 "f.tablanota": "Coste fijo de 640 € a la semana (tierra, maquinaria, seguros). El coste marginal de la tabla es el de la última fracción de tonelada en ese punto.",
 "m.eyebrow": "1b · El mercado",
 "m.h2": "¿Qué pasa cuando entran más explotaciones?",
 "m.p": "Todas las explotaciones tienen los mismos costes. Si ganan más de lo normal, entran explotaciones nuevas; si pierden, algunas cierran. Cada clic es una semana.",
-"m.p2": "El beneficio que aparece aquí es el <strong>extraordinario</strong>: lo que se gana por encima de la remuneración normal del agricultor, que ya está incluida en los costes.",
+"m.p2": "Aquí <strong>beneficio</strong> es lo que sobra después de pagarlo todo, también el sueldo del agricultor (los economistas lo llaman beneficio extraordinario).",
 "m.step": "Avanzar una semana",
 "m.up": "Sube la demanda",
 "m.down": "Baja la demanda",
@@ -1165,7 +1331,7 @@ window.OBS = (() => {
 "mo.go": "Fijar ese precio",
 "mo.cmp": " Comparar con competencia perfecta",
 "mo.fig": "Demanda, ingreso marginal y coste",
-"lg.img": "Ingreso marginal (IMg)",
+"lg.img": "Lo que aporta una unidad más (ingreso marginal, IMg)",
 "lg.beneficio": "Beneficio",
 "lg.ec": "Excedente del consumidor",
 "lg.pi": "Pérdida irrecuperable",
@@ -1258,8 +1424,8 @@ window.OBS = (() => {
 "w.compPerf": "Competencia perfecta",
 "w.compReal": "Competencia real",
 "and": " y ",
-"f.chip.ok": "beneficio",
-"f.zone.ok": "El precio supera el coste medio mínimo ({p}): produciendo lo adecuado hay beneficio extraordinario.",
+"f.chip.ok": "se puede ganar",
+"f.zone.ok": "A este precio la explotación puede ganar dinero (el precio supera el coste medio más bajo, {p}), pero depende de cuántas toneladas venda. Prueba otras cantidades.",
 "f.chip.mid": "pérdidas, sigue",
 "f.zone.mid": "El precio no cubre el coste medio, pero sí el variable medio (mínimo {p}): a corto plazo le conviene seguir, porque paga los costes variables y parte de los fijos.",
 "f.chip.bad": "cierra",
@@ -1394,16 +1560,16 @@ window.OBS = (() => {
 "f.best": "Mostrar la millor quantitat",
 "f.go": "Vendre eixa quantitat",
 "f.fig": "Costos per tona i preu",
-"lg.cmg": "Cost marginal (CMg)",
-"lg.ctme": "Cost total mitjà (CTMe)",
-"lg.cvme": "Cost variable mitjà (CVMe)",
+"lg.cmg": "El que costa una unitat més (cost marginal, CMg)",
+"lg.ctme": "El que costa de mitjana cada unitat (cost mitjà, CTMe)",
+"lg.cvme": "Cost mitjà sense comptar els fixos (CVMe)",
 "lg.pimg": "Preu = ingrés marginal",
 "f.tabla": "Vore la taula de costos",
 "f.tablanota": "Cost fix de 640 € a la setmana (terra, maquinària, assegurances). El cost marginal de la taula és el de l'última fracció de tona en eixe punt.",
 "m.eyebrow": "1b · El mercat",
 "m.h2": "Què passa quan entren més explotacions?",
 "m.p": "Totes les explotacions tenen els mateixos costos. Si guanyen més del normal, entren explotacions noves; si perden, algunes tanquen. Cada clic és una setmana.",
-"m.p2": "El benefici que apareix ací és l'<strong>extraordinari</strong>: el que es guanya per damunt de la remuneració normal de l'agricultor, que ja està inclosa en els costos.",
+"m.p2": "Ací <strong>benefici</strong> és el que sobra després de pagar-ho tot, també el sou de l'agricultor (els economistes l'anomenen benefici extraordinari).",
 "m.step": "Avançar una setmana",
 "m.up": "Puja la demanda",
 "m.down": "Baixa la demanda",
@@ -1423,7 +1589,7 @@ window.OBS = (() => {
 "mo.go": "Fixar eixe preu",
 "mo.cmp": " Comparar amb competència perfecta",
 "mo.fig": "Demanda, ingrés marginal i cost",
-"lg.img": "Ingrés marginal (IMg)",
+"lg.img": "El que aporta una unitat més (ingrés marginal, IMg)",
 "lg.beneficio": "Benefici",
 "lg.ec": "Excedent del consumidor",
 "lg.pi": "Pèrdua irrecuperable",
@@ -1516,8 +1682,8 @@ window.OBS = (() => {
 "w.compPerf": "Competència perfecta",
 "w.compReal": "Competència real",
 "and": " i ",
-"f.chip.ok": "benefici",
-"f.zone.ok": "El preu supera el cost mitjà mínim ({p}): produint el que convé hi ha benefici extraordinari.",
+"f.chip.ok": "es pot guanyar",
+"f.zone.ok": "A este preu l'explotació pot guanyar diners (el preu supera el cost mitjà més baix, {p}), però depén de quantes tones venga. Prova altres quantitats.",
 "f.chip.mid": "pèrdues, continua",
 "f.zone.mid": "El preu no cobrix el cost mitjà, però sí el variable mitjà (mínim {p}): a curt termini li convé continuar, perquè paga els costos variables i part dels fixos.",
 "f.chip.bad": "tanca",
@@ -1669,7 +1835,7 @@ window.OBS = (() => {
   // ---------- Pestañas ----------
   const VIEWS = ["perfecta", "imperfecta", "real", "supuestos"];
   function show(view) {
-    if (!VIEWS.includes(view)) view = "perfecta";
+    if (!VIEWS.includes(view) || view === "supuestos") view = "perfecta";
     for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
@@ -2344,6 +2510,64 @@ window.OBS = (() => {
       { nombre: { es: "Las mismas empresas con 1.200 € de reservas", va: "Les mateixes empreses amb 1.200 € de reserves" }, arr: [[20], [1200, 200, 260, 15, 12, 0.5], [1]] }
     ]
   });
+  // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
+  OBS.register({
+    es: { "c.sa3": "Los dos modelos de costes (cada unidad cuesta más que la anterior, o cada unidad cuesta lo mismo hasta llenar la fábrica) se repasan en la SA 3, pestaña «Calculadora de costes».",
+      "o.cambiar": "Cambiar las ganancias de la tabla", "o.votacion": "Votación en clase: apuntar las rondas",
+      "sub.1a": "a · ¿Cuánto vender?", "sub.1b": "b · ¿Qué pasa cuando entran más?", "sub.2a": "a · Monopolio: ¿qué precio?", "sub.2b": "b · Oligopolio: ¿mantener o bajar?",
+      "mi.f": "Mueve el <b>precio</b> y las <b>toneladas</b>. Fíjate en dónde se cruzan la línea del precio y la del coste de una tonelada más: ahí está la mejor cantidad.",
+      "mi.m": "Pulsa «Avanzar una semana» y mira cómo se desplaza la <b>oferta</b> cuando entran explotaciones, y qué le pasa al <b>precio</b>.",
+      "mi.mf": "La misma explotación, con el precio de cada semana. Cuando el precio baja hasta el punto más bajo del coste medio, ya no gana nada.",
+      "mi.mo": "La empresa elige el <b>precio</b>. Fíjate en las zonas de color: lo que gana la empresa, lo que se ahorran los clientes y lo que se pierde porque se vende menos.",
+      "mi.wp": "Competencia perfecta: las dos aceptan el precio del mercado. Mira si las dos siguen vendiendo semana tras semana.",
+      "mi.wr": "Competencia real: cada empresa fija su precio. Mira quién baja el precio y cuántos clientes se lleva.",
+      "mi.wacc": "Las reservas son el dinero ahorrado. Si una línea llega a cero, esa empresa cierra.",
+      "pal.cmg": "Coste marginal", "pal.cmg.d": "Lo que cuesta producir una unidad más (una tonelada, una caja).",
+      "pal.cme": "Coste medio", "pal.cme.d": "El coste total dividido entre las unidades producidas: lo que cuesta de media cada una.",
+      "pal.cf": "Costes fijos", "pal.cf.d": "Los que se pagan aunque no se produzca nada: alquiler, maquinaria, seguros.",
+      "pal.img": "Ingreso marginal", "pal.img.d": "Lo que se ingresa de más al vender una unidad más.",
+      "pal.ben": "Beneficio", "pal.ben.d": "Lo que queda de los ingresos después de pagar todos los costes.",
+      "pal.mon": "Monopolio", "pal.mon.d": "Mercado con una sola empresa vendedora: puede elegir el precio.",
+      "pal.oli": "Oligopolio", "pal.oli.d": "Mercado con pocas empresas: lo que hace una afecta a las demás.",
+      "pal.cuota": "Cuota de mercado", "pal.cuota.d": "La parte de las ventas totales que se lleva una empresa.",
+      "pal.res": "Reservas", "pal.res.d": "El dinero que una empresa tiene ahorrado para aguantar las semanas de pérdidas." },
+    va: { "c.sa3": "Els dos models de costos (cada unitat costa més que l'anterior, o cada unitat costa el mateix fins omplir la fàbrica) es repassen en la SA 3, pestanya «Calculadora de costos».",
+      "o.cambiar": "Canviar els guanys de la taula", "o.votacion": "Votació a classe: apuntar les rondes",
+      "sub.1a": "a · Quant vendre?", "sub.1b": "b · Què passa quan n'entren més?", "sub.2a": "a · Monopoli: quin preu?", "sub.2b": "b · Oligopoli: mantindre o abaixar?",
+      "mi.f": "Mou el <b>preu</b> i les <b>tones</b>. Fixa't on es creuen la línia del preu i la del cost d'una tona més: allí està la millor quantitat.",
+      "mi.m": "Prem «Avançar una setmana» i mira com es desplaça l'<b>oferta</b> quan entren explotacions, i què li passa al <b>preu</b>.",
+      "mi.mf": "La mateixa explotació, amb el preu de cada setmana. Quan el preu baixa fins al punt més baix del cost mitjà, ja no guanya res.",
+      "mi.mo": "L'empresa tria el <b>preu</b>. Fixa't en les zones de color: el que guanya l'empresa, el que s'estalvien els clients i el que es perd perquè es ven menys.",
+      "mi.wp": "Competència perfecta: les dues accepten el preu del mercat. Mira si les dues continuen venent setmana rere setmana.",
+      "mi.wr": "Competència real: cada empresa fixa el seu preu. Mira qui abaixa el preu i quants clients s'endú.",
+      "mi.wacc": "Les reserves són els diners estalviats. Si una línia arriba a zero, eixa empresa tanca.",
+      "pal.cmg": "Cost marginal", "pal.cmg.d": "El que costa produir una unitat més (una tona, una caixa).",
+      "pal.cme": "Cost mitjà", "pal.cme.d": "El cost total dividit entre les unitats produïdes: el que costa de mitjana cadascuna.",
+      "pal.cf": "Costos fixos", "pal.cf.d": "Els que es paguen encara que no es produïsca res: lloguer, maquinària, assegurances.",
+      "pal.img": "Ingrés marginal", "pal.img.d": "El que s'ingressa de més en vendre una unitat més.",
+      "pal.ben": "Benefici", "pal.ben.d": "El que queda dels ingressos després de pagar tots els costos.",
+      "pal.mon": "Monopoli", "pal.mon.d": "Mercat amb una sola empresa venedora: pot triar el preu.",
+      "pal.oli": "Oligopoli", "pal.oli.d": "Mercat amb poques empreses: el que fa una afecta les altres.",
+      "pal.cuota": "Quota de mercat", "pal.cuota.d": "La part de les vendes totals que s'endú una empresa.",
+      "pal.res": "Reserves", "pal.res.d": "Els diners que una empresa té estalviats per a aguantar les setmanes de pèrdues." }
+  });
+  {
+    const tr = k => ({ get es() { return OBS.t(k); }, get va() { return OBS.t(k); } });
+    OBS.subpestanas($("view-perfecta"), [{ el: $("firm-block"), t: tr("sub.1a") }, { el: $("market-block"), t: tr("sub.1b") }]);
+    OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }]);
+    // Lo del docente, al panel «Para el docente»: los parámetros de la guerra de precios (los escenarios ya van allí)
+    const panelDoc = document.getElementById("obs-docente");
+    if (panelDoc) { $("w-params").classList.add("obs-params"); panelDoc.append($("w-params")); }
+    OBS.mirar($("f-chart"), tr("mi.f")); OBS.mirar($("m-chart"), tr("mi.m")); OBS.mirar($("m-firm"), tr("mi.mf"));
+    OBS.mirar($("mo-chart"), tr("mi.mo")); OBS.mirar($("w-acc"), tr("mi.wacc"));
+    const mw = (id, k) => { const p = OBS.h("p", { class: "obs-mirar" }); const pinta = () => { p.innerHTML = OBS.t(k); }; pinta(); OBS.onLang(pinta); $(id).before(p); };
+    mw("w-perf", "mi.wp"); mw("w-real", "mi.wr");
+    const pal = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
+    OBS.palabras($("firm-block"), pal(["cmg", "cme", "cf", "ben"]), { antes: $("firm-block").querySelector(".controls") });
+    OBS.palabras($("mono-block"), pal(["mon", "cmg", "img", "ben"]), { antes: $("mono-block").querySelector(".controls") });
+    OBS.palabras($("oli-block"), pal(["oli"]), { antes: $("oli-block").querySelector(".o-voto") });
+    OBS.palabras($("war-block"), pal(["cf", "cmg", "cuota", "res"]), { antes: $("w-perf") });
+  }
   OBS.apply();
   OBS.onLang(() => {
     setBestLabels(); buildFirmTable(); renderFirm(); renderMarket(); renderMono(); renderOli();

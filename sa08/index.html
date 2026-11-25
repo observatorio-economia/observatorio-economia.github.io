@@ -117,6 +117,8 @@ body.obs-proj .stat b { font-size: 42px; }
 body.obs-proj table { font-size: 17px; }
 
 .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 8px 22px; }
+.groups > details.otros-grupos { grid-column: 1 / -1; }
+.groups > details.otros-grupos > .groups { margin-top: 8px; }
 .grow { display: grid; grid-template-columns: minmax(0, 1fr) 4.6em; gap: 2px 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--rule); }
 .grow .nm { font-size: 14px; min-width: 0; }
 .grow output { font-family: var(--font-mono); font-size: 14px; text-align: right; font-variant-numeric: tabular-nums; }
@@ -194,9 +196,10 @@ details.obs-ficha[open] > summary { margin-bottom: 10px; }
 .obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
 @media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
 /* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
-body.obs-proj { font-size: 19px; }
-body.obs-proj .wrap { max-width: 1240px; }
-body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj { font-size: 22px; }
+body.obs-proj .wrap { max-width: min(1760px, 96vw); }
+body.obs-proj p, body.obs-proj li, body.obs-proj label, body.obs-proj td, body.obs-proj th, body.obs-proj .help, body.obs-proj .obs-mirar { font-size: 22px; line-height: 1.4; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 20px; }
 body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
 body.obs-proj h2 { font-size: 32px; }
 body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
@@ -258,6 +261,7 @@ details.obs-esc > * + * { margin-top: 8px; }
 @media (max-width: 640px) { .obs-esc__lista li { grid-template-columns: minmax(0, 1fr); } .obs-esc__acc { justify-content: flex-start; } }
 .obs-print-head { display: none; }
 @media print {
+  .obs-sub, details.obs-palabras, a.obs-skip, .obs-mirar { display: none !important; }
   @page { size: A4; margin: 12mm; }
   html, body { background: #fff !important; color: #000 !important; }
   body { font-size: 10.5pt; }
@@ -288,6 +292,60 @@ details.obs-esc > * + * { margin-top: 8px; }
 .obs-marca rect { fill: var(--accent); opacity: .1; }
 .obs-marca text { font: 500 11px var(--font-mono); fill: var(--accent); }
 body.obs-proj .obs-marca text { font-size: 14px; }
+
+/* ===== Auditoría de accesibilidad y comprensión (25/11/2026) ===== */
+/* Lo del docente solo se ve con el panel «Para el docente» abierto */
+body:not(.obs-docente-on) [data-obs-docente] { display: none !important; }
+.obs-aula__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.obs-docente details.obs-esc, .obs-docente details.obs-params { margin-top: 14px; }
+/* Saltar a la herramienta: invisible hasta que llega el foco */
+a.obs-skip { position: absolute; left: 8px; top: -60px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 4px; font: 600 15px var(--font-body); text-decoration: none; }
+a.obs-skip:focus { top: 8px; }
+/* Fuentes y notas plegadas al pie */
+details.obs-fuentes > summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+details.obs-fuentes[open] > summary { margin-bottom: 8px; }
+details.obs-fuentes > span, details.obs-fuentes > p { display: block; margin: 0 0 6px; }
+/* «Qué mirar»: una frase encima de cada gráfico */
+.obs-mirar { margin: 0 0 6px; font-size: 15px; line-height: 1.45; color: var(--ink); border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; }
+.obs-mirar b { font-weight: 600; }
+/* Palabras nuevas: cada término se abre al tocarlo */
+details.obs-palabras { border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); padding: 8px 12px; font-size: 15px; }
+details.obs-palabras > summary { cursor: pointer; font-weight: 600; }
+.obs-palabras__lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.obs-palabras__lista details { border: 1px solid var(--rule); border-radius: 4px; padding: 4px 10px; background: var(--bg); max-width: 100%; }
+.obs-palabras__lista details[open] { flex-basis: 100%; }
+.obs-palabras__lista summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.obs-palabras__lista p { margin: 4px 0 2px; }
+/* Subpestañas «a / b»: una pregunta por pantalla */
+.obs-sub { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 4px; }
+.obs-sub button { font: 500 14px var(--font-body); background: var(--bg); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 12px; cursor: pointer; text-align: left; }
+.obs-sub button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); font-weight: 600; }
+body.obs-proj .obs-sub button { font-size: 20px; padding: 12px 18px; }
+/* Móvil legible: gráficos con letra suficiente (se desplazan de lado) y controles de 44 px */
+@media (max-width: 640px) {
+  .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .plot > svg.chart { min-width: 600px; }
+  .diagram { overflow-x: auto; }
+  .diagram > svg { min-width: 600px; }
+  input[type="range"] { min-height: 44px; }
+  input[type="checkbox"], input[type="radio"] { width: 22px; height: 22px; }
+  summary { min-height: 44px; padding-block: 11px; box-sizing: border-box; }
+  .btn, .obs-toggle, .obs-seg button, .obs-sub button, nav.tabs button { min-height: 44px; }
+  select, input[type="number"], input[type="text"] { min-height: 44px; }
+}
+@media (max-width: 640px) {
+  nav.tabs { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.tabs button { flex: 0 0 auto; white-space: nowrap; }
+}
+/* Pizarra sin arrastrar */
+details.pz-unir { margin-top: 10px; }
+details.pz-unir > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.pz-u-fila { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin-top: 8px; }
+.pz-u-l { display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: var(--muted); }
+.pz-u-l select { font: inherit; font-size: 15px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 8px; min-width: 9em; }
+ol.pasos { margin: 6px 0 0; padding-left: 1.3em; }
+body.obs-proj .casa { display: none; }
+[hidden] { display: none !important; }
 
 /* OBS-COMMON-CSS:END */
 </style>
@@ -431,12 +489,12 @@ window.OBS = (() => {
       "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
       "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
       "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
-      "obs.saved": "Archivo descargado." },
+      "obs.saved": "Archivo descargado.", "obs.aula": "Para el aula", "obs.fuentes": "Fuentes y notas", "obs.saltar": "Saltar a la herramienta" },
     va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent", "obs.docente": "Per al docent", "obs.sobre": "Sobre esta ferramenta",
       "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
       "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
       "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
-      "obs.saved": "Arxiu descarregat." }
+      "obs.saved": "Arxiu descarregat.", "obs.aula": "Per a l'aula", "obs.fuentes": "Fonts i notes", "obs.saltar": "Saltar a la ferramenta" }
   });
   const h = (tag, attrs = {}, ...kids) => {
     const n = document.createElement(tag);
@@ -456,6 +514,57 @@ window.OBS = (() => {
         ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
         ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
   }
+  /* Fuentes y notas del pie, plegadas: son necesarias, pero no para leerlas en clase (auditoría del 25/11/2026) */
+  function plegarFuentes() {
+    document.querySelectorAll("footer").forEach(f => {
+      if (f.querySelector(":scope > details.obs-fuentes") || !f.children.length) return;
+      const sum = h("summary", { text: t("obs.fuentes") });
+      const det = h("details", { class: "obs-fuentes" }, sum);
+      while (f.firstChild) det.append(f.firstChild);
+      det.prepend(sum); f.append(det);
+      onLang(() => { sum.textContent = t("obs.fuentes"); });
+    });
+  }
+  /* «Saltar a la herramienta»: primer elemento al que llega el tabulador (si la página no tiene ya uno) */
+  function saltoAlContenido(cabecera) {
+    const destino = document.querySelector('[role="tablist"]') || (cabecera && cabecera.nextElementSibling && cabecera.nextElementSibling.id !== "obs-docente" ? cabecera.nextElementSibling : null) || document.querySelector("main, section");
+    if (!destino) return;
+    if (!destino.id) destino.id = "obs-main";
+    if (!destino.hasAttribute("tabindex")) destino.setAttribute("tabindex", "-1");
+    let a = document.querySelector("a.obs-skip");
+    if (!a) { a = h("a", { class: "obs-skip", href: "#" + destino.id, text: t("obs.saltar") }); document.body.prepend(a); onLang(() => { a.textContent = t("obs.saltar"); }); }
+    else a.setAttribute("href", "#" + destino.id);
+  }
+  // Pestañas con las flechas (lo que espera quien usa lector de pantalla) y unidad en los deslizadores
+  document.addEventListener("keydown", e => {
+    const tab = e.target.closest && e.target.closest('[role="tab"]');
+    if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+    const todas = [...tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]')].filter(b => b.offsetParent !== null);
+    let i = todas.indexOf(tab);
+    i = e.key === "Home" ? 0 : e.key === "End" ? todas.length - 1 : (i + (e.key === "ArrowRight" ? 1 : -1) + todas.length) % todas.length;
+    todas[i].focus(); todas[i].click(); e.preventDefault();
+  });
+  function valorTexto(inp) {
+    if (!inp || inp.type !== "range") return;
+    const lab = inp.id && document.querySelector('label[for="' + inp.id + '"]');
+    const out = (inp.id && (document.getElementById(inp.id + "-out") || document.getElementById(inp.id + "-v") || document.getElementById(inp.id + "-val")))
+      || (lab && lab.parentElement && lab.parentElement.querySelector("output, .val, .v"));
+    const txt = out && out.textContent.trim();
+    if (txt) inp.setAttribute("aria-valuetext", txt);
+  }
+  document.addEventListener("input", e => setTimeout(() => valorTexto(e.target), 0));
+  // Zonas que se desplazan de lado (gráficos en el móvil, tablas anchas): alcanzables con el teclado
+  function focoScroll() {
+    document.querySelectorAll(".plot, .scroll, .parsed, .lab-tabla-caja").forEach(n => {
+      const desborda = n.scrollWidth > n.clientWidth + 2 || n.scrollHeight > n.clientHeight + 2;
+      if (desborda && !n.hasAttribute("tabindex")) { n.setAttribute("tabindex", "0"); n.dataset.obsFoco = "1"; }
+      else if (!desborda && n.dataset.obsFoco) { n.removeAttribute("tabindex"); delete n.dataset.obsFoco; }
+    });
+  }
+  let focoT = null; const focoLuego = () => { clearTimeout(focoT); focoT = setTimeout(focoScroll, 250); };
+  ["resize", "click", "input", "toggle"].forEach(ev => document.addEventListener(ev, focoLuego, true));
+  window.addEventListener("load", focoLuego); document.addEventListener("DOMContentLoaded", focoLuego);
+  document.addEventListener("DOMContentLoaded", () => setTimeout(() => document.querySelectorAll('input[type="range"]').forEach(valorTexto), 50));
   /* Barra de una línea: «← Panel», idioma, modo proyector y «Para el docente».
      El panel «Para el docente» (cerrado al empezar) recoge la entrada de la cabecera (.lede) y la ficha docente,
      para que la herramienta empiece arriba. */
@@ -476,6 +585,10 @@ window.OBS = (() => {
     if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
     let fichaBox = null;
     if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
+    // «Para el aula»: modo proyector, imprimir y velo. Es lo primero del panel (25/11/2026: la barra del alumnado queda en idioma + docente)
+    const aula = h("div", { class: "obs-apertura obs-aula" }, h("h2", { class: "obs-docente__h", text: t("obs.aula") }), h("div", { class: "obs-aula__btns" }, pj));
+    panel.prepend(aula);
+    onLang(() => { aula.querySelector("h2").textContent = t("obs.aula"); });
     let impr = null;
     if (opts.apertura) {
       aperturaOn = true;
@@ -484,21 +597,20 @@ window.OBS = (() => {
       sel.addEventListener("change", () => setVeloModo(sel.value));
       const conRes = h("button", { type: "button", class: "obs-toggle", text: t("obs.pr.con") });
       conRes.addEventListener("click", () => imprimir(true));
-      const caja = h("div", { class: "obs-apertura" }, h("h2", { class: "obs-docente__h", text: t("obs.apertura") }),
-        h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel), h("div", {}, conRes));
-      panel.append(caja);
-      onLang(() => { caja.querySelector("h2").textContent = t("obs.apertura"); caja.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); });
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
-      onLang(() => { impr.textContent = t("obs.pr.ficha"); });
+      aula.querySelector(".obs-aula__btns").append(impr, conRes);
+      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
+      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
+        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
-    const hayPanel = !!(lede || opts.ficha || opts.apertura);
+    const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
-    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
+    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); document.body.classList.toggle("obs-docente-on", !panel.hidden); });
     container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
-      h("div", { class: "obs-tools" }, seg, pj, impr, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+      h("div", { class: "obs-tools" }, seg, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
     if (hayPanel) (cabecera || container).after(panel);
+    plegarFuentes(); saltoAlContenido(cabecera);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
@@ -528,7 +640,7 @@ window.OBS = (() => {
   //   data-obs-result · lo que es resultado (cifras, gráficos, tablas de solución, botones que dan la respuesta);
   //   data-obs-prompt · (opcional) dónde va el aviso del bloque; si no lo hay, va delante del primer resultado.
   register({
-    es: { "obs.velo.txt": "¿Qué creéis que pasará? Escribidlo en la ficha antes de verlo.", "obs.velo.ver": "Ver",
+    es: { "obs.velo.txt": "¿Qué creéis que pasará? Pensadlo, o escribidlo, antes de verlo.", "obs.velo.ver": "Ver el resultado",
       "obs.velo.tapar": "Tapar otra vez", "obs.velo.modo": "Antes de ver: tapar los resultados hasta que la clase haya hecho su predicción",
       "obs.velo.proj": "Solo en modo proyector", "obs.velo.on": "Siempre", "obs.velo.off": "Nunca",
       "obs.pr.ficha": "Imprimir ficha", "obs.pr.con": "Imprimir con resultados", "obs.pr.nombre": "Nombre", "obs.pr.equipo": "Equipo",
@@ -546,7 +658,7 @@ window.OBS = (() => {
       "obs.esc.guardado": "Escenario «{n}» guardado.", "obs.esc.cargado": "Escenario cargado: «{n}».", "obs.esc.borrado": "Escenario borrado.",
       "obs.esc.comparar": "Comparar los escenarios", "obs.esc.col": "Escenario", "obs.esc.vacio": "Todavía no hay escenarios guardados.",
       "obs.esc.guardados": "Guardados en este navegador" },
-    va: { "obs.velo.txt": "Què creieu que passarà? Escriviu-ho en la fitxa abans de veure-ho.", "obs.velo.ver": "Veure",
+    va: { "obs.velo.txt": "Què creieu que passarà? Penseu-ho, o escriviu-ho, abans de veure-ho.", "obs.velo.ver": "Veure el resultat",
       "obs.velo.tapar": "Tapar una altra vegada", "obs.velo.modo": "Abans de veure: tapar els resultats fins que la classe haja fet la seua predicció",
       "obs.velo.proj": "Només en mode projector", "obs.velo.on": "Sempre", "obs.velo.off": "Mai",
       "obs.pr.ficha": "Imprimir fitxa", "obs.pr.con": "Imprimir amb resultats", "obs.pr.nombre": "Nom", "obs.pr.equipo": "Equip",
@@ -697,7 +809,9 @@ window.OBS = (() => {
     }
     const yo = { pintar, describeActual: () => cfg.describe ? cfg.describe(cfg.toArray()) : "", mount: cfg.mount };
     box._obsEsc = yo;
-    (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
+    // Desde el 25/11/2026 los escenarios viven en el panel «Para el docente» (si lo hay), no en mitad de la página
+    const panelDoc = document.getElementById("obs-docente");
+    if (panelDoc) panelDoc.append(box); else (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
     pintar();
     onLang(pintar);
     return yo;
@@ -712,7 +826,7 @@ window.OBS = (() => {
     const titulo = ((document.querySelector("header h1") || {}).textContent || document.title).trim();
     const eyebrow = ((document.querySelector("header .eyebrow") || {}).textContent || "").trim();
     // el escenario descrito es el del bloque visible (si lo hay)
-    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d.offsetParent !== null);
+    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d._obsEsc && d._obsEsc.mount && d._obsEsc.mount.offsetParent !== null);
     const esc = vis && vis._obsEsc ? vis._obsEsc.describeActual() : "";
     head.replaceChildren(...[
       h("div", { class: "obs-ph-top" }, h("span", { text: eyebrow }), h("span", { text: new Date().toLocaleDateString(lang === "va" ? "ca-ES" : "es-ES") })),
@@ -760,9 +874,58 @@ window.OBS = (() => {
     });
   }
 
+  // ================= Comprensión (auditoría del 25/11/2026) =================
+  const Lx = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+  /* OBS.mirar(elemento, {es, va}): una frase encima del gráfico que dice qué mirar (admite <b>) */
+  function mirar(el, txt) {
+    if (!el) return;
+    const fig = el.closest("figure") || el.closest(".plot") || el;
+    const p = h("p", { class: "obs-mirar" });
+    const pinta = () => { p.innerHTML = Lx(txt); };
+    pinta(); onLang(pinta);
+    const cap = fig.tagName === "FIGURE" ? fig.querySelector(":scope > figcaption") : null;
+    if (cap) cap.after(p); else if (fig.tagName === "FIGURE") fig.prepend(p); else fig.before(p);
+    return p;
+  }
+  /* OBS.palabras(contenedor, [{t: {es, va}, d: {es, va}}], {antes: elemento}): «Palabras nuevas», cada una se abre al tocarla */
+  register({ es: { "obs.pal.h": "Palabras nuevas ({n})" }, va: { "obs.pal.h": "Paraules noves ({n})" } });
+  function palabras(cont, lista, opts = {}) {
+    if (!cont || !lista || !lista.length) return;
+    const box = h("details", { class: "obs-palabras" });
+    const pinta = () => {
+      box.replaceChildren(h("summary", { text: t("obs.pal.h", { n: lista.length }) }),
+        h("div", { class: "obs-palabras__lista" }, lista.map(w => h("details", {}, h("summary", { text: Lx(w.t) }), h("p", { text: Lx(w.d) })))));
+    };
+    pinta(); onLang(() => { const ab = box.open; pinta(); box.open = ab; });
+    if (opts.antes) opts.antes.before(box); else cont.prepend(box);
+    return box;
+  }
+  /* OBS.subpestanas(contenedor, [{el, t: {es, va}}]): una pregunta por pantalla; botones «a · …», «b · …» */
+  function subpestanas(cont, partes, opts = {}) {
+    if (!cont || !partes || partes.length < 2) return;
+    const nav = h("div", { class: "obs-sub", role: "group" });
+    let actual = 0;
+    const btns = partes.map((pt, i) => {
+      const b = h("button", { type: "button", "aria-pressed": String(i === 0) });
+      b.addEventListener("click", () => mostrar(i));
+      return b;
+    });
+    const textos = () => { nav.setAttribute("aria-label", t("obs.sub")); btns.forEach((b, i) => { b.textContent = Lx(partes[i].t); }); };
+    function mostrar(i) {
+      actual = i;
+      partes.forEach((pt, j) => { pt.el.hidden = j !== i; btns[j].setAttribute("aria-pressed", String(j === i)); });
+      if (opts.onChange) opts.onChange(i);
+    }
+    nav.append(...btns); textos(); onLang(textos);
+    (opts.antes || partes[0].el).before(nav);
+    mostrar(0);
+    return { mostrar, actual: () => actual };
+  }
+  register({ es: { "obs.sub": "Partes de esta pestaña" }, va: { "obs.sub": "Parts d'esta pestanya" } });
+
   document.addEventListener("DOMContentLoaded", () => apply());
   return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
-    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas };
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas };
 })();
 
 // OBS-COMMON-JS:END
@@ -898,6 +1061,13 @@ window.OBS = (() => {
       "b.diff.same": "Tu inflación es casi igual que la oficial.",
       "b.wnote": "Las ponderaciones de partida son las de 2025 del INE ({src}). El INE cambia las ponderaciones cada año, por eso la cesta media no coincide exactamente con el IPC general.",
       "b.f": "Cuánto ha subido cada grupo", "b.faria": "Subida de precios de cada grupo frente al IPC general", "b.leg1": "Subida del grupo", "b.leg2": "IPC general",
+      "b.otros": "Ver los otros {n} grupos", "c.tabla": "Ver los datos año a año", "c.th.y": "Año", "c.th.eq": "Lo mismo costaría", "c.th.inf": "Inflación ese año",
+      "mi.c1": "Cada punto dice cuánto dinero hace falta cada año para comprar lo mismo. Las líneas rojas marcan fechas que cambiaron los precios.",
+      "mi.b": "Mueve cuánto gastas en cada grupo y mira cómo cambia la subida de <b>tu</b> cesta frente a la media.",
+      "pal.ipc": "IPC", "pal.ipc.d": "Índice de Precios de Consumo: mide cuánto cuesta cada año la misma cesta de la compra.",
+      "pal.inf": "Inflación", "pal.inf.d": "La subida general de los precios en un año.",
+      "pal.pond": "Ponderación", "pal.pond.d": "Lo que pesa cada grupo en la cesta: cuántos euros de cada 100 se gastan en él.",
+      "pal.ind": "Índice (2021 = 100)", "pal.ind.d": "Un número que compara con 2021: 118 quiere decir que lo que costaba 100 € en 2021 cuesta ahora 118 €.",
       "b.table": "Ver la tabla", "b.th.g": "Grupo", "b.th.w": "En tu compra", "b.th.r": "Subida", "b.th.end": "Costaría", "b.total": "Total",
       "b.ax": "% de subida", "b.general": "IPC general",
       "ft.src": "Datos: INE, Índice de Precios de Consumo, base 2021: medias anuales por grupos (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50934\" target=\"_blank\" rel=\"noopener\">tabla 50934</a>), ponderaciones (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50946\" target=\"_blank\" rel=\"noopener\">tabla 50946</a>) y tasas desde 1961 (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50911\" target=\"_blank\" rel=\"noopener\">tabla 50911</a>). Consulta: 29 de octubre de 2026.",
@@ -932,6 +1102,13 @@ window.OBS = (() => {
       "b.diff.same": "La teua inflació és quasi igual que l'oficial.",
       "b.wnote": "Les ponderacions de partida són les de 2025 de l'INE ({src}). L'INE canvia les ponderacions cada any, per això la cistella mitjana no coincidix exactament amb l'IPC general.",
       "b.f": "Quant ha pujat cada grup", "b.faria": "Pujada de preus de cada grup enfront de l'IPC general", "b.leg1": "Pujada del grup", "b.leg2": "IPC general",
+      "b.otros": "Veure els altres {n} grups", "c.tabla": "Veure les dades any a any", "c.th.y": "Any", "c.th.eq": "El mateix costaria", "c.th.inf": "Inflació eixe any",
+      "mi.c1": "Cada punt diu quants diners calen cada any per a comprar el mateix. Les línies roges marquen dates que van canviar els preus.",
+      "mi.b": "Mou quant gastes en cada grup i mira com canvia la pujada de <b>la teua</b> cistella davant de la mitjana.",
+      "pal.ipc": "IPC", "pal.ipc.d": "Índex de Preus de Consum: mesura quant costa cada any la mateixa cistella de la compra.",
+      "pal.inf": "Inflació", "pal.inf.d": "La pujada general dels preus en un any.",
+      "pal.pond": "Ponderació", "pal.pond.d": "El que pesa cada grup en la cistella: quants euros de cada 100 s'hi gasten.",
+      "pal.ind": "Índex (2021 = 100)", "pal.ind.d": "Un número que compara amb 2021: 118 vol dir que el que costava 100 € el 2021 costa ara 118 €.",
       "b.table": "Veure la taula", "b.th.g": "Grup", "b.th.w": "En la teua compra", "b.th.r": "Pujada", "b.th.end": "Costaria", "b.total": "Total",
       "b.ax": "% de pujada", "b.general": "IPC general",
       "ft.src": "Dades: INE, Índex de Preus de Consum, base 2021: mitjanes anuals per grups (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50934\" target=\"_blank\" rel=\"noopener\">taula 50934</a>), ponderacions (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50946\" target=\"_blank\" rel=\"noopener\">taula 50946</a>) i taxes des de 1961 (<a href=\"https://www.ine.es/jaxiT3/Tabla.htm?t=50911\" target=\"_blank\" rel=\"noopener\">taula 50911</a>). Consulta: 29 d'octubre de 2026.",
@@ -999,8 +1176,6 @@ window.OBS = (() => {
     let mx = null; for (let y = lo + 1; y <= hi; y++) { const v = (GEN.get(y) / GEN.get(y - 1) - 1) * 100; if (!mx || v > mx.v) mx = { y, v }; }
     $("c-stats").replaceChildren(
       el("div", { class: "stat" }, el("b", { text: "× " + fmt(r, 2) }), el("span", { text: t("c.mult") })),
-      el("div", { class: "stat" }, el("b", { text: pct((r - 1) * 100, 1) }), el("span", { text: t("c.cum") })),
-      el("div", { class: "stat" }, el("b", { text: pct(y1 >= y0 ? avg : -avg, 1) }), el("span", { text: t("c.avg") })),
       mx ? el("div", { class: "stat" }, el("b", { text: mx.y + " · " + pct(mx.v, 1) }), el("span", { text: t("c.max") })) : null);
     const note = y0 === y1 ? t("c.note.same") : (y1 > y0 && r >= 1) ? t("c.note.up", { a: eur(a), y1, b: eur(a / r), y0, p: fmt((1 - 1 / r) * 100, 1) + " %" }) : t("c.note.down", { y0, y1 });
     $("c-note").textContent = note;
@@ -1038,14 +1213,20 @@ window.OBS = (() => {
   function presets() {
     $("b-presets").replaceChildren(...["media", "comida", "transporte", "vivienda"].map(p => { const b = el("button", { type: "button", class: "btn ghost small", text: t("b.pre." + p) }); b.addEventListener("click", () => preset(p)); return b; }));
   }
+  const PRINCIPALES = ["01", "04", "07"];
   function buildSliders() {
-    $("b-groups").replaceChildren(...GROUPS.map(s => {
+    const fila = s => {
       const id = "b-w" + s.group;
       const out = el("output", { for: id, id: id + "-o", text: eur(share[s.group], 2) });
       const inp = el("input", { type: "range", id, min: "0", max: "40", step: "0.5", value: String(Math.round(share[s.group] * 2) / 2), "aria-label": L(s.short) });
       inp.addEventListener("input", () => { setShare(s.group, +inp.value); });
       return el("div", { class: "grow" }, el("label", { class: "nm", for: id, text: L(s.short) }), out, inp);
-    }));
+    };
+    const abierto = !!document.querySelector("#b-groups details[open]");
+    const otros = el("details", { class: "otros-grupos" }, el("summary", { text: t("b.otros", { n: GROUPS.length - PRINCIPALES.length }) }),
+      el("div", { class: "groups" }, ...GROUPS.filter(s => !PRINCIPALES.includes(s.group)).map(fila)));
+    if (abierto) otros.open = true;
+    $("b-groups").replaceChildren(...GROUPS.filter(s => PRINCIPALES.includes(s.group)).map(fila), otros);
   }
   // Al mover un grupo, los demás se reajustan en proporción para que la compra siga sumando 100 €
   function setShare(g, v) {
@@ -1107,6 +1288,27 @@ window.OBS = (() => {
   OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
   function renderAll() { OBS.apply(); quick(); presets(); buildSliders(); renderCalc(); renderBasket(); $("ft-base").textContent = L(DATA.notes); }
   OBS.onLang(renderAll);
+  // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
+  {
+    const tr = k => ({ get es() { return OBS.t(k); }, get va() { return OBS.t(k); } });
+    OBS.mirar($("c-chart1"), tr("mi.c1")); OBS.mirar($("b-chart"), tr("mi.b"));
+    const fig = $("c-chart1").closest("figure");
+    const tabla = el("table", {}), det = el("details", { class: "c-tabla" }, el("summary", { text: t("c.tabla") }), el("div", { class: "scroll" }, tabla));
+    fig.after(det);
+    const rehacer = () => {
+      const a = Math.max(0, parseFloat(String($("c-amt").value).replace(",", ".")) || 0), y0 = +$("c-y0").value, y1 = +$("c-y1").value;
+      const lo = Math.min(y0, y1), hi = Math.max(y0, y1), filas = [];
+      for (let y = lo; y <= hi; y++) if (GEN.has(y)) filas.push(el("tr", {}, el("td", { text: y }), el("td", { text: eur(a * GEN.get(y) / GEN.get(y0)) }),
+        el("td", { text: GEN.has(y - 1) ? pct((GEN.get(y) / GEN.get(y - 1) - 1) * 100, 1) : "—" })));
+      tabla.replaceChildren(el("thead", {}, el("tr", {}, el("th", { text: t("c.th.y") }), el("th", { text: t("c.th.eq") }), el("th", { text: t("c.th.inf") }))), el("tbody", {}, ...filas));
+      det.querySelector("summary").textContent = t("c.tabla");
+    };
+    new MutationObserver(rehacer).observe($("c-eq"), { childList: true });
+    rehacer();
+    const pal = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
+    OBS.palabras($("view-calc"), pal(["ipc", "inf"]), { antes: $("c-stats") });
+    OBS.palabras($("view-cesta"), pal(["pond", "inf"]), { antes: $("b-presets") });
+  }
   preset("media");
   renderAll();
   show(location.hash.slice(1));

@@ -66,9 +66,10 @@ details.obs-ficha[open] > summary { margin-bottom: 10px; }
 .obs-ficha .code { font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-right: 6px; }
 @media (max-width: 560px) { .obs-ficha dl { grid-template-columns: minmax(0, 1fr); } .obs-ficha dt { margin-top: 6px; } }
 /* Modo proyector: todo más grande y controles más fáciles de acertar desde lejos */
-body.obs-proj { font-size: 19px; }
-body.obs-proj .wrap { max-width: 1240px; }
-body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 17px; }
+body.obs-proj { font-size: 22px; }
+body.obs-proj .wrap { max-width: min(1760px, 96vw); }
+body.obs-proj p, body.obs-proj li, body.obs-proj label, body.obs-proj td, body.obs-proj th, body.obs-proj .help, body.obs-proj .obs-mirar { font-size: 22px; line-height: 1.4; }
+body.obs-proj .small, body.obs-proj .legend, body.obs-proj .notice, body.obs-proj figcaption { font-size: 20px; }
 body.obs-proj h1 { font-size: clamp(36px, 6vw, 56px); }
 body.obs-proj h2 { font-size: 32px; }
 body.obs-proj nav.tabs button { font-size: 18px; padding: 12px 18px; }
@@ -130,6 +131,7 @@ details.obs-esc > * + * { margin-top: 8px; }
 @media (max-width: 640px) { .obs-esc__lista li { grid-template-columns: minmax(0, 1fr); } .obs-esc__acc { justify-content: flex-start; } }
 .obs-print-head { display: none; }
 @media print {
+  .obs-sub, details.obs-palabras, a.obs-skip, .obs-mirar { display: none !important; }
   @page { size: A4; margin: 12mm; }
   html, body { background: #fff !important; color: #000 !important; }
   body { font-size: 10.5pt; }
@@ -160,3 +162,57 @@ details.obs-esc > * + * { margin-top: 8px; }
 .obs-marca rect { fill: var(--accent); opacity: .1; }
 .obs-marca text { font: 500 11px var(--font-mono); fill: var(--accent); }
 body.obs-proj .obs-marca text { font-size: 14px; }
+
+/* ===== Auditoría de accesibilidad y comprensión (25/11/2026) ===== */
+/* Lo del docente solo se ve con el panel «Para el docente» abierto */
+body:not(.obs-docente-on) [data-obs-docente] { display: none !important; }
+.obs-aula__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.obs-docente details.obs-esc, .obs-docente details.obs-params { margin-top: 14px; }
+/* Saltar a la herramienta: invisible hasta que llega el foco */
+a.obs-skip { position: absolute; left: 8px; top: -60px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: 4px; font: 600 15px var(--font-body); text-decoration: none; }
+a.obs-skip:focus { top: 8px; }
+/* Fuentes y notas plegadas al pie */
+details.obs-fuentes > summary { cursor: pointer; font-weight: 600; color: var(--muted); }
+details.obs-fuentes[open] > summary { margin-bottom: 8px; }
+details.obs-fuentes > span, details.obs-fuentes > p { display: block; margin: 0 0 6px; }
+/* «Qué mirar»: una frase encima de cada gráfico */
+.obs-mirar { margin: 0 0 6px; font-size: 15px; line-height: 1.45; color: var(--ink); border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; }
+.obs-mirar b { font-weight: 600; }
+/* Palabras nuevas: cada término se abre al tocarlo */
+details.obs-palabras { border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); padding: 8px 12px; font-size: 15px; }
+details.obs-palabras > summary { cursor: pointer; font-weight: 600; }
+.obs-palabras__lista { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.obs-palabras__lista details { border: 1px solid var(--rule); border-radius: 4px; padding: 4px 10px; background: var(--bg); max-width: 100%; }
+.obs-palabras__lista details[open] { flex-basis: 100%; }
+.obs-palabras__lista summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.obs-palabras__lista p { margin: 4px 0 2px; }
+/* Subpestañas «a / b»: una pregunta por pantalla */
+.obs-sub { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 4px; }
+.obs-sub button { font: 500 14px var(--font-body); background: var(--bg); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 12px; cursor: pointer; text-align: left; }
+.obs-sub button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); font-weight: 600; }
+body.obs-proj .obs-sub button { font-size: 20px; padding: 12px 18px; }
+/* Móvil legible: gráficos con letra suficiente (se desplazan de lado) y controles de 44 px */
+@media (max-width: 640px) {
+  .plot { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .plot > svg.chart { min-width: 600px; }
+  .diagram { overflow-x: auto; }
+  .diagram > svg { min-width: 600px; }
+  input[type="range"] { min-height: 44px; }
+  input[type="checkbox"], input[type="radio"] { width: 22px; height: 22px; }
+  summary { min-height: 44px; padding-block: 11px; box-sizing: border-box; }
+  .btn, .obs-toggle, .obs-seg button, .obs-sub button, nav.tabs button { min-height: 44px; }
+  select, input[type="number"], input[type="text"] { min-height: 44px; }
+}
+@media (max-width: 640px) {
+  nav.tabs { flex-direction: row !important; flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  nav.tabs button { flex: 0 0 auto; white-space: nowrap; }
+}
+/* Pizarra sin arrastrar */
+details.pz-unir { margin-top: 10px; }
+details.pz-unir > summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.pz-u-fila { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin-top: 8px; }
+.pz-u-l { display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: var(--muted); }
+.pz-u-l select { font: inherit; font-size: 15px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 8px; min-width: 9em; }
+ol.pasos { margin: 6px 0 0; padding-left: 1.3em; }
+body.obs-proj .casa { display: none; }
+[hidden] { display: none !important; }

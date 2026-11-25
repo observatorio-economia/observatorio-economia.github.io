@@ -311,3 +311,17 @@ figure .plot { background: transparent; }
   .obs-page .crono li { padding: 0 0 14px 18px; border-top: 0; }
   .obs-page .crono li::before { top: 4px; left: -9px; }
 }
+
+/* Auditoría de accesibilidad y comprensión (25/11/2026) */
+/* En la web, las migas ya dicen dónde estás: fuera el antetítulo repetido de las herramientas */
+header.top > .eyebrow, header.top .eyebrow:first-child { display: none; }
+/* En el móvil el menú no se queda fijo: no se come la pantalla al bajar */
+@media (max-width: 640px) { .obs-menu { position: static; } }
+a.obs-skip { position: absolute; left: 8px; top: -60px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 14px; font: 600 15px var(--font-label); text-decoration: none; }
+a.obs-skip:focus { top: 8px; }
+.obs-page .sit-crisis { display: block; font: 600 13px var(--font-label); color: var(--accent); letter-spacing: .02em; margin-top: 2px; }
+.obs-page details.crono-det > summary { cursor: pointer; font: 600 15px var(--font-label); color: var(--accent); min-height: 44px; padding-block: 11px; box-sizing: border-box; }
+.obs-page div.row.sin { color: var(--muted); cursor: default; }
+.obs-page div.row.sin .num { color: var(--muted); }
+.obs-page details.act-titulares > summary { cursor: pointer; font: 600 17px var(--font-label); color: var(--accent); min-height: 44px; padding-block: 11px; box-sizing: border-box; }
+.obs-page [hidden] { display: none !important; }

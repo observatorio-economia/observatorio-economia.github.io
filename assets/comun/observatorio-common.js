@@ -63,12 +63,12 @@ window.OBS = (() => {
       "obs.sessions": "Sesiones", "obs.saberes": "Saberes básicos", "obs.criterios": "Criterios de evaluación", "obs.uso": "Cómo se usa",
       "obs.copied": "No se puede descargar aquí: los datos se han copiado. Pégalos en una hoja de cálculo.",
       "obs.copyfail": "No se ha podido descargar ni copiar. Abre la herramienta desde el archivo para descargar.",
-      "obs.saved": "Archivo descargado." },
+      "obs.saved": "Archivo descargado.", "obs.aula": "Para el aula", "obs.fuentes": "Fuentes y notas", "obs.saltar": "Saltar a la herramienta" },
     va: { "obs.back": "← Tauler de l'Observatori", "obs.lang": "Idioma", "obs.proj": "Mode projector", "obs.ficha": "Fitxa docent", "obs.docente": "Per al docent", "obs.sobre": "Sobre esta ferramenta",
       "obs.sessions": "Sessions", "obs.saberes": "Sabers bàsics", "obs.criterios": "Criteris d'avaluació", "obs.uso": "Com s'utilitza",
       "obs.copied": "Ací no es pot descarregar: les dades s'han copiat. Apega-les en un full de càlcul.",
       "obs.copyfail": "No s'ha pogut descarregar ni copiar. Obri la ferramenta des de l'arxiu per a descarregar.",
-      "obs.saved": "Arxiu descarregat." }
+      "obs.saved": "Arxiu descarregat.", "obs.aula": "Per a l'aula", "obs.fuentes": "Fonts i notes", "obs.saltar": "Saltar a la ferramenta" }
   });
   const h = (tag, attrs = {}, ...kids) => {
     const n = document.createElement(tag);
@@ -88,6 +88,57 @@ window.OBS = (() => {
         ficha.criterios ? [h("dt", { text: t("obs.criterios") }), h("dd", {}, list(ficha.criterios))] : null,
         ficha.uso ? [h("dt", { text: t("obs.uso") }), h("dd", { text: L(ficha.uso) })] : null));
   }
+  /* Fuentes y notas del pie, plegadas: son necesarias, pero no para leerlas en clase (auditoría del 25/11/2026) */
+  function plegarFuentes() {
+    document.querySelectorAll("footer").forEach(f => {
+      if (f.querySelector(":scope > details.obs-fuentes") || !f.children.length) return;
+      const sum = h("summary", { text: t("obs.fuentes") });
+      const det = h("details", { class: "obs-fuentes" }, sum);
+      while (f.firstChild) det.append(f.firstChild);
+      det.prepend(sum); f.append(det);
+      onLang(() => { sum.textContent = t("obs.fuentes"); });
+    });
+  }
+  /* «Saltar a la herramienta»: primer elemento al que llega el tabulador (si la página no tiene ya uno) */
+  function saltoAlContenido(cabecera) {
+    const destino = document.querySelector('[role="tablist"]') || (cabecera && cabecera.nextElementSibling && cabecera.nextElementSibling.id !== "obs-docente" ? cabecera.nextElementSibling : null) || document.querySelector("main, section");
+    if (!destino) return;
+    if (!destino.id) destino.id = "obs-main";
+    if (!destino.hasAttribute("tabindex")) destino.setAttribute("tabindex", "-1");
+    let a = document.querySelector("a.obs-skip");
+    if (!a) { a = h("a", { class: "obs-skip", href: "#" + destino.id, text: t("obs.saltar") }); document.body.prepend(a); onLang(() => { a.textContent = t("obs.saltar"); }); }
+    else a.setAttribute("href", "#" + destino.id);
+  }
+  // Pestañas con las flechas (lo que espera quien usa lector de pantalla) y unidad en los deslizadores
+  document.addEventListener("keydown", e => {
+    const tab = e.target.closest && e.target.closest('[role="tab"]');
+    if (!tab || !["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+    const todas = [...tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]')].filter(b => b.offsetParent !== null);
+    let i = todas.indexOf(tab);
+    i = e.key === "Home" ? 0 : e.key === "End" ? todas.length - 1 : (i + (e.key === "ArrowRight" ? 1 : -1) + todas.length) % todas.length;
+    todas[i].focus(); todas[i].click(); e.preventDefault();
+  });
+  function valorTexto(inp) {
+    if (!inp || inp.type !== "range") return;
+    const lab = inp.id && document.querySelector('label[for="' + inp.id + '"]');
+    const out = (inp.id && (document.getElementById(inp.id + "-out") || document.getElementById(inp.id + "-v") || document.getElementById(inp.id + "-val")))
+      || (lab && lab.parentElement && lab.parentElement.querySelector("output, .val, .v"));
+    const txt = out && out.textContent.trim();
+    if (txt) inp.setAttribute("aria-valuetext", txt);
+  }
+  document.addEventListener("input", e => setTimeout(() => valorTexto(e.target), 0));
+  // Zonas que se desplazan de lado (gráficos en el móvil, tablas anchas): alcanzables con el teclado
+  function focoScroll() {
+    document.querySelectorAll(".plot, .scroll, .parsed, .lab-tabla-caja").forEach(n => {
+      const desborda = n.scrollWidth > n.clientWidth + 2 || n.scrollHeight > n.clientHeight + 2;
+      if (desborda && !n.hasAttribute("tabindex")) { n.setAttribute("tabindex", "0"); n.dataset.obsFoco = "1"; }
+      else if (!desborda && n.dataset.obsFoco) { n.removeAttribute("tabindex"); delete n.dataset.obsFoco; }
+    });
+  }
+  let focoT = null; const focoLuego = () => { clearTimeout(focoT); focoT = setTimeout(focoScroll, 250); };
+  ["resize", "click", "input", "toggle"].forEach(ev => document.addEventListener(ev, focoLuego, true));
+  window.addEventListener("load", focoLuego); document.addEventListener("DOMContentLoaded", focoLuego);
+  document.addEventListener("DOMContentLoaded", () => setTimeout(() => document.querySelectorAll('input[type="range"]').forEach(valorTexto), 50));
   /* Barra de una línea: «← Panel», idioma, modo proyector y «Para el docente».
      El panel «Para el docente» (cerrado al empezar) recoge la entrada de la cabecera (.lede) y la ficha docente,
      para que la herramienta empiece arriba. */
@@ -108,6 +159,10 @@ window.OBS = (() => {
     if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
     let fichaBox = null;
     if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
+    // «Para el aula»: modo proyector, imprimir y velo. Es lo primero del panel (25/11/2026: la barra del alumnado queda en idioma + docente)
+    const aula = h("div", { class: "obs-apertura obs-aula" }, h("h2", { class: "obs-docente__h", text: t("obs.aula") }), h("div", { class: "obs-aula__btns" }, pj));
+    panel.prepend(aula);
+    onLang(() => { aula.querySelector("h2").textContent = t("obs.aula"); });
     let impr = null;
     if (opts.apertura) {
       aperturaOn = true;
@@ -116,21 +171,20 @@ window.OBS = (() => {
       sel.addEventListener("change", () => setVeloModo(sel.value));
       const conRes = h("button", { type: "button", class: "obs-toggle", text: t("obs.pr.con") });
       conRes.addEventListener("click", () => imprimir(true));
-      const caja = h("div", { class: "obs-apertura" }, h("h2", { class: "obs-docente__h", text: t("obs.apertura") }),
-        h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel), h("div", {}, conRes));
-      panel.append(caja);
-      onLang(() => { caja.querySelector("h2").textContent = t("obs.apertura"); caja.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); });
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
-      onLang(() => { impr.textContent = t("obs.pr.ficha"); });
+      aula.querySelector(".obs-aula__btns").append(impr, conRes);
+      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
+      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
+        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
-    const hayPanel = !!(lede || opts.ficha || opts.apertura);
+    const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
-    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
+    doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); document.body.classList.toggle("obs-docente-on", !panel.hidden); });
     container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
-      h("div", { class: "obs-tools" }, seg, pj, impr, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+      h("div", { class: "obs-tools" }, seg, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
     if (hayPanel) (cabecera || container).after(panel);
+    plegarFuentes(); saltoAlContenido(cabecera);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
@@ -160,7 +214,7 @@ window.OBS = (() => {
   //   data-obs-result · lo que es resultado (cifras, gráficos, tablas de solución, botones que dan la respuesta);
   //   data-obs-prompt · (opcional) dónde va el aviso del bloque; si no lo hay, va delante del primer resultado.
   register({
-    es: { "obs.velo.txt": "¿Qué creéis que pasará? Escribidlo en la ficha antes de verlo.", "obs.velo.ver": "Ver",
+    es: { "obs.velo.txt": "¿Qué creéis que pasará? Pensadlo, o escribidlo, antes de verlo.", "obs.velo.ver": "Ver el resultado",
       "obs.velo.tapar": "Tapar otra vez", "obs.velo.modo": "Antes de ver: tapar los resultados hasta que la clase haya hecho su predicción",
       "obs.velo.proj": "Solo en modo proyector", "obs.velo.on": "Siempre", "obs.velo.off": "Nunca",
       "obs.pr.ficha": "Imprimir ficha", "obs.pr.con": "Imprimir con resultados", "obs.pr.nombre": "Nombre", "obs.pr.equipo": "Equipo",
@@ -178,7 +232,7 @@ window.OBS = (() => {
       "obs.esc.guardado": "Escenario «{n}» guardado.", "obs.esc.cargado": "Escenario cargado: «{n}».", "obs.esc.borrado": "Escenario borrado.",
       "obs.esc.comparar": "Comparar los escenarios", "obs.esc.col": "Escenario", "obs.esc.vacio": "Todavía no hay escenarios guardados.",
       "obs.esc.guardados": "Guardados en este navegador" },
-    va: { "obs.velo.txt": "Què creieu que passarà? Escriviu-ho en la fitxa abans de veure-ho.", "obs.velo.ver": "Veure",
+    va: { "obs.velo.txt": "Què creieu que passarà? Penseu-ho, o escriviu-ho, abans de veure-ho.", "obs.velo.ver": "Veure el resultat",
       "obs.velo.tapar": "Tapar una altra vegada", "obs.velo.modo": "Abans de veure: tapar els resultats fins que la classe haja fet la seua predicció",
       "obs.velo.proj": "Només en mode projector", "obs.velo.on": "Sempre", "obs.velo.off": "Mai",
       "obs.pr.ficha": "Imprimir fitxa", "obs.pr.con": "Imprimir amb resultats", "obs.pr.nombre": "Nom", "obs.pr.equipo": "Equip",
@@ -329,7 +383,9 @@ window.OBS = (() => {
     }
     const yo = { pintar, describeActual: () => cfg.describe ? cfg.describe(cfg.toArray()) : "", mount: cfg.mount };
     box._obsEsc = yo;
-    (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
+    // Desde el 25/11/2026 los escenarios viven en el panel «Para el docente» (si lo hay), no en mitad de la página
+    const panelDoc = document.getElementById("obs-docente");
+    if (panelDoc) panelDoc.append(box); else (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
     pintar();
     onLang(pintar);
     return yo;
@@ -344,7 +400,7 @@ window.OBS = (() => {
     const titulo = ((document.querySelector("header h1") || {}).textContent || document.title).trim();
     const eyebrow = ((document.querySelector("header .eyebrow") || {}).textContent || "").trim();
     // el escenario descrito es el del bloque visible (si lo hay)
-    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d.offsetParent !== null);
+    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d._obsEsc && d._obsEsc.mount && d._obsEsc.mount.offsetParent !== null);
     const esc = vis && vis._obsEsc ? vis._obsEsc.describeActual() : "";
     head.replaceChildren(...[
       h("div", { class: "obs-ph-top" }, h("span", { text: eyebrow }), h("span", { text: new Date().toLocaleDateString(lang === "va" ? "ca-ES" : "es-ES") })),
@@ -392,7 +448,56 @@ window.OBS = (() => {
     });
   }
 
+  // ================= Comprensión (auditoría del 25/11/2026) =================
+  const Lx = o => o == null ? "" : typeof o === "string" ? o : (o[lang] || o.es || "");
+  /* OBS.mirar(elemento, {es, va}): una frase encima del gráfico que dice qué mirar (admite <b>) */
+  function mirar(el, txt) {
+    if (!el) return;
+    const fig = el.closest("figure") || el.closest(".plot") || el;
+    const p = h("p", { class: "obs-mirar" });
+    const pinta = () => { p.innerHTML = Lx(txt); };
+    pinta(); onLang(pinta);
+    const cap = fig.tagName === "FIGURE" ? fig.querySelector(":scope > figcaption") : null;
+    if (cap) cap.after(p); else if (fig.tagName === "FIGURE") fig.prepend(p); else fig.before(p);
+    return p;
+  }
+  /* OBS.palabras(contenedor, [{t: {es, va}, d: {es, va}}], {antes: elemento}): «Palabras nuevas», cada una se abre al tocarla */
+  register({ es: { "obs.pal.h": "Palabras nuevas ({n})" }, va: { "obs.pal.h": "Paraules noves ({n})" } });
+  function palabras(cont, lista, opts = {}) {
+    if (!cont || !lista || !lista.length) return;
+    const box = h("details", { class: "obs-palabras" });
+    const pinta = () => {
+      box.replaceChildren(h("summary", { text: t("obs.pal.h", { n: lista.length }) }),
+        h("div", { class: "obs-palabras__lista" }, lista.map(w => h("details", {}, h("summary", { text: Lx(w.t) }), h("p", { text: Lx(w.d) })))));
+    };
+    pinta(); onLang(() => { const ab = box.open; pinta(); box.open = ab; });
+    if (opts.antes) opts.antes.before(box); else cont.prepend(box);
+    return box;
+  }
+  /* OBS.subpestanas(contenedor, [{el, t: {es, va}}]): una pregunta por pantalla; botones «a · …», «b · …» */
+  function subpestanas(cont, partes, opts = {}) {
+    if (!cont || !partes || partes.length < 2) return;
+    const nav = h("div", { class: "obs-sub", role: "group" });
+    let actual = 0;
+    const btns = partes.map((pt, i) => {
+      const b = h("button", { type: "button", "aria-pressed": String(i === 0) });
+      b.addEventListener("click", () => mostrar(i));
+      return b;
+    });
+    const textos = () => { nav.setAttribute("aria-label", t("obs.sub")); btns.forEach((b, i) => { b.textContent = Lx(partes[i].t); }); };
+    function mostrar(i) {
+      actual = i;
+      partes.forEach((pt, j) => { pt.el.hidden = j !== i; btns[j].setAttribute("aria-pressed", String(j === i)); });
+      if (opts.onChange) opts.onChange(i);
+    }
+    nav.append(...btns); textos(); onLang(textos);
+    (opts.antes || partes[0].el).before(nav);
+    mostrar(0);
+    return { mostrar, actual: () => actual };
+  }
+  register({ es: { "obs.sub": "Partes de esta pestaña" }, va: { "obs.sub": "Parts d'esta pestanya" } });
+
   document.addEventListener("DOMContentLoaded", () => apply());
   return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
-    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas };
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas };
 })();

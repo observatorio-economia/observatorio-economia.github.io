@@ -16,23 +16,23 @@
       d: { es: "Encuestas a las familias, resultados de la clase y matriz de la estantería.", va: "Enquestes a les famílies, resultats de la classe i matriu del prestatge." } },
     { n: 3, ini: "2026-10-28", fin: "2026-11-18", tri: 1,  ruta: "sa03/", estado: "proto",
       t: { es: "La producción", va: "La producció" },
-      d: { es: "Laboratorio de costes para trastear y practicar, el caso de General Motors (2009) y la frontera de posibilidades de producción.", va: "Laboratori de costos per a trastejar i practicar, el cas de General Motors (2009) i la frontera de possibilitats de producció." } },
+      d: { es: "Cuánto cuesta producir y cuándo se gana dinero, por qué quebró General Motors y qué se puede producir con lo que hay.", va: "Quant costa produir i quan es guanyen diners, per què va fer fallida General Motors i què es pot produir amb el que hi ha." } },
     { n: 4, ini: "2026-11-19", fin: "2026-12-21", tri: 1,  ruta: "sa04/", estado: "proto",
       t: { es: "El mercado", va: "El mercat" },
-      d: { es: "Competencia perfecta, monopolio, el dilema de las dos gasolineras y la guerra de precios de la competencia real.", va: "Competència perfecta, monopoli, el dilema de les dues gasolineres i la guerra de preus de la competència real." } },
+      d: { es: "Cuánto vender cuando no eliges el precio, qué precio pone un monopolio y por qué dos empresas se hacen la guerra de precios.", va: "Quant vendre quan no tries el preu, quin preu posa un monopoli i per què dues empreses es fan la guerra de preus." } },
     { n: 5, ini: "2027-01-07", fin: "2027-02-01", tri: 2,  ruta: "sa05/", estado: "proto",
       t: { es: "Crecimiento económico y desarrollo", va: "Creixement econòmic i desenvolupament" },
-      d: { es: "Emisiones, clima y producción: pizarra de sistemas y simulador.", va: "Emissions, clima i producció: pissarra de sistemes i simulador." } },
+      d: { es: "Dibuja cómo se empujan la producción, las emisiones y el clima, y simula qué pasa de aquí a 2100.", va: "Dibuixa com s'empenyen la producció, les emissions i el clima, i simula què passa d'ací a 2100." } },
     { n: 6, ini: "2027-02-02", fin: "2027-02-22", tri: 2,  ruta: "sa06/", estado: "proto",
       t: { es: "El mercado laboral", va: "El mercat laboral" },
-      d: { es: "El salario como precio frente al ciclo de Goodwin: el mismo cambio, dos respuestas.", va: "El salari com a preu enfront del cicle de Goodwin: el mateix canvi, dues respostes." } },
+      d: { es: "¿Por qué hay paro? El mismo cambio visto desde dos maneras de entender el mercado de trabajo.", va: "Per què hi ha desocupació? El mateix canvi vist des de dues maneres d'entendre el mercat de treball." } },
     { n: 7, ini: "2027-02-23", fin: "2027-03-24", tri: 2,  t: { es: "El Estado y sus cuentas", va: "L'Estat i els seus comptes" } },
     { n: 8, ini: "2027-04-06", fin: "2027-04-27", tri: 3,  ruta: "sa08/", estado: "proto",
       t: { es: "El dinero", va: "Els diners" },
-      d: { es: "La inflación en tu bolsillo: calculadora del IPC desde 1961 y «Mi cesta de la compra».", va: "La inflació a la butxaca: calculadora de l'IPC des de 1961 i «La meua cistella de la compra»." } },
+      d: { es: "La inflación en tu bolsillo: cuánto valen hoy 100 € de otro año y cuánto sube tu propia cesta de la compra.", va: "La inflació a la butxaca: quant valen hui 100 € d'un altre any i quant puja la teua pròpia cistella de la compra." } },
     { n: 9, ini: "2027-04-28", fin: "2027-05-26", tri: 3,  ruta: "sa09/", estado: "proto",
       t: { es: "Comercio internacional", va: "Comerç internacional" },
-      d: { es: "Ricardo frente a Shaikh: ventaja comparativa o ventaja absoluta, con déficit y deuda.", va: "Ricardo enfront de Shaikh: avantatge comparatiu o avantatge absolut, amb dèficit i deute." } },
+      d: { es: "¿Ganan los dos países cuando comercian? ¿Y qué pasa cuando uno compra más de lo que vende?", va: "Guanyen els dos països quan comercien? I què passa quan un compra més del que ven?" } },
     { n: 10, ini: "2027-05-27", fin: "2027-06-17", tri: 3,  t: { es: "Las finanzas", va: "Les finances" } },
   ];
   // Interruptor del libro del alumnado en el menú y la portada (la página libro/ se genera siempre):
@@ -45,7 +45,7 @@
   // Páginas comunes a todo el curso (fuera de la lista de SA)
   const TODAS_EXTRA = [
     { ruta: "actualidad/", num: "◆", t: { es: "Actualidad", va: "Actualitat" }, corto: { es: "Actualidad", va: "Actualitat" },
-      d: { es: "Noticias de economía comentadas en clase y titulares de varios medios.", va: "Notícies d'economia comentades a classe i titulars de diversos mitjans." } },
+      d: { es: "Las noticias de economía que comentamos en clase.", va: "Les notícies d'economia que comentem a classe." } },
     { ruta: "libro/", num: "¶", t: { es: "Libro del alumnado", va: "Llibre de l'alumnat" }, corto: { es: "Libro", va: "Llibre" },
       d: { es: "Los apuntes de todas las situaciones de aprendizaje, seguidos, para leer o imprimir.", va: "Els apunts de totes les situacions d'aprenentatge, seguits, per a llegir o imprimir." } },
     { ruta: "datos/", num: "∑", t: { es: "Base de datos", va: "Base de dades" }, corto: { es: "Datos", va: "Dades" },
@@ -70,7 +70,7 @@
       lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
       cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el",
       inicio: "Inicio", migas: "Estás en", herr: "Herramienta", ses: "Sesión {n}",
-      crono: "Las crisis del Observatorio", cronod: "Cada situación de aprendizaje se construye alrededor de una crisis. De 1929 a hoy, en orden.", cronoir: "Ir a la SA {n}" },
+      crono: "Las crisis del Observatorio", cronod: "Cada situación de aprendizaje se construye alrededor de una crisis. De 1929 a hoy, en orden.", cronoir: "Ir a la SA {n}", saltar: "Saltar al contenido", cronover: "Ver las crisis en orden, de 1929 a hoy", crisis: "Crisis" },
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
       open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
       act: "Actualitat", pq: "Per a pensar", actmas: "Més notícies i titulars",
@@ -83,7 +83,7 @@
       lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
       cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el",
       inicio: "Inici", migas: "Estàs en", herr: "Ferramenta", ses: "Sessió {n}",
-      crono: "Les crisis de l'Observatori", cronod: "Cada situació d'aprenentatge es construeix al voltant d'una crisi. Del 1929 fins hui, en ordre.", cronoir: "Anar a la SA {n}" },
+      crono: "Les crisis de l'Observatori", cronod: "Cada situació d'aprenentatge es construeix al voltant d'una crisi. Del 1929 fins hui, en ordre.", cronoir: "Anar a la SA {n}", saltar: "Saltar al contingut", cronover: "Veure les crisis en ordre, del 1929 fins hui", crisis: "Crisi" },
   };
   const idioma = () => (window.OBS && OBS.lang && OBS.lang() === "va") ? "va" : "es";
   const tx = k => TXT[idioma()][k];
@@ -192,10 +192,25 @@
     if (pieEl && pieEl.isConnected) pieEl.replaceWith(nuevo); else document.body.append(nuevo);
     pieEl = nuevo;
   }
+  // «Saltar al contenido»: lo primero que encuentra el tabulador (auditoría de accesibilidad, 25/11/2026).
+  // En las herramientas lo pone la pieza común (lleva a las pestañas); aquí solo se sube al principio o se crea.
+  function saltar() {
+    let a = document.querySelector("a.obs-skip");
+    if (!a) {
+      const destino = document.querySelector('[role="tablist"]') || document.querySelector("main, .wrap, #portada-hero, section");
+      if (!destino) return;
+      if (!destino.id) destino.id = "obs-main";
+      if (!destino.hasAttribute("tabindex")) destino.setAttribute("tabindex", "-1");
+      a = el("a", { class: "obs-skip", href: "#" + destino.id });
+    }
+    a.textContent = tx("saltar");
+    if (document.body.firstChild !== a) document.body.prepend(a);
+  }
   function pintarMenu() {
     const nueva = menu();
     if (barra && barra.isConnected) barra.replaceWith(nueva); else document.body.prepend(nueva);
     barra = nueva;
+    saltar();
   }
 
   const fechaCorta = f => { const d = new Date(f); return isNaN(d) ? (f || "") : d.toLocaleDateString(idioma() === "va" ? "ca-ES" : "es-ES", { day: "numeric", month: "short" }); };
@@ -303,7 +318,9 @@
   }
 
   // Portada · la línea del curso: un tramo por SA, con el ancho de su duración; la de hoy en rojo
+  const MOSTRAR_CAMINO = false; // auditoría del 25/11/2026: repetía la lista de situaciones
   function portadaCamino() {
+    if (!MOSTRAR_CAMINO) { const c = document.getElementById("portada-camino"); if (c) { c.hidden = true; c.replaceChildren(); } return; }
     const caja = document.getElementById("portada-camino");
     if (!caja) return;
     const hoy = new Date(), { sa: actual, cuando } = saDeHoy();
@@ -355,7 +372,11 @@
         : el("span", { class: "crono-sa sin" }, "SA " + c.sa + " · " + tx("soon"));
       return el("li", { class: s.ruta ? null : "sin" }, el("span", { class: "crono-cuando", text: L(c.cuando) }), el("span", { class: "crono-t", text: L(c.t) }), sa);
     });
-    caja.replaceChildren(el("h2", { class: "camino-titulo", text: tx("crono") }), el("p", { class: "crono-d", text: tx("cronod") }), el("ol", { class: "crono" }, ...items));
+    const movil = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
+    if (movil) {
+      const det = el("details", { class: "crono-det" }, el("summary", { text: tx("cronover") }), el("p", { class: "crono-d", text: tx("cronod") }), el("ol", { class: "crono" }, ...items));
+      caja.replaceChildren(el("h2", { class: "camino-titulo", text: tx("crono") }), det);
+    } else caja.replaceChildren(el("h2", { class: "camino-titulo", text: tx("crono") }), el("p", { class: "crono-d", text: tx("cronod") }), el("ol", { class: "crono" }, ...items));
   }
 
   function panel() {
@@ -378,6 +399,8 @@
             esAhora ? el("span", { class: "sit-badge", text: tx("ahoraCorto") }) : ""));
         if (s.q) texto.append(el("span", { class: "sit-q", text: L(s.q) }));
         if (s.d) texto.append(el("span", { class: "sit-d", text: L(s.d) }));
+        const cr = CRISIS.find(c => c.sa === s.n);
+        if (cr) texto.append(el("span", { class: "sit-crisis", text: tx("crisis") + ": " + L(cr.cuando) + " · " + L(cr.t) }));
         const fila = s.ruta ? el("a", { class: "sit-fila", href: enlace(s.ruta) }) : el("div", { class: "sit-fila sin" });
         fila.append(el("span", { class: "sit-n", text: s.n }), texto,
           el("span", { class: "sit-accion", text: s.ruta ? tx("abrirc") : tx("soon") }));

@@ -324,11 +324,12 @@ def actualidad(vault_dir):
     t(tx, "ac.lede", "Noticias de economía para leer con los modelos del curso. Primero, las comentadas en clase; después, los titulares de varios medios, de líneas editoriales distintas: compara cómo cuenta cada uno la misma noticia.",
       "Notícies d'economia per a llegir amb els models del curs. Primer, les comentades a classe; després, els titulars de diversos mitjans, de línies editorials diferents: compara com conta cadascun la mateixa notícia.")
     t(tx, "ac.com", "Comentadas en clase", "Comentades a classe")
-    t(tx, "ac.nocom", "Todavía no hay noticias comentadas.", "Encara no hi ha notícies comentades.")
+    t(tx, "ac.nocom", "Aquí aparecerán las noticias que comentemos en clase.", "Ací apareixeran les notícies que comentem a classe.")
     t(tx, "ac.tit", "Titulares de economía", "Titulars d'economia")
     t(tx, "ac.titd", "Se actualizan solos a partir de los canales públicos de cada medio. Solo se muestran el titular y el enlace: la noticia completa está en la web del medio.",
       "S'actualitzen sols a partir dels canals públics de cada mitjà. Només es mostren el titular i l'enllaç: la notícia completa està en la web del mitjà.")
     t(tx, "ac.pq", "Para pensar", "Per a pensar")
+    t(tx, "ac.titdoc", "Titulares de hoy en varios medios (para el docente)", "Titulars de hui en diversos mitjans (per al docent)")
     t(tx, "ac.leer", "Leer la noticia", "Llegir la notícia")
     t(tx, "ac.vacio", "Sin titulares recientes.", "Sense titulars recents.")
     t(tx, "ac.act", "Actualizado: {f}", "Actualitzat: {f}")
@@ -341,7 +342,7 @@ def actualidad(vault_dir):
         preg = f'<p class="act-pregunta"><strong data-i18n="ac.pq">Para pensar</strong>: {esc(c["pregunta"])}</p>' if c["pregunta"] else ""
         return f'<article class="act-destacada">{meta}<h3>{titulo}</h3>{c["html"]}{preg}</article>'
 
-    coms = "\n".join(bloque_comentada(c, i == 0) for i, c in enumerate(comentadas)) or '<p class="small" data-i18n="ac.nocom">Todavía no hay noticias comentadas.</p>'
+    coms = "\n".join(bloque_comentada(c, i == 0) for i, c in enumerate(comentadas)) or '<p class="small" data-i18n="ac.nocom">Aquí aparecerán las noticias que comentemos en clase.</p>'
     fuentes = []
     for f in titulares:
         lis = "".join(f'<li><a href="{esc(i["enlace"])}" target="_blank" rel="noopener nofollow">{esc(i["titulo"])}</a>'
@@ -357,13 +358,13 @@ def actualidad(vault_dir):
     <h2 data-i18n="ac.com">Comentadas en clase</h2>
 {coms}
   </section>
-  <section class="obs-fase">
-    <h2 data-i18n="ac.tit">Titulares de economía</h2>
+  <details class="obs-fase act-titulares">
+    <summary data-i18n="ac.titdoc">Titulares de hoy en varios medios (para el docente)</summary>
     <p class="small"><span data-i18n="ac.titd"></span> <span class="act-cuando" data-generado="{esc(ahora)}"></span></p>
     <div class="act-fuentes">
 {chr(10).join(fuentes)}
     </div>
-  </section>
+  </details>
   <script>
   // Fechas en el formato y el idioma del lector
   (function () {{
@@ -497,9 +498,12 @@ for clave, sa in SAS.items():
             k = int(sm.get("sesion", 0))
             t(textos, f"s{k}.t", sm.get("titulo", ""), sm.get("titulo_va", ""))
             ok = publicada(sm, sc)
-            lis.append(f'    <li><a class="row" href="{nombre_sesion(sm)}"><span class="num">S{k}</span>'
+            # Desde el 25/11/2026 las sesiones sin apunte publicado se listan sin enlace (no llevan a una página vacía)
+            etiqueta = "a" if ok else "div"
+            destino = f' href="{nombre_sesion(sm)}"' if ok else ""
+            lis.append(f'    <li><{etiqueta} class="row{"" if ok else " sin"}"{destino}><span class="num">S{k}</span>'
                        f'<span><span class="t" data-i18n="s{k}.t">{esc(sm.get("titulo", ""))}</span></span>'
-                       f'<span class="state" data-i18n="{"st.read" if ok else "st.soon"}">{"leer" if ok else "en elaboración"}</span></a></li>')
+                       f'<span class="state" data-i18n="{"st.read" if ok else "st.soon"}">{"leer" if ok else "en elaboración"}</span></{etiqueta}></li>')
         t(textos, f"f{f}", f"{f} · {fes}", f"{f} · {fva}")
         filas.append(f'  <section class="obs-fase">\n    <h2 data-i18n="f{f}">{f} · {esc(fes)}</h2>\n    <ol class="sa">\n' + "\n".join(lis) + "\n    </ol>\n  </section>")
     intro = md_a_html(sa["cuerpo"]) if tiene_texto(sa["cuerpo"]) else ""
@@ -570,11 +574,13 @@ for clave, sa in SAS.items():
     indice.append(f'<li><a href="#{clave}" data-i18n="{clave}.t">SA {n} · {esc(m.get("titulo", ""))}</a></li>')
     bloques = []
     for sm, sc in sa["sesiones"]:
+        if not publicada(sm, sc):
+            continue  # desde el 25/11/2026 el libro solo enseña los apuntes publicados
         k = int(sm.get("sesion", 0))
         t(tx, f"{clave}.s{k}", f"Sesión {k} · {sm.get('titulo', '')}", f"Sessió {k} · {sm.get('titulo_va') or sm.get('titulo', '')}")
         txt = md_a_html(sc) if publicada(sm, sc) else '<p class="small" data-i18n="lb.soon">En elaboración.</p>'
         bloques.append(f'<section class="lb-sesion"><h3 data-i18n="{clave}.s{k}">Sesión {k} · {esc(sm.get("titulo", ""))}</h3>\n<div class="obs-texto">{txt}</div></section>')
-    partes.append(f'<section class="lb-sa" id="{clave}"><h2 data-i18n="{clave}.t">SA {n} · {esc(m.get("titulo", ""))}</h2>\n' + "\n".join(bloques) + "</section>")
+    partes.append(f'<section class="lb-sa" id="{clave}"><h2 data-i18n="{clave}.t">SA {n} · {esc(m.get("titulo", ""))}</h2>\n' + ("\n".join(bloques) or '<p class="small" data-i18n="lb.soon">En elaboración.</p>') + "</section>")
 cuerpo = f"""  <header class="top">
     <span class="eyebrow" data-i18n="lb.eyebrow">Economía · 1.º de Bachillerato</span>
     <h1 data-i18n="lb.title">Libro del alumnado</h1>
