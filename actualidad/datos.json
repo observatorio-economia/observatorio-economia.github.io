@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-25T20:48:28.136359+00:00",
+ "generado": "2026-11-25T21:19:30.406612+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,7 +33,7 @@
      "fecha": "2026-11-25T12:16:51+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:22.899599+00:00"
+   "leido": "2026-11-25T21:19:24.176401+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,12 +65,17 @@
      "fecha": "2026-11-25T08:25:29+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:23.944255+00:00"
+   "leido": "2026-11-25T21:19:25.190077+00:00"
   },
   {
    "nombre": "Invertia · El Español",
    "salmon": true,
    "items": [
+    {
+     "titulo": "\"Han habilitado camas en el salón de actos del hospital\": la migración masiva desborda la sanidad en El Hierro",
+     "enlace": "https://www.elespanol.com/invertia/observatorios/sanidad/20261125/habilitado-camas-salon-actos-hospital-migracion-masiva-desborda-sanidad-hierro/1003744472416_0.html",
+     "fecha": "2026-11-25T19:24:32+00:00"
+    },
     {
      "titulo": "La CNMV da luz verde a un nuevo mercado organizado para derivados energéticos",
      "enlace": "https://www.elespanol.com/invertia/mercados/20261125/cnmv-autoriza-nuevo-sistema-soc-negociar-derivados-subyacentes-energeticos/1003744472437_0.html",
@@ -90,14 +95,9 @@
      "titulo": "Ibercaja abrirá más centros de empresas para defenderse de los neobancos",
      "enlace": "https://www.elespanol.com/invertia/empresas/banca/20261125/ibercaja-abrira-centros-empresas-defenderse-neobancos/1003744472395_0.html",
      "fecha": "2026-11-25T17:30:23+00:00"
-    },
-    {
-     "titulo": "Santander reorganiza su banca corporativa y de inversión y pone a Felipe Portillo al frente de España y Europa",
-     "enlace": "https://www.elespanol.com/invertia/empresas/banca/20261125/santander-reorganiza-banca-corporativa-inversion-pone-felipe-portillo-frente-espana-europa/1003744472138_0.html",
-     "fecha": "2026-11-25T15:45:15+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:24.441293+00:00"
+   "leido": "2026-11-25T21:19:25.763040+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:25.233097+00:00"
+   "leido": "2026-11-25T21:19:26.956051+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,12 +141,27 @@
      "fecha": "2026-11-25T08:25:29+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:25.817720+00:00"
+   "leido": "2026-11-25T21:19:27.750570+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Los impagos de una subcontrata afectan a trabajadores de polideportivos de toda España: “Esto no es normal\"",
+     "enlace": "https://www.eldiario.es/economia/impagos-subcontrata-afectan-trabajadores-polideportivos-espana-no-normal_1_13689796.html",
+     "fecha": "2026-11-25T21:08:51+00:00"
+    },
+    {
+     "titulo": "España tiene medio millón de pisos más en alquiler que en 2018: la cifra que desmiente al PP y a las patronales",
+     "enlace": "https://www.eldiario.es/economia/espana-medio-millon-pisos-alquiler-cifra-desmiente-pp-patronales_1_13693142.html",
+     "fecha": "2026-11-25T21:08:48+00:00"
+    },
+    {
+     "titulo": "Los 27 chocan por el presupuesto europeo en una cumbre que designará a Hernández de Cos como presidente del BCE",
+     "enlace": "https://www.eldiario.es/economia/27-chocan-presupuesto-europeo-cumbre-designara-hernandez-cos-presidente-bce_1_13692828.html",
+     "fecha": "2026-11-25T21:08:47+00:00"
+    },
     {
      "titulo": "El Banco de España entrega a la justicia lo que pagó a la banca por sus depósitos y Sumar exige acceso \"inmediato”",
      "enlace": "https://www.eldiario.es/economia/banco-espana-entrega-justicia-pago-banca-depositos-sumar-exige-acceso-inmediato_1_13692955.html",
@@ -156,24 +171,9 @@
      "titulo": "El Corte Inglés da luz verde a su plan estratégico e invertirá hasta 5.000 millones en el periodo 2027-2032",
      "enlace": "https://www.eldiario.es/economia/corte-ingles-da-luz-verde-plan-estrategico-e-invertira-5-000-millones-periodo-2027-2032_1_13692940.html",
      "fecha": "2026-11-25T14:49:59+00:00"
-    },
-    {
-     "titulo": "Bruselas amplía el plazo para que los países mantengan las ayudas por la guerra de Irán hasta junio de 2027",
-     "enlace": "https://www.eldiario.es/economia/bruselas-amplia-plazo-paises-mantengan-ayudas-guerra-iran-junio-2027_1_13692554.html",
-     "fecha": "2026-11-25T14:00:10+00:00"
-    },
-    {
-     "titulo": "El salario medio aumentó un 4,7% en 2025 hasta rozar los 2.500 euros, pero con más brecha entre hombres y mujeres",
-     "enlace": "https://www.eldiario.es/economia/salario-medio-aumento-4-7-2025-rozar-2-500-euros-brecha-hombres-mujeres_1_13692301.html",
-     "fecha": "2026-11-25T13:22:46+00:00"
-    },
-    {
-     "titulo": "Las 20 semanas del permiso por nacimiento y los 10 días por duelo entran en vigor este jueves",
-     "enlace": "https://www.eldiario.es/economia/20-semanas-permiso-nacimiento-10-dias-duelo-entran-vigor-jueves_1_13691325.html",
-     "fecha": "2026-11-25T10:01:26+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:26.385174+00:00"
+   "leido": "2026-11-25T21:19:28.588101+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,7 +205,7 @@
      "fecha": "2026-11-25T14:53:21+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:26.974192+00:00"
+   "leido": "2026-11-25T21:19:29.151570+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,7 +237,7 @@
      "fecha": "2026-11-25T15:01:16+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:27.735786+00:00"
+   "leido": "2026-11-25T21:19:29.947782+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -269,7 +269,7 @@
      "fecha": "2026-11-25T16:17:56+00:00"
     }
    ],
-   "leido": "2026-11-25T20:48:28.136310+00:00"
+   "leido": "2026-11-25T21:19:30.406569+00:00"
   }
  ]
 }

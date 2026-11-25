@@ -346,12 +346,12 @@ window.OBS = (() => {
     // el escenario descrito es el del bloque visible (si lo hay)
     const vis = [...document.querySelectorAll(".obs-esc")].find(d => d.offsetParent !== null);
     const esc = vis && vis._obsEsc ? vis._obsEsc.describeActual() : "";
-    head.replaceChildren(
+    head.replaceChildren(...[
       h("div", { class: "obs-ph-top" }, h("span", { text: eyebrow }), h("span", { text: new Date().toLocaleDateString(lang === "va" ? "ca-ES" : "es-ES") })),
       h("div", { class: "obs-ph-h", text: titulo + (tab ? " · " + [...tab.childNodes].map(n => n.textContent.trim()).filter(Boolean).join(" ").replace(/\s+/g, " ") : "") }),
       conResultados ? null : h("div", { class: "obs-ph-campos" }, h("span", { text: t("obs.pr.nombre") + ":" }), h("span", { text: t("obs.pr.equipo") + ":" })),
       esc ? h("p", { class: "obs-ph-esc", text: t("obs.pr.esc") + ": " + esc }) : null,
-      conResultados ? null : h("p", { class: "obs-ph-ayuda", text: t("obs.pr.help") }));
+      conResultados ? null : h("p", { class: "obs-ph-ayuda", text: t("obs.pr.help") })].filter(Boolean));
     document.querySelectorAll("[data-obs-result]").forEach(r => r.setAttribute("data-obs-pred", t("obs.pr.pred")));
     document.body.classList.toggle("obs-print-ficha", !conResultados);
     document.body.classList.add("obs-printing");

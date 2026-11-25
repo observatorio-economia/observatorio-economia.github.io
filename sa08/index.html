@@ -227,7 +227,7 @@ body.obs-proj header.top { padding-block: 8px 4px !important; }
 body.obs-proj header.top h1 { font-size: 28px !important; }
 
 /* ===== Apertura (25/11/2026): «Antes de ver», «Escenarios propios» e «Imprimir ficha» ===== */
-.obs-velo-on .obs-velado [data-obs-result] { filter: blur(10px) grayscale(.7); opacity: .45; pointer-events: none; user-select: none; transition: filter .25s, opacity .25s; }
+.obs-velo-on .obs-velado [data-obs-result], body.obs-velo-on.obs-velado [data-obs-result] { filter: blur(10px) grayscale(.7); opacity: .45; pointer-events: none; user-select: none; transition: filter .25s, opacity .25s; }
 .obs-velo-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; border: 2px dashed var(--accent); background: var(--accent-soft); padding: 12px 16px; margin: 6px 0; }
 .obs-velo-bar[hidden] { display: none !important; }
 .obs-velo-bar p { margin: 0; flex: 1 1 18em; font-family: var(--font-read); font-size: 17px; color: var(--ink); }
@@ -264,7 +264,7 @@ details.obs-esc > * + * { margin-top: 8px; }
   .wrap { max-width: none !important; padding: 0 !important; }
   .obs-bar, .obs-docente, details.obs-esc, nav.obs-menu, .obs-menu, footer.obs-pie, .obs-pie, nav.tabs, .obs-velo-bar, .tip,
   button, .btn, header.top { display: none !important; }
-  .obs-velo-on .obs-velado [data-obs-result] { filter: none !important; opacity: 1 !important; }
+  .obs-velo-on .obs-velado [data-obs-result], body.obs-velo-on.obs-velado [data-obs-result] { filter: none !important; opacity: 1 !important; }
   .obs-print-head { display: block !important; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 8px; }
   .obs-ph-top { display: flex; justify-content: space-between; font: 9pt var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
   .obs-ph-h { font: 700 15pt var(--font-display); text-transform: uppercase; margin: 4px 0; }
@@ -714,12 +714,12 @@ window.OBS = (() => {
     // el escenario descrito es el del bloque visible (si lo hay)
     const vis = [...document.querySelectorAll(".obs-esc")].find(d => d.offsetParent !== null);
     const esc = vis && vis._obsEsc ? vis._obsEsc.describeActual() : "";
-    head.replaceChildren(
+    head.replaceChildren(...[
       h("div", { class: "obs-ph-top" }, h("span", { text: eyebrow }), h("span", { text: new Date().toLocaleDateString(lang === "va" ? "ca-ES" : "es-ES") })),
       h("div", { class: "obs-ph-h", text: titulo + (tab ? " · " + [...tab.childNodes].map(n => n.textContent.trim()).filter(Boolean).join(" ").replace(/\s+/g, " ") : "") }),
       conResultados ? null : h("div", { class: "obs-ph-campos" }, h("span", { text: t("obs.pr.nombre") + ":" }), h("span", { text: t("obs.pr.equipo") + ":" })),
       esc ? h("p", { class: "obs-ph-esc", text: t("obs.pr.esc") + ": " + esc }) : null,
-      conResultados ? null : h("p", { class: "obs-ph-ayuda", text: t("obs.pr.help") }));
+      conResultados ? null : h("p", { class: "obs-ph-ayuda", text: t("obs.pr.help") })].filter(Boolean));
     document.querySelectorAll("[data-obs-result]").forEach(r => r.setAttribute("data-obs-pred", t("obs.pr.pred")));
     document.body.classList.toggle("obs-print-ficha", !conResultados);
     document.body.classList.add("obs-printing");
@@ -883,7 +883,7 @@ window.OBS = (() => {
       "c.note.up": "Con {a} de {y1} se compra lo mismo que con {b} de {y0}. Dicho de otro modo: el dinero de {y0} ha perdido {p} de su poder de compra.",
       "c.note.down": "Entre {y0} y {y1} los precios bajaron: con el mismo dinero se compra algo más.",
       "c.note.same": "Elige dos años distintos.",
-      "c.f1": "Lo que valen {a} de {y0}, año a año", "c.f1aria": "Cantidad necesaria cada año para comprar lo mismo", "c.leg1": "Lo que hace falta cada año para comprar lo mismo",
+      "c.marks": "Fechas históricas en los gráficos", "c.f1": "Lo que valen {a} de {y0}, año a año", "c.f1aria": "Cantidad necesaria cada año para comprar lo mismo", "c.leg1": "Lo que hace falta cada año para comprar lo mismo",
       "c.f2": "Inflación de cada año", "c.f2aria": "Variación anual de la media del IPC", "c.leg2": "Subida de la media anual del IPC", "c.leg3": "Año más alto del periodo",
       "c.year": "Año {y}", "c.need": "Hace falta", "c.infl": "Inflación", "c.ax.y": "Euros", "c.ax.p": "% anual",
       "b.h": "Cada familia tiene su propia inflación",
@@ -917,7 +917,7 @@ window.OBS = (() => {
       "c.note.up": "Amb {a} de {y1} es compra el mateix que amb {b} de {y0}. Dit d'una altra manera: els diners de {y0} han perdut {p} del seu poder de compra.",
       "c.note.down": "Entre {y0} i {y1} els preus van baixar: amb els mateixos diners es compra un poc més.",
       "c.note.same": "Tria dos anys diferents.",
-      "c.f1": "El que valen {a} de {y0}, any a any", "c.f1aria": "Quantitat necessària cada any per a comprar el mateix", "c.leg1": "El que cal cada any per a comprar el mateix",
+      "c.marks": "Dates històriques en els gràfics", "c.f1": "El que valen {a} de {y0}, any a any", "c.f1aria": "Quantitat necessària cada any per a comprar el mateix", "c.leg1": "El que cal cada any per a comprar el mateix",
       "c.f2": "Inflació de cada any", "c.f2aria": "Variació anual de la mitjana de l'IPC", "c.leg2": "Pujada de la mitjana anual de l'IPC", "c.leg3": "Any més alt del període",
       "c.year": "Any {y}", "c.need": "Cal", "c.infl": "Inflació", "c.ax.y": "Euros", "c.ax.p": "% anual",
       "b.h": "Cada família té la seua pròpia inflació",
