@@ -337,6 +337,68 @@ body.obs-proj p.help, body.obs-proj .lede, body.obs-proj .obs-pie { display: non
 body.obs-proj header.top { padding-block: 8px 4px !important; }
 body.obs-proj header.top h1 { font-size: 28px !important; }
 
+/* ===== Apertura (25/11/2026): «Antes de ver», «Escenarios propios» e «Imprimir ficha» ===== */
+.obs-velo-on .obs-velado [data-obs-result] { filter: blur(10px) grayscale(.7); opacity: .45; pointer-events: none; user-select: none; transition: filter .25s, opacity .25s; }
+.obs-velo-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; border: 2px dashed var(--accent); background: var(--accent-soft); padding: 12px 16px; margin: 6px 0; }
+.obs-velo-bar[hidden] { display: none !important; }
+.obs-velo-bar p { margin: 0; flex: 1 1 18em; font-family: var(--font-read); font-size: 17px; color: var(--ink); }
+.obs-velo-bar.destapado { border: 0; background: transparent; padding: 0; margin: 0; justify-content: flex-end; }
+.obs-velo-bar.destapado .btn { font-size: 11px; padding: 4px 10px; }
+body.obs-proj .obs-velo-bar p { font-size: 22px; }
+.obs-apertura { display: flex; flex-direction: column; gap: 8px; }
+.obs-apertura__fila { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 14px; }
+.obs-apertura select { font: 14px var(--font-body); padding: 4px 8px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); }
+details.obs-esc { border: 1px solid var(--rule); background: var(--paper); padding: 10px 14px; margin: 10px 0; font-size: 14px; }
+details.obs-esc > summary { cursor: pointer; font-family: var(--font-mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+details.obs-esc[open] > summary { margin-bottom: 10px; }
+details.obs-esc > * + * { margin-top: 8px; }
+.obs-esc__fila { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-esc__fila input[type="text"] { font: 14px var(--font-body); padding: 6px 8px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); min-width: 14em; flex: 1 1 14em; }
+.obs-esc__lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.obs-esc__lista li { display: grid; grid-template-columns: minmax(0, 12em) minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; border-top: 1px solid var(--grid); padding-top: 6px; }
+.obs-esc__acc { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+.obs-esc__tag { font-family: var(--font-mono); font-size: 11px; color: var(--accent); margin-right: 6px; text-transform: uppercase; letter-spacing: .08em; }
+.obs-esc__cod { font-family: var(--font-mono); font-size: 12px; color: var(--muted); user-select: all; word-break: break-all; }
+.obs-esc__cod.grande { font-size: 15px; color: var(--ink); background: var(--bg); padding: 3px 8px; border: 1px solid var(--rule); }
+.obs-esc__estado.malo { color: var(--bad); }
+.obs-esc__tabla { border-collapse: collapse; font-size: 13px; }
+.obs-esc__tabla th, .obs-esc__tabla td { border-bottom: 1px solid var(--grid); padding: 4px 10px; text-align: right; white-space: nowrap; }
+.obs-esc__tabla th:first-child { text-align: left; }
+.obs-esc__cmp { overflow-x: auto; max-width: 100%; }
+.obs-esc__tabla thead th { white-space: normal; min-width: 7em; max-width: 12em; vertical-align: bottom; }
+@media (max-width: 640px) { .obs-esc__lista li { grid-template-columns: minmax(0, 1fr); } .obs-esc__acc { justify-content: flex-start; } }
+.obs-print-head { display: none; }
+@media print {
+  @page { size: A4; margin: 12mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body { font-size: 10.5pt; }
+  .wrap { max-width: none !important; padding: 0 !important; }
+  .obs-bar, .obs-docente, details.obs-esc, nav.obs-menu, .obs-menu, footer.obs-pie, .obs-pie, nav.tabs, .obs-velo-bar, .tip,
+  button, .btn, header.top { display: none !important; }
+  .obs-velo-on .obs-velado [data-obs-result] { filter: none !important; opacity: 1 !important; }
+  .obs-print-head { display: block !important; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 8px; }
+  .obs-ph-top { display: flex; justify-content: space-between; font: 9pt var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+  .obs-ph-h { font: 700 15pt var(--font-display); text-transform: uppercase; margin: 4px 0; }
+  .obs-ph-campos { display: flex; gap: 24px; margin: 6px 0; }
+  .obs-ph-campos span { flex: 1; border-bottom: 1px solid #000; padding-bottom: 14px; }
+  .obs-ph-esc, .obs-ph-ayuda { margin: 4px 0; font-size: 9.5pt; }
+  figure, .world, .rule, .stats, .notice, table { break-inside: avoid; }
+  svg.chart { max-height: 70mm; }
+  details > *:not(summary) { display: block; }
+  /* Ficha: los resultados quedan en blanco, con sitio para escribir la predicción; en los gráficos se quedan los ejes */
+  body.obs-print-ficha [data-obs-result]:not(figure) { position: relative; min-height: 22mm; border: 1px dashed #555; }
+  body.obs-print-ficha [data-obs-result]:not(figure) > * { visibility: hidden; }
+  body.obs-print-ficha [data-obs-result]:not(figure)::before { content: attr(data-obs-pred); position: absolute; top: 2mm; left: 3mm; font: 8.5pt var(--font-mono); color: #555; text-transform: uppercase; letter-spacing: .06em; }
+  body.obs-print-ficha figure[data-obs-result] svg [clip-path], body.obs-print-ficha figure[data-obs-result] svg .dot,
+  body.obs-print-ficha figure[data-obs-result] svg .lbl, body.obs-print-ficha figure[data-obs-result] svg .hover-line { visibility: hidden; }
+  body.obs-print-ficha figure[data-obs-result] .share, body.obs-print-ficha figure[data-obs-result] .fstats { visibility: hidden; }
+  body.obs-print-ficha details[data-obs-result] { display: none !important; }
+}
+/* Marcas de fechas sobre las series (25/11/2026) */
+.obs-marca line { stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.obs-marca rect { fill: var(--accent); opacity: .1; }
+.obs-marca text { font: 500 11px var(--font-mono); fill: var(--accent); }
+body.obs-proj .obs-marca text { font-size: 14px; }
 
 /* OBS-COMMON-CSS:END */
 </style>
@@ -359,7 +421,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
   <!-- ===================== 1 · COMPETENCIA PERFECTA ===================== -->
   <section class="view" id="view-perfecta" role="tabpanel" aria-labelledby="tab-perfecta">
 
-    <div class="block" id="firm-block">
+    <div class="block" id="firm-block" data-obs-scope>
       <div class="prose">
         <span class="eyebrow" data-i18n="f.eyebrow">1a · La empresa</span>
         <h2 data-i18n="f.h2">¿Cuántas toneladas le conviene vender?</h2>
@@ -375,14 +437,14 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           <input type="range" id="f-q" min="0" max="8" step="0.1" value="3">
         </div>
       </div>
-      <div class="stats" id="f-stats"></div>
-      <div class="state" id="f-state" aria-live="polite"></div>
-      <div class="actions">
+      <div class="stats" id="f-stats" data-obs-result></div>
+      <div class="state" id="f-state" aria-live="polite" data-obs-result></div>
+      <div class="actions" data-obs-result>
         <button type="button" class="btn ghost" id="f-best" data-i18n="f.best">Mostrar la mejor cantidad</button>
         <button type="button" class="btn quiet" id="f-go" hidden data-i18n="f.go">Vender esa cantidad</button>
       </div>
-      <div class="notice" id="f-rule" hidden></div>
-      <figure>
+      <div class="notice" id="f-rule" hidden data-obs-result></div>
+      <figure data-obs-result>
         <figcaption data-i18n="f.fig">Costes por tonelada y precio</figcaption>
         <div class="legend">
           <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">Coste marginal (CMg)</span></span>
@@ -392,14 +454,14 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
         </div>
         <div class="plot"><svg class="chart" id="f-chart" viewBox="0 0 640 380" role="img" aria-label="Curvas de coste marginal, coste total medio y coste variable medio, con la línea del precio y el beneficio o la pérdida de la cantidad elegida" data-i18n-attr="aria-label:aria.f"></svg><div class="tip" id="f-tip" hidden></div></div>
       </figure>
-      <details>
+      <details data-obs-result>
         <summary data-i18n="f.tabla">Ver la tabla de costes</summary>
         <div class="scroll"><table id="f-table"></table></div>
         <p class="small" style="margin-top:8px" data-i18n="f.tablanota">Coste fijo de 640 € a la semana (tierra, maquinaria, seguros). El coste marginal de la tabla es el de la última fracción de tonelada en ese punto.</p>
       </details>
     </div>
 
-    <div class="block" id="market-block">
+    <div class="block" id="market-block" data-obs-scope>
       <div class="prose">
         <span class="eyebrow" data-i18n="m.eyebrow">1b · El mercado</span>
         <h2 data-i18n="m.h2">¿Qué pasa cuando entran más explotaciones?</h2>
@@ -412,10 +474,10 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
         <button type="button" class="btn ghost" id="m-down" data-i18n="m.down">Baja la demanda</button>
         <button type="button" class="btn quiet" id="m-reset" data-i18n="m.reset">Volver a empezar</button>
       </div>
-      <div class="stats" id="m-stats"></div>
-      <div class="notice" id="m-note" aria-live="polite"></div>
+      <div class="stats" id="m-stats" data-obs-result></div>
+      <div class="notice" id="m-note" aria-live="polite" data-obs-result></div>
       <div class="charts">
-        <figure>
+        <figure data-obs-result>
           <figcaption data-i18n="m.fig1">El mercado</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.demanda">Demanda</span></span>
@@ -423,7 +485,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           </div>
           <div class="plot"><svg class="chart" id="m-chart" viewBox="0 0 640 380" role="img" aria-label="Oferta y demanda del mercado de naranjas" data-i18n-attr="aria-label:aria.m"></svg><div class="tip" id="m-tip" hidden></div></div>
         </figure>
-        <figure>
+        <figure data-obs-result>
           <figcaption data-i18n="m.fig2">Una explotación</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--s1)"></i>CMg</span>
@@ -433,7 +495,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           <div class="plot"><svg class="chart" id="m-firm" viewBox="0 0 640 380" role="img" aria-label="Costes de una explotación y precio del mercado" data-i18n-attr="aria-label:aria.mf"></svg><div class="tip" id="m-firm-tip" hidden></div></div>
         </figure>
       </div>
-      <details open>
+      <details open data-obs-result>
         <summary data-i18n="m.hist">Semana a semana</summary>
         <div class="scroll"><table id="m-hist"></table></div>
       </details>
@@ -443,7 +505,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
   <!-- ===================== 2 · COMPETENCIA IMPERFECTA ===================== -->
   <section class="view" id="view-imperfecta" role="tabpanel" aria-labelledby="tab-imperfecta" hidden>
 
-    <div class="block" id="mono-block">
+    <div class="block" id="mono-block" data-obs-scope>
       <div class="prose">
         <span class="eyebrow" data-i18n="mo.eyebrow">2a · Monopolio</span>
         <h2 data-i18n="mo.h2">¿Qué precio le conviene fijar?</h2>
@@ -459,14 +521,14 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           <input type="range" id="mo-c" min="5" max="60" step="1" value="20">
         </div>
       </div>
-      <div class="stats" id="mo-stats"></div>
-      <div class="actions">
+      <div class="stats" id="mo-stats" data-obs-result></div>
+      <div class="actions" data-obs-result>
         <button type="button" class="btn ghost" id="mo-best" data-i18n="mo.best">Mostrar el mejor precio</button>
         <button type="button" class="btn quiet" id="mo-go" hidden data-i18n="mo.go">Fijar ese precio</button>
         <label class="check"><input type="checkbox" id="mo-cmp"><span data-i18n="mo.cmp"> Comparar con competencia perfecta</span></label>
       </div>
-      <div class="notice" id="mo-rule" hidden></div>
-      <figure>
+      <div class="notice" id="mo-rule" hidden data-obs-result></div>
+      <figure data-obs-result>
         <figcaption data-i18n="mo.fig">Demanda, ingreso marginal y coste</figcaption>
         <div class="legend">
           <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.demanda">Demanda</span></span>
@@ -478,7 +540,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
         </div>
         <div class="plot"><svg class="chart" id="mo-chart" viewBox="0 0 640 380" role="img" aria-label="Demanda, ingreso marginal y coste marginal del monopolio, con el beneficio, el excedente del consumidor y la pérdida irrecuperable" data-i18n-attr="aria-label:aria.mo"></svg><div class="tip" id="mo-tip" hidden></div></div>
       </figure>
-      <details>
+      <details data-obs-result>
         <summary data-i18n="mo.tabla">Ver la tabla de precios</summary>
         <div class="scroll"><table id="mo-table"></table></div>
         <p class="small" style="margin-top:8px" data-i18n="mo.tablanota">Sin costes fijos, para simplificar. Cantidades en miles de cajas al mes; ingresos, costes y beneficios en miles de euros al mes.</p>
@@ -512,7 +574,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
 
   <!-- ===================== 3 · COMPETENCIA REAL ===================== -->
   <section class="view" id="view-real" role="tabpanel" aria-labelledby="tab-real" hidden>
-    <div class="block" id="cmp-block">
+    <div class="block" id="cmp-block" data-obs-scope>
       <div class="prose">
         <span class="eyebrow" data-i18n="c.eyebrow">3a · Dos formas de dibujar los costes</span>
         <h2 data-i18n="c.h2">¿Qué cambia si el coste marginal no sube?</h2>
@@ -526,11 +588,11 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
         </div>
       </div>
       <div class="duo-head">
-        <div class="rule" id="c-res-perf"></div>
-        <div class="rule" id="c-res-real"></div>
+        <div class="rule" id="c-res-perf" data-obs-result></div>
+        <div class="rule" id="c-res-real" data-obs-result></div>
       </div>
       <div class="duo">
-        <figure>
+        <figure data-obs-result>
           <figcaption data-i18n="c.f1">Competencia perfecta · costes por unidad</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--s1)"></i>CMg</span>
@@ -539,7 +601,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           </div>
           <div class="plot"><svg class="chart" id="c-u-perf" role="img" aria-label="Costes por unidad con coste marginal creciente" data-i18n-attr="aria-label:aria.c1"></svg><div class="tip" id="c-u-perf-tip" hidden></div></div>
         </figure>
-        <figure>
+        <figure data-obs-result>
           <figcaption data-i18n="c.f2">Competencia real · costes por unidad</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmgplano">CMg (plano hasta la capacidad)</span></span>
@@ -548,7 +610,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           </div>
           <div class="plot"><svg class="chart" id="c-u-real" role="img" aria-label="Costes por unidad con coste marginal constante" data-i18n-attr="aria-label:aria.c2"></svg><div class="tip" id="c-u-real-tip" hidden></div></div>
         </figure>
-        <figure>
+        <figure data-obs-result>
           <figcaption data-i18n="c.f3">Competencia perfecta · ingresos y costes totales</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.it">Ingreso total</span></span>
@@ -557,7 +619,7 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           </div>
           <div class="plot"><svg class="chart" id="c-t-perf" role="img" aria-label="Ingreso total recto y coste total curvo" data-i18n-attr="aria-label:aria.c3"></svg><div class="tip" id="c-t-perf-tip" hidden></div></div>
         </figure>
-        <figure>
+        <figure data-obs-result>
           <figcaption data-i18n="c.f4">Competencia real · ingresos y costes totales</figcaption>
           <div class="legend">
             <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.it">Ingreso total</span></span>
@@ -571,12 +633,26 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
       <p class="small" data-i18n="c.foot">La idea de partida es la crítica de Sraffa (1926) a los rendimientos decrecientes; el coste marginal constante lo usan Shaikh y los postkeynesianos (por ejemplo, Lavoie). Cifras del ejemplo, inventadas para el aula.</p>
     </div>
 
-    <div class="block" id="war-block">
+    <div class="block" id="war-block" data-obs-scope>
       <div class="prose">
         <span class="eyebrow" data-i18n="w.eyebrow">3b · Dos empresas, 20 semanas</span>
         <h2 data-i18n="w.h2">¿Conviven o se hacen la guerra?</h2>
         <p data-i18n-html="w.p">Las mismas dos empresas en los dos mundos. <strong>B</strong> tiene una técnica más moderna: produce cada unidad más barata, pero necesitó más maquinaria y tiene más coste fijo. Arrastra las semanas o pulsa «Reproducir».</p>
       </div>
+      <details class="war-params" id="w-params">
+        <summary data-i18n="wp.h">Parámetros del escenario</summary>
+        <p class="small" data-i18n="wp.help">Con los valores de partida, la herramienta da exactamente lo mismo que antes. Cambiadlos para probar el escenario de un equipo.</p>
+        <div class="params">
+          <div class="field"><label for="wp-res" data-i18n="wp.res">Reservas iniciales de cada empresa (€)</label><input type="number" id="wp-res" min="0" max="2000" step="50" value="400"></div>
+          <div class="field"><label for="wp-fa" data-i18n="wp.fa">Coste fijo de A (€ a la semana)</label><input type="number" id="wp-fa" min="100" max="400" step="10" value="200"></div>
+          <div class="field"><label for="wp-fb" data-i18n="wp.fb">Coste fijo de B (€ a la semana)</label><input type="number" id="wp-fb" min="100" max="400" step="10" value="260"></div>
+          <div class="field"><label for="wp-ca" data-i18n="wp.ca">Competencia real: coste por unidad de A (€)</label><input type="number" id="wp-ca" min="8" max="20" step="0.5" value="15"></div>
+          <div class="field"><label for="wp-cb" data-i18n="wp.cb">Competencia real: coste por unidad de B (€)</label><input type="number" id="wp-cb" min="8" max="20" step="0.5" value="12"></div>
+          <div class="field"><label for="wp-cut" data-i18n="wp.cut">Competencia real: cuánto baja B su precio cada semana (€)</label><input type="number" id="wp-cut" min="0" max="2" step="0.1" value="0.5"></div>
+        </div>
+        <div class="actions"><button type="button" class="btn quiet small" id="wp-reset" data-i18n="wp.reset">Volver a los valores de partida</button></div>
+      </details>
+      <div id="w-esc"></div>
       <div class="timeline">
         <span class="wk" id="w-label">Semana 1</span>
         <div class="slider">
@@ -587,23 +663,23 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
       </div>
       <div class="world" id="w-perf">
         <h3><span data-i18n="w.compPerf"><span data-i18n="tab.1">Competencia perfecta</span></span> <span class="small" data-i18n="w.perfsub">las dos aceptan el precio del mercado</span></h3>
-        <div class="notice" id="w-perf-note" aria-live="polite"></div>
+        <div class="notice" id="w-perf-note" aria-live="polite" data-obs-result></div>
         <div class="duo">
-          <figure><figcaption>Empresa A</figcaption><div class="fstats" id="wp-a-stats"></div><div class="plot"><svg class="chart" id="wp-a" role="img" aria-label="Costes y precio de la empresa A en competencia perfecta" data-i18n-attr="aria-label:aria.wpa"></svg><div class="tip" id="wp-a-tip" hidden></div></div></figure>
-          <figure><figcaption>Empresa B</figcaption><div class="fstats" id="wp-b-stats"></div><div class="plot"><svg class="chart" id="wp-b" role="img" aria-label="Costes y precio de la empresa B en competencia perfecta" data-i18n-attr="aria-label:aria.wpb"></svg><div class="tip" id="wp-b-tip" hidden></div></div></figure>
+          <figure data-obs-result><figcaption>Empresa A</figcaption><div class="fstats" id="wp-a-stats"></div><div class="plot"><svg class="chart" id="wp-a" role="img" aria-label="Costes y precio de la empresa A en competencia perfecta" data-i18n-attr="aria-label:aria.wpa"></svg><div class="tip" id="wp-a-tip" hidden></div></div></figure>
+          <figure data-obs-result><figcaption>Empresa B</figcaption><div class="fstats" id="wp-b-stats"></div><div class="plot"><svg class="chart" id="wp-b" role="img" aria-label="Costes y precio de la empresa B en competencia perfecta" data-i18n-attr="aria-label:aria.wpb"></svg><div class="tip" id="wp-b-tip" hidden></div></div></figure>
         </div>
-        <div class="field"><span class="small" data-i18n="w.share">Cuota de mercado entre las dos</span><div class="share" id="wp-share"></div></div>
+        <div class="field" data-obs-result><span class="small" data-i18n="w.share">Cuota de mercado entre las dos</span><div class="share" id="wp-share"></div></div>
       </div>
       <div class="world" id="w-real">
         <h3><span data-i18n="w.compReal"><span data-i18n="tab.3">Competencia real</span></span> <span class="small" data-i18n="w.realsub">las dos fijan su precio y se disputan los clientes</span></h3>
-        <div class="notice" id="w-real-note" aria-live="polite"></div>
+        <div class="notice" id="w-real-note" aria-live="polite" data-obs-result></div>
         <div class="duo">
-          <figure><figcaption>Empresa A</figcaption><div class="fstats" id="wr-a-stats"></div><div class="plot"><svg class="chart" id="wr-a" role="img" aria-label="Costes y precio de la empresa A en competencia real" data-i18n-attr="aria-label:aria.wra"></svg><div class="tip" id="wr-a-tip" hidden></div></div></figure>
-          <figure><figcaption>Empresa B</figcaption><div class="fstats" id="wr-b-stats"></div><div class="plot"><svg class="chart" id="wr-b" role="img" aria-label="Costes y precio de la empresa B en competencia real" data-i18n-attr="aria-label:aria.wrb"></svg><div class="tip" id="wr-b-tip" hidden></div></div></figure>
+          <figure data-obs-result><figcaption>Empresa A</figcaption><div class="fstats" id="wr-a-stats"></div><div class="plot"><svg class="chart" id="wr-a" role="img" aria-label="Costes y precio de la empresa A en competencia real" data-i18n-attr="aria-label:aria.wra"></svg><div class="tip" id="wr-a-tip" hidden></div></div></figure>
+          <figure data-obs-result><figcaption>Empresa B</figcaption><div class="fstats" id="wr-b-stats"></div><div class="plot"><svg class="chart" id="wr-b" role="img" aria-label="Costes y precio de la empresa B en competencia real" data-i18n-attr="aria-label:aria.wrb"></svg><div class="tip" id="wr-b-tip" hidden></div></div></figure>
         </div>
-        <div class="field"><span class="small" data-i18n="w.share">Cuota de mercado entre las dos</span><div class="share" id="wr-share"></div></div>
+        <div class="field" data-obs-result><span class="small" data-i18n="w.share">Cuota de mercado entre las dos</span><div class="share" id="wr-share"></div></div>
       </div>
-      <figure>
+      <figure data-obs-result>
         <figcaption data-i18n="w.acc.h">Reservas: lo que cada empresa va acumulando</figcaption>
         <div class="legend">
           <span><i style="border-color:var(--s2)"></i><span data-i18n="w.acc.ra">A · competencia real</span></span>
@@ -612,9 +688,9 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
           <span><i class="dash" style="border-color:var(--s1)"></i><span data-i18n="w.acc.pb">B · competencia perfecta</span></span>
         </div>
         <div class="plot"><svg class="chart" id="w-acc" role="img" data-i18n-attr="aria-label:w.acc.h" aria-label="Reservas: lo que cada empresa va acumulando"></svg><div class="tip" id="w-acc-tip" hidden></div></div>
-        <p class="small" data-i18n="w.acc.p">Las reservas empiezan en 400 € y cada semana suman el beneficio o restan la pérdida.</p>
+        <p class="small" id="w-acc-p"></p>
       </figure>
-      <details>
+      <details data-obs-result>
         <summary data-i18n="m.hist">Semana a semana</summary>
         <div class="scroll"><table id="w-hist"></table></div>
       </details>
@@ -646,7 +722,12 @@ body.obs-proj header.top h1 { font-size: 28px !important; }
    OBS.onLang(fn)  · vuelve a dibujar lo que se genera con JavaScript al cambiar de idioma
    OBS.mountBar(el, {ficha})  · pinta «← Panel», idioma, modo proyector y la ficha docente
    OBS.download(nombre, texto, tipo, {downloads})  · descarga un archivo; si no se puede, lo copia
-   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español) */
+   OBS.csv(filas)  · convierte una tabla en texto CSV con punto y coma (Excel en español)
+   Apertura (25/11/2026), con OBS.mountBar(el, { apertura: true }):
+   OBS.velo.cubrir(el)  · «Antes de ver»: vuelve a tapar los resultados del bloque de «el»
+   OBS.escenarios(cfg)  · «Escenarios propios»: guardar, cargar, comparar y pasar por código
+   OBS.imprimir(conResultados)  · «Imprimir ficha» (resultados en blanco) o con resultados
+   OBS.marcas(svg, opciones)  · líneas o franjas con fechas históricas sobre una serie temporal */
 window.OBS = (() => {
   "use strict";
   const PANEL_URL = "../index.html";
@@ -692,6 +773,7 @@ window.OBS = (() => {
     proj = !!on; store.set("obs-proj", proj ? "1" : "0");
     document.body.classList.toggle("obs-proj", proj);
     document.querySelectorAll(".obs-toggle[data-proj]").forEach(b => b.setAttribute("aria-pressed", String(proj)));
+    if (aperturaOn) pintarVelo();
   }
   register({
     es: { "obs.back": "← Panel del Observatorio", "obs.lang": "Idioma", "obs.proj": "Modo proyector", "obs.ficha": "Ficha docente", "obs.docente": "Para el docente", "obs.sobre": "Sobre esta herramienta",
@@ -743,17 +825,35 @@ window.OBS = (() => {
     if (lede) panel.append(h("h2", { class: "obs-docente__h", "data-i18n": "obs.sobre", text: t("obs.sobre") }), lede);
     let fichaBox = null;
     if (opts.ficha) { fichaBox = h("div", { class: "obs-ficha" }); panel.append(fichaBox); renderFicha(fichaBox, opts.ficha); onLang(() => renderFicha(fichaBox, opts.ficha)); }
-    const hayPanel = !!(lede || opts.ficha);
+    let impr = null;
+    if (opts.apertura) {
+      aperturaOn = true;
+      const sel = h("select", { "aria-label": t("obs.velo.modo") },
+        ["proj", "on", "off"].map(m => h("option", { value: m, selected: m === veloModo ? true : null, text: t("obs.velo." + m) })));
+      sel.addEventListener("change", () => setVeloModo(sel.value));
+      const conRes = h("button", { type: "button", class: "obs-toggle", text: t("obs.pr.con") });
+      conRes.addEventListener("click", () => imprimir(true));
+      const caja = h("div", { class: "obs-apertura" }, h("h2", { class: "obs-docente__h", text: t("obs.apertura") }),
+        h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel), h("div", {}, conRes));
+      panel.append(caja);
+      onLang(() => { caja.querySelector("h2").textContent = t("obs.apertura"); caja.querySelector("label > span").textContent = t("obs.velo.modo");
+        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); });
+      impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
+      impr.addEventListener("click", () => imprimir(false));
+      onLang(() => { impr.textContent = t("obs.pr.ficha"); });
+    }
+    const hayPanel = !!(lede || opts.ficha || opts.apertura);
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
     doc.addEventListener("click", () => { panel.hidden = !panel.hidden; doc.setAttribute("aria-expanded", String(!panel.hidden)); });
     container.replaceChildren(h("div", { class: "obs-bar" }, opts.noBack ? h("span") : back,
-      h("div", { class: "obs-tools" }, seg, pj, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
+      h("div", { class: "obs-tools" }, seg, pj, impr, hayPanel ? doc : null), h("div", { class: "obs-tools keep obs-proj-only" }, pjKeep)));
     if (hayPanel) (cabecera || container).after(panel);
     // en modo normal solo se ve el primer grupo; en modo proyector, solo el botón para salir
     const style = document.createElement("style");
     style.textContent = "body:not(.obs-proj) .obs-proj-only{display:none!important}";
     document.head.append(style);
     setProj(proj);
+    if (opts.apertura) cubrir();
   }
   const csvCell = v => { const s = String(v == null ? "" : v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   function csv(rows) { return rows.map(r => r.map(csvCell).join(";")).join("\n"); }
@@ -770,8 +870,248 @@ window.OBS = (() => {
     }
     try { await navigator.clipboard.writeText(text); return t("obs.copied"); } catch { return t("obs.copyfail"); }
   }
+  // ================= Apertura (25/11/2026): «Antes de ver», «Escenarios» e «Imprimir ficha» =================
+  // La apertura está en la tarea: la clase predice antes de ver, los equipos proponen sus escenarios y todo se lleva al papel.
+  // Una herramienta la activa con OBS.mountBar(el, { apertura: true }) y marca:
+  //   data-obs-scope  · el bloque (una pestaña o una parte de ella) que se tapa y se destapa junto;
+  //   data-obs-result · lo que es resultado (cifras, gráficos, tablas de solución, botones que dan la respuesta);
+  //   data-obs-prompt · (opcional) dónde va el aviso del bloque; si no lo hay, va delante del primer resultado.
+  register({
+    es: { "obs.velo.txt": "¿Qué creéis que pasará? Escribidlo en la ficha antes de verlo.", "obs.velo.ver": "Ver",
+      "obs.velo.tapar": "Tapar otra vez", "obs.velo.modo": "Antes de ver: tapar los resultados hasta que la clase haya hecho su predicción",
+      "obs.velo.proj": "Solo en modo proyector", "obs.velo.on": "Siempre", "obs.velo.off": "Nunca",
+      "obs.pr.ficha": "Imprimir ficha", "obs.pr.con": "Imprimir con resultados", "obs.pr.nombre": "Nombre", "obs.pr.equipo": "Equipo",
+      "obs.pr.esc": "Escenario", "obs.pr.pred": "Vuestra predicción",
+      "obs.pr.help": "Antes de ver el resultado, escribid vuestra predicción en los recuadros. Después, comprobadla con la herramienta.",
+      "obs.apertura": "Abrir la herramienta",
+      "obs.esc.h": "Escenarios propios", "obs.esc.help": "Guardad el escenario de cada equipo, cargadlo con un clic y comparad los resultados. Un equipo puede preparar el suyo en casa y pasaros el código.",
+      "obs.esc.nombre": "Nombre del escenario", "obs.esc.ph": "Por ejemplo, Equipo 3", "obs.esc.guardar": "Guardar el que está en pantalla",
+      "obs.esc.cargar": "Cargar", "obs.esc.borrar": "Borrar", "obs.esc.seguro": "¿Seguro? Pulsa otra vez", "obs.esc.ejemplo": "Ejemplo",
+      "obs.esc.actual": "Ahora en pantalla", "obs.esc.codActual": "Código del escenario que está en pantalla", "obs.esc.copiar": "Copiar",
+      "obs.esc.copiado": "Código copiado.", "obs.esc.nocopia": "No se ha podido copiar: seleccionad el código y copiadlo a mano.",
+      "obs.esc.pegar": "Pegar un código", "obs.esc.cargarCod": "Cargar el código",
+      "obs.esc.malo": "Ese código no es válido: revisad que esté copiado entero.", "obs.esc.otro": "Ese código es de otra herramienta ({id}).",
+      "obs.esc.lleno": "Ya hay siete escenarios guardados: borrad uno antes.", "obs.esc.sinNombre": "Escribid un nombre para el escenario.",
+      "obs.esc.guardado": "Escenario «{n}» guardado.", "obs.esc.cargado": "Escenario cargado: «{n}».", "obs.esc.borrado": "Escenario borrado.",
+      "obs.esc.comparar": "Comparar los escenarios", "obs.esc.col": "Escenario", "obs.esc.vacio": "Todavía no hay escenarios guardados.",
+      "obs.esc.guardados": "Guardados en este navegador" },
+    va: { "obs.velo.txt": "Què creieu que passarà? Escriviu-ho en la fitxa abans de veure-ho.", "obs.velo.ver": "Veure",
+      "obs.velo.tapar": "Tapar una altra vegada", "obs.velo.modo": "Abans de veure: tapar els resultats fins que la classe haja fet la seua predicció",
+      "obs.velo.proj": "Només en mode projector", "obs.velo.on": "Sempre", "obs.velo.off": "Mai",
+      "obs.pr.ficha": "Imprimir fitxa", "obs.pr.con": "Imprimir amb resultats", "obs.pr.nombre": "Nom", "obs.pr.equipo": "Equip",
+      "obs.pr.esc": "Escenari", "obs.pr.pred": "La vostra predicció",
+      "obs.pr.help": "Abans de veure el resultat, escriviu la vostra predicció en els requadres. Després, comproveu-la amb la ferramenta.",
+      "obs.apertura": "Obrir la ferramenta",
+      "obs.esc.h": "Escenaris propis", "obs.esc.help": "Guardeu l'escenari de cada equip, carregueu-lo amb un clic i compareu els resultats. Un equip pot preparar el seu a casa i passar-vos el codi.",
+      "obs.esc.nombre": "Nom de l'escenari", "obs.esc.ph": "Per exemple, Equip 3", "obs.esc.guardar": "Guardar el que hi ha en pantalla",
+      "obs.esc.cargar": "Carregar", "obs.esc.borrar": "Esborrar", "obs.esc.seguro": "Segur? Prem una altra vegada", "obs.esc.ejemplo": "Exemple",
+      "obs.esc.actual": "Ara en pantalla", "obs.esc.codActual": "Codi de l'escenari que hi ha en pantalla", "obs.esc.copiar": "Copiar",
+      "obs.esc.copiado": "Codi copiat.", "obs.esc.nocopia": "No s'ha pogut copiar: seleccioneu el codi i copieu-lo a mà.",
+      "obs.esc.pegar": "Apegar un codi", "obs.esc.cargarCod": "Carregar el codi",
+      "obs.esc.malo": "Eixe codi no és vàlid: reviseu que estiga copiat sencer.", "obs.esc.otro": "Eixe codi és d'una altra ferramenta ({id}).",
+      "obs.esc.lleno": "Ja hi ha set escenaris guardats: esborreu-ne un abans.", "obs.esc.sinNombre": "Escriviu un nom per a l'escenari.",
+      "obs.esc.guardado": "Escenari «{n}» guardat.", "obs.esc.cargado": "Escenari carregat: «{n}».", "obs.esc.borrado": "Escenari esborrat.",
+      "obs.esc.comparar": "Comparar els escenaris", "obs.esc.col": "Escenari", "obs.esc.vacio": "Encara no hi ha escenaris guardats.",
+      "obs.esc.guardados": "Guardats en este navegador" }
+  });
+
+  // ---------- «Antes de ver» ----------
+  let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
+  let aperturaOn = false;
+  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
+  function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
+  function barDe(s) {
+    if (s._obsBar) return s._obsBar;
+    const bar = h("div", { class: "obs-velo-bar", "aria-live": "polite" });
+    const sitio = [...s.querySelectorAll("[data-obs-prompt]")].find(n => scopeDe(n) === s);
+    const primero = [...s.querySelectorAll("[data-obs-result]")].find(n => scopeDe(n) === s);
+    if (sitio) sitio.replaceChildren(bar); else if (primero) primero.before(bar); else s.prepend(bar);
+    s._obsBar = bar; return bar;
+  }
+  function pintarVelo() {
+    const activo = veloActivo();
+    document.body.classList.toggle("obs-velo-on", activo);
+    for (const s of scopes()) {
+      const bar = barDe(s), tapado = activo && s.classList.contains("obs-velado");
+      bar.hidden = !activo;
+      bar.classList.toggle("destapado", !tapado);
+      if (tapado) {
+        const ver = h("button", { type: "button", class: "btn", text: t("obs.velo.ver") });
+        ver.addEventListener("click", () => { s.classList.remove("obs-velado"); pintarVelo(); });
+        bar.replaceChildren(h("p", { text: t("obs.velo.txt") }), ver);
+      } else {
+        const tap = h("button", { type: "button", class: "btn quiet small", text: t("obs.velo.tapar") });
+        tap.addEventListener("click", () => { s.classList.add("obs-velado"); pintarVelo(); });
+        bar.replaceChildren(tap);
+      }
+      s.querySelectorAll("[data-obs-result]").forEach(r => {
+        if (scopeDe(r) !== s) return;
+        if (tapado) { r.setAttribute("aria-hidden", "true"); r.inert = true; } else { r.removeAttribute("aria-hidden"); r.inert = false; }
+      });
+    }
+  }
+  /* OBS.velo.cubrir(elemento) vuelve a tapar el bloque de ese elemento (sin elemento, todos); por ejemplo, al cargar un escenario */
+  function cubrir(n) { (n ? [scopeDe(n)] : scopes()).forEach(s => s.classList.add("obs-velado")); pintarVelo(); }
+  function setVeloModo(m) { veloModo = m; store.set("obs-velo", m); pintarVelo(); }
+  onLang(() => { if (aperturaOn) pintarVelo(); });
+
+  // ---------- «Escenarios propios» ----------
+  /* OBS.escenarios({ id: "SA4", mount, toArray(), fromArray(arr), describe(arr) → texto, resumen() → [[etiqueta, valor]],
+       ejemplos: [{ nombre: {es, va}, arr }] })
+     El estado es una lista de grupos de números: [[1, 2], [3, 4.5]]. Así el código es corto: «SA4-1_2~3_4.5-K». */
+  const MAX_ESC = 7;
+  const num = n => String(Math.round(+n * 1000) / 1000);
+  const control = s => { let a = 0; for (let i = 0; i < s.length; i++) a = (a + (i + 1) * s.charCodeAt(i)) % 26; return String.fromCharCode(65 + a); };
+  function codificar(id, arr) { const cuerpo = id + "-" + arr.map(g => g.map(num).join("_")).join("~"); return cuerpo + "-" + control(cuerpo); }
+  function descodificar(id, code) {
+    const m = String(code || "").trim().replace(/\s+/g, "").match(/^([A-Za-z0-9]+)-([0-9._~]+)-([A-Za-z])$/);
+    if (!m) return { error: t("obs.esc.malo") };
+    const cuerpo = m[1].toUpperCase() + "-" + m[2];
+    if (control(cuerpo) !== m[3].toUpperCase()) return { error: t("obs.esc.malo") };
+    if (m[1].toUpperCase() !== id.toUpperCase()) return { error: t("obs.esc.otro", { id: m[1].toUpperCase() }) };
+    const arr = m[2].split("~").map(g => g.split("_").map(Number));
+    if (arr.some(g => g.some(x => !isFinite(x)))) return { error: t("obs.esc.malo") };
+    return { arr };
+  }
+  function escenarios(cfg) {
+    const KEY = "obs-esc:" + cfg.id;
+    const leer = () => { try { const a = JSON.parse(store.get(KEY) || "[]"); return Array.isArray(a) ? a.filter(x => x && x.n && Array.isArray(x.a)) : []; } catch { return []; } };
+    const escribir = lista => store.set(KEY, JSON.stringify(lista));
+    const L = o => typeof o === "string" ? o : (o[lang] || o.es || "");
+    const box = h("details", { class: "obs-esc" });
+    const estado = h("p", { class: "obs-esc__estado small", "aria-live": "polite" });
+    const avisar = (txt, malo) => { estado.textContent = txt; estado.classList.toggle("malo", !!malo); };
+    function cargar(arr, nombre) {
+      try { cfg.fromArray(arr); } catch (e) { console.error(e); avisar(t("obs.esc.malo"), true); return; }
+      cubrir(cfg.mount); avisar(t("obs.esc.cargado", { n: nombre })); pintar();
+    }
+    function pintar() {
+      const guardados = leer();
+      const nombre = h("input", { type: "text", maxlength: "40", placeholder: t("obs.esc.ph"), "aria-label": t("obs.esc.nombre") });
+      const guardar = h("button", { type: "button", class: "btn small", text: t("obs.esc.guardar") });
+      guardar.addEventListener("click", () => {
+        const n = nombre.value.trim(); if (!n) { avisar(t("obs.esc.sinNombre"), true); nombre.focus(); return; }
+        const lista = leer(); const i = lista.findIndex(x => x.n === n);
+        if (i < 0 && lista.length >= MAX_ESC) { avisar(t("obs.esc.lleno"), true); return; }
+        const item = { n, a: cfg.toArray() }; if (i >= 0) lista[i] = item; else lista.push(item);
+        escribir(lista); pintar(); avisar(t("obs.esc.guardado", { n }));
+      });
+      const fila = (nom, arr, ejemplo, idx) => {
+        const b = h("button", { type: "button", class: "btn ghost small", text: t("obs.esc.cargar") });
+        b.addEventListener("click", () => cargar(arr, nom));
+        const cod = h("code", { class: "obs-esc__cod", text: codificar(cfg.id, arr) });
+        let del = null;
+        if (!ejemplo) {
+          del = h("button", { type: "button", class: "btn quiet small", text: t("obs.esc.borrar") });
+          let armado = false;
+          del.addEventListener("click", () => {
+            if (!armado) { armado = true; del.textContent = t("obs.esc.seguro"); setTimeout(() => { armado = false; if (del.isConnected) del.textContent = t("obs.esc.borrar"); }, 4000); return; }
+            const lista = leer(); lista.splice(idx, 1); escribir(lista); pintar(); avisar(t("obs.esc.borrado"));
+          });
+        }
+        return h("li", {}, h("div", { class: "obs-esc__nom" }, ejemplo ? h("span", { class: "obs-esc__tag", text: t("obs.esc.ejemplo") }) : null, h("b", { text: nom })),
+          h("div", { class: "obs-esc__desc small", text: cfg.describe ? cfg.describe(arr) : "" }), h("div", { class: "obs-esc__acc" }, b, cod, del));
+      };
+      const lista = h("ul", { class: "obs-esc__lista" },
+        (cfg.ejemplos || []).map(e => fila(L(e.nombre), e.arr, true)),
+        guardados.map((g, i) => fila(g.n, g.a, false, i)));
+      const actual = codificar(cfg.id, cfg.toArray());
+      const codBox = h("code", { class: "obs-esc__cod grande", text: actual });
+      const copiar = h("button", { type: "button", class: "btn quiet small", text: t("obs.esc.copiar") });
+      copiar.addEventListener("click", async () => { try { await navigator.clipboard.writeText(actual); avisar(t("obs.esc.copiado")); } catch { avisar(t("obs.esc.nocopia"), true); } });
+      const pega = h("input", { type: "text", placeholder: "SA0-…", "aria-label": t("obs.esc.pegar"), spellcheck: "false", autocapitalize: "characters" });
+      const pegaBtn = h("button", { type: "button", class: "btn ghost small", text: t("obs.esc.cargarCod") });
+      pegaBtn.addEventListener("click", () => { const r = descodificar(cfg.id, pega.value); if (r.error) { avisar(r.error, true); return; } cargar(r.arr, pega.value.trim()); });
+      const cmpBtn = h("button", { type: "button", class: "btn ghost small", text: t("obs.esc.comparar") });
+      const cmpBox = h("div", { class: "scroll obs-esc__cmp" });
+      cmpBtn.addEventListener("click", () => {
+        if (!cfg.resumen) return;
+        const ahora = cfg.toArray();
+        const filas = [[t("obs.esc.actual"), ahora]].concat((cfg.ejemplos || []).map(e => [L(e.nombre), e.arr]), leer().map(g => [g.n, g.a]));
+        const datos = filas.map(([n, a]) => { try { cfg.fromArray(a, { silencioso: true }); return [n, cfg.resumen()]; } catch { return [n, null]; } });
+        cfg.fromArray(ahora, { silencioso: true });
+        const cab = (datos.find(d => d[1]) || [null, []])[1].map(c => c[0]);
+        cmpBox.replaceChildren(h("table", { class: "obs-esc__tabla" },
+          h("thead", {}, h("tr", {}, h("th", { text: t("obs.esc.col") }), cab.map(c => h("th", { text: c })))),
+          h("tbody", {}, datos.map(([n, r]) => h("tr", {}, h("th", { text: n }), (r || cab.map(() => ["", "—"])).map(c => h("td", { text: c[1] })))))));
+      });
+      box.replaceChildren(...[h("summary", { text: t("obs.esc.h") }),
+        h("p", { class: "small", text: t("obs.esc.help") }),
+        h("div", { class: "obs-esc__fila" }, nombre, guardar),
+        lista, guardados.length ? null : h("p", { class: "small obs-esc__vacio", text: t("obs.esc.vacio") }),
+        h("div", { class: "obs-esc__fila" }, h("span", { class: "small", text: t("obs.esc.codActual") + ": " }), codBox, copiar),
+        h("div", { class: "obs-esc__fila" }, pega, pegaBtn),
+        cfg.resumen ? h("div", { class: "obs-esc__fila" }, cmpBtn) : null, cmpBox, estado].filter(Boolean));
+    }
+    const yo = { pintar, describeActual: () => cfg.describe ? cfg.describe(cfg.toArray()) : "", mount: cfg.mount };
+    box._obsEsc = yo;
+    (cfg.antes ? cfg.mount.before(box) : cfg.mount.append(box));
+    pintar();
+    onLang(pintar);
+    return yo;
+  }
+
+  // ---------- «Imprimir ficha» ----------
+  function imprimir(conResultados) {
+    const wrap = document.querySelector(".wrap") || document.body;
+    let head = document.getElementById("obs-print-head");
+    if (!head) { head = h("div", { id: "obs-print-head", class: "obs-print-head" }); wrap.prepend(head); }
+    const tab = document.querySelector('[role="tab"][aria-selected="true"]');
+    const titulo = ((document.querySelector("header h1") || {}).textContent || document.title).trim();
+    const eyebrow = ((document.querySelector("header .eyebrow") || {}).textContent || "").trim();
+    // el escenario descrito es el del bloque visible (si lo hay)
+    const vis = [...document.querySelectorAll(".obs-esc")].find(d => d.offsetParent !== null);
+    const esc = vis && vis._obsEsc ? vis._obsEsc.describeActual() : "";
+    head.replaceChildren(
+      h("div", { class: "obs-ph-top" }, h("span", { text: eyebrow }), h("span", { text: new Date().toLocaleDateString(lang === "va" ? "ca-ES" : "es-ES") })),
+      h("div", { class: "obs-ph-h", text: titulo + (tab ? " · " + [...tab.childNodes].map(n => n.textContent.trim()).filter(Boolean).join(" ").replace(/\s+/g, " ") : "") }),
+      conResultados ? null : h("div", { class: "obs-ph-campos" }, h("span", { text: t("obs.pr.nombre") + ":" }), h("span", { text: t("obs.pr.equipo") + ":" })),
+      esc ? h("p", { class: "obs-ph-esc", text: t("obs.pr.esc") + ": " + esc }) : null,
+      conResultados ? null : h("p", { class: "obs-ph-ayuda", text: t("obs.pr.help") }));
+    document.querySelectorAll("[data-obs-result]").forEach(r => r.setAttribute("data-obs-pred", t("obs.pr.pred")));
+    document.body.classList.toggle("obs-print-ficha", !conResultados);
+    document.body.classList.add("obs-printing");
+    const fin = () => { document.body.classList.remove("obs-print-ficha", "obs-printing"); window.removeEventListener("afterprint", fin); };
+    window.addEventListener("afterprint", fin);
+    window.print();
+  }
+
+  // ---------- «Marcas de fechas» (25/11/2026) ----------
+  /* OBS.marcas(svg, { sx, yTop, yBot, x0, x1, lista: [{ desde, hasta, txt: {es, va} }] })
+     Dibuja una línea vertical (o una franja, si hay «hasta») con un rótulo corto en cada fecha que cae en el tramo. */
+  function marcas(svg, o) {
+    const NS = "http://www.w3.org/2000/svg";
+    const mk = (tag, at, txt) => { const n = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(at)) n.setAttribute(k, v); if (txt != null) n.textContent = txt; return n; };
+    const g = mk("g", { class: "obs-marca" });
+    for (const m of o.lista || []) {
+      const a = Math.max(m.desde, o.x0), b = Math.min(m.hasta != null ? m.hasta : m.desde, o.x1);
+      if (a > b) continue;
+      const xa = o.sx(a), xb = o.sx(b);
+      if (m.hasta != null && xb > xa) g.append(mk("rect", { x: xa, y: o.yTop, width: xb - xa, height: o.yBot - o.yTop }));
+      else g.append(mk("line", { x1: xa, x2: xa, y1: o.yTop, y2: o.yBot }));
+      const txt = typeof m.txt === "string" ? m.txt : (m.txt[lang] || m.txt.es);
+      g.append(mk("text", { x: xa + 4, y: o.yTop + 12, "data-xb": xb }, txt));
+    }
+    svg.append(g);
+    // Si un texto se sale por la derecha del gráfico, se alinea a la izquierda de la marca;
+    // cada texto baja a la primera fila libre para no pisar a los anteriores
+    const derecha = o.sx(o.x1), filas = [];
+    g.querySelectorAll("text").forEach(tx => {
+      try {
+        const w = tx.getComputedTextLength(); let x = +tx.getAttribute("x"), izq = x;
+        if (x + w > derecha) { x = +tx.getAttribute("data-xb") - 4; izq = x - w; tx.setAttribute("text-anchor", "end"); tx.setAttribute("x", x); }
+        const der = izq + w; let f = 0;
+        while ((filas[f] || []).some(([a, b]) => izq < b + 6 && der > a - 6)) f++;
+        (filas[f] = filas[f] || []).push([izq, der]);
+        tx.setAttribute("y", o.yTop + 12 + f * 13);
+      } catch {}
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => apply());
-  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h };
+  return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas };
 })();
 
 // OBS-COMMON-JS:END
@@ -1016,7 +1356,7 @@ window.OBS = (() => {
 "w.real.broke": "**A se ha quedado sin reservas.** Esta semana ha perdido {l} y ya no puede pagar sus costes fijos: la semana que viene cierra.",
 "w.real.capB": "B ha ampliado su capacidad hasta **{c} unidades** a la semana, y puede hacerlo porque tiene **{r}** de reservas: lo que ha ido acumulando.",
 "w.acc.h": "Reservas: lo que cada empresa va acumulando",
-"w.acc.p": "Las reservas empiezan en 400 € y cada semana suman el beneficio o restan la pérdida. En competencia perfecta (línea discontinua) las dos acumulan cada vez más despacio, pero las dos siguen. En competencia real (línea continua), B acumula mientras A gasta sus reservas en la guerra de precios.",
+"w.acc.p": "Las reservas empiezan en {r} y cada semana suman el beneficio o restan la pérdida. En competencia perfecta (línea discontinua) las dos acumulan cada vez más despacio, pero las dos siguen. En competencia real (línea continua), B acumula mientras A gasta sus reservas en la guerra de precios.",
 "w.acc.y": "€ acumulados",
 "w.acc.ra": "A · competencia real", "w.acc.rb": "B · competencia real", "w.acc.pa": "A · competencia perfecta", "w.acc.pb": "B · competencia perfecta",
 "w.acc.close": "A cierra (semana {n})",
@@ -1028,6 +1368,15 @@ window.OBS = (() => {
 "w.th.rpb": "Precio B",
 "w.th.pia": "Beneficio A",
 "w.th.pib": "Beneficio B",
+"w.acc.pc": "Las reservas empiezan en {r} y cada semana suman el beneficio o restan la pérdida. Con este escenario, mirad qué empresa acumula reservas y cuál las gasta.",
+"wp.h": "Parámetros del escenario", "wp.help": "Con los valores de partida, la herramienta da exactamente lo mismo que antes. Cambiadlos para probar el escenario de un equipo.",
+"wp.res": "Reservas iniciales de cada empresa (€)", "wp.fa": "Coste fijo de A (€ a la semana)", "wp.fb": "Coste fijo de B (€ a la semana)",
+"wp.ca": "Competencia real: coste por unidad de A (€)", "wp.cb": "Competencia real: coste por unidad de B (€)",
+"wp.cut": "Competencia real: cuánto baja B su precio cada semana (€)", "wp.reset": "Volver a los valores de partida",
+"esc.desc": "Precio en 3a: {p} €. Reservas: {r}. Costes fijos: A {fa}, B {fb}. Coste por unidad: A {ca} €, B {cb} €. B baja {cut} € a la semana. Semana {w}.",
+"esc.ej1": "Valores de partida", "esc.ej2": "Las mismas empresas con 1.200 € de reservas",
+"esc.r.cierra": "¿Cierra A? (real)", "esc.r.no": "no cierra", "esc.r.sem": "semana {n}", "esc.r.resB": "Reservas de B, semana 20 (real)",
+"esc.r.cuota": "Cuota de B, semana 20 (real)", "esc.r.pB": "Precio de B, semana 20", "esc.r.perf": "Reservas de A, semana 20 (perfecta)",
 },
 "va": {
 "hd.eyebrow": "Observatori · SA 4 · El mercat",
@@ -1265,7 +1614,7 @@ window.OBS = (() => {
 "w.real.broke": "**A s'ha quedat sense reserves.** Esta setmana ha perdut {l} i ja no pot pagar els seus costos fixos: la setmana que ve tanca.",
 "w.real.capB": "B ha ampliat la seua capacitat fins a **{c} unitats** a la setmana, i pot fer-ho perquè té **{r}** de reserves: el que ha anat acumulant.",
 "w.acc.h": "Reserves: el que cada empresa va acumulant",
-"w.acc.p": "Les reserves comencen en 400 € i cada setmana sumen el benefici o resten la pèrdua. En competència perfecta (línia discontínua) les dues acumulen cada vegada més a poc a poc, però les dues continuen. En competència real (línia contínua), B acumula mentre A gasta les seues reserves en la guerra de preus.",
+"w.acc.p": "Les reserves comencen en {r} i cada setmana sumen el benefici o resten la pèrdua. En competència perfecta (línia discontínua) les dues acumulen cada vegada més a poc a poc, però les dues continuen. En competència real (línia contínua), B acumula mentre A gasta les seues reserves en la guerra de preus.",
 "w.acc.y": "€ acumulats",
 "w.acc.ra": "A · competència real", "w.acc.rb": "B · competència real", "w.acc.pa": "A · competència perfecta", "w.acc.pb": "B · competència perfecta",
 "w.acc.close": "A tanca (setmana {n})",
@@ -1277,6 +1626,15 @@ window.OBS = (() => {
 "w.th.rpb": "Preu B",
 "w.th.pia": "Benefici A",
 "w.th.pib": "Benefici B",
+"w.acc.pc": "Les reserves comencen en {r} i cada setmana sumen el benefici o resten la pèrdua. Amb este escenari, mireu quina empresa acumula reserves i quina les gasta.",
+"wp.h": "Paràmetres de l'escenari", "wp.help": "Amb els valors de partida, la ferramenta dona exactament el mateix que abans. Canvieu-los per a provar l'escenari d'un equip.",
+"wp.res": "Reserves inicials de cada empresa (€)", "wp.fa": "Cost fix d'A (€ a la setmana)", "wp.fb": "Cost fix de B (€ a la setmana)",
+"wp.ca": "Competència real: cost per unitat d'A (€)", "wp.cb": "Competència real: cost per unitat de B (€)",
+"wp.cut": "Competència real: quant abaixa B el seu preu cada setmana (€)", "wp.reset": "Tornar als valors de partida",
+"esc.desc": "Preu en 3a: {p} €. Reserves: {r}. Costos fixos: A {fa}, B {fb}. Cost per unitat: A {ca} €, B {cb} €. B abaixa {cut} € a la setmana. Setmana {w}.",
+"esc.ej1": "Valors de partida", "esc.ej2": "Les mateixes empreses amb 1.200 € de reserves",
+"esc.r.cierra": "Tanca A? (real)", "esc.r.no": "no tanca", "esc.r.sem": "setmana {n}", "esc.r.resB": "Reserves de B, setmana 20 (real)",
+"esc.r.cuota": "Quota de B, setmana 20 (real)", "esc.r.pB": "Preu de B, setmana 20", "esc.r.perf": "Reserves d'A, setmana 20 (perfecta)",
 }
 });
   const FICHA = {"sesiones": {"es": "14 sesiones, del jueves 19 de noviembre al martes 15 de diciembre (calendario 2026-27). Reparto por sesiones: por definir.", "va": "14 sessions, del dijous 19 de novembre al dimarts 15 de desembre (calendari 2026-27). Repartiment per sessions: per definir."}, "saberes": [{"code": "A3", "es": "La modelización como herramienta para entender las interacciones económicas.", "va": "La modelització com a ferramenta per a entendre les interaccions econòmiques."}, {"code": "A13", "es": "La competencia perfecta e imperfecta.", "va": "La competència perfecta i imperfecta."}, {"code": "B1", "es": "Intercambio y mercado. Tipos y funcionamiento de los mercados. Representación gráfica.", "va": "Intercanvi i mercat. Tipus i funcionament dels mercats. Representació gràfica."}, {"code": "B2", "es": "La elasticidad.", "va": "L'elasticitat."}, {"code": "B4", "es": "Los fallos de mercado.", "va": "Les fallades de mercat."}, {"code": "D2", "es": "La intervención del Estado y su justificación.", "va": "La intervenció de l'Estat i la seua justificació."}, {"code": "E5", "es": "La economía colaborativa.", "va": "L'economia col·laborativa."}], "criterios": [{"code": "2.1", "es": "Valorar la repercusión de los fallos del mercado a nivel microeconómico y facilitar el proceso de toma de decisiones en este ámbito, reconociendo y comprendiendo el funcionamiento del mismo.", "va": "Valorar la repercussió de les fallades del mercat des del punt de vista microeconòmic i facilitar el procés de presa de decisions en este àmbit, reconeixent i comprenent el funcionament d'este."}, {"code": "2.2", "es": "Entender el funcionamiento del mercado y la naturaleza de las transacciones que tienen lugar en él, analizando elementos como la oferta, la demanda, los precios, los tipos de mercado y los agentes implicados y reflexionado sobre su importancia como fuente de mejora económica y social.", "va": "Entendre el funcionament del mercat i la naturalesa de les transaccions que tenen lloc en este, analitzant elements com l'oferta, la demanda, els preus, els tipus de mercat i els agents implicats, i reflexionant sobre la seua importància com a font de millora econòmica i social."}, {"code": "2.3", "es": "Analizar con espíritu crítico los fallos del mercado, evaluando sus consecuencias y reflexionando sobre sus posibles soluciones.", "va": "Analitzar amb esperit crític les fallades del mercat, avaluant-ne les conseqüències i reflexionant sobre les seues possibles solucions."}, {"code": "5.2", "es": "Comprender los retos económicos actuales analizando, de forma crítica y constructiva, el entorno, identificando aquellos elementos que condicionan y transforman la economía y fomentando iniciativas que respondan a las necesidades que plantean estos retos.", "va": "Comprendre els reptes econòmics actuals, analitzant l'entorn de manera crítica i constructiva, identificant aquells elements que condicionen i transformen l'economia, i fomentant iniciatives que responguen a les necessitats que plantegen estos reptes."}, {"code": "6.1", "es": "Plantear soluciones socioeconómicas que respondan a necesidades individuales y colectivas investigando y explorando la realidad económica teniendo en cuenta diversos factores y aplicando las herramientas propias del ámbito de la economía.", "va": "Plantejar solucions socioeconòmiques que responguen a necessitats individuals i col·lectives, investigant i explorant la realitat econòmica, tenint en compte diversos factors i aplicant les ferramentes pròpies de l'àmbit de l'economia."}], "uso": {"es": "1 · Competencia perfecta: la empresa que acepta el precio (P = CMg) y la entrada de explotaciones hasta el equilibrio a largo plazo.\n2 · Competencia imperfecta: el monopolio (IMg = CMg y pérdida irrecuperable) y el dilema de las dos gasolineras, votado con Plickers.\n3 · Competencia real: coste marginal en U frente a coste marginal constante y la guerra de precios entre dos empresas (Shaikh).\n4 · Comparar supuestos: en preparación.", "va": "1 · Competència perfecta: l'empresa que accepta el preu (P = CMg) i l'entrada d'explotacions fins a l'equilibri a llarg termini.\n2 · Competència imperfecta: el monopoli (IMg = CMg i pèrdua irrecuperable) i el dilema de les dues gasolineres, votat amb Plickers.\n3 · Competència real: cost marginal en U davant de cost marginal constant i la guerra de preus entre dues empreses (Shaikh).\n4 · Comparar supòsits: en preparació."}};
@@ -1508,9 +1866,9 @@ window.OBS = (() => {
     mkt.hist.push(snapshot(Math.max(1, s.n + d), s.A, d > 0 ? { k: "m.n.enter", n: d } : d < 0 ? { k: "m.n.exit", n: -d } : { k: "m.n.same" }));
     renderMarket();
   });
-  $("m-up").addEventListener("click", () => { const s = cur(); mkt.week++; mkt.hist.push(snapshot(s.n, Math.min(s.A + DEM_STEP, 960), { k: "m.n.up" })); renderMarket(); });
-  $("m-down").addEventListener("click", () => { const s = cur(); mkt.week++; mkt.hist.push(snapshot(s.n, Math.max(s.A - DEM_STEP, 360), { k: "m.n.down" })); renderMarket(); });
-  $("m-reset").addEventListener("click", resetMarket);
+  $("m-up").addEventListener("click", () => { const s = cur(); mkt.week++; mkt.hist.push(snapshot(s.n, Math.min(s.A + DEM_STEP, 960), { k: "m.n.up" })); renderMarket(); OBS.velo.cubrir($("market-block")); });
+  $("m-down").addEventListener("click", () => { const s = cur(); mkt.week++; mkt.hist.push(snapshot(s.n, Math.max(s.A - DEM_STEP, 360), { k: "m.n.down" })); renderMarket(); OBS.velo.cubrir($("market-block")); });
+  $("m-reset").addEventListener("click", () => { resetMarket(); OBS.velo.cubrir($("market-block")); });
 
   function renderMarket() {
     const s = cur();
@@ -1816,7 +2174,10 @@ window.OBS = (() => {
   const PA_U = { F: 200, k: 1 }, PB_U = { F: 260, k: 0.85 };
   // Reservas iniciales de cada empresa (€). Las reservas suman todos los beneficios y restan todas las pérdidas;
   // cuando A se queda sin reservas, cierra la semana siguiente (con 400 €, en la semana 15).
-  const RA = { F: 200, c: 15, cap: 100 }, RB = { F: 260, c: 12, cap: 100 }, RESERVES = 400;
+  const RA = { F: 200, c: 15, cap: 100 }, RB = { F: 260, c: 12, cap: 100 };
+  // Parámetros del escenario (25/11/2026): por defecto, los mismos valores de siempre
+  const WAR0 = { res: 400, fa: 200, fb: 260, ca: 15, cb: 12, cut: 0.5 };
+  let RESERVES = WAR0.res, WCUT = WAR0.cut;
   function battle() {
     const perf = [], real = [];
     let ra = RESERVES, rb = RESERVES;
@@ -1829,7 +2190,7 @@ window.OBS = (() => {
     }
     let pA = 20, pB = 20, sB = 0.5, resA = RESERVES, resB = RESERVES, alive = true, capB = RB.cap;
     for (let t = 1; t <= WEEKS; t++) {
-      if (t > 1) { const prevB = pB; pB = alive ? Math.max(pB - 0.5, 14) : 14.5; if (alive) pA = Math.max(prevB, RA.c); }
+      if (t > 1) { const prevB = pB; pB = alive ? Math.max(pB - WCUT, 14) : 14.5; if (alive) pA = Math.max(prevB, RA.c); }
       if (t > 1 && alive) sB = clamp(sB + 0.05 * (pA - pB), 0, 1);
       if (!alive) sB = 1;
       const pav = alive ? (1 - sB) * pA + sB * pB : pB;
@@ -1872,8 +2233,20 @@ window.OBS = (() => {
         [C.s2, t("w.acc.pa"), eur0(pp.ra)], [C.s1, t("w.acc.pb"), eur0(pp.rb)]] };
     });
   }
-  const BT = battle();
-  const CLOSE_WEEK = (BT.real.find(r => !r.alive) || {}).t;
+  let BT = battle();
+  let CLOSE_WEEK = (BT.real.find(r => !r.alive) || {}).t;
+  const WP = { res: "wp-res", fa: "wp-fa", fb: "wp-fb", ca: "wp-ca", cb: "wp-cb", cut: "wp-cut" };
+  function leerWar() {
+    const v = {};
+    for (const [k, id] of Object.entries(WP)) { const n = $(id), x = parseFloat(String(n.value).replace(",", ".")); v[k] = clamp(isFinite(x) ? x : WAR0[k], +n.min, +n.max); n.value = v[k]; }
+    return v;
+  }
+  function aplicarWar(v) {
+    RESERVES = v.res; WCUT = v.cut;
+    PA_U.F = RA.F = v.fa; PB_U.F = RB.F = v.fb; RA.c = v.ca; RB.c = v.cb;
+    BT = battle(); CLOSE_WEEK = (BT.real.find(r => !r.alive) || {}).t;
+  }
+  const esPartida = v => Object.keys(WAR0).every(k => v[k] === WAR0[k]);
   const bx = { xMax: 220, yMax: 40, xTicks: [0, 50, 100, 150, 200], yTicks: [0, 10, 20, 30, 40] };
   function share(elId, sa, labA, labB) {
     const box = $(elId);
@@ -1911,6 +2284,8 @@ window.OBS = (() => {
     if (r.capB > RB.cap + 0.5) msg.push(el("span", { text: " " }), rich("w.real.capB", { c: fmt(r.capB), r: eur0(r.resB) }));
     $("w-real-note").replaceChildren(...msg);
     drawAcc(t);
+    const v = leerWar();
+    $("w-acc-p").textContent = OBS.t(esPartida(v) ? "w.acc.p" : "w.acc.pc", { r: eur0(RESERVES) });
   }
   function buildWarTable() {
     const head = el("tr", {}, ["w.th.week", "w.th.pp", "w.th.qa", "w.th.qb", "w.th.rpa", "w.th.rpb", "w.th.qa", "w.th.qb", "w.th.pia", "w.th.pib"].map(x => el("th", { text: t(x) })));
@@ -1940,7 +2315,35 @@ window.OBS = (() => {
     $("mo-best").textContent = t(moShowBest ? "mo.hide" : "mo.best");
     $("w-play").textContent = t(playTimer ? "w.pause" : "w.play");
   }
-  OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
+  OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top"), apertura: true });
+  // ---------- Parámetros y escenarios propios de la 3b ----------
+  function warCambia() { stopPlay(); aplicarWar(leerWar()); buildWarTable(); renderWar(); }
+  Object.values(WP).forEach(id => $(id).addEventListener("change", warCambia));
+  $("wp-reset").addEventListener("click", () => { for (const [k, id] of Object.entries(WP)) $(id).value = WAR0[k]; warCambia(); });
+  const r1 = x => Math.round(x * 10) / 10;
+  const ESC = OBS.escenarios({
+    id: "SA4", mount: $("w-esc"),
+    toArray: () => { const v = leerWar(); return [[+$("c-p").value], [v.res, v.fa, v.fb, v.ca, v.cb, v.cut], [+$("w-t").value]]; },
+    fromArray: (a) => {
+      const g = a[1] || [], v = {};
+      Object.keys(WAR0).forEach((k, i) => { $(WP[k]).value = g[i] != null ? g[i] : WAR0[k]; });
+      Object.assign(v, leerWar());
+      $("c-p").value = clamp(+((a[0] || [])[0]) || 20, 10, 30);
+      $("w-t").value = clamp(Math.round(+((a[2] || [])[0]) || 1), 1, WEEKS);
+      stopPlay(); aplicarWar(v); renderCmp(); buildWarTable(); renderWar();
+    },
+    describe: a => { const g = a[1] || []; return OBS.t("esc.desc", { p: uFmt(+((a[0] || [])[0])), r: eur0(g[0]), fa: eur0(g[1]), fb: eur0(g[2]), ca: uFmt(g[3]), cb: uFmt(g[4]), cut: uFmt(g[5]), w: (a[2] || [])[0] }); },
+    resumen: () => {
+      const r = BT.real[WEEKS - 1], p = BT.perf[WEEKS - 1];
+      return [[OBS.t("esc.r.cierra"), CLOSE_WEEK ? OBS.t("esc.r.sem", { n: CLOSE_WEEK }) : OBS.t("esc.r.no")],
+        [OBS.t("esc.r.resB"), eur0(r.resB)], [OBS.t("esc.r.cuota"), Math.round((1 - r.sa) * 100) + " %"],
+        [OBS.t("esc.r.pB"), uFmt(r1(r.pB)) + " €"], [OBS.t("esc.r.perf"), eur0(p.ra)]];
+    },
+    ejemplos: [
+      { nombre: { es: "Valores de partida", va: "Valors de partida" }, arr: [[20], [400, 200, 260, 15, 12, 0.5], [1]] },
+      { nombre: { es: "Las mismas empresas con 1.200 € de reservas", va: "Les mateixes empreses amb 1.200 € de reserves" }, arr: [[20], [1200, 200, 260, 15, 12, 0.5], [1]] }
+    ]
+  });
   OBS.apply();
   OBS.onLang(() => {
     setBestLabels(); buildFirmTable(); renderFirm(); renderMarket(); renderMono(); renderOli();
