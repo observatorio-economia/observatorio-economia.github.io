@@ -216,3 +216,19 @@ details.pz-unir > summary { cursor: pointer; font-weight: 600; color: var(--acce
 ol.pasos { margin: 6px 0 0; padding-left: 1.3em; }
 body.obs-proj .casa { display: none; }
 [hidden] { display: none !important; }
+.obs-serie { font: 600 12px var(--font-body); paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }
+body.obs-proj .obs-serie { font-size: 15px; }
+/* Proyector: en los bloques con un gráfico, controles a la izquierda y gráfico a la derecha (auditoría del 25/11/2026) */
+@media (min-width: 1280px) {
+  body.obs-proj .block:has(> figure) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); grid-template-rows: repeat(11, min-content) 1fr; column-gap: 40px; row-gap: 16px; align-items: start; }
+  body.obs-proj .block:has(> figure) > * { grid-column: 1; min-width: 0; }
+  body.obs-proj .block:has(> figure) > figure:first-of-type { grid-column: 2; grid-row: 1 / -1; }
+}
+/* Ficha impresa más corta: gráficos más bajos y sin lo que no se rellena (auditoría del 25/11/2026) */
+@media print {
+  svg.chart { max-height: 55mm !important; }
+  .duo svg.chart, .charts svg.chart { max-height: 42mm !important; }
+  .obs-docente, details.obs-tabla-datos, details.t-anyos, details.c-tabla, .obs-sub, .seg2 { display: none !important; }
+  .block > .prose p.small, .help { display: none !important; }
+}
+@media print { #c-sa3 { display: none !important; } }

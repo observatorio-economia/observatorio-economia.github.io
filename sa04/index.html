@@ -455,6 +455,22 @@ details.pz-unir > summary { cursor: pointer; font-weight: 600; color: var(--acce
 ol.pasos { margin: 6px 0 0; padding-left: 1.3em; }
 body.obs-proj .casa { display: none; }
 [hidden] { display: none !important; }
+.obs-serie { font: 600 12px var(--font-body); paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }
+body.obs-proj .obs-serie { font-size: 15px; }
+/* Proyector: en los bloques con un gráfico, controles a la izquierda y gráfico a la derecha (auditoría del 25/11/2026) */
+@media (min-width: 1280px) {
+  body.obs-proj .block:has(> figure) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); grid-template-rows: repeat(11, min-content) 1fr; column-gap: 40px; row-gap: 16px; align-items: start; }
+  body.obs-proj .block:has(> figure) > * { grid-column: 1; min-width: 0; }
+  body.obs-proj .block:has(> figure) > figure:first-of-type { grid-column: 2; grid-row: 1 / -1; }
+}
+/* Ficha impresa más corta: gráficos más bajos y sin lo que no se rellena (auditoría del 25/11/2026) */
+@media print {
+  svg.chart { max-height: 55mm !important; }
+  .duo svg.chart, .charts svg.chart { max-height: 42mm !important; }
+  .obs-docente, details.obs-tabla-datos, details.t-anyos, details.c-tabla, .obs-sub, .seg2 { display: none !important; }
+  .block > .prose p.small, .help { display: none !important; }
+}
+@media print { #c-sa3 { display: none !important; } }
 
 /* OBS-COMMON-CSS:END */
 </style>
@@ -1274,10 +1290,58 @@ window.OBS = (() => {
     return { mostrar, actual: () => actual };
   }
   register({ es: { "obs.sub": "Partes de esta pestaña" }, va: { "obs.sub": "Parts d'esta pestanya" } });
+  /* OBS.series(svg, …): escribe el nombre de cada serie al final de su línea, con el texto de la leyenda de su figura,
+     para que el gráfico no dependa solo del color (auditoría del 25/11/2026). Se rehace cada vez que el gráfico se redibuja. */
+  const conSeries = new Set();
+  function etiquetar(svg) {
+    const fig = svg.closest("figure"); if (!fig || !svg.getScreenCTM()) return;
+    const obs = svg._obsSeries; if (obs) obs.disconnect();
+    svg.querySelectorAll(".obs-serie").forEach(n => n.remove());
+    const items = [...fig.querySelectorAll(".legend i")].filter(i => !i.classList.contains("box") && !i.classList.contains("dash"))
+      .map(i => ({ color: getComputedStyle(i).borderTopColor, txt: (i.parentElement.textContent || "").trim() })).filter(x => x.txt);
+    if (items.length >= 2) {
+      const NS = "http://www.w3.org/2000/svg", inv = svg.getScreenCTM().inverse(), puestos = [];
+      const vb = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width ? svg.viewBox.baseVal : { width: svg.clientWidth };
+      for (const it of items) {
+        let mejor = null, largo = 0;
+        svg.querySelectorAll("path, polyline, line").forEach(n => {
+          const cs = getComputedStyle(n); if (cs.stroke !== it.color || (cs.fill && cs.fill !== "none" && cs.fill !== "rgba(0, 0, 0, 0)")) return;
+          let L = 0; try { L = n.getTotalLength ? n.getTotalLength() : 0; } catch {}
+          if (L > largo) { largo = L; mejor = n; }
+        });
+        if (!mejor || largo < 20) continue;
+        const m = inv.multiply(mejor.getScreenCTM());
+        const a = mejor.getPointAtLength(0).matrixTransform(m), b = mejor.getPointAtLength(largo).matrixTransform(m);
+        const fin = b.x >= a.x ? b : a;
+        const tx = document.createElementNS(NS, "text");
+        tx.setAttribute("class", "obs-serie"); tx.setAttribute("text-anchor", "end"); tx.setAttribute("fill", it.color);
+        tx.textContent = it.txt.length > 34 ? it.txt.slice(0, 32) + "…" : it.txt;
+        svg.append(tx);
+        let x = Math.min(fin.x - 4, vb.width - 2), y = fin.y - 8;
+        tx.setAttribute("x", x); tx.setAttribute("y", y);
+        let w = 0; try { w = tx.getComputedTextLength(); } catch {}
+        let n = 0; while (n++ < 8 && puestos.some(q => Math.abs(q.y - y) < 14 && x - w < q.x && x > q.x - q.w)) y += 15;
+        tx.setAttribute("y", y); puestos.push({ x, y, w });
+      }
+    }
+    if (obs) obs.observe(svg, { childList: true });
+  }
+  function series(...svgs) {
+    svgs.filter(Boolean).forEach(svg => {
+      if (conSeries.has(svg)) return; conSeries.add(svg);
+      svg._obsSeries = new MutationObserver(() => etiquetar(svg));
+      svg._obsSeries.observe(svg, { childList: true });
+      etiquetar(svg);
+    });
+  }
+  let serieT = null;
+  const seriesLuego = () => { clearTimeout(serieT); serieT = setTimeout(() => conSeries.forEach(etiquetar), 200); };
+  ["click", "resize", "toggle"].forEach(ev => document.addEventListener(ev, seriesLuego, true));
+  onLang(seriesLuego);
 
   document.addEventListener("DOMContentLoaded", () => apply());
   return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
-    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas };
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas, series };
 })();
 
 // OBS-COMMON-JS:END
@@ -1539,7 +1603,7 @@ window.OBS = (() => {
 "wp.res": "Reservas iniciales de cada empresa (€)", "wp.fa": "Coste fijo de A (€ a la semana)", "wp.fb": "Coste fijo de B (€ a la semana)",
 "wp.ca": "Competencia real: coste por unidad de A (€)", "wp.cb": "Competencia real: coste por unidad de B (€)",
 "wp.cut": "Competencia real: cuánto baja B su precio cada semana (€)", "wp.reset": "Volver a los valores de partida",
-"esc.desc": "Precio en 3a: {p} €. Reservas: {r}. Costes fijos: A {fa}, B {fb}. Coste por unidad: A {ca} €, B {cb} €. B baja {cut} € a la semana. Semana {w}.",
+"esc.desc": "Reservas: {r}. Costes fijos: A {fa}, B {fb}. Coste por unidad: A {ca} €, B {cb} €. B baja {cut} € a la semana. Semana {w}.",
 "esc.ej1": "Valores de partida", "esc.ej2": "Las mismas empresas con 1.200 € de reservas",
 "esc.r.cierra": "¿Cierra A? (real)", "esc.r.no": "no cierra", "esc.r.sem": "semana {n}", "esc.r.resB": "Reservas de B, semana 20 (real)",
 "esc.r.cuota": "Cuota de B, semana 20 (real)", "esc.r.pB": "Precio de B, semana 20", "esc.r.perf": "Reservas de A, semana 20 (perfecta)",
@@ -1797,7 +1861,7 @@ window.OBS = (() => {
 "wp.res": "Reserves inicials de cada empresa (€)", "wp.fa": "Cost fix d'A (€ a la setmana)", "wp.fb": "Cost fix de B (€ a la setmana)",
 "wp.ca": "Competència real: cost per unitat d'A (€)", "wp.cb": "Competència real: cost per unitat de B (€)",
 "wp.cut": "Competència real: quant abaixa B el seu preu cada setmana (€)", "wp.reset": "Tornar als valors de partida",
-"esc.desc": "Preu en 3a: {p} €. Reserves: {r}. Costos fixos: A {fa}, B {fb}. Cost per unitat: A {ca} €, B {cb} €. B abaixa {cut} € a la setmana. Setmana {w}.",
+"esc.desc": "Reserves: {r}. Costos fixos: A {fa}, B {fb}. Cost per unitat: A {ca} €, B {cb} €. B abaixa {cut} € a la setmana. Setmana {w}.",
 "esc.ej1": "Valors de partida", "esc.ej2": "Les mateixes empreses amb 1.200 € de reserves",
 "esc.r.cierra": "Tanca A? (real)", "esc.r.no": "no tanca", "esc.r.sem": "setmana {n}", "esc.r.resB": "Reserves de B, setmana 20 (real)",
 "esc.r.cuota": "Quota de B, setmana 20 (real)", "esc.r.pB": "Preu de B, setmana 20", "esc.r.perf": "Reserves d'A, setmana 20 (perfecta)",

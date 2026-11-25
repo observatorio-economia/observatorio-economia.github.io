@@ -425,6 +425,22 @@ details.pz-unir > summary { cursor: pointer; font-weight: 600; color: var(--acce
 ol.pasos { margin: 6px 0 0; padding-left: 1.3em; }
 body.obs-proj .casa { display: none; }
 [hidden] { display: none !important; }
+.obs-serie { font: 600 12px var(--font-body); paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }
+body.obs-proj .obs-serie { font-size: 15px; }
+/* Proyector: en los bloques con un gráfico, controles a la izquierda y gráfico a la derecha (auditoría del 25/11/2026) */
+@media (min-width: 1280px) {
+  body.obs-proj .block:has(> figure) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); grid-template-rows: repeat(11, min-content) 1fr; column-gap: 40px; row-gap: 16px; align-items: start; }
+  body.obs-proj .block:has(> figure) > * { grid-column: 1; min-width: 0; }
+  body.obs-proj .block:has(> figure) > figure:first-of-type { grid-column: 2; grid-row: 1 / -1; }
+}
+/* Ficha impresa más corta: gráficos más bajos y sin lo que no se rellena (auditoría del 25/11/2026) */
+@media print {
+  svg.chart { max-height: 55mm !important; }
+  .duo svg.chart, .charts svg.chart { max-height: 42mm !important; }
+  .obs-docente, details.obs-tabla-datos, details.t-anyos, details.c-tabla, .obs-sub, .seg2 { display: none !important; }
+  .block > .prose p.small, .help { display: none !important; }
+}
+@media print { #c-sa3 { display: none !important; } }
 
 /* OBS-COMMON-CSS:END */
 </style>
@@ -1078,10 +1094,58 @@ window.OBS = (() => {
     return { mostrar, actual: () => actual };
   }
   register({ es: { "obs.sub": "Partes de esta pestaña" }, va: { "obs.sub": "Parts d'esta pestanya" } });
+  /* OBS.series(svg, …): escribe el nombre de cada serie al final de su línea, con el texto de la leyenda de su figura,
+     para que el gráfico no dependa solo del color (auditoría del 25/11/2026). Se rehace cada vez que el gráfico se redibuja. */
+  const conSeries = new Set();
+  function etiquetar(svg) {
+    const fig = svg.closest("figure"); if (!fig || !svg.getScreenCTM()) return;
+    const obs = svg._obsSeries; if (obs) obs.disconnect();
+    svg.querySelectorAll(".obs-serie").forEach(n => n.remove());
+    const items = [...fig.querySelectorAll(".legend i")].filter(i => !i.classList.contains("box") && !i.classList.contains("dash"))
+      .map(i => ({ color: getComputedStyle(i).borderTopColor, txt: (i.parentElement.textContent || "").trim() })).filter(x => x.txt);
+    if (items.length >= 2) {
+      const NS = "http://www.w3.org/2000/svg", inv = svg.getScreenCTM().inverse(), puestos = [];
+      const vb = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width ? svg.viewBox.baseVal : { width: svg.clientWidth };
+      for (const it of items) {
+        let mejor = null, largo = 0;
+        svg.querySelectorAll("path, polyline, line").forEach(n => {
+          const cs = getComputedStyle(n); if (cs.stroke !== it.color || (cs.fill && cs.fill !== "none" && cs.fill !== "rgba(0, 0, 0, 0)")) return;
+          let L = 0; try { L = n.getTotalLength ? n.getTotalLength() : 0; } catch {}
+          if (L > largo) { largo = L; mejor = n; }
+        });
+        if (!mejor || largo < 20) continue;
+        const m = inv.multiply(mejor.getScreenCTM());
+        const a = mejor.getPointAtLength(0).matrixTransform(m), b = mejor.getPointAtLength(largo).matrixTransform(m);
+        const fin = b.x >= a.x ? b : a;
+        const tx = document.createElementNS(NS, "text");
+        tx.setAttribute("class", "obs-serie"); tx.setAttribute("text-anchor", "end"); tx.setAttribute("fill", it.color);
+        tx.textContent = it.txt.length > 34 ? it.txt.slice(0, 32) + "…" : it.txt;
+        svg.append(tx);
+        let x = Math.min(fin.x - 4, vb.width - 2), y = fin.y - 8;
+        tx.setAttribute("x", x); tx.setAttribute("y", y);
+        let w = 0; try { w = tx.getComputedTextLength(); } catch {}
+        let n = 0; while (n++ < 8 && puestos.some(q => Math.abs(q.y - y) < 14 && x - w < q.x && x > q.x - q.w)) y += 15;
+        tx.setAttribute("y", y); puestos.push({ x, y, w });
+      }
+    }
+    if (obs) obs.observe(svg, { childList: true });
+  }
+  function series(...svgs) {
+    svgs.filter(Boolean).forEach(svg => {
+      if (conSeries.has(svg)) return; conSeries.add(svg);
+      svg._obsSeries = new MutationObserver(() => etiquetar(svg));
+      svg._obsSeries.observe(svg, { childList: true });
+      etiquetar(svg);
+    });
+  }
+  let serieT = null;
+  const seriesLuego = () => { clearTimeout(serieT); serieT = setTimeout(() => conSeries.forEach(etiquetar), 200); };
+  ["click", "resize", "toggle"].forEach(ev => document.addEventListener(ev, seriesLuego, true));
+  onLang(seriesLuego);
 
   document.addEventListener("DOMContentLoaded", () => apply());
   return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
-    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas };
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas, series };
 })();
 
 // OBS-COMMON-JS:END
@@ -1616,7 +1680,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "p.emisiones": "Emisiones y daños", "p.poblacion": "Población y alimentos", "p.blanco": "En blanco",
       "p.espiral": "La espiral de 1929", "p.espiral.q": "Un bucle que se refuerza: ¿dónde se podría cortar?",
       "n.ventas": "Ventas", "n.empleo": "Empleo", "n.renta": "Renta de los hogares", "n.consumo": "Consumo",
-      "d.dentro": "Ver cómo funciona por dentro",
+      "d.dentro": "Ver cómo funciona por dentro", "tb.sim": "Ver los datos cada diez años",
       "mi.prod": "Mira la distancia entre la <b>producción</b> y los <b>daños</b>: si los daños crecen más deprisa, la producción acaba bajando.",
       "mi.co2": "El CO₂ se acumula: aunque las emisiones bajen, la línea sigue subiendo mientras se emita algo.",
       "mi.temp": "Las líneas discontinuas son los límites de 1,5 °C y 2 °C. Mira en qué año los cruza la temperatura.",
@@ -1680,7 +1744,7 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
       "p.emisiones": "Emissions i danys", "p.poblacion": "Població i aliments", "p.blanco": "En blanc",
       "p.espiral": "L'espiral del 1929", "p.espiral.q": "Un bucle que es reforça: on es podria tallar?",
       "n.ventas": "Vendes", "n.empleo": "Ocupació", "n.renta": "Renda de les llars", "n.consumo": "Consum",
-      "d.dentro": "Veure com funciona per dins",
+      "d.dentro": "Veure com funciona per dins", "tb.sim": "Veure les dades cada deu anys",
       "mi.prod": "Mira la distància entre la <b>producció</b> i els <b>danys</b>: si els danys creixen més de pressa, la producció acaba baixant.",
       "mi.co2": "El CO₂ s'acumula: encara que les emissions baixen, la línia continua pujant mentre s'emeta alguna cosa.",
       "mi.temp": "Les línies discontínues són els límits d'1,5 °C i 2 °C. Mira en quin any els creua la temperatura.",
@@ -2069,6 +2133,18 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
     const tr = k => ({ get es() { return OBS.t(k); }, get va() { return OBS.t(k); } });
     if (Pizarra.bindUnir) Pizarra.bindUnir(document.querySelector("#view-pizarra .loops") ? document.querySelector("#view-pizarra .loops").parentNode.insertBefore(OBS.h("div", { class: "pz-unir-caja" }), document.querySelector("#view-pizarra .loops")) : $("board"), board);
     OBS.mirar($("ch-prod"), tr("mi.prod")); OBS.mirar($("ch-co2"), tr("mi.co2")); OBS.mirar($("ch-temp"), tr("mi.temp"));
+    OBS.series(...["ch-prod"].map(id => $(id)));  // nombre de cada serie sobre su línea
+    // Tabla de datos junto a los gráficos (alternativa para lector de pantalla), cada diez años
+    {
+      const tabla = el("table", {}), det = el("details", { class: "obs-tabla-datos" }, el("summary", { text: t("tb.sim") }), el("div", { class: "scroll" }, tabla));
+      $("ch-temp").closest(".charts").after(det);
+      const rehacer = () => {
+        det.querySelector("summary").textContent = t("tb.sim");
+        tabla.replaceChildren(el("thead", {}, el("tr", {}, [t("t.year"), t("g.prodL"), t("g.dam"), t("g.co2L"), t("g.tempL")].map(c => el("th", { text: c })))),
+          el("tbody", {}, run.filter(r => r.yr % 10 === 0 || r.yr === 2025).map(r => el("tr", {}, [String(r.yr), fmt(r.Y), fmt(r.dam, 1), t("d.ppm", { v: fmt(r.C) }), t("d.deg", { v: fmt(r.T, 1) })].map(c => el("td", { text: c }))))));
+      };
+      new MutationObserver(rehacer).observe($("stats"), { childList: true });
+    }
     const pal = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
     const sim = document.querySelector("#view-simulador section.block[aria-labelledby='h-sim']");
     if (sim) OBS.palabras(sim, pal(["ind", "ppm", "pre"]), { antes: sim.querySelector(".controls") });

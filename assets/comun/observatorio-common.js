@@ -496,8 +496,56 @@ window.OBS = (() => {
     return { mostrar, actual: () => actual };
   }
   register({ es: { "obs.sub": "Partes de esta pestaña" }, va: { "obs.sub": "Parts d'esta pestanya" } });
+  /* OBS.series(svg, …): escribe el nombre de cada serie al final de su línea, con el texto de la leyenda de su figura,
+     para que el gráfico no dependa solo del color (auditoría del 25/11/2026). Se rehace cada vez que el gráfico se redibuja. */
+  const conSeries = new Set();
+  function etiquetar(svg) {
+    const fig = svg.closest("figure"); if (!fig || !svg.getScreenCTM()) return;
+    const obs = svg._obsSeries; if (obs) obs.disconnect();
+    svg.querySelectorAll(".obs-serie").forEach(n => n.remove());
+    const items = [...fig.querySelectorAll(".legend i")].filter(i => !i.classList.contains("box") && !i.classList.contains("dash"))
+      .map(i => ({ color: getComputedStyle(i).borderTopColor, txt: (i.parentElement.textContent || "").trim() })).filter(x => x.txt);
+    if (items.length >= 2) {
+      const NS = "http://www.w3.org/2000/svg", inv = svg.getScreenCTM().inverse(), puestos = [];
+      const vb = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width ? svg.viewBox.baseVal : { width: svg.clientWidth };
+      for (const it of items) {
+        let mejor = null, largo = 0;
+        svg.querySelectorAll("path, polyline, line").forEach(n => {
+          const cs = getComputedStyle(n); if (cs.stroke !== it.color || (cs.fill && cs.fill !== "none" && cs.fill !== "rgba(0, 0, 0, 0)")) return;
+          let L = 0; try { L = n.getTotalLength ? n.getTotalLength() : 0; } catch {}
+          if (L > largo) { largo = L; mejor = n; }
+        });
+        if (!mejor || largo < 20) continue;
+        const m = inv.multiply(mejor.getScreenCTM());
+        const a = mejor.getPointAtLength(0).matrixTransform(m), b = mejor.getPointAtLength(largo).matrixTransform(m);
+        const fin = b.x >= a.x ? b : a;
+        const tx = document.createElementNS(NS, "text");
+        tx.setAttribute("class", "obs-serie"); tx.setAttribute("text-anchor", "end"); tx.setAttribute("fill", it.color);
+        tx.textContent = it.txt.length > 34 ? it.txt.slice(0, 32) + "…" : it.txt;
+        svg.append(tx);
+        let x = Math.min(fin.x - 4, vb.width - 2), y = fin.y - 8;
+        tx.setAttribute("x", x); tx.setAttribute("y", y);
+        let w = 0; try { w = tx.getComputedTextLength(); } catch {}
+        let n = 0; while (n++ < 8 && puestos.some(q => Math.abs(q.y - y) < 14 && x - w < q.x && x > q.x - q.w)) y += 15;
+        tx.setAttribute("y", y); puestos.push({ x, y, w });
+      }
+    }
+    if (obs) obs.observe(svg, { childList: true });
+  }
+  function series(...svgs) {
+    svgs.filter(Boolean).forEach(svg => {
+      if (conSeries.has(svg)) return; conSeries.add(svg);
+      svg._obsSeries = new MutationObserver(() => etiquetar(svg));
+      svg._obsSeries.observe(svg, { childList: true });
+      etiquetar(svg);
+    });
+  }
+  let serieT = null;
+  const seriesLuego = () => { clearTimeout(serieT); serieT = setTimeout(() => conSeries.forEach(etiquetar), 200); };
+  ["click", "resize", "toggle"].forEach(ev => document.addEventListener(ev, seriesLuego, true));
+  onLang(seriesLuego);
 
   document.addEventListener("DOMContentLoaded", () => apply());
   return { t, register, apply, setLang, onLang, lang: () => lang, mountBar, download, csv, store, h,
-    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas };
+    velo: { cubrir, modo: setVeloModo }, escenarios, imprimir, marcas, mirar, palabras, subpestanas, series };
 })();
