@@ -1,5 +1,5 @@
 {
-  "_nota": "Fuentes de la sección Actualidad (canales RSS o Atom). Las marcadas con \"salmon\": true son prensa económica: sus noticias con imagen forman el carrusel de la portada y de Actualidad. Las demás, de líneas editoriales distintas, completan la lista de titulares para contrastar. Para quitar una, bórrala; para añadir otra, copia una entrada con su nombre y su canal. elEconomista no se puede leer: bloquea los lectores automáticos. Comprobadas el 30/10/2026.",
+  "_nota": "Fuentes de la sección Actualidad (canales RSS o Atom). Las marcadas con \"salmon\": true son prensa económica; las demás, de líneas editoriales distintas, completan la lista de titulares para contrastar. Desde el 25/11/2026 no hay carrusel ni imágenes: la portada solo enseña las noticias comentadas en clase y Actualidad, los titulares con su enlace. Para quitar una, bórrala; para añadir otra, copia una entrada con su nombre y su canal. elEconomista no se puede leer: bloquea los lectores automáticos. Comprobadas el 30/10/2026.",
   "por_fuente": 5,
   "dias": 10,
   "carrusel": 8,

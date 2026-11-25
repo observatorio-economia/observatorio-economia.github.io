@@ -292,3 +292,22 @@ figure .plot { background: transparent; }
 .obs-migas a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 .obs-migas [aria-current] { color: var(--muted); }
 #obs-bar a.back, .obs-bar a.back, a.back.obs-volver { display: none; }
+
+/* Portada · las crisis del Observatorio (25/11/2026): una línea de 1929 a hoy en dos tramos de cinco; en el móvil, vertical */
+.obs-page .crono-caja { display: flex; flex-direction: column; gap: 8px; padding: 18px 20px 22px; background: var(--paper); }
+.obs-page .crono-d { margin: 0; color: var(--muted); font-size: 15px; }
+.obs-page .crono { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 26px 0; }
+.obs-page .crono li { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 14px 14px 4px 0; min-width: 0; border-top: 3px solid var(--ink); }
+.obs-page .crono li::before { content: ""; position: absolute; top: -9px; left: 0; width: 15px; height: 15px; background: var(--accent); }
+.obs-page .crono li.sin::before { background: var(--paper); box-shadow: inset 0 0 0 3px var(--ink); }
+.obs-page .crono-cuando { font: 600 15px var(--font-display); color: var(--ink); }
+.obs-page .crono-t { font-size: 14px; line-height: 1.3; overflow-wrap: break-word; }
+.obs-page .crono-sa { font: 600 12px var(--font-label); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); text-decoration: none; align-self: flex-start; border-bottom: 2px solid var(--accent); }
+.obs-page .crono-sa.sin { color: var(--muted); border-bottom: 0; }
+.obs-page a.crono-sa:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 900px) {
+  .obs-page .crono { grid-template-columns: minmax(0, 1fr); border-top: 0; border-left: 3px solid var(--ink); margin-left: 6px; }
+  .obs-page .crono { gap: 0; }
+  .obs-page .crono li { padding: 0 0 14px 18px; border-top: 0; }
+  .obs-page .crono li::before { top: 4px; left: -9px; }
+}

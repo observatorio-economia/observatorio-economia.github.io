@@ -74,19 +74,27 @@ En todas las páginas, el menú de arriba (Inicio, Situaciones, Actualidad, Dato
 
 ## Portada
 
-La rellena `assets/menu.js`: arriba, **«Esta semana en clase»**, la SA que toca según las fechas del calendario (campos `ini` y `fin` de cada SA en `menu.js`, sacados de `02-curriculo/03-calendario-2026-27.md`); en vacaciones, la siguiente. Debajo, **la línea del curso** (un tramo por SA con el ancho de su duración: pasadas en grafito, la actual en rojo con la marca de hoy), la actualidad, las situaciones por trimestre (con la pregunta guía cuando está decidida, campo `q`) y las páginas comunes. El menú tiene «Situaciones» como desplegable con los títulos, «Actualidad», «Datos» y el botón del tema. Si cambia el calendario, hay que cambiar esas fechas en `menu.js`.
+La rellena `assets/menu.js`: arriba, **«Esta semana en clase»**, la SA que toca según las fechas del calendario (campos `ini` y `fin` de cada SA en `menu.js`, sacados de `02-curriculo/03-calendario-2026-27.md`); en vacaciones, la siguiente. Debajo, **la línea del curso** (un tramo por SA con el ancho de su duración: pasadas en grafito, la actual en rojo con la marca de hoy), **las crisis del Observatorio** (una línea de 1929 a hoy con la crisis hilo de cada SA y el enlace a su herramienta, o «próximamente» si aún no la tiene; en el móvil la línea es vertical; los datos están en `CRISIS`, en `menu.js`), la noticia comentada más reciente (solo si hay alguna), las situaciones por trimestre (con la pregunta guía cuando está decidida, campo `q`) y las páginas comunes. El menú tiene «Situaciones» como desplegable con los títulos, «Actualidad», «Datos» y el botón del tema. Si cambia el calendario, hay que cambiar esas fechas en `menu.js`.
 
 ## Actualidad
 
-Se ve en el menú («Actualidad»), en la portada (el carrusel de la prensa salmón y la noticia comentada más reciente) y en `actualidad/` (carrusel, comentadas y titulares por medio).
+Se ve en el menú («Actualidad»), en la portada (solo la noticia comentada en clase más reciente; si no hay, la sección no sale) y en `actualidad/` (comentadas y titulares por medio). Desde el 25/11/2026 no hay carrusel ni imágenes de los medios: la portada no muestra titulares automáticos y ninguna página carga fotos de servidores ajenos.
 
 - **Noticias comentadas:** en el vault, `05-SA/_actualidad/AAAA-MM-DD-palabra-clave.md`, copiando `_plantilla.md`: titular, medio, enlace, SA, concepto y una pregunta para la clase en la cabecera, y dos o tres líneas propias debajo. Solo salen las que tienen `estado: publicado`. No se copia el texto de la noticia: se resume y se enlaza.
 - **Titulares:** los recoge `actualizar.sh` de los canales RSS de `scripts/fuentes-actualidad.json` (medios de líneas editoriales distintas; se pueden quitar o añadir). Solo título, medio, fecha y enlace. Si un canal falla, se conservan sus titulares anteriores y se avisa con ⚠, sin parar la web.
-- **Carrusel de la prensa salmón:** las fuentes marcadas con `"salmon": true` (Expansión, Cinco Días e Invertia) dan las noticias con imagen del carrusel, alternando medios, ocho como máximo (`"carrusel"` en el mismo archivo). Botones de anterior, siguiente y pausa, contador y puntos; se puede deslizar con el dedo; avanza solo cada 7 segundos salvo con «reducir movimiento», con el ratón encima o con el foco dentro. elEconomista no se puede usar: bloquea los lectores automáticos.
-- **Las imágenes** son las que cada medio pone en su propio canal para que se muestren sus noticias: se enlazan desde su servidor (no se copian ni se guardan), llevan el crédito del medio y enlazan a la noticia. Solo se descarga la de la noticia que se está viendo; las de Cinco Días pesan cerca de 1 MB cada una.
+- **Sin carrusel ni imágenes (25/11/2026):** las fuentes marcadas con `"salmon": true` (prensa económica) siguen en la lista de titulares, pero ya no se guardan ni se enlazan sus imágenes. La función del carrusel (`OBS_CARRUSEL` en `menu.js`) se conserva sin uso por si se quiere recuperar. elEconomista no se puede usar: bloquea los lectores automáticos.
 - **Cada día, solos:** cuando la web esté en GitHub, `.github/workflows/titulares.yml` los renueva cada mañana (`--solo-titulares`, sin el vault). En local, se renuevan al ejecutar `actualizar.sh`.
 - Sin comentarios ni foros: la web es solo de lectura.
 - Los titulares automáticos no se revisan uno a uno: pueden colarse noticias poco adecuadas para el aula. Si pasa, se quita ese medio de la lista.
+
+## Herramientas abiertas: «Antes de ver», escenarios, ficha imprimible y marcas de fecha
+
+Piezas comunes en `05-SA/_observatorio-comun/observatorio-common.js` y `.css` (vault), que `sync.py` copia en cada herramienta. Una herramienta las activa con `OBS.mountBar(..., { apertura: true })`.
+
+- **«Antes de ver»:** en modo proyector (o siempre, según el panel del profesor, «Abrir la herramienta»), los resultados de cada bloque (`data-obs-scope`) salen tapados hasta pulsar «Ver», para que la clase prediga primero. Se marcan con `data-obs-result`; la barra va donde haya un `data-obs-prompt` o antes del primer resultado. Se vuelven a tapar al cargar un escenario, al pulsar un botón de choque o con «Tapar otra vez»; mover un deslizador no los tapa.
+- **Escenarios propios** (`OBS.escenarios`): guardar hasta 7 configuraciones con nombre en el navegador, cargar ejemplos, comparar los resultados en una tabla y pasar un escenario con un código corto (`SA4-…-X`, con letra de control). Nada sale del navegador. Hoy en SA 4 (pestaña de la guerra de precios, con sus parámetros a la vista) y SA 6.
+- **Ficha imprimible** (`OBS.imprimir`): «Imprimir ficha» saca la pestaña activa en A4 con Nombre/Equipo, el escenario y huecos para la predicción en lugar de los resultados (en los gráficos quedan los ejes); el profesor puede imprimir con resultados desde su panel.
+- **Marcas de fecha** (`OBS.marcas`): líneas o bandas con texto sobre un gráfico de años. En SA 8, sobre el IPC: 1973, 1977, 1999 y 2021-2023 (casilla «Fechas históricas en los gráficos»).
 
 ## Autoría, licencia y cómo citar
 

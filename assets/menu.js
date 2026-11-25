@@ -69,7 +69,8 @@
       ant: "Noticia anterior", sig: "Noticia siguiente", pausa: "Pausar", seguir: "Reanudar", ir: "Ir a la noticia {n}", comclase: "Comentada en clase",
       lic: "Licencia", licd: "Puedes copiar, adaptar y compartir este material citando la fuente y con la misma licencia.",
       cita: "Cómo citar esta página", sitio: "Observatorio · Economía 1.º de Bachillerato", consulta: "consultado el",
-      inicio: "Inicio", migas: "Estás en", herr: "Herramienta", ses: "Sesión {n}" },
+      inicio: "Inicio", migas: "Estás en", herr: "Herramienta", ses: "Sesión {n}",
+      crono: "Las crisis del Observatorio", cronod: "Cada situación de aprendizaje se construye alrededor de una crisis. De 1929 a hoy, en orden.", cronoir: "Ir a la SA {n}" },
     va: { home: "Observatori", sub: "Economia · 1r Batx.", nav: "Situacions d'aprenentatge", soon: "pròximament",
       open: "obrir", proto: "prototip", tema: "Tema", auto: "automàtic", light: "clar", dark: "fosc", cambiar: "Canviar el tema; ara {v}",
       act: "Actualitat", pq: "Per a pensar", actmas: "Més notícies i titulars",
@@ -81,7 +82,8 @@
       ant: "Notícia anterior", sig: "Notícia següent", pausa: "Pausar", seguir: "Reprendre", ir: "Anar a la notícia {n}", comclase: "Comentada a classe",
       lic: "Llicència", licd: "Pots copiar, adaptar i compartir aquest material citant la font i amb la mateixa llicència.",
       cita: "Com citar aquesta pàgina", sitio: "Observatori · Economia 1r de Batxillerat", consulta: "consultat el",
-      inicio: "Inici", migas: "Estàs en", herr: "Ferramenta", ses: "Sessió {n}" },
+      inicio: "Inici", migas: "Estàs en", herr: "Ferramenta", ses: "Sessió {n}",
+      crono: "Les crisis de l'Observatori", cronod: "Cada situació d'aprenentatge es construeix al voltant d'una crisi. Del 1929 fins hui, en ordre.", cronoir: "Anar a la SA {n}" },
   };
   const idioma = () => (window.OBS && OBS.lang && OBS.lang() === "va") ? "va" : "es";
   const tx = k => TXT[idioma()][k];
@@ -258,22 +260,15 @@
   }
   window.OBS_CARRUSEL = carrusel;
 
-  // Portada: el carrusel de la prensa salmón y la noticia comentada más reciente (los deja actualizar.sh en estado-web.js)
+  // Portada: solo la noticia comentada en clase más reciente (la deja actualizar.sh en estado-web.js).
+  // Desde el 25/11/2026 la portada no muestra titulares automáticos ni fotos de otros servidores: están en «Actualidad».
+  // Si no hay ninguna comentada, la sección no aparece.
   function portadaActualidad() {
     const caja = document.getElementById("panel-actualidad");
     const a = window.OBS_ESTADO && window.OBS_ESTADO.actualidad;
     if (!caja) return;
-    const enCarrusel = (a && a.carrusel) || [];
-    if (!a || (!a.comentada && !enCarrusel.length && !(a.titulares || []).length)) { caja.hidden = true; return; }
+    if (!a || !a.comentada) { caja.hidden = true; caja.replaceChildren(); return; }
     const hijos = [el("h2", { text: tx("act") })];
-    if (enCarrusel.length) {
-      const c = el("div", { class: "act-carrusel" });
-      hijos.push(c);
-      setTimeout(() => carrusel(c, enCarrusel), 0);
-    } else if ((a.titulares || []).length) {
-      hijos.push(el("ul", { class: "act-lista" }, ...a.titulares.map(i => el("li", {},
-        el("a", Object.assign({ href: i.enlace }, EXT), i.titulo), el("time", { text: fechaCorta(i.fecha) + " · " + i.fuente })))));
-    }
     const c = a.comentada;
     if (c) {
       const meta = el("div", { class: "act-meta" }, el("span", { text: tx("comclase") }), el("time", { text: c.fecha }), el("span", { text: c.fuente || "" }),
@@ -284,8 +279,6 @@
       hijos.push(art);
     }
     hijos.push(el("a", { class: "act-mas", href: enlace("actualidad/"), text: tx("actmas") }));
-    const anterior = caja.querySelector(".act-carrusel");
-    if (anterior && anterior._parar) anterior._parar();
     caja.replaceChildren(...hijos);
     caja.hidden = false;
   }
@@ -339,8 +332,34 @@
       el("ol", { class: "camino" }, ...tramos), el("div", { class: "camino-meses", "aria-hidden": "true" }, ...meses));
   }
 
+  // Portada · las crisis hilo del curso, en orden cronológico, cada una con su SA (25/11/2026)
+  const CRISIS = [
+    { cuando: { es: "1929", va: "1929" }, sa: 5, t: { es: "La Gran Depresión", va: "La Gran Depressió" } },
+    { cuando: { es: "1943", va: "1943" }, sa: 1, t: { es: "El hambre de Bengala", va: "La fam de Bengala" } },
+    { cuando: { es: "1973", va: "1973" }, sa: 8, t: { es: "La crisis del petróleo y la estanflación", va: "La crisi del petroli i l'estagflació" } },
+    { cuando: { es: "Años ochenta", va: "Anys huitanta" }, sa: 6, t: { es: "La crisis industrial y el paro en España", va: "La crisi industrial i l'atur a Espanya" } },
+    { cuando: { es: "2008", va: "2008" }, sa: 10, t: { es: "La crisis de las hipotecas subprime", va: "La crisi de les hipoteques subprime" } },
+    { cuando: { es: "2009", va: "2009" }, sa: 3, t: { es: "La quiebra de General Motors", va: "La fallida de General Motors" } },
+    { cuando: { es: "2010-2012", va: "2010-2012" }, sa: 7, t: { es: "La crisis de la deuda soberana europea", va: "La crisi del deute sobirà europeu" } },
+    { cuando: { es: "2020", va: "2020" }, sa: 2, t: { es: "La pandemia", va: "La pandèmia" } },
+    { cuando: { es: "2022", va: "2022" }, sa: 4, t: { es: "La crisis energética europea", va: "La crisi energètica europea" } },
+    { cuando: { es: "Hoy", va: "Hui" }, sa: 9, t: { es: "La guerra arancelaria (eco de 1930)", va: "La guerra aranzelària (ressò del 1930)" } },
+  ];
+  function portadaCrisis() {
+    const caja = document.getElementById("portada-crisis");
+    if (!caja) return;
+    const items = CRISIS.map(c => {
+      const s = SA.find(x => x.n === c.sa) || {};
+      const sa = s.ruta
+        ? el("a", { class: "crono-sa", href: enlace(s.ruta), "aria-label": tx("cronoir").replace("{n}", c.sa) + ": " + L(s.t) }, "SA " + c.sa)
+        : el("span", { class: "crono-sa sin" }, "SA " + c.sa + " · " + tx("soon"));
+      return el("li", { class: s.ruta ? null : "sin" }, el("span", { class: "crono-cuando", text: L(c.cuando) }), el("span", { class: "crono-t", text: L(c.t) }), sa);
+    });
+    caja.replaceChildren(el("h2", { class: "camino-titulo", text: tx("crono") }), el("p", { class: "crono-d", text: tx("cronod") }), el("ol", { class: "crono" }, ...items));
+  }
+
   function panel() {
-    portadaHero(); portadaCamino(); portadaActualidad();
+    portadaHero(); portadaCamino(); portadaCrisis(); portadaActualidad();
     const extra = document.getElementById("panel-datos");
     if (extra) extra.replaceChildren(...EXTRA.map(x => el("li", {}, el("a", { class: "row", href: enlace(x.ruta) },
       el("span", { class: "num", "aria-hidden": "true", text: x.num }),

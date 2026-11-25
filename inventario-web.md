@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-10-31 10:43
-- Commit de partida: `b0ba5ea`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 4
+- Generado: 2026-11-25 20:18
+- Commit de partida: `a35bd48`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 21
 
 ## Interruptores de la web
 
@@ -16,7 +16,7 @@
 ### sa01 · SA 1 · ¿Qué es la economía?
 
 - Web: `sa01/herramientas/index.html`
-- Vault: `SA01-que-es-la-economia/material/observatorio-sa1.html` (2026-10-30 19:45, 129 KB)
+- Vault: `SA01-que-es-la-economia/material/observatorio-sa1.html` (2026-11-25 20:17, 155 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -36,7 +36,7 @@
 ### sa02 · SA 2 · El comportamiento humano en la actividad económica
 
 - Web: `sa02/index.html`
-- Vault: `SA02-el-comportamiento-humano/material/SA2-herramientas.html` (2026-10-30 19:45, 101 KB)
+- Vault: `SA02-el-comportamiento-humano/material/SA2-herramientas.html` (2026-11-25 20:17, 127 KB)
 - Copia: ✓ copiada
 - En el menú: estado `open`, oculta: no
 - Pestañas:
@@ -54,7 +54,7 @@
 ### sa03 · SA 3 · La producción
 
 - Web: `sa03/index.html`
-- Vault: `SA03-la-produccion/material/observatorio-sa3.html` (2026-10-30 19:45, 237 KB)
+- Vault: `SA03-la-produccion/material/observatorio-sa3.html` (2026-11-25 20:17, 263 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -74,7 +74,7 @@
 ### sa04 · SA 4 · El mercado
 
 - Web: `sa04/index.html`
-- Vault: `SA04-el-mercado/material/observatorio-sa4.html` (2026-10-30 19:45, 136 KB)
+- Vault: `SA04-el-mercado/material/observatorio-sa4.html` (2026-11-25 20:17, 169 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -100,7 +100,7 @@
 ### sa05 · SA 5 · Crecimiento económico y desarrollo
 
 - Web: `sa05/index.html`
-- Vault: `SA05-crecimiento-y-desarrollo/material/observatorio-sa5.html` (2026-10-30 19:45, 113 KB)
+- Vault: `SA05-crecimiento-y-desarrollo/material/observatorio-sa5.html` (2026-11-25 20:17, 140 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -116,7 +116,7 @@
 ### sa06 · SA 6 · El mercado laboral
 
 - Web: `sa06/index.html`
-- Vault: `SA06-el-mercado-laboral/material/observatorio-sa6.html` (2026-10-30 19:45, 66 KB)
+- Vault: `SA06-el-mercado-laboral/material/observatorio-sa6.html` (2026-11-25 20:17, 95 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas: ninguna (una sola pantalla)
@@ -131,7 +131,7 @@
 ### sa08 · SA 8 · El dinero
 
 - Web: `sa08/index.html`
-- Vault: `SA08-el-dinero/material/observatorio-sa8.html` (2026-10-30 19:45, 80 KB)
+- Vault: `SA08-el-dinero/material/observatorio-sa8.html` (2026-11-25 20:17, 106 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -147,7 +147,7 @@
 ### sa09 · SA 9 · Comercio internacional
 
 - Web: `sa09/index.html`
-- Vault: `SA09-comercio-internacional/material/observatorio-sa9.html` (2026-10-30 19:45, 91 KB)
+- Vault: `SA09-comercio-internacional/material/observatorio-sa9.html` (2026-11-25 20:17, 117 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -167,7 +167,7 @@
 ### datos
 
 - Web: `datos/index.html`
-- Vault: `_base-de-datos/observatorio-datos.html` (2026-10-30 19:45, 61 KB)
+- Vault: `_base-de-datos/observatorio-datos.html` (2026-11-25 20:17, 87 KB)
 - Copia: ✓ copiada
 - Pestañas: ninguna (una sola pantalla)
 - Fuentes que cita:
