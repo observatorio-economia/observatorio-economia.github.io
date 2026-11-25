@@ -98,3 +98,65 @@ body.obs-proj p.help, body.obs-proj .lede, body.obs-proj .obs-pie { display: non
 body.obs-proj header.top { padding-block: 8px 4px !important; }
 body.obs-proj header.top h1 { font-size: 28px !important; }
 
+/* ===== Apertura (25/11/2026): «Antes de ver», «Escenarios propios» e «Imprimir ficha» ===== */
+.obs-velo-on .obs-velado [data-obs-result] { filter: blur(10px) grayscale(.7); opacity: .45; pointer-events: none; user-select: none; transition: filter .25s, opacity .25s; }
+.obs-velo-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; border: 2px dashed var(--accent); background: var(--accent-soft); padding: 12px 16px; margin: 6px 0; }
+.obs-velo-bar[hidden] { display: none !important; }
+.obs-velo-bar p { margin: 0; flex: 1 1 18em; font-family: var(--font-read); font-size: 17px; color: var(--ink); }
+.obs-velo-bar.destapado { border: 0; background: transparent; padding: 0; margin: 0; justify-content: flex-end; }
+.obs-velo-bar.destapado .btn { font-size: 11px; padding: 4px 10px; }
+body.obs-proj .obs-velo-bar p { font-size: 22px; }
+.obs-apertura { display: flex; flex-direction: column; gap: 8px; }
+.obs-apertura__fila { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 14px; }
+.obs-apertura select { font: 14px var(--font-body); padding: 4px 8px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); }
+details.obs-esc { border: 1px solid var(--rule); background: var(--paper); padding: 10px 14px; margin: 10px 0; font-size: 14px; }
+details.obs-esc > summary { cursor: pointer; font-family: var(--font-mono); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+details.obs-esc[open] > summary { margin-bottom: 10px; }
+details.obs-esc > * + * { margin-top: 8px; }
+.obs-esc__fila { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.obs-esc__fila input[type="text"] { font: 14px var(--font-body); padding: 6px 8px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); min-width: 14em; flex: 1 1 14em; }
+.obs-esc__lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.obs-esc__lista li { display: grid; grid-template-columns: minmax(0, 12em) minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; border-top: 1px solid var(--grid); padding-top: 6px; }
+.obs-esc__acc { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: flex-end; }
+.obs-esc__tag { font-family: var(--font-mono); font-size: 11px; color: var(--accent); margin-right: 6px; text-transform: uppercase; letter-spacing: .08em; }
+.obs-esc__cod { font-family: var(--font-mono); font-size: 12px; color: var(--muted); user-select: all; word-break: break-all; }
+.obs-esc__cod.grande { font-size: 15px; color: var(--ink); background: var(--bg); padding: 3px 8px; border: 1px solid var(--rule); }
+.obs-esc__estado.malo { color: var(--bad); }
+.obs-esc__tabla { border-collapse: collapse; font-size: 13px; }
+.obs-esc__tabla th, .obs-esc__tabla td { border-bottom: 1px solid var(--grid); padding: 4px 10px; text-align: right; white-space: nowrap; }
+.obs-esc__tabla th:first-child { text-align: left; }
+.obs-esc__cmp { overflow-x: auto; max-width: 100%; }
+.obs-esc__tabla thead th { white-space: normal; min-width: 7em; max-width: 12em; vertical-align: bottom; }
+@media (max-width: 640px) { .obs-esc__lista li { grid-template-columns: minmax(0, 1fr); } .obs-esc__acc { justify-content: flex-start; } }
+.obs-print-head { display: none; }
+@media print {
+  @page { size: A4; margin: 12mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body { font-size: 10.5pt; }
+  .wrap { max-width: none !important; padding: 0 !important; }
+  .obs-bar, .obs-docente, details.obs-esc, nav.obs-menu, .obs-menu, footer.obs-pie, .obs-pie, nav.tabs, .obs-velo-bar, .tip,
+  button, .btn, header.top { display: none !important; }
+  .obs-velo-on .obs-velado [data-obs-result] { filter: none !important; opacity: 1 !important; }
+  .obs-print-head { display: block !important; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 8px; }
+  .obs-ph-top { display: flex; justify-content: space-between; font: 9pt var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+  .obs-ph-h { font: 700 15pt var(--font-display); text-transform: uppercase; margin: 4px 0; }
+  .obs-ph-campos { display: flex; gap: 24px; margin: 6px 0; }
+  .obs-ph-campos span { flex: 1; border-bottom: 1px solid #000; padding-bottom: 14px; }
+  .obs-ph-esc, .obs-ph-ayuda { margin: 4px 0; font-size: 9.5pt; }
+  figure, .world, .rule, .stats, .notice, table { break-inside: avoid; }
+  svg.chart { max-height: 70mm; }
+  details > *:not(summary) { display: block; }
+  /* Ficha: los resultados quedan en blanco, con sitio para escribir la predicción; en los gráficos se quedan los ejes */
+  body.obs-print-ficha [data-obs-result]:not(figure) { position: relative; min-height: 22mm; border: 1px dashed #555; }
+  body.obs-print-ficha [data-obs-result]:not(figure) > * { visibility: hidden; }
+  body.obs-print-ficha [data-obs-result]:not(figure)::before { content: attr(data-obs-pred); position: absolute; top: 2mm; left: 3mm; font: 8.5pt var(--font-mono); color: #555; text-transform: uppercase; letter-spacing: .06em; }
+  body.obs-print-ficha figure[data-obs-result] svg [clip-path], body.obs-print-ficha figure[data-obs-result] svg .dot,
+  body.obs-print-ficha figure[data-obs-result] svg .lbl, body.obs-print-ficha figure[data-obs-result] svg .hover-line { visibility: hidden; }
+  body.obs-print-ficha figure[data-obs-result] .share, body.obs-print-ficha figure[data-obs-result] .fstats { visibility: hidden; }
+  body.obs-print-ficha details[data-obs-result] { display: none !important; }
+}
+/* Marcas de fechas sobre las series (25/11/2026) */
+.obs-marca line { stroke: var(--accent); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.obs-marca rect { fill: var(--accent); opacity: .1; }
+.obs-marca text { font: 500 11px var(--font-mono); fill: var(--accent); }
+body.obs-proj .obs-marca text { font-size: 14px; }
