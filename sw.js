@@ -1,5 +1,5 @@
 /* Generado por actualizar.sh: no editar a mano. Web instalable del Observatorio. */
-const VERSION = "obs-6c0f3bb4ddd0";
+const VERSION = "obs-6f36dd64bc73";
 const ARCHIVOS = [
 "./",
 "actualidad/datos.json",
