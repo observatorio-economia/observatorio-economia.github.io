@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icono/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icono/apple-touch-icon.png">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Observatorio">
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/estado-web.js"></script>
+<script src="../assets/menu.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="v.titulo">El pueblo · tu hogar</title>
+<style>:root { --bg: #faf7ef; --ink: #23262b; --muted: #5d636c; --paper: #ffffff; --rule: #d9d3c3; --ok: #2d6a4f; --bad: #a4372c; --acc: #2f4f8a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; } }
+:root[data-theme="dark"] { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 16px; }
+main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+h1 { font-size: 28px; margin: 0; }
+.small { font-size: 14px; color: var(--muted); }
+.caja { background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+label { font-size: 14px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+input, select { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); min-height: 44px; }
+button { font: 600 16px system-ui, sans-serif; padding: 10px 14px; border-radius: 10px; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; min-height: 48px; }
+button.prim { background: var(--ink); color: var(--bg); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.rejilla button[aria-pressed="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
+.idiomas { display: flex; gap: 6px; justify-content: flex-end; }
+.idiomas button { min-height: 36px; padding: 4px 10px; font-size: 14px; }
+.ok { color: var(--ok); font-weight: 600; } .mal { color: var(--bad); font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--rule); padding: 5px 8px; text-align: left; }
+.cifras { display: flex; flex-wrap: wrap; gap: 10px; }
+.cifras div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 12px; min-width: 140px; }
+.cifras b { display: block; font-size: 28px; }
+.scroll { overflow-x: auto; }
+a { overflow-wrap: anywhere; }
+[hidden] { display: none !important; }
+
+.hogar { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+.hogar b { font-size: 22px; }
+.estado { font-size: 15px; }
+.voto { border-top: 1px solid var(--rule); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.voto h3 { margin: 0; font-size: 18px; }
+.ops { display: flex; flex-wrap: wrap; gap: 8px; }
+.ops button[aria-pressed="true"], .rejilla button[aria-pressed="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
+.rejilla button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
+.rejilla button small { font-weight: 400; font-size: 14px; }
+textarea { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); min-height: 110px; width: 100%; }
+textarea:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+h2 { margin: 0; font-size: 21px; }
+.suceso { font-size: 24px; font-weight: 700; margin: 0; }
+</style>
+<main>
+  <div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div>
+  <h1 data-t="v.titulo">El pueblo · tu hogar</h1>
+  <div class="caja">
+    <label><span data-t="v.codigo">Código de tu puesto (está en la tarjeta)</span><select id="codigo"></select></label>
+    <label id="url-l" hidden><span data-t="v.url">Dirección del programa de Google (la da el docente)</span><input id="url" type="url" inputmode="url"></label>
+  </div>
+  <div class="caja" id="hogar" hidden></div>
+  <div class="caja" id="fase" aria-live="polite"></div>
+  <p id="estado" class="estado small" aria-live="polite"></p>
+</main>
+<script>// Piezas comunes de la prueba: idioma, dirección del programa de Google y guardado en el navegador
+const T = {
+  es: {}, va: {}
+};
+let LANG = (() => { try { return localStorage.getItem("prueba-lang") || "es"; } catch { return "es"; } })();
+const tr = k => (T[LANG] && T[LANG][k]) || T.es[k] || k;
+function aplicar() { document.documentElement.lang = LANG; document.querySelectorAll("[data-t]").forEach(n => { n.textContent = tr(n.dataset.t); }); document.querySelectorAll("[data-tl]").forEach(n => { n.setAttribute("aria-label", tr(n.dataset.tl)); }); }
+function idioma(l) { LANG = l; try { localStorage.setItem("prueba-lang", l); } catch {} aplicar(); if (window.alIdioma) window.alIdioma(); }
+function leerURL() {
+  const q = new URLSearchParams(location.search).get("u");
+  if (q) { try { localStorage.setItem("prueba-url", q); } catch {} return q; }
+  try { return localStorage.getItem("prueba-url") || ""; } catch { return ""; }
+}
+function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {} }
+
+const TXT = {
+  es: { "v.titulo": "El pueblo · tu hogar", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)",
+    "v.elige": "Elige tu código de puesto para empezar.", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
+    "v.anio": "Año {n}", "v.tu": "Tu hogar: {h}", "v.trabaja": "Trabajáis en {s}", "v.cobra": "{w} soles por jornada", "v.cargo": "A vuestro cargo: {c}", "v.nadie": "nadie",
+    "v.n": "{n} niño(s)", "v.m": "{n} mayor(es)", "v.e": "{n} enfermo(s)",
+    "v.f1": "Mira el proyector: este año pasa esto:", "v.f2": "¿Dónde trabaja tu hogar este año?", "v.f2.p": "Debajo de cada sector, lo que paga por jornada ahora. Si no eliges, tu hogar hará lo que haría el mercado: irse donde se pague más.",
+    "v.f3": "La asamblea vota", "v.f3.no": "Todavía no hay ninguna votación abierta. Escucha la asamblea.", "v.f4": "Mira el proyector.",
+    "v.f5": "¿Qué ha pasado este año y por qué?", "v.f5.p": "Una o dos frases. Se leerán algunas en voz alta, sin nombre.", "v.enviar": "Enviar",
+    "v.enviando": "Enviando…", "v.enviado": "Enviado. Puedes cambiarlo mientras la fase siga abierta.", "v.error": "No se ha podido enviar: avisa al docente.",
+    "v.paga": "Paga por jornada en la asamblea", "v.ayuda": "Ayuda a cada hogar que pasaría hambre", "v.sem": "La semilla para sembrar el año que viene", "v.log": "¿Quién reparte {s}? (hace falta el 60 % para cambiar)", "v.obra": "¿Hacemos esta obra este año? {o}",
+    "v.si": "Sí", "v.no": "No", "v.soles": "{n} soles", "v.nada": "Nada", "v.merc": "mercado", "v.asam": "asamblea",
+    "l.m": "Mercado", "l.a": "Asamblea", "l.v": "Mercado con vales", "sem.m": "La guarda cada hortelano", "sem.a": "La guarda la asamblea (granero común)",
+    "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Educación", "s.red": "Red eléctrica y agua", "s.suelo": "Suelo de las azoteas", "s.investigacion": "Investigación",
+    "suc.ninguno": "Un año normal", "suc.gustos": "Cambian los gustos", "suc.mayores": "Hay más personas mayores", "suc.sequia": "Sequía en un huerto", "suc.averia": "Avería en la red", "suc.riada": "Riada", "suc.calor": "Ola de calor", "suc.crisis": "Crisis de confianza",
+    "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar" },
+  va: { "v.titulo": "El poble · la teua llar", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)",
+    "v.elige": "Tria el codi del teu lloc per a començar.", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
+    "v.anio": "Any {n}", "v.tu": "La teua llar: {h}", "v.trabaja": "Treballeu en {s}", "v.cobra": "{w} sous per jornada", "v.cargo": "Al vostre càrrec: {c}", "v.nadie": "ningú",
+    "v.n": "{n} xiquet(s)", "v.m": "{n} major(s)", "v.e": "{n} malalt(s)",
+    "v.f1": "Mira el projector: este any passa això:", "v.f2": "On treballa la teua llar este any?", "v.f2.p": "Davall de cada sector, el que paga per jornada ara. Si no tries, la teua llar farà el que faria el mercat: anar-se'n on es pague més.",
+    "v.f3": "L'assemblea vota", "v.f3.no": "Encara no hi ha cap votació oberta. Escolta l'assemblea.", "v.f4": "Mira el projector.",
+    "v.f5": "Què ha passat este any i per què?", "v.f5.p": "Una o dues frases. Se'n llegiran algunes en veu alta, sense nom.", "v.enviar": "Enviar",
+    "v.enviando": "Enviant…", "v.enviado": "Enviat. Pots canviar-ho mentre la fase continue oberta.", "v.error": "No s'ha pogut enviar: avisa el docent.",
+    "v.paga": "Paga per jornada en l'assemblea", "v.ayuda": "Ajuda a cada llar que passaria fam", "v.sem": "La llavor per a sembrar l'any que ve", "v.log": "Qui reparteix {s}? (cal el 60 % per a canviar)", "v.obra": "Fem esta obra este any? {o}",
+    "v.si": "Sí", "v.no": "No", "v.soles": "{n} sous", "v.nada": "Res", "v.merc": "mercat", "v.asam": "assemblea",
+    "l.m": "Mercat", "l.a": "Assemblea", "l.v": "Mercat amb vals", "sem.m": "La guarda cada hortolà", "sem.a": "La guarda l'assemblea (graner comú)",
+    "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Educació", "s.red": "Xarxa elèctrica i aigua", "s.suelo": "Sòl dels terrats", "s.investigacion": "Investigació",
+    "suc.ninguno": "Un any normal", "suc.gustos": "Canvien els gustos", "suc.mayores": "Hi ha més persones majors", "suc.sequia": "Sequera en un hort", "suc.averia": "Avaria en la xarxa", "suc.riada": "Riuada", "suc.calor": "Onada de calor", "suc.crisis": "Crisi de confiança",
+    "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar" }
+};
+Object.assign(T.es, TXT.es); Object.assign(T.va, TXT.va);
+const tv = (k, v = {}) => tr(k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? "");
+const $ = id => document.getElementById(id);
+const mk = (tag, a = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(a)) { if (v == null) continue; if (k === "text") n.textContent = v; else n.setAttribute(k, v); } kids.flat().forEach(k => k != null && n.append(k)); return n; };
+const fmt = v => Math.round(v).toLocaleString("es-ES");
+let URL_G = leerURL(), EST = null, sinRed = 0;
+$("url").value = URL_G; $("url-l").hidden = !!URL_G;
+$("url").addEventListener("change", () => { URL_G = $("url").value.trim(); guardarURL(URL_G); leer(); });
+const sel = $("codigo"); sel.append(new Option("—", ""));
+for (let k = 1; k <= 25; k++) { const c = "P" + String(k).padStart(2, "0"); sel.append(new Option(c, c)); }
+try { sel.value = localStorage.getItem("pueblo-codigo") || ""; } catch {}
+sel.addEventListener("change", () => { try { localStorage.setItem("pueblo-codigo", sel.value); } catch {} pintar(); });
+// lo que ha enviado este puesto (para marcar el botón elegido)
+const mios = (() => { try { return JSON.parse(localStorage.getItem("pueblo-mios") || "{}"); } catch { return {}; } })();
+const guardarMios = () => { try { localStorage.setItem("pueblo-mios", JSON.stringify(mios)); } catch {} };
+let texto = "";
+async function enviar(fase, valor) {
+  if (!sel.value || !URL_G) return;
+  mios[sel.value + "|" + fase] = valor; guardarMios(); $("estado").textContent = tr("v.enviando"); pintar();
+  try {
+    await fetch(URL_G, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ codigo: sel.value, fase, valor, envio_ms: Date.now() }) });
+    $("estado").textContent = tr("v.enviado");
+  } catch { $("estado").textContent = tr("v.error"); }
+}
+async function leer() {
+  if (!URL_G) { $("url-l").hidden = false; return; }
+  try {
+    const r = await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "estado=1", { cache: "no-store" });
+    const d = await r.json(); const nuevo = JSON.stringify(d.estado || null);
+    sinRed = 0;
+    if (nuevo !== JSON.stringify(EST)) { EST = d.estado && d.estado.partida ? d.estado : null; pintar(); }
+  } catch { if (++sinRed === 3) { $("estado").textContent = tr("v.sinred"); } }
+}
+const botones = (fase, ops) => mk("div", { class: "ops" }, ops.map(([v, txt]) => { const b = mk("button", { type: "button", "aria-pressed": String(mios[sel.value + "|" + fase] === String(v)), text: txt }); b.addEventListener("click", () => enviar(fase, String(v))); return b; }));
+function tituloVoto(v) {
+  if (v.id === "paga") return tr("v.paga"); if (v.id === "ayuda") return tr("v.ayuda"); if (v.id === "sem") return tr("v.sem");
+  if (v.id.startsWith("log-")) return tv("v.log", { s: tr("s." + v.id.slice(4)) });
+  if (v.id.startsWith("obra-")) return tv("v.obra", { o: tr("ob." + v.id.slice(5)) });
+  return v.id;
+}
+function textoOp(v, o) {
+  if (v.id === "paga") return String(o); if (v.id === "ayuda") return +o ? tv("v.soles", { n: o }) : tr("v.nada");
+  if (v.id === "sem") return tr("sem." + o); if (v.id.startsWith("log-")) return tr("l." + o);
+  if (v.id.startsWith("obra-")) return tr(o === "si" ? "v.si" : "v.no"); return String(o);
+}
+function pintar() {
+  const caja = $("fase"), hog = $("hogar");
+  if (!sel.value) { hog.hidden = true; caja.replaceChildren(mk("p", { text: tr("v.elige") })); return; }
+  if (!EST) { hog.hidden = true; caja.replaceChildren(mk("p", { text: tr("v.espera") })); return; }
+  const k = parseInt(sel.value.slice(1), 10) - 1, h = EST.hogares[k], base = EST.partida + "-" + EST.anio + "-";
+  if (h) {
+    const cargo = [h.n ? tv("v.n", { n: h.n }) : null, h.m ? tv("v.m", { n: h.m }) : null, h.e ? tv("v.e", { n: h.e }) : null].filter(Boolean).join(", ") || tr("v.nadie");
+    hog.hidden = false;
+    hog.replaceChildren(mk("div", { class: "hogar" }, mk("b", { text: tv("v.tu", { h: h.nombre }) }), mk("span", { text: tv("v.anio", { n: EST.anio }) }),
+      mk("span", { text: tv("v.trabaja", { s: tr("s." + h.sector) }) }), mk("span", { text: EST.sal[h.sector] != null ? tv("v.cobra", { w: fmt(EST.sal[h.sector]) }) : "" }),
+      mk("span", { class: "small", text: tv("v.cargo", { c: cargo }) })));
+  } else hog.hidden = true;
+  const f = EST.fase;
+  if (f === 1) caja.replaceChildren(...(EST.suceso ? [mk("h2", { text: tr("v.f1") }), mk("p", { class: "suceso", text: tr("suc." + EST.suceso) })] : [mk("p", { text: tr("v.f4") })]));
+  else if (f === 2 && EST.empleo) {
+    const fase = base + "empleo";
+    caja.replaceChildren(mk("h2", { text: tr("v.f2") }), mk("p", { class: "small", text: tr("v.f2.p") }),
+      mk("div", { class: "rejilla" }, EST.sectores.map(s => { const b = mk("button", { type: "button", "aria-pressed": String(mios[sel.value + "|" + fase] === s), "aria-label": tr("s." + s) + ": " + tv("v.cobra", { w: fmt(EST.sal[s] || 0) }) },
+        mk("span", { text: tr("s." + s) }), mk("small", { text: tv("v.cobra", { w: fmt(EST.sal[s] || 0) }) + " · " + tr(EST.logica[s] === "a" ? "v.asam" : "v.merc") })); b.addEventListener("click", () => enviar(fase, s)); return b; })));
+  } else if (f === 3) {
+    const vs = EST.votos || [];
+    caja.replaceChildren(mk("h2", { text: tr("v.f3") }), ...(vs.length ? vs.map(v => mk("div", { class: "voto" }, mk("h3", { text: tituloVoto(v) }), botones(base + "v-" + v.id, v.ops.map(o => [o, textoOp(v, o)])))) : [mk("p", { text: tr("v.f3.no") })]));
+  } else if (f === 5 && EST.frase) {
+    const fase = base + "frase", ta = mk("textarea", { id: "frase", maxlength: "300", "aria-label": tr("v.f5") }); ta.value = mios[sel.value + "|" + fase] || texto;
+    ta.addEventListener("input", () => { texto = ta.value; });
+    const b = mk("button", { type: "button", class: "prim", text: tr("v.enviar") }); b.addEventListener("click", () => { if (ta.value.trim()) enviar(fase, ta.value.trim().slice(0, 300)); });
+    if (!(document.activeElement && document.activeElement.id === "frase")) caja.replaceChildren(mk("h2", { text: tr("v.f5") }), mk("p", { class: "small", text: tr("v.f5.p") }), ta, mk("div", {}, b));
+  } else caja.replaceChildren(mk("p", { text: tr("v.f4") }));
+}
+window.alIdioma = pintar;
+aplicar(); pintar(); leer(); setInterval(leer, 4000);
+</script>
+
+<!-- Añadido por actualizar.sh: línea gráfica de la web, la última para que mande -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600&family=Jost:wght@500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<link rel="stylesheet" href="../assets/estilo.css">

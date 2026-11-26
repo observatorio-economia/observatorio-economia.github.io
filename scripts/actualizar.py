@@ -26,6 +26,7 @@ HERRAMIENTAS = [
     ("sa08", "SA08-el-dinero/material/observatorio-sa8.html"),
     ("sa09", "SA09-comercio-internacional/material/observatorio-sa9.html"),
     ("pueblo", "SA01-que-es-la-economia/material/juego-pueblo.html"),   # juego del pueblo (SA 1), pantalla del proyector: no se enlaza desde la portada
+    ("pueblo-vecino", "SA01-que-es-la-economia/material/juego-pueblo-vecino.html"),  # juego del pueblo: página del alumnado (su hogar, empleo, votos y frase), sin enlace en la portada
     ("prueba-alumno", "SA01-que-es-la-economia/material/prueba-sala/alumno.html"),       # prueba técnica de la sala: página del alumnado, sin enlace en la portada
     ("prueba-proyector", "SA01-que-es-la-economia/material/prueba-sala/proyector.html"), # prueba técnica de la sala: página del proyector, sin enlace en la portada
     ("datos", "_base-de-datos/observatorio-datos.html"),
