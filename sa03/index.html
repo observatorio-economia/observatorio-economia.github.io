@@ -319,6 +319,26 @@ body.obs-proj input[type="number"], body.obs-proj .fn { font-size: 20px !importa
 .lab-tabla-caja th { position: sticky; top: 0; background: var(--paper); }
 .lab-tabla-caja tr.cur td { background: var(--accent-soft); font-weight: 600; }
 .lab-tabla-caja tr.vacia td { color: transparent; }
+/* Les dues empreses (26/11/2026) */
+.du { display: flex; flex-direction: column; gap: 16px; }
+.du-intro { margin: 0; font-size: 15px; line-height: 1.5; max-width: 90ch; }
+.du-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; align-items: start; }
+.du-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; border-top: 3px solid var(--s2); padding-top: 10px; }
+.du-col.du-real { border-top-color: var(--s1); }
+.du-col h3 { margin: 0; font-size: 17px; }
+.du-col > p.small { margin: 0; }
+.du-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px 12px; align-items: end; }
+.du-campos .du-ancho { grid-column: 1 / -1; }
+.du-campos input[type="number"] { font: 15px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); padding: 7px 8px; width: 100%; min-width: 0; }
+.du-err { white-space: pre-wrap; font-family: var(--font-mono); font-size: 13px; color: var(--bad); margin: 0; }
+.du-err:empty, .du-avis:empty { display: none; }
+.du-avis { margin: 0; border-left: 3px solid var(--bad); padding: 4px 0 4px 10px; font-size: 14px; line-height: 1.45; }
+.du-col .lab-cifras b { font-size: 22px; }
+.du-mando { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; border-top: 2px solid var(--ink); padding-top: 12px; }
+.du-mando a.btn { text-decoration: none; }
+.du-prop { display: flex; flex-direction: column; gap: 8px; }
+.du-prop textarea { font: 14px var(--font-mono); width: 100%; min-height: 4.5em; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); padding: 6px 8px; }
+@media (max-width: 900px) { .du-cols { grid-template-columns: minmax(0, 1fr); } }
 /* Modelos y taller (26/11/2026): cabecera de cada modelo con sus supuestos; reglas del taller */
 .lab.lab-v2 { display: flex; flex-direction: column; align-items: stretch; gap: 16px; }
 .lab-graf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 26px; align-items: start; }
@@ -732,6 +752,55 @@ body.obs-proj .obs-serie { font-size: 15px; }
             <span class="small" id="lb-dl-st" aria-live="polite"></span>
           </div>
           <details class="lab-mas"><summary data-i18n="lb.todos">Todos los valores de esta unidad</summary><dl class="lab-todos" id="lb-todos"></dl></details>
+      </div>
+      <div class="du" id="lb-dues" hidden>
+        <p class="du-intro" data-i18n-html="du.intro"></p>
+        <div class="du-cols">
+        <section class="du-col du-neo" aria-labelledby="du-h-neo">
+          <h3 id="du-h-neo" data-i18n="du.neo.h"></h3>
+          <p class="small" data-i18n="du.neo.sup"></p>
+          <div class="tal-ej" id="du-neo-ej" role="group" data-i18n-attr="aria-label:lb.ej"></div>
+          <div class="du-campos">
+            <div class="field du-ancho"><label for="du-neo-ct" data-i18n="lb.ct">Costes totales: CT(q) =</label><input type="text" id="du-neo-ct" class="fn" spellcheck="false" autocomplete="off"></div>
+            <div class="field"><label for="du-neo-p" data-i18n="lb.p"></label><input type="number" id="du-neo-p" step="any" min="0"></div>
+            <div class="field"><label for="du-neo-qm" data-i18n="du.qm"></label><input type="number" id="du-neo-qm" step="any" min="0.1"></div>
+          </div>
+          <p class="du-err" id="du-neo-err" aria-live="polite"></p>
+          <p class="du-avis" id="du-neo-avis" aria-live="polite"></p>
+          <figure>
+            <figcaption data-i18n="lb.ch2">Por unidad</figcaption>
+            <div class="legend" id="du-neo-lg"></div>
+            <div class="plot"><svg class="chart" id="du-neo-g" role="img" data-i18n-attr="aria-label:lb.ch2"></svg></div>
+          </figure>
+          <div class="lab-cifras" id="du-neo-cif" aria-live="polite"></div>
+          <p class="lab-frase" id="du-neo-frase" aria-live="polite"></p>
+        </section>
+        <section class="du-col du-real" aria-labelledby="du-h-real">
+          <h3 id="du-h-real" data-i18n="du.real.h"></h3>
+          <p class="small" data-i18n="du.real.sup"></p>
+          <div class="tal-ej" id="du-real-ej" role="group" data-i18n-attr="aria-label:lb.ej"></div>
+          <div class="du-campos">
+            <div class="field du-ancho"><label for="du-real-ct" data-i18n="lb.ct">Costes totales: CT(q) =</label><input type="text" id="du-real-ct" class="fn" spellcheck="false" autocomplete="off"></div>
+            <div class="field"><label for="du-real-p" data-i18n="lb.p"></label><input type="number" id="du-real-p" step="any" min="0"></div>
+            <div class="field"><label for="du-real-cap" data-i18n="lb.cap"></label><input type="number" id="du-real-cap" step="1" min="1"></div>
+            <div class="field"><label for="du-real-dem" data-i18n="lb.dem">Clientes como máximo</label><input type="number" id="du-real-dem" step="1" min="0" placeholder="sin límite" data-i18n-attr="placeholder:lb.dem.ph"></div>
+          </div>
+          <p class="du-err" id="du-real-err" aria-live="polite"></p>
+          <p class="du-avis" id="du-real-avis" aria-live="polite"></p>
+          <figure>
+            <figcaption data-i18n="lb.ch2">Por unidad</figcaption>
+            <div class="legend" id="du-real-lg"></div>
+            <div class="plot"><svg class="chart" id="du-real-g" role="img" data-i18n-attr="aria-label:lb.ch2"></svg></div>
+          </figure>
+          <div class="lab-cifras" id="du-real-cif" aria-live="polite"></div>
+          <p class="lab-frase" id="du-real-frase" aria-live="polite"></p>
+        </section>
+        </div>
+        <div class="du-mando">
+          <button type="button" class="btn" id="du-play" data-i18n="lb.play">Reproducir</button>
+          <a class="btn ghost" id="du-mercat" href="#"><span data-i18n="du.mercat">Porta-les al mercat (SA 4) →</span></a>
+        </div>
+        <p class="small" data-i18n="du.mercat.p"></p>
       </div>
       <div class="lab-supuestos" id="lb-supuestos">
         <div class="sup sup1"><h3 data-i18n="lb.sup.h1">Modelo 1 · la empresa neoclásica (Marshall, 1890)</h3>
@@ -1912,7 +1981,7 @@ window.OBS = (() => {
     if (alCambiarPestana && view === "lab") alCambiarPestana(practicar);
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
-  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+  window.addEventListener("hashchange", () => show(location.hash.slice(1).split("?")[0]));
 
   // ---------- Motor de gráficos (el de la SA 4, con eje y que puede empezar en negativo) ----------
   const M = { l: 66, r: 22, t: 14, b: 50 };
@@ -2186,6 +2255,7 @@ window.OBS = (() => {
     $("lb-trastear").hidden = lb.modo !== "tr"; $("lb-practicar").hidden = lb.modo !== "pr";
     $("lb-m-tr").setAttribute("aria-pressed", String(lb.modo === "tr")); $("lb-m-pr").setAttribute("aria-pressed", String(lb.modo === "pr"));
     if (lb.modo !== "tr") return;
+    if (lb.dues) { ["m1", "m2", "dos", "tal"].forEach(k => { $("lb-cab-" + k).hidden = true; }); return; }
     const dos = lb.ej === "dos", tal = lb.ej === "taller";
     $("lb-datos").hidden = !tal; $("lb-datos-dos").hidden = !dos; $("lb-datos-m1").hidden = lb.ej !== "m1"; $("lb-datos-m2").hidden = lb.ej !== "m2";
     ["m1", "m2", "dos", "tal"].forEach(k => { $("lb-cab-" + k).hidden = (k === "tal" ? "taller" : k) !== lb.ej; });
@@ -2419,6 +2489,30 @@ window.OBS = (() => {
   document.querySelectorAll(".ej-btn").forEach(b => b.addEventListener("click", () => cargarEjemplo(b.dataset.ej)));
   // Subpestanas: a · Modelo 1 · b · Modelo 2 · c · Comparar · d · Taller
   OBS.register({ es: {
+      "sub.lb.dues": "c · Las dos empresas",
+      "du.intro": "Dos maneras de entender la empresa, cada una con su regla. <b>Neoclásica:</b> el precio le viene dado y produce mientras una unidad más le cueste menos de lo que aporta. <b>Competencia real:</b> cada unidad le cuesta lo mismo hasta llenar la fábrica; la frena la capacidad o la falta de clientes. Escribe una función en cada lado (o elige una) y pulsa «Reproducir».",
+      "du.neo.h": "La empresa neoclásica", "du.real.h": "La empresa de la competencia real",
+      "du.neo.sup": "Cada unidad cuesta más que la anterior a partir de cierto punto. El precio lo pone el mercado.",
+      "du.real.sup": "Cada unidad cuesta lo mismo hasta llenar la fábrica. Producir más abarata cada unidad de media.",
+      "du.qm": "Unidades como máximo en el gráfico", "du.lg.p": "Precio (lo que aporta una unidad más)",
+      "du.f.va": "Unidad {q}: todavía le conviene producir más.",
+      "du.f.mg": "Se para en {q}: la unidad siguiente costaría {cmg} y solo aportaría {p}. Beneficio: {b}.",
+      "du.f.cap": "Llega a {q}: la fábrica está llena. Beneficio: {b}.",
+      "du.f.dem": "Llega a {q}: no hay más clientes. Beneficio: {b}.",
+      "du.f.no": "No produce: ninguna unidad le cubre lo que cuesta.",
+      "du.f.max": "Llega a {q}, el máximo del gráfico, y todavía le convendría producir más. Beneficio: {b}.",
+      "du.neo.avis.plano": "Esta función no respeta el supuesto neoclásico: cada unidad cuesta lo mismo, así que la regla «producir hasta que una unidad más cueste lo que aporta» no dice cuánto. Es una empresa de la competencia real.",
+      "du.neo.avis.baja": "Esta función no respeta el supuesto neoclásico: cada unidad cuesta menos que la anterior, y la empresa querría crecer sin fin.",
+      "du.neo.avis.nopara": "Con esta función y este precio, la empresa no se para por los costes antes del máximo del gráfico: amplía las unidades o baja el precio.",
+      "du.neo.avis.sube": "", "du.neo.avis.u": "",
+      "du.real.avis.sube": "Esta función no respeta el supuesto de la competencia real: cada unidad cuesta más que la anterior (coste marginal creciente). Es una empresa neoclásica.",
+      "du.real.avis.u": "Esta función no respeta el supuesto de la competencia real: el coste de una unidad más cambia (la U de los manuales). Es una empresa neoclásica.",
+      "du.real.avis.baja": "Esta función no respeta el supuesto de la competencia real: cada unidad cuesta menos que la anterior.",
+      "du.mercat": "Llévalas al mercado (SA 4) →",
+      "du.mercat.p": "Cada empresa va a su mercado: la neoclásica, a la competencia perfecta; la de la competencia real, a la guerra de precios.",
+      "du.prop": "Propuesta {n}", "du.prop.h": "Funciones para el alumnado (las dos empresas)",
+      "du.prop.p": "Una función por línea; si quieres, con un nombre delante: «Taller de cerámica = 300 + 8q + 0,5q^2». Aparecen como botones en «c · Las dos empresas». El enlace las lleva a los ordenadores del alumnado.",
+      "du.prop.copia": "Copiar el enlace para el alumnado", "du.prop.ok": "Enlace copiado.", "du.prop.sel": "Copia este enlace:",
       "sub.lb.m1": "a · Modelo 1: cada unidad cuesta más", "sub.lb.m2": "b · Modelo 2: cada unidad cuesta lo mismo", "sub.lb.dos": "c · Comparar los dos", "sub.lb.taller": "d · Taller: escribe tu función",
       "lb.s.cf": "Coste fijo", "lb.s.c1": "Lo que cuesta la primera unidad", "lb.s.s": "Cuánto más cuesta cada unidad que la anterior", "lb.s.p": "Precio de venta",
       "lb.s.c": "Lo que cuesta cada unidad", "lb.s.cap": "Capacidad de la fábrica", "lb.s.dem": "Clientes como máximo", "lb.s.mas": "{v} € más", "lb.s.uds": "{v} unidades",
@@ -2440,6 +2534,30 @@ window.OBS = (() => {
       "lb.tal.f1": " Con la regla del modelo 1, aquí se para.", "lb.tal.f2c": " Con la regla del modelo 2, aquí se para: la fábrica está llena.", "lb.tal.f2d": " Con la regla del modelo 2, aquí se para: no hay más clientes.",
       "lb.tal.m1": "regla 1", "lb.tal.m2": "regla 2"
     }, va: {
+      "sub.lb.dues": "c · Les dues empreses",
+      "du.intro": "Dues maneres d'entendre l'empresa, cadascuna amb la seua regla. <b>Neoclàssica:</b> el preu li ve donat i produïx mentre una unitat més li coste menys del que aporta. <b>Competència real:</b> cada unitat li costa el mateix fins omplir la fàbrica; la frena la capacitat o la falta de clients. Escriu una funció en cada costat (o tria'n una) i prem «Reproduir».",
+      "du.neo.h": "L'empresa neoclàssica", "du.real.h": "L'empresa de la competència real",
+      "du.neo.sup": "Cada unitat costa més que l'anterior a partir de cert punt. El preu el posa el mercat.",
+      "du.real.sup": "Cada unitat costa el mateix fins omplir la fàbrica. Produir més abarateix cada unitat de mitjana.",
+      "du.qm": "Unitats com a màxim en el gràfic", "du.lg.p": "Preu (el que aporta una unitat més)",
+      "du.f.va": "Unitat {q}: encara li convé produir més.",
+      "du.f.mg": "S'atura en {q}: la unitat següent costaria {cmg} i només aportaria {p}. Benefici: {b}.",
+      "du.f.cap": "Arriba a {q}: la fàbrica està plena. Benefici: {b}.",
+      "du.f.dem": "Arriba a {q}: no hi ha més clients. Benefici: {b}.",
+      "du.f.no": "No produïx: cap unitat li cobrix el que costa.",
+      "du.f.max": "Arriba a {q}, el màxim del gràfic, i encara li convindria produir més. Benefici: {b}.",
+      "du.neo.avis.plano": "Esta funció no respecta el supòsit neoclàssic: cada unitat costa el mateix, així que la regla «produir fins que una unitat més coste el que aporta» no diu quant. És una empresa de la competència real.",
+      "du.neo.avis.baja": "Esta funció no respecta el supòsit neoclàssic: cada unitat costa menys que l'anterior, i l'empresa voldria créixer sense fi.",
+      "du.neo.avis.nopara": "Amb esta funció i este preu, l'empresa no s'atura pels costos abans del màxim del gràfic: amplia les unitats o abaixa el preu.",
+      "du.neo.avis.sube": "", "du.neo.avis.u": "",
+      "du.real.avis.sube": "Esta funció no respecta el supòsit de la competència real: cada unitat costa més que l'anterior (cost marginal creixent). És una empresa neoclàssica.",
+      "du.real.avis.u": "Esta funció no respecta el supòsit de la competència real: el cost d'una unitat més canvia (la U dels manuals). És una empresa neoclàssica.",
+      "du.real.avis.baja": "Esta funció no respecta el supòsit de la competència real: cada unitat costa menys que l'anterior.",
+      "du.mercat": "Porta-les al mercat (SA 4) →",
+      "du.mercat.p": "Cada empresa va al seu mercat: la neoclàssica, a la competència perfecta; la de la competència real, a la guerra de preus.",
+      "du.prop": "Proposta {n}", "du.prop.h": "Funcions per a l'alumnat (les dues empreses)",
+      "du.prop.p": "Una funció per línia; si vols, amb un nom davant: «Taller de ceràmica = 300 + 8q + 0,5q^2». Ixen com a botons en «c · Les dues empreses». L'enllaç les porta als ordinadors de l'alumnat.",
+      "du.prop.copia": "Copiar l'enllaç per a l'alumnat", "du.prop.ok": "Enllaç copiat.", "du.prop.sel": "Copia este enllaç:",
       "sub.lb.m1": "a · Model 1: cada unitat costa més", "sub.lb.m2": "b · Model 2: cada unitat costa el mateix", "sub.lb.dos": "c · Comparar-los", "sub.lb.taller": "d · Taller: escriu la teua funció",
       "lb.s.cf": "Cost fix", "lb.s.c1": "El que costa la primera unitat", "lb.s.s": "Quant més costa cada unitat que l'anterior", "lb.s.p": "Preu de venda",
       "lb.s.c": "El que costa cada unitat", "lb.s.cap": "Capacitat de la fàbrica", "lb.s.dem": "Clients com a màxim", "lb.s.mas": "{v} € més", "lb.s.uds": "{v} unitats",
@@ -2461,10 +2579,15 @@ window.OBS = (() => {
       "lb.tal.f1": " Amb la regla del model 1, ací s'atura.", "lb.tal.f2c": " Amb la regla del model 2, ací s'atura: la fàbrica està plena.", "lb.tal.f2d": " Amb la regla del model 2, ací s'atura: no hi ha més clients.",
       "lb.tal.m1": "regla 1", "lb.tal.m2": "regla 2"
     } });
-  const LBSUB = ["m1", "m2", "dos", "taller"];
-  OBS.subpestanas($("lb-trastear"), LBSUB.map(k => ({ el: $("lb-cab-" + (k === "taller" ? "tal" : k)), t: { get es() { return OBS.t("sub.lb." + k); }, get va() { return OBS.t("sub.lb." + k); } } })),
+  const LBSUB = ["m1", "m2", "dues"];
+  const lbSub = OBS.subpestanas($("lb-trastear"), LBSUB.map(k => ({ el: k === "dues" ? $("lb-dues") : $("lb-cab-" + k), t: { get es() { return OBS.t("sub.lb." + k); }, get va() { return OBS.t("sub.lb." + k); } } })),
     { antes: $("lb-cab-m1"), onChange: i => {
-      lb.ej = LBSUB[i]; lbParar();
+      lbParar();
+      lb.dues = LBSUB[i] === "dues";
+      document.querySelector("#lb-trastear .lab.lab-v2").hidden = lb.dues; $("lb-supuestos").hidden = true; $("lb-src").hidden = lb.dues;
+      if (lb.dues) { if (duListo) duPintar(); return; }
+      if (duListo) duParar();
+      lb.ej = LBSUB[i];
       const m = lbModelo(); ponerQ(m, qInicial(m));
       renderLab();
     } });
@@ -2846,6 +2969,149 @@ window.OBS = (() => {
   $("q-t").addEventListener("input", () => { qStop(); renderGrowth(); });
   ["q-k", "q-ta", "q-tm"].forEach(id => $(id).addEventListener("input", renderGrowth));
 
+
+  // =====================================================================
+  // c · LES DUES EMPRESES (26/11/2026)
+  // Cada món, coherent amb si mateix: l'empresa neoclàssica (preu donat; s'atura on una unitat més costa més del que aporta)
+  // i l'empresa de la competència real (cost per unitat pla; l'atura la capacitat o la falta de clients).
+  // =====================================================================
+  const DU_EJ = {
+    neo: [{ id: "nar", n: { es: "La explotación de naranjas (SA 4)", va: "L'explotació de taronges (SA 4)" }, ct: "640 + 200q - 40q^2 + 5q^3", p: 320, qm: 8 },
+          { id: "m1", n: { es: "La del modelo 1", va: "La del model 1" }, ct: "200 + 5q + 5q^2", p: 85, qm: 12 }],
+    real: [{ id: "b", n: { es: "La empresa B (SA 4)", va: "L'empresa B (SA 4)" }, ct: "260 + 12q", p: 20, cap: 100 },
+           { id: "m2", n: { es: "La del modelo 2", va: "La del model 2" }, ct: "200 + 15q", p: 20, cap: 100 }]
+  };
+  var duListo = false;  // «var»: les subpestanes la consulten abans que s'execute este tros
+  const DU_KEY = "obs-sa3-propostes";
+  const duProp = () => { try { const o = JSON.parse(OBS.store.get(DU_KEY) || "{}"); return { neo: Array.isArray(o.neo) ? o.neo : [], real: Array.isArray(o.real) ? o.real : [] }; } catch { return { neo: [], real: [] }; } };
+  const du = { k: null, reloj: null, sel: { neo: "nar", real: "b" } };
+  const Lx2 = x => typeof x === "string" ? x : (x[OBS.lang()] || x.es);
+  function duBotons() {
+    const pr = duProp();
+    for (const k of ["neo", "real"]) {
+      const box = $("du-" + k + "-ej");
+      const ex = DU_EJ[k].map(e => ({ ...e, nom: Lx2(e.n) })).concat(pr[k].map((e, i) => ({ id: "p" + i, nom: e.n || t("du.prop", { n: i + 1 }), ct: e.f })));
+      box.replaceChildren(el("span", { text: t("lb.tal.ej") }), ...ex.map(e => {
+        const b = el("button", { type: "button", class: "ej-btn" + (e.id[0] === "p" ? " du-p" : ""), "aria-pressed": String(du.sel[k] === e.id), text: e.nom });
+        b.addEventListener("click", () => { du.sel[k] = e.id; $("du-" + k + "-ct").value = e.ct; if (e.p != null) $("du-" + k + "-p").value = e.p; if (e.qm != null) $("du-" + k + "-qm").value = e.qm; if (e.cap != null) $("du-" + k + "-cap").value = e.cap; duParar(); duBotons(); duPintar(); });
+        return b;
+      }));
+    }
+  }
+  // Una empresa: la taula unitat a unitat, on s'atura segons la regla del seu món i si la funció respecta el supòsit
+  function duModel(k) {
+    const src = $("du-" + k + "-ct").value; let CT;
+    try { CT = parseFn(src); } catch (e) { return { ok: false, err: fnError(e, "CT", src) }; }
+    const P = Math.max(0, num($("du-" + k + "-p").value) || 0), IT = q => P * q;
+    let qmax, lim;
+    if (k === "neo") { qmax = Math.max(0.1, num($("du-neo-qm").value) || 8); lim = qmax; }
+    else { qmax = Math.max(1, Math.round(num($("du-real-cap").value) || 100)); const d = num($("du-real-dem").value); lim = isFinite(d) && d >= 0 ? Math.min(qmax, d) : qmax; }
+    const paso = qmax <= 20 ? Math.round(qmax / 100 * 1000) / 1000 || 0.01 : qmax <= 150 ? 1 : Math.ceil(qmax / 150);
+    const filas = tablaDe(CT, IT, qmax, paso);
+    if (filas.some(f => !isFinite(f.CT))) return { ok: false, err: t("e.nan", { q: fmtA(filas.find(f => !isFinite(f.CT)).q) }) };
+    const r = resumen(filas, Math.floor(lim / paso + 1e-9) * paso);
+    // Forma del cost marginal (com en el taller d'abans)
+    const cm = filas.filter(f => f.q > 0).map(f => f.CMg).filter(isFinite);
+    let forma = "plano";
+    if (cm.length > 1) { const a = cm[0], z = cm[cm.length - 1], mn = Math.min(...cm), tol = 0.02 * Math.max(1, Math.abs(a), Math.abs(z));
+      forma = cm.every(v => Math.abs(v - a) <= tol) ? "plano" : mn < a - tol && z > mn + tol ? "u" : z > a + tol ? "sube" : "baja"; }
+    const coherent = k === "neo" ? (forma === "sube" || forma === "u") && r.razon === "mg" : forma === "plano";
+    return { ok: true, k, CT, P, qmax, paso, filas, ...r, forma, coherent, lim };
+  }
+  function duPintaCol(m, prog) {
+    const k = m.k, pre = "du-" + k;
+    // Es reprodueix des de zero fins on s'atura l'empresa
+    const tope = m.parada > 0 ? m.parada : m.qmax, q = Math.round(prog * tope / m.paso) * m.paso, qd = prog * tope, f = filaDe(m.filas, q);
+    $(pre + "-cif").replaceChildren(cifra("lb.ct.k", eur(f.CT)), cifra("lb.it.k", eur(f.IT)), cifra(f.B >= 0 ? "lb.b.k" : "lb.per.k", signed(f.B), f.B >= 0 ? "pos" : "neg"));
+    const sp = filaDe(m.filas, m.parada), sig = m.filas.find(x => x.q > m.parada + 1e-9);
+    let fr;
+    if (prog < 1 - 1e-9 && q < m.parada - 1e-9) fr = t("du.f.va", { q: fmtA(q) });
+    else if (m.parada <= 0) fr = t("du.f.no");
+    else fr = t(m.razon === "mg" ? "du.f.mg" : k === "neo" ? "du.f.max" : m.razon === "dem" ? "du.f.dem" : "du.f.cap", { q: fmtA(m.parada), b: signed(sp.B), cmg: sig ? eur(sig.CMg) : "", p: eur(m.P) });
+    $(pre + "-frase").textContent = fr;
+    $(pre + "-avis").textContent = m.coherent ? "" : t("du." + k + ".avis." + (k === "neo" ? (m.razon !== "mg" && m.forma !== "plano" ? "nopara" : m.forma) : m.forma));
+    // Gràfic per unitat
+    const fu = m.filas.filter(r => r.q > 0), vals = fu.flatMap(r => [r.CMe, r.CMg, m.P]).filter(isFinite).sort((a, b) => a - b);
+    const xT = nice(0, m.qmax), yU = nice(Math.min(0, vals[0] ?? 0), Math.max(m.P * 1.5, (vals[Math.floor(vals.length * 0.9)] ?? 1)) * 1.05);
+    const G = frame($(pre + "-g"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yU.lo, yMax: yU.hi, yTicks: yU.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") });
+    const dib = (campo, cls, extra = {}) => { line(G, fu.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, tramo(fu, campo, qd), "curve " + cls, extra); };
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(m.qmax), y1: G.sy(m.P), y2: G.sy(m.P), class: "curve", style: "stroke:var(--ink);stroke-dasharray:6 4" }));
+    dib("CMe", "c-s2"); dib("CMg", "c-s1");
+    if (k === "real" && m.lim < m.qmax - 1e-9) { G.plot.append(sv("line", { x1: G.sx(m.lim), x2: G.sx(m.lim), y1: G.sy(yU.lo), y2: G.sy(yU.hi), class: "limite" })); label(G, m.lim, yU.lo, t("lb.deml"), "end", "mark-txt", -6); }
+    const cd = valEn(fu, "CMg", qd); if (qd > 0 && isFinite(cd)) G.top.append(sv("circle", { cx: G.sx(qd), cy: G.sy(cd), r: 5, class: "dot s1" }));
+    if (qd > 0) G.top.append(sv("circle", { cx: G.sx(qd), cy: G.sy(m.P), r: 5, class: "dot ink" }));
+    if (prog >= 1 - 1e-9 || qd >= m.parada - 1e-9) if (m.parada > 0) { const yv = sp.CMg; if (isFinite(yv)) { G.top.append(sv("circle", { cx: G.sx(sp.q), cy: G.sy(yv), r: 8, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" })); label(G, sp.q, yv, t(m.razon === "mg" ? "lb.para.mg" : m.razon === "dem" ? "lb.para.dem" : "lb.para.cap"), sp.q > m.qmax * 0.55 ? "end" : "start", "mark-txt", -14); } }
+    $(pre + "-lg").replaceChildren(...ley([[C.s2, t("lg.cme")], [C.s1, t("lg.cmg")], [C.ink, t("du.lg.p"), true]]));
+  }
+  let duM = { neo: null, real: null };
+  function duPintar(prog = 1) {
+    for (const k of ["neo", "real"]) {
+      const m = duM[k] = duModel(k);
+      $("du-" + k + "-err").textContent = m.ok ? "" : m.err;
+      if (!m.ok) { [$("du-" + k + "-g"), $("du-" + k + "-cif"), $("du-" + k + "-lg")].forEach(x => x.replaceChildren()); $("du-" + k + "-frase").textContent = ""; $("du-" + k + "-avis").textContent = ""; continue; }
+      duPintaCol(m, prog);
+    }
+    $("du-mercat").href = duEnllac();
+  }
+  // L'enllaç a la SA 4 porta les dues funcions (en la pàgina web i en la carpeta de treball)
+  const rutaSA4 = () => /\/sa03\/(index\.html)?$/.test(location.pathname) ? "../sa04/index.html" : "../../SA04-el-mercado/material/observatorio-sa4.html";
+  function duParams() {
+    const v = id => encodeURIComponent($(id).value.trim());
+    return "neo=" + v("du-neo-ct") + "&qm=" + v("du-neo-qm") + "&real=" + v("du-real-ct") + "&p0=" + v("du-real-p") + "&cap=" + v("du-real-cap");
+  }
+  const duEnllac = () => rutaSA4() + "#mercats?" + duParams();
+  function duParar() { if (du.reloj) { cancelAnimationFrame(du.reloj); du.reloj = null; } $("du-play").textContent = t("lb.play"); }
+  $("du-play").addEventListener("click", () => {
+    if (du.reloj) { duParar(); duPintar(); return; }
+    const t0 = performance.now(), dur = 6000;
+    $("du-play").textContent = t("lb.pause");
+    const paso = ahora => { if (!du.reloj) return; const k = Math.min(1, (ahora - t0) / dur); duPintar(k); if (k < 1) du.reloj = requestAnimationFrame(paso); else { duParar(); duPintar(); } };
+    du.reloj = requestAnimationFrame(paso);
+  });
+  ["du-neo-ct", "du-neo-p", "du-neo-qm", "du-real-ct", "du-real-p", "du-real-cap", "du-real-dem"].forEach(id => $(id).addEventListener("input", () => {
+    duParar(); if (/-ct$/.test(id)) { du.sel[id.split("-")[1]] = null; duBotons(); } duPintar();
+  }));
+  // Funcions proposades pel docent: s'escriuen en «Per al docent» i es passen a l'alumnat amb un enllaç
+  function duPanell() {
+    const panel = document.getElementById("obs-docente"); if (!panel) return;
+    const pr = duProp(), txt = arr => arr.map(e => (e.n ? e.n + " = " : "") + e.f).join("\n");
+    const tn = el("textarea", { id: "du-prop-neo", spellcheck: "false" }), trr = el("textarea", { id: "du-prop-real", spellcheck: "false" });
+    tn.value = txt(pr.neo); trr.value = txt(pr.real);
+    const st = el("span", { class: "small", "aria-live": "polite" }), out = el("input", { type: "text", readonly: true, "aria-label": "URL" }); out.hidden = true;
+    const llig = ta => ta.value.split("\n").map(x => x.trim()).filter(Boolean).slice(0, 8).map(x => { const i = x.lastIndexOf("="); return i > 0 ? { n: x.slice(0, i).trim(), f: x.slice(i + 1).trim() } : { n: "", f: x }; });
+    const desa = () => { OBS.store.set(DU_KEY, JSON.stringify({ neo: llig(tn), real: llig(trr) })); duBotons(); };
+    tn.addEventListener("input", desa); trr.addEventListener("input", desa);
+    const btn = el("button", { type: "button", class: "btn quiet small", text: t("du.prop.copia") });
+    btn.addEventListener("click", async () => {
+      desa(); const enc = btoa(unescape(encodeURIComponent(OBS.store.get(DU_KEY) || "{}"))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+      const url = location.href.split("#")[0] + "#lab?prop=" + enc;
+      try { await navigator.clipboard.writeText(url); st.textContent = t("du.prop.ok"); out.hidden = true; } catch { out.value = url; out.hidden = false; out.select(); st.textContent = t("du.prop.sel"); }
+    });
+    const box = el("details", { class: "obs-aula du-prop" }, el("summary", { text: t("du.prop.h") }),
+      el("p", { class: "small", text: t("du.prop.p") }),
+      el("label", { for: "du-prop-neo", text: t("du.neo.h") }), tn, el("label", { for: "du-prop-real", text: t("du.real.h") }), trr, btn, out, st);
+    panel.append(box);
+  }
+  // Paràmetres de l'enllaç: #lab?neo=…&real=… (tornada des de la SA 4) o #lab?prop=… (propostes del docent)
+  function duLligEnllac() {
+    const q = (location.hash.split("?")[1] || ""); if (!q) return false;
+    const ps = new URLSearchParams(q);
+    if (ps.get("prop")) { try { const b = ps.get("prop").replace(/-/g, "+").replace(/_/g, "/"); const j = decodeURIComponent(escape(atob(b))); JSON.parse(j); OBS.store.set(DU_KEY, j); } catch {} }
+    const set = (id, k) => { if (ps.get(k) != null && ps.get(k) !== "") $(id).value = ps.get(k); };
+    set("du-neo-ct", "neo"); set("du-neo-qm", "qm"); set("du-real-ct", "real"); set("du-real-p", "p0"); set("du-real-cap", "cap");
+    if (ps.get("neo") || ps.get("real")) { du.sel.neo = du.sel.real = null; }
+    return true;
+  }
+  function duArranca() {
+    const e1 = DU_EJ.neo[0], e2 = DU_EJ.real[0];
+    $("du-neo-ct").value = e1.ct; $("du-neo-p").value = e1.p; $("du-neo-qm").value = e1.qm;
+    $("du-real-ct").value = e2.ct; $("du-real-p").value = e2.p; $("du-real-cap").value = e2.cap; $("du-real-dem").value = "";
+    const hi = duLligEnllac();
+    duListo = true;
+    duBotons(); duPanell(); duPintar();
+    if (hi && location.hash.slice(1).split("?")[0] === "lab") lbSub.mostrar(2);
+  }
+
   // ---------- Barra común, idioma y arranque ----------
   OBS.mountBar($("obs-bar"), { ficha: FICHA, fichaContainer: document.querySelector("header.top") });
   // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
@@ -2919,12 +3185,13 @@ window.OBS = (() => {
     if (bloques[0]) OBS.palabras(bloques[0], pal(["fpp", "co"]), { antes: bloques[0].querySelector(".controls, .params, .field") });
   }
   OBS.apply();
-  OBS.onLang(() => { lbParar(); renderLab(); if (pr.actual) prPintar(); renderGM(); buildWorkerCards(); renderFPP(); });
+  OBS.onLang(() => { lbParar(); renderLab(); duParar(); duBotons(); duPintar(); if (pr.actual) prPintar(); renderGM(); buildWorkerCards(); renderFPP(); });
   cargarEjemplo("m1");
   { const m = lbModelo(); ponerQ(m, qInicial(m)); renderLab(); }
+  duArranca();
   renderGM();
   resetClass();
-  show(location.hash.slice(1));
+  show(location.hash.slice(1).split("?")[0]);
 })();
 </script>
 

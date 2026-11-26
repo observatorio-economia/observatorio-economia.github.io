@@ -2,8 +2,8 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-11-26 09:36
-- Commit de partida: `6c41a9e`
+- Generado: 2026-11-26 09:54
+- Commit de partida: `6db9782`
 - Cambios sin confirmar en el repositorio (sin contar este archivo): 5
 
 ## Interruptores de la web
@@ -57,7 +57,7 @@
 ### sa03 · SA 3 · La producción
 
 - Web: `sa03/index.html`
-- Vault: `SA03-la-produccion/material/observatorio-sa3.html` (2026-11-26 09:36, 309 KB)
+- Vault: `SA03-la-produccion/material/observatorio-sa3.html` (2026-11-26 09:54, 332 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -79,14 +79,13 @@
 ### sa04 · SA 4 · El mercado
 
 - Web: `sa04/index.html`
-- Vault: `SA04-el-mercado/material/observatorio-sa4.html` (2026-11-26 09:36, 276 KB)
+- Vault: `SA04-el-mercado/material/observatorio-sa4.html` (2026-11-26 09:54, 287 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
   - **Competencia perfecta**
     - ¿Cuántas toneladas le conviene vender?
     - ¿Qué pasa cuando entran más explotaciones?
-    - Tu mercado: ¿adónde lleva la competencia?
   - **Competencia imperfecta**
     - ¿Qué precio le conviene fijar?
     - ¿Mantener el precio o bajarlo?
@@ -95,9 +94,10 @@
     - ¿Qué cambia si el coste marginal no sube?
     - ¿Quién gana la guerra de precios?
     - ¿Conviven o se hacen la guerra?
+  - **Los dos mercados**
+    - ¿Cómo se entiende el mercado con cada empresa?
+    - Tu mercado: ¿adónde lleva la competencia?
     - Tus dos empresas: ¿quién aguanta la guerra?
-  - **Comparar supuestos**
-    - Comparar supuestos
 - Fuentes que cita:
   - `c.foot`: La idea de partida es la crítica de Sraffa (1926) a los rendimientos decrecientes; el coste marginal constante lo usan Shaikh y los postkeynesianos (por ejemplo, Lavoie). Cifras del ejemplo, inventadas para el aula.
   - `ft.1`: Prototipo del 29 de octubre de 2026. Las cifras de los ejemplos están inventadas para el aula; los costes de la explotación están en el orden de magnitud del precio de la naranja en el campo.

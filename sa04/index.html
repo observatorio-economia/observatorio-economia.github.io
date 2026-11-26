@@ -139,6 +139,19 @@ input[type="text"] { font: 15px var(--font-body); color: var(--ink); background:
 .tal-diag { margin: 0; font-size: 15px; line-height: 1.5; }
 svg .c-ok { stroke: var(--ok); }
 .charts > figure > .plot { margin-top: auto; }
+/* Los dos mercados (26/11/2026) */
+.dm-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; align-items: start; }
+.dm-cols > .block { border-top: 3px solid var(--s2); padding-top: 12px; min-width: 0; }
+.dm-cols > #rt-block { border-top-color: var(--s1); }
+.dm-cols .charts, .dm-cols .mando { grid-template-columns: minmax(0, 1fr); }
+.dm-cols .tal-campos .ancho { grid-column: 1 / -1; }
+.dm-cols .duo { grid-template-columns: minmax(0, 1fr); }
+.dm-concl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; }
+.dm-concl p { margin: 0; font-size: 15px; line-height: 1.5; border-left: 4px solid var(--s2); padding: 4px 0 4px 12px; }
+.dm-concl p.r { border-left-color: var(--s1); }
+.dm-concl p.mal { background: var(--accent-soft); }
+#dm-cab .actions a.btn { text-decoration: none; }
+@media (max-width: 900px) { .dm-cols, .dm-concl { grid-template-columns: minmax(0, 1fr); } }
 #rm-block .duo, #rt-block .duo { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 22px; }
 table.payoff td.hl .other { color: var(--ink); } /* contraste suficiente sobre la casilla resaltada del dilema */
 @media (max-width: 900px) { .tal-campos .ancho { grid-column: 1 / -1; } .mando { grid-template-columns: minmax(0, 1fr); } }
@@ -512,7 +525,7 @@ body.obs-proj .obs-serie { font-size: 15px; }
     <button role="tab" id="tab-perfecta" aria-selected="true" data-view="perfecta"><span class="n">1</span><span data-i18n="tab.1">Competencia perfecta</span></button>
     <button role="tab" id="tab-imperfecta" aria-selected="false" data-view="imperfecta"><span class="n">2</span><span data-i18n="tab.2">Competencia imperfecta</span></button>
     <button role="tab" id="tab-real" aria-selected="false" data-view="real"><span class="n">3</span><span data-i18n="tab.3">Competencia real</span></button>
-    <button role="tab" id="tab-supuestos" aria-selected="false" data-view="supuestos" class="soon" hidden><span class="n">4</span><span data-i18n="tab.4">Comparar supuestos</span></button>
+    <button role="tab" id="tab-mercats" aria-selected="false" data-view="mercats"><span class="n">4</span><span data-i18n="tab.mercats">Los dos mercados</span></button>
   </nav>
 
   <!-- ===================== 1 · COMPETENCIA PERFECTA ===================== -->
@@ -612,57 +625,6 @@ body.obs-proj .obs-serie { font-size: 15px; }
         <summary data-i18n="m.hist">Semana a semana</summary>
         <div class="scroll"><table id="m-hist"></table></div>
       </details>
-    </div>
-
-    <div class="block" id="pt-block">
-      <div class="prose">
-        <span class="eyebrow" data-i18n="pt.eyebrow">1c · Taller</span>
-        <h2 data-i18n="pt.h2">Tu mercado: ¿adónde lleva la competencia?</h2>
-        <p data-i18n="pt.p"></p>
-      </div>
-      <div class="charts">
-        <figure>
-          <figcaption data-i18n="m.fig1">El mercado</figcaption>
-          <div class="legend">
-            <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.demanda">Demanda</span></span>
-            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.oferta">Oferta (suma de las explotaciones)</span></span>
-          </div>
-          <div class="plot"><svg class="chart" id="pt-mkt" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.m"></svg><div class="tip" id="pt-mkt-tip" hidden></div></div>
-        </figure>
-        <figure>
-          <figcaption data-i18n="m.fig2">Una explotación</figcaption>
-          <div class="legend">
-            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">CMg</span></span>
-            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ctme">CTMe</span></span>
-            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.precio">Precio</span></span>
-          </div>
-          <div class="plot"><svg class="chart" id="pt-firm" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.mf"></svg><div class="tip" id="pt-firm-tip" hidden></div></div>
-        </figure>
-      </div>
-      <div class="mando">
-        <div class="tal-campos">
-          <div class="tal-ej" role="group" data-i18n-attr="aria-label:tal.ej"><span data-i18n="tal.ej">Para empezar:</span>
-            <button type="button" class="ej-btn" data-pt="nar" aria-pressed="true" data-i18n="pt.ej1">Las naranjas</button>
-            <button type="button" class="ej-btn" data-pt="sube" aria-pressed="false" data-i18n="pt.ej2">Las naranjas, con más demanda</button>
-            <button type="button" class="ej-btn" data-pt="plano" aria-pressed="false" data-i18n="pt.ej3">Coste marginal plano</button>
-          </div>
-          <div class="field ancho"><label for="pt-ct" data-i18n="pt.ct">Costes de una explotación: CT(q) =</label><input type="text" id="pt-ct" spellcheck="false" autocomplete="off"></div>
-          <div class="field ancho"><label for="pt-d" data-i18n="pt.d">Demanda de todo el mercado: Q(P) =</label><input type="text" id="pt-d" spellcheck="false" autocomplete="off"></div>
-          <div class="field"><label for="pt-n" data-i18n="pt.n">Explotaciones al empezar</label><input type="text" id="pt-n" inputmode="numeric"></div>
-          <div class="field"><label for="pt-qm" data-i18n="pt.qm">Toneladas como máximo por explotación</label><input type="text" id="pt-qm" inputmode="decimal"></div>
-          <p class="tal-err" id="pt-err" aria-live="polite"></p>
-          <details><summary data-i18n="tal.sint">Cómo se escribe una función</summary><p class="small" data-i18n="tal.sintx"></p></details>
-        </div>
-        <div class="actions" style="flex-direction:column;align-items:stretch">
-          <button type="button" class="btn" id="pt-play" data-i18n="rep.weeks">Reproducir semana a semana</button>
-          <button type="button" class="btn ghost" id="pt-step" data-i18n="m.step">Avanzar una semana</button>
-          <button type="button" class="btn quiet" id="pt-reset" data-i18n="m.reset">Volver a empezar</button>
-        </div>
-      </div>
-      <div class="stats" id="pt-stats" aria-live="polite"></div>
-      <div class="notice" id="pt-note" aria-live="polite"></div>
-      <p class="tal-diag" id="pt-diag"></p>
-      <details><summary data-i18n="m.hist">Semana a semana</summary><div class="scroll"><table id="pt-hist"></table></div></details>
     </div>
   </section>
 
@@ -973,6 +935,74 @@ body.obs-proj .obs-serie { font-size: 15px; }
         <div class="scroll"><table id="w-hist"></table></div>
       </details>
     </div>
+  </section>
+
+  <!-- ===================== 4 · LOS DOS MERCADOS (26/11/2026) ===================== -->
+  <section class="view" id="view-mercats" role="tabpanel" aria-labelledby="tab-mercats" hidden>
+    <div class="block" id="dm-cab">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="dm.eyebrow">4 · De la empresa al mercado</span>
+        <h2 data-i18n="dm.h2">¿Cómo se entiende el mercado con cada empresa?</h2>
+        <p data-i18n="dm.p"></p>
+      </div>
+      <p class="notice" id="dm-origen" hidden></p>
+      <div class="actions">
+        <button type="button" class="btn" id="dm-play" data-i18n="dm.play">Reproducir los dos mercados</button>
+        <a class="btn ghost" id="dm-tornar" href="#"><span data-i18n="dm.tornar">← Volver a las empresas (SA 3)</span></a>
+      </div>
+      <div class="dm-concl" id="dm-concl" aria-live="polite"></div>
+    </div>
+    <div class="dm-cols">
+    <div class="block" id="pt-block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="pt.eyebrow">1c · Taller</span>
+        <h2 data-i18n="pt.h2">Tu mercado: ¿adónde lleva la competencia?</h2>
+        <p data-i18n="pt.p"></p>
+      </div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="m.fig1">El mercado</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.demanda">Demanda</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.oferta">Oferta (suma de las explotaciones)</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="pt-mkt" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.m"></svg><div class="tip" id="pt-mkt-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="m.fig2">Una explotación</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">CMg</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ctme">CTMe</span></span>
+            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.precio">Precio</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="pt-firm" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.mf"></svg><div class="tip" id="pt-firm-tip" hidden></div></div>
+        </figure>
+      </div>
+      <div class="mando">
+        <div class="tal-campos">
+          <div class="tal-ej" role="group" data-i18n-attr="aria-label:tal.ej"><span data-i18n="tal.ej">Para empezar:</span>
+            <button type="button" class="ej-btn" data-pt="nar" aria-pressed="true" data-i18n="pt.ej1">Las naranjas</button>
+            <button type="button" class="ej-btn" data-pt="sube" aria-pressed="false" data-i18n="pt.ej2">Las naranjas, con más demanda</button>
+            <button type="button" class="ej-btn" data-pt="plano" aria-pressed="false" data-i18n="pt.ej3">Coste marginal plano</button>
+          </div>
+          <div class="field ancho"><label for="pt-ct" data-i18n="pt.ct">Costes de una explotación: CT(q) =</label><input type="text" id="pt-ct" spellcheck="false" autocomplete="off"></div>
+          <div class="field ancho"><label for="pt-d" data-i18n="pt.d">Demanda de todo el mercado: Q(P) =</label><input type="text" id="pt-d" spellcheck="false" autocomplete="off"></div>
+          <div class="field"><label for="pt-n" data-i18n="pt.n">Explotaciones al empezar</label><input type="text" id="pt-n" inputmode="numeric"></div>
+          <div class="field"><label for="pt-qm" data-i18n="pt.qm">Toneladas como máximo por explotación</label><input type="text" id="pt-qm" inputmode="decimal"></div>
+          <p class="tal-err" id="pt-err" aria-live="polite"></p>
+          <details><summary data-i18n="tal.sint">Cómo se escribe una función</summary><p class="small" data-i18n="tal.sintx"></p></details>
+        </div>
+        <div class="actions" style="flex-direction:column;align-items:stretch">
+          <button type="button" class="btn" id="pt-play" data-i18n="rep.weeks">Reproducir semana a semana</button>
+          <button type="button" class="btn ghost" id="pt-step" data-i18n="m.step">Avanzar una semana</button>
+          <button type="button" class="btn quiet" id="pt-reset" data-i18n="m.reset">Volver a empezar</button>
+        </div>
+      </div>
+      <div class="stats" id="pt-stats" aria-live="polite"></div>
+      <div class="notice" id="pt-note" aria-live="polite"></div>
+      <p class="tal-diag" id="pt-diag"></p>
+      <details><summary data-i18n="m.hist">Semana a semana</summary><div class="scroll"><table id="pt-hist"></table></div></details>
+    </div>
 
     <div class="block" id="rt-block">
       <div class="prose">
@@ -1030,14 +1060,6 @@ body.obs-proj .obs-serie { font-size: 15px; }
       </div>
       <details><summary data-i18n="m.hist">Semana a semana</summary><div class="scroll"><table id="rt-hist"></table></div></details>
     </div>
-  </section>
-
-  <!-- ===================== 4 · COMPARAR SUPUESTOS ===================== -->
-  <section class="view" id="view-supuestos" role="tabpanel" aria-labelledby="tab-supuestos" hidden>
-    <div class="empty">
-      <span class="eyebrow" data-i18n="s.prep">En preparación</span>
-      <h2 data-i18n="tab.4">Comparar supuestos</h2>
-      <p class="small" data-i18n="s.p">Una tabla que la clase rellena con lo que supone cada modelo: información, número de empresas, quién fija el precio y si hay equilibrio.</p>
     </div>
   </section>
 
@@ -2155,13 +2177,14 @@ window.OBS = (() => {
   const lab = x => typeof x === "function" ? x() : x;
 
   // ---------- Pestañas ----------
-  const VIEWS = ["perfecta", "imperfecta", "real", "supuestos"];
+  const VIEWS = ["perfecta", "imperfecta", "real", "mercats"];
   function show(view) {
-    if (!VIEWS.includes(view) || view === "supuestos") view = "perfecta";
+    if (view === "supuestos") view = "mercats";
+    if (!VIEWS.includes(view)) view = "perfecta";
     for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
-  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+  window.addEventListener("hashchange", () => { show(location.hash.slice(1).split("?")[0]); if (typeof dmLligEnllac === "function" && dmListo) dmLligEnllac(); });
 
   // ---------- Motor de gráficos (SVG, una escala por gráfico) ----------
   const M = { l: 62, r: 22, t: 14, b: 50 };
@@ -3344,7 +3367,7 @@ window.OBS = (() => {
       if (!vivo.A && !vivo.B) break;
     }
     while (R.length < WEEKS) { const u = R[R.length - 1]; R.push({ ...u, t: R.length + 1, alive: false, aliveB: false, broke: false, brokeB: false, pa: 0, pb: 0, qa: 0, qb: 0 }); }
-    return { ok: true, R, c, atk, def, suelo, cierre, p0 };
+    return { ok: true, R, c, atk, def, suelo, cierre, p0, CT, cap };
   }
   function rtPintar() {
     const m = rt;
@@ -3374,11 +3397,64 @@ window.OBS = (() => {
     document.querySelectorAll("[data-rt]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.rt === k)));
     rtRep.parar(); $("rt-t").value = "1"; rtEmpezar();
   }
-  const rtRep = continuo($("rt-play"), { desde: () => +$("rt-t").value >= WEEKS ? 1 : +$("rt-t").value, hasta: () => WEEKS, dur: () => 13000,
+  const rtRep = continuo($("rt-play"), { desde: () => +$("rt-t").value >= WEEKS ? 1 : +$("rt-t").value, hasta: () => WEEKS, dur: () => (WEEKS - +$("rt-t").value) * 650 || 12350,
     pinta: v => { if (!rt || !rt.ok) return; rtVista = v; $("rt-t").value = String(Math.floor(v + 1e-9)); rtPintar(); } });
   $("rt-t").addEventListener("input", () => { rtRep.parar(); rtVista = null; rtPintar(); });
   ["rt-cta", "rt-ctb", "rt-d", "rt-p0", "rt-res0", "rt-cut", "rt-cap"].forEach(id => $(id).addEventListener("input", () => { rtRep.parar(); document.querySelectorAll("[data-rt]").forEach(b => b.setAttribute("aria-pressed", "false")); rtEmpezar(); }));
   document.querySelectorAll("[data-rt]").forEach(b => b.addEventListener("click", () => rtEjemplo(b.dataset.rt)));
+
+  // =====================================================================
+  // 4 · LOS DOS MERCADOS (26/11/2026): cada empresa en su mercado
+  // =====================================================================
+  var dmListo = false;
+  const rutaSA3 = () => /\/sa04\/(index\.html)?$/.test(location.pathname) ? "../sa03/index.html" : "../../SA03-la-produccion/material/observatorio-sa3.html";
+  function dmEnllacTornar() {
+    const v = id => encodeURIComponent($(id).value.trim());
+    $("dm-tornar").href = rutaSA3() + "#lab?neo=" + v("pt-ct") + "&qm=" + v("pt-qm") + "&real=" + v("rt-ctb") + "&p0=" + v("rt-p0") + "&cap=" + v("rt-cap");
+  }
+  // Conclusión de cada mercado (y si la empresa respeta el supuesto de su mundo)
+  function dmConcl() {
+    if (!dmListo) return;
+    const out = [];
+    if (pt && pt.m && pt.m.ok) {
+      const m = pt.m; let st = m.equilibrio(m.n0), sem = 1, ds = [];
+      while (sem < 60) { const d = m.entra(st.pi); if (d === 0) break; ds.push(d); st = m.equilibrio(Math.max(1, st.n + d)); sem++; const u = ds.slice(-6); if (u.length === 6 && u.every((x, i) => i === 0 || Math.sign(x) !== Math.sign(u[i - 1]))) { sem = -1; break; } }
+      let txt = m.forma !== "sube" ? t("dm.neo.mal") + " " : "";
+      txt += sem < 0 ? t("dm.neo.osc") : sem >= 60 ? t("dm.neo.no") : t("dm.neo.eq", { s: sem, n: fmt(st.n), p: fmt(st.P, 1) + " €", q: fmt(st.q, 1), m: fmt(m.minCTMe, 1) + " €" });
+      out.push(el("p", { class: m.forma !== "sube" ? "mal" : null, text: txt }));
+    } else out.push(el("p", { text: t("dm.err") }));
+    if (rt && rt.ok) {
+      const x = [0.1, 0.5, 0.9].map(f => { const q = rt.cap * f; return (rt.CT.B(q + 0.5) - rt.CT.B(Math.max(0, q - 0.5))) / (q + 0.5 - Math.max(0, q - 0.5)); });
+      const plana = x.every(v => Math.abs(v - x[0]) <= 0.02 * Math.max(1, Math.abs(x[0])));
+      let txt = plana ? "" : t("dm.real.mal") + " ";
+      txt += !rt.atk ? t("dm.real.igual") : rt.cierre ? t("dm.real.cierra", { y: rt.cierre.e, n: rt.cierre.t, x: rt.cierre.e === "A" ? "B" : "A" }) : t("dm.real.aguanta", { y: rt.def });
+      out.push(el("p", { class: "r" + (plana ? "" : " mal"), text: txt }));
+    } else out.push(el("p", { class: "r", text: t("dm.err") }));
+    $("dm-concl").replaceChildren(...out);
+    dmEnllacTornar();
+  }
+  new MutationObserver(dmConcl).observe($("pt-diag"), { childList: true, characterData: true, subtree: true });
+  new MutationObserver(dmConcl).observe($("rt-diag"), { childList: true, characterData: true, subtree: true });
+  // Las empresas que llegan de la SA 3
+  function dmLligEnllac() {
+    const q = location.hash.split("?")[1] || ""; if (!q) return false;
+    const ps = new URLSearchParams(q);
+    if (!ps.get("neo") && !ps.get("real")) return false;
+    const set = (id, k) => { if (ps.get(k) != null && ps.get(k) !== "") $(id).value = ps.get(k); };
+    set("pt-ct", "neo"); set("pt-qm", "qm"); set("rt-ctb", "real"); set("rt-p0", "p0"); set("rt-cap", "cap");
+    document.querySelectorAll("[data-pt], [data-rt]").forEach(b => b.setAttribute("aria-pressed", "false"));
+    ptRep.parar(); rtRep.parar(); $("rt-t").value = "1";
+    ptEmpezar(); rtEmpezar();
+    $("dm-origen").hidden = false; $("dm-origen").textContent = t("dm.origen");
+    return true;
+  }
+  $("dm-play").addEventListener("click", () => {
+    const vaPt = ptRep.activo(), vaRt = rtRep.activo();
+    if (vaPt || vaRt) { if (vaPt) $("pt-play").click(); if (vaRt) $("rt-play").click(); return; }
+    if (pt && pt.m && pt.m.ok && pt.hist.length > 1) ptEmpezar();
+    $("rt-t").value = "1"; rtVista = null; rtPintar();
+    $("pt-play").click(); $("rt-play").click();
+  });
 
   // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
   OBS.register({ es: {
@@ -3587,11 +3663,11 @@ window.OBS = (() => {
   {
     const tr = k => ({ get es() { return OBS.t(k); }, get va() { return OBS.t(k); } });
     const pal0 = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
-    OBS.subpestanas($("view-perfecta"), [{ el: $("firm-block"), t: tr("sub.1a") }, { el: $("market-block"), t: tr("sub.1b") }, { el: $("pt-block"), t: tr("sub.1c") }],
+    OBS.subpestanas($("view-perfecta"), [{ el: $("firm-block"), t: tr("sub.1a") }, { el: $("market-block"), t: tr("sub.1b") }],
       { onChange: () => { if (typeof fRep !== "undefined") { fRep.parar(); mRep.parar(); ptRep.parar(); } } });
     OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }, { el: $("mt-block"), t: tr("sub.2c") }],
       { onChange: () => { if (typeof moRep !== "undefined") { moRep.parar(); mtRep.parar(); } } });
-    OBS.subpestanas($("view-real"), [{ el: $("rm-block"), t: tr("sub.3a") }, { el: $("war-block"), t: tr("sub.3b") }, { el: $("rt-block"), t: tr("sub.3c") }],
+    OBS.subpestanas($("view-real"), [{ el: $("rm-block"), t: tr("sub.3a") }, { el: $("war-block"), t: tr("sub.3b") }],
       { onChange: () => { if (typeof rmRep !== "undefined") { rmRep.parar(); rtRep.parar(); stopPlay(); } } });
     OBS.palabras($("rm-block"), pal0(["cf", "cmg", "cuota", "res"]), { antes: $("rm-block").querySelector(".charts") });
     OBS.mirar($("rm-precios"), tr("mi.rmp")); OBS.mirar($("rm-res"), tr("mi.rmr"));
@@ -3611,9 +3687,52 @@ window.OBS = (() => {
     OBS.palabras($("oli-block"), pal(["oli"]), { antes: $("oli-block").querySelector(".o-voto") });
     OBS.palabras($("war-block"), pal(["cf", "cmg", "cuota", "res"]), { antes: $("w-perf") });
   }
+  OBS.register({ es: {
+    "tab.mercats": "Los dos mercados",
+    "dm.eyebrow": "4 · De la empresa al mercado", "dm.h2": "¿Cómo se entiende el mercado con cada empresa?",
+    "dm.p": "Cada empresa va a su mercado. La neoclásica, a la competencia perfecta: muchas empresas iguales que aceptan el precio, y entran o salen hasta el equilibrio. La de la competencia real, a la guerra de precios contra una rival con la técnica de siempre. Las funciones llegan de la SA 3 («c · Las dos empresas») o se escriben aquí.",
+    "dm.play": "Reproducir los dos mercados", "dm.tornar": "← Volver a las empresas (SA 3)",
+    "dm.origen": "Estas empresas vienen de la SA 3. Si cambiáis algo aquí, «Volver a las empresas» se lo lleva de vuelta.",
+    "dm.neo.eq": "Mundo neoclásico: el mercado llega al equilibrio en la semana {s}, con {n} explotaciones de {q} t a {p}. Es el mínimo del coste medio ({m}): nadie gana más de lo normal y ya no entra nadie.",
+    "dm.neo.osc": "Mundo neoclásico: el mercado no se asienta; entran y salen explotaciones sin parar.",
+    "dm.neo.no": "Mundo neoclásico: en 60 semanas el mercado no llega al equilibrio.",
+    "dm.neo.mal": "Cuidado: vuestra empresa neoclásica no tiene un coste marginal que suba, así que no respeta el supuesto de su mundo.",
+    "dm.real.cierra": "Mundo de la competencia real: {y} cierra en la semana {n} y {x} se queda con el mercado. No hay equilibrio: la competencia es una guerra que acaba concentrando el mercado.",
+    "dm.real.igual": "Mundo de la competencia real: las dos empresas tienen la misma técnica, nadie gana bajando el precio y conviven.",
+    "dm.real.aguanta": "Mundo de la competencia real: {y} aguanta las 20 semanas, pero va perdiendo clientes y reservas.",
+    "dm.real.mal": "Cuidado: vuestra empresa de la competencia real tiene un coste por unidad que cambia, así que no respeta el supuesto de su mundo.",
+    "dm.err": "Revisa las funciones de abajo.",
+    "pt.eyebrow": "Mundo neoclásico", "pt.h2": "Competencia perfecta",
+    "pt.p": "Todas las explotaciones son como la vuestra. Cada una vende lo que más le conviene al precio del mercado y, si se gana más de lo normal, entran explotaciones nuevas.",
+    "pt.ct": "Costes de vuestra empresa (todas iguales): CT(q) =",
+    "rt.eyebrow": "Mundo de la competencia real", "rt.h2": "Guerra de precios",
+    "rt.p": "Vuestra empresa (B) compite con una rival (A). La que tiene la unidad más barata baja el precio cada semana; la otra la sigue sin bajar de lo que le cuesta una unidad.",
+    "rt.cta": "Costes de la rival (A): CT(q) =", "rt.ctb": "Costes de vuestra empresa (B): CT(q) =",
+  }, va: {
+    "tab.mercats": "Els dos mercats",
+    "dm.eyebrow": "4 · De l'empresa al mercat", "dm.h2": "Com s'entén el mercat amb cada empresa?",
+    "dm.p": "Cada empresa va al seu mercat. La neoclàssica, a la competència perfecta: moltes empreses iguals que accepten el preu, i entren o ixen fins a l'equilibri. La de la competència real, a la guerra de preus contra una rival amb la tècnica de sempre. Les funcions arriben de la SA 3 («c · Les dues empreses») o s'escriuen ací.",
+    "dm.play": "Reproduir els dos mercats", "dm.tornar": "← Tornar a les empreses (SA 3)",
+    "dm.origen": "Estes empreses vénen de la SA 3. Si canvieu alguna cosa ací, «Tornar a les empreses» se l'emporta de tornada.",
+    "dm.neo.eq": "Món neoclàssic: el mercat arriba a l'equilibri en la setmana {s}, amb {n} explotacions de {q} t a {p}. És el mínim del cost mitjà ({m}): ningú guanya més del normal i ja no entra ningú.",
+    "dm.neo.osc": "Món neoclàssic: el mercat no s'assenta; entren i ixen explotacions sense parar.",
+    "dm.neo.no": "Món neoclàssic: en 60 setmanes el mercat no arriba a l'equilibri.",
+    "dm.neo.mal": "Compte: la vostra empresa neoclàssica no té un cost marginal que puge, així que no respecta el supòsit del seu món.",
+    "dm.real.cierra": "Món de la competència real: {y} tanca en la setmana {n} i {x} es queda el mercat. No hi ha equilibri: la competència és una guerra que acaba concentrant el mercat.",
+    "dm.real.igual": "Món de la competència real: les dues empreses tenen la mateixa tècnica, ningú guanya abaixant el preu i conviuen.",
+    "dm.real.aguanta": "Món de la competència real: {y} aguanta les 20 setmanes, però va perdent clients i reserves.",
+    "dm.real.mal": "Compte: la vostra empresa de la competència real té un cost per unitat que canvia, així que no respecta el supòsit del seu món.",
+    "dm.err": "Revisa les funcions de baix.",
+    "pt.eyebrow": "Món neoclàssic", "pt.h2": "Competència perfecta",
+    "pt.p": "Totes les explotacions són com la vostra. Cadascuna ven el que més li convé al preu del mercat i, si es guanya més del normal, entren explotacions noves.",
+    "pt.ct": "Costos de la vostra empresa (totes iguals): CT(q) =",
+    "rt.eyebrow": "Món de la competència real", "rt.h2": "Guerra de preus",
+    "rt.p": "La vostra empresa (B) competix amb una rival (A). La que té la unitat més barata abaixa el preu cada setmana; l'altra la seguix sense baixar del que li costa una unitat.",
+    "rt.cta": "Costos de la rival (A): CT(q) =", "rt.ctb": "Costos de la vostra empresa (B): CT(q) =",
+  } });
   OBS.apply();
   OBS.onLang(() => {
-    ptPintar(); mtPintar(); renderRm(); rtPintar();
+    ptPintar(); mtPintar(); renderRm(); rtPintar(); dmConcl(); if (!$("dm-origen").hidden) $("dm-origen").textContent = t("dm.origen");
     setBestLabels(); buildFirmTable(); renderFirm(); renderMarket(); renderMono(); renderOli();
     renderCmp(); buildWarTable(); renderWar();
   });
@@ -3632,7 +3751,10 @@ window.OBS = (() => {
   mtEjemplo("far");
   renderRm();
   rtEjemplo("mod");
-  show(location.hash.slice(1));
+  dmListo = true;
+  dmLligEnllac();
+  dmConcl();
+  show(location.hash.slice(1).split("?")[0]);
 })();
 </script>
 
