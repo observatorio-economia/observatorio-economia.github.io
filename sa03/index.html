@@ -319,6 +319,39 @@ body.obs-proj input[type="number"], body.obs-proj .fn { font-size: 20px !importa
 .lab-tabla-caja th { position: sticky; top: 0; background: var(--paper); }
 .lab-tabla-caja tr.cur td { background: var(--accent-soft); font-weight: 600; }
 .lab-tabla-caja tr.vacia td { color: transparent; }
+/* Modelos y taller (26/11/2026): cabecera de cada modelo con sus supuestos; reglas del taller */
+.lab.lab-v2 { display: flex; flex-direction: column; align-items: stretch; gap: 16px; }
+.lab-graf { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 26px; align-items: start; }
+.lab-graf figure { margin: 0; min-width: 0; }
+.lab-mando { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 280px); gap: 14px 30px; align-items: end; border-top: 2px solid var(--ink); padding-top: 12px; }
+.lab-paso { display: flex; flex-direction: column; gap: 10px; }
+.lab-v2 .lab-sliders { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 22px; align-items: end; }
+.lab-v2 #lb-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 16px; align-items: end; }
+.lab-v2 #lb-datos[hidden] { display: none; }
+.lab-v2 #lb-datos > .tal-ej, .lab-v2 #lb-datos > .err, .lab-v2 #lb-datos > details { grid-column: 1 / -1; }
+.lab-v2 #lb-datos > .field:has(#lb-ct) { grid-column: span 2; }
+.lab-v2 #lb-datos .lab-fila { display: contents; }
+.lab-lectura { display: grid; grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr); gap: 12px 28px; align-items: start; }
+.lab-lectura .lab-cifras { border-top: 0; padding-top: 0; }
+.lab-lectura .lab-reglas { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 28px; }
+.lab-lectura .lab-reglas[hidden] { display: none; }
+.lab-lectura .lab-reglas .diag { grid-column: 1 / -1; }
+@media (max-width: 900px) {
+  .lab-graf, .lab-mando, .lab-lectura, .lab-lectura .lab-reglas { grid-template-columns: minmax(0, 1fr); }
+  .lab-v2 #lb-datos > .field:has(#lb-ct) { grid-column: 1 / -1; }
+}
+.lab-cabm { border-top: 3px solid var(--s2); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.lab-cabm.m2 { border-top-color: var(--s1); } .lab-cabm.neutro { border-top-color: var(--ink); }
+.lab-cabm h3 { margin: 0; font-size: 17px; }
+.lab-cabm ul { margin: 0; padding-left: 1.1em; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4px 24px; font-size: 15px; }
+.lab-cabm p { margin: 0; font-size: 15px; line-height: 1.5; max-width: 90ch; }
+.lab-sliders { display: flex; flex-direction: column; gap: 10px; }
+.tal-ej { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); }
+.lab-reglas { display: flex; flex-direction: column; gap: 10px; }
+.lab-reglas .diag { margin: 0; font-size: 15px; line-height: 1.5; }
+.lab-reglas .regla { border-left: 4px solid var(--s2); padding: 4px 0 4px 12px; display: flex; flex-direction: column; gap: 3px; }
+.lab-reglas .regla.r2 { border-left-color: var(--s1); }
+.lab-reglas .regla b { font-size: 15px; } .lab-reglas .regla span { font-size: 15px; line-height: 1.45; }
 .lab-supuestos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
 .lab-supuestos .sup { border-top: 3px solid var(--s2); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
 .lab-supuestos .sup2 { border-top-color: var(--s1); }
@@ -613,14 +646,51 @@ body.obs-proj .obs-serie { font-size: 15px; }
 
     <!-- Trastear: proyectado en clase (S3 y S4) y en casa -->
     <div id="lb-trastear">
-      <div class="lab-ejemplos" role="group" aria-label="Ejemplos" data-i18n-attr="aria-label:lb.ej">
-        <button type="button" class="ej-btn" data-ej="m1" aria-pressed="true" data-i18n="lb.m1">Cada unidad cuesta más que la anterior (modelo 1)</button>
-        <button type="button" class="ej-btn" data-ej="m2" aria-pressed="false" data-i18n="lb.m2">Cada unidad cuesta lo mismo (modelo 2)</button>
-        <button type="button" class="ej-btn" data-ej="dos" aria-pressed="false" data-i18n="lb.dos">Comparar los dos</button>
+      <div class="lab-cabm" id="lb-cab-m1">
+        <h3 data-i18n="lb.sup.h1">Modelo 1 · la empresa neoclásica (Marshall, 1890)</h3>
+        <ul><li data-i18n="lb.sup.1a"></li><li data-i18n="lb.sup.1b"></li><li data-i18n="lb.sup.1c"></li></ul>
       </div>
-      <div class="lab">
-        <div class="lab-izq">
-          <div class="lab-datos" id="lb-datos">
+      <div class="lab-cabm m2" id="lb-cab-m2" hidden>
+        <h3 data-i18n="lb.sup.h2">Modelo 2 · la empresa poskeynesiana (Kalecki, 1954)</h3>
+        <ul><li data-i18n="lb.sup.2a"></li><li data-i18n="lb.sup.2b"></li><li data-i18n="lb.sup.2c"></li></ul>
+        <p class="small" data-i18n="lb.sup.nota"></p>
+      </div>
+      <div class="lab-cabm neutro" id="lb-cab-dos" hidden><p data-i18n="lb.dos.fns"></p></div>
+      <div class="lab-cabm neutro" id="lb-cab-tal" hidden><p data-i18n-html="lb.tal.cab"></p></div>
+      <div class="lab lab-v2">
+        <div class="lab-graf">
+          <figure>
+            <figcaption data-i18n="lb.ch1">Costes e ingresos totales</figcaption>
+            <div class="legend" id="lb-lg1"></div>
+            <div class="plot"><svg class="chart" id="lb-tot" role="img" data-i18n-attr="aria-label:lb.ch1"></svg><div class="tip" id="lb-tot-tip" hidden></div></div>
+          </figure>
+          <figure>
+            <figcaption data-i18n="lb.ch2">Por unidad</figcaption>
+            <div class="legend" id="lb-lg2"></div>
+            <div class="plot"><svg class="chart" id="lb-uni" role="img" data-i18n-attr="aria-label:lb.ch2"></svg><div class="tip" id="lb-uni-tip" hidden></div></div>
+          </figure>
+        </div>
+        <div class="lab-mando">
+          <div class="lab-ctrl">
+          <div class="lab-sliders" id="lb-datos-m1">
+            <div class="slider"><div class="lab"><label for="m1-cf" data-i18n="lb.s.cf"></label><output id="m1-cf-out" for="m1-cf"></output></div><input type="range" id="m1-cf" min="0" max="600" step="10" value="200"></div>
+            <div class="slider"><div class="lab"><label for="m1-c1" data-i18n="lb.s.c1"></label><output id="m1-c1-out" for="m1-c1"></output></div><input type="range" id="m1-c1" min="0" max="60" step="1" value="10"></div>
+            <div class="slider"><div class="lab"><label for="m1-s" data-i18n="lb.s.s"></label><output id="m1-s-out" for="m1-s"></output></div><input type="range" id="m1-s" min="1" max="30" step="1" value="10"></div>
+            <div class="slider"><div class="lab"><label for="m1-p" data-i18n="lb.s.p"></label><output id="m1-p-out" for="m1-p"></output></div><input type="range" id="m1-p" min="5" max="200" step="1" value="85"></div>
+          </div>
+          <div class="lab-sliders" id="lb-datos-m2" hidden>
+            <div class="slider"><div class="lab"><label for="m2-cf" data-i18n="lb.s.cf"></label><output id="m2-cf-out" for="m2-cf"></output></div><input type="range" id="m2-cf" min="0" max="1000" step="10" value="200"></div>
+            <div class="slider"><div class="lab"><label for="m2-c" data-i18n="lb.s.c"></label><output id="m2-c-out" for="m2-c"></output></div><input type="range" id="m2-c" min="1" max="50" step="1" value="15"></div>
+            <div class="slider"><div class="lab"><label for="m2-p" data-i18n="lb.s.p"></label><output id="m2-p-out" for="m2-p"></output></div><input type="range" id="m2-p" min="1" max="60" step="1" value="20"></div>
+            <div class="slider"><div class="lab"><label for="m2-cap" data-i18n="lb.s.cap"></label><output id="m2-cap-out" for="m2-cap"></output></div><input type="range" id="m2-cap" min="10" max="200" step="5" value="100"></div>
+            <div class="slider"><div class="lab"><label for="m2-dem" data-i18n="lb.s.dem"></label><output id="m2-dem-out" for="m2-dem"></output></div><input type="range" id="m2-dem" min="0" max="250" step="5" value="250"></div>
+          </div>
+          <div class="lab-datos" id="lb-datos" hidden>
+            <div class="tal-ej" role="group" aria-label="Ejemplos" data-i18n-attr="aria-label:lb.ej"><span data-i18n="lb.tal.ej">Para empezar:</span>
+              <button type="button" class="ej-btn" data-ej="m1" aria-pressed="false" data-i18n="lb.tal.ej1">Ejemplo del modelo 1</button>
+              <button type="button" class="ej-btn" data-ej="m2" aria-pressed="false" data-i18n="lb.tal.ej2">Ejemplo del modelo 2</button>
+              <button type="button" class="ej-btn" data-ej="u" aria-pressed="false" data-i18n="lb.tal.ej3">La explotación de naranjas (SA 4)</button>
+            </div>
             <div class="field"><label for="lb-ct" data-i18n="lb.ct">Costes totales: CT(q) =</label><input type="text" id="lb-ct" class="fn" spellcheck="false" autocomplete="off"></div>
             <div class="lab-fila">
               <div class="field"><label for="lb-ing" data-i18n="lb.ing">Ingreso</label>
@@ -635,10 +705,11 @@ body.obs-proj .obs-serie { font-size: 15px; }
             <div class="err" id="lb-err" aria-live="polite"></div>
             <details class="lab-mas"><summary data-i18n="lb.sint">Cómo se escribe una función</summary><p class="small" data-i18n="lb.sintx"></p></details>
           </div>
-          <div class="lab-datos" id="lb-datos-dos" hidden>
-            <p class="small" data-i18n="lb.dos.fns"></p>
-            <div class="field"><label for="lb-p2" data-i18n="lb.p">Precio (€ por unidad)</label><input type="number" id="lb-p2" step="0.5" min="0" value="20"></div>
+          <div class="lab-sliders" id="lb-datos-dos" hidden>
+            <div class="slider"><div class="lab"><label for="lb-p2" data-i18n="lb.s.p"></label><output id="lb-p2-out" for="lb-p2"></output></div><input type="range" id="lb-p2" min="5" max="40" step="1" value="20"></div>
           </div>
+          </div>
+          <div class="lab-paso">
           <div class="lab-play">
             <button type="button" class="btn" id="lb-play" data-i18n="lb.play">Reproducir</button>
             <label class="lab-vel" hidden><span data-i18n="lb.vel">Velocidad</span>
@@ -648,27 +719,19 @@ body.obs-proj .obs-serie { font-size: 15px; }
             <div class="lab"><label for="lb-q" data-i18n="lb.q">Unidad</label><output id="lb-q-out" for="lb-q"></output></div>
             <input type="range" id="lb-q" min="0" step="1" value="0">
           </div>
+          </div>
+        </div>
+        <div class="lab-lectura">
           <div class="lab-cifras" id="lb-cifras" aria-live="polite"></div>
           <p class="lab-frase" id="lb-frase" aria-live="polite"></p>
-          <details class="lab-mas"><summary data-i18n="lb.todos">Todos los valores de esta unidad</summary><dl class="lab-todos" id="lb-todos"></dl></details>
+          <div class="lab-reglas" id="lb-reglas" hidden></div>
         </div>
-        <div class="lab-der">
-          <figure>
-            <figcaption data-i18n="lb.ch1">Costes e ingresos totales</figcaption>
-            <div class="legend" id="lb-lg1"></div>
-            <div class="plot"><svg class="chart" id="lb-tot" role="img" data-i18n-attr="aria-label:lb.ch1"></svg><div class="tip" id="lb-tot-tip" hidden></div></div>
-          </figure>
-          <figure>
-            <figcaption data-i18n="lb.ch2">Por unidad</figcaption>
-            <div class="legend" id="lb-lg2"></div>
-            <div class="plot"><svg class="chart" id="lb-uni" role="img" data-i18n-attr="aria-label:lb.ch2"></svg><div class="tip" id="lb-uni-tip" hidden></div></div>
-          </figure>
           <div class="lab-tabla">
             <div class="lab-tabla-cab"><span data-i18n="lb.tabla">Tabla unidad a unidad</span><button type="button" class="btn quiet small" id="lb-dl" data-i18n="lb.dl">Descargar la tabla (Excel)</button></div>
             <div class="scroll lab-tabla-caja" id="lb-tabla-caja"><table id="lb-tabla"></table></div>
             <span class="small" id="lb-dl-st" aria-live="polite"></span>
           </div>
-        </div>
+          <details class="lab-mas"><summary data-i18n="lb.todos">Todos los valores de esta unidad</summary><dl class="lab-todos" id="lb-todos"></dl></details>
       </div>
       <div class="lab-supuestos" id="lb-supuestos">
         <div class="sup sup1"><h3 data-i18n="lb.sup.h1">Modelo 1 · la empresa neoclásica (Marshall, 1890)</h3>
@@ -677,7 +740,7 @@ body.obs-proj .obs-serie { font-size: 15px; }
           <ul><li data-i18n="lb.sup.2a"></li><li data-i18n="lb.sup.2b"></li><li data-i18n="lb.sup.2c"></li></ul>
           <p class="small" data-i18n="lb.sup.nota"></p></div>
       </div>
-      <p class="small" data-i18n="lb.sup.src"></p>
+      <p class="small" id="lb-src" data-i18n="lb.sup.src"></p>
     </div>
 
     <!-- Practicar: en casa, prepara la prueba de la S12 -->
@@ -2023,20 +2086,47 @@ window.OBS = (() => {
     // Modelo 1: término al cuadrado; con P = 85 € el umbral cae entre la 3.ª y la 4.ª unidad y el máximo en la 8.ª (como la tabla en U de los apuntes)
     m1: { ct: "200 + 5q + 5q^2", p: 85, cap: 12 },
     // Modelo 2: coste por unidad constante hasta la capacidad (tabla plana de los apuntes: umbral en 40)
-    m2: { ct: "200 + 15q", p: 20, cap: 100 }
+    m2: { ct: "200 + 15q", p: 20, cap: 100 },
+    // La explotación de naranjas de la SA 4 (competencia perfecta): la U de los manuales
+    u: { ct: "640 + 200q - 40q^2 + 5q^3", p: 320, cap: 8 }
   };
   // «Los dos a la vez»: la misma empresa con los dos supuestos (mismo coste fijo, mismo precio)
   const DOS = { m1: q => 200 + 20 * q - 0.3 * q * q + 0.0025 * q ** 3, m2: q => 200 + 15 * q, cap: 100, qmax: 120 };
   const lb = { ej: "m1", modo: "tr", reloj: null };
+  // Modelos y taller (26/11/2026). En las pantallas de cada modelo, la función tiene la forma del modelo y se mueve con deslizadores
+  // (los valores de partida son los de los ejemplos de siempre: modelo 1, 200 + 5q + 5q² con P = 85; modelo 2, 200 + 15q con P = 20 y 100 de capacidad).
+  // En el taller se escribe la función y se lee con la regla de cada modelo.
+  const val = id => +$(id).value;
+  // Coloca el deslizador de unidades (primero el máximo y el paso, para que el navegador no recorte el valor)
+  const ponerQ = (m, q) => { const i = $("lb-q"); if (m && m.ok) { i.max = String(m.qmax); i.step = String(m.paso); } i.value = String(Math.max(0, q)); };
+  const qInicial = m => !m.ok ? 0 : m.tal ? (m.q1 != null ? m.q1 : m.q2) : m.dos ? 0 : m.parada;
+  function salidas() {
+    const e = v => fmtA(v) + " €";
+    $("m1-cf-out").textContent = e(val("m1-cf")); $("m1-c1-out").textContent = e(val("m1-c1"));
+    $("m1-s-out").textContent = t("lb.s.mas", { v: fmtA(val("m1-s")) }); $("m1-p-out").textContent = e(val("m1-p"));
+    $("m2-cf-out").textContent = e(val("m2-cf")); $("m2-c-out").textContent = e(val("m2-c")); $("m2-p-out").textContent = e(val("m2-p"));
+    $("m2-cap-out").textContent = t("lb.s.uds", { v: fmtA(val("m2-cap")) });
+    $("m2-dem-out").textContent = val("m2-dem") >= 250 ? t("lb.dem.ph") : t("lb.s.uds", { v: fmtA(val("m2-dem")) });
+    $("lb-p2-out").textContent = e(val("lb-p2"));
+  }
+  function fuenteModelo() {
+    if (lb.ej === "m1") {
+      // CT = CF + a·q + b·q², con CMg(1) = a + b (lo que cuesta la primera unidad) y cada unidad 2b más cara que la anterior
+      const cf = val("m1-cf"), c1 = val("m1-c1"), sube = val("m1-s"), P = val("m1-p"), b = sube / 2, a = c1 - b;
+      const qStop = P < c1 ? 0 : Math.floor((P - c1) / sube) + 1;
+      return { CT: q => cf + a * q + b * q * q, IT: q => P * q, cap: Math.min(150, Math.max(12, Math.ceil(qStop * 1.5))), dem: Infinity };
+    }
+    const dv = val("m2-dem");
+    return { CT: (cf => c => q => cf + c * q)(val("m2-cf"))(val("m2-c")), IT: (P => q => P * q)(val("m2-p")), cap: val("m2-cap"), dem: dv >= 250 ? Infinity : dv };
+  }
   const num = v => { const x = parseFloat(String(v).replace(",", ".")); return isFinite(x) ? x : NaN; };
 
   function cargarEjemplo(k) {
-    lb.ej = k;
     document.querySelectorAll(".ej-btn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.ej === k)));
-    if (k !== "dos") { const e = EJ[k]; $("lb-ct").value = e.ct; $("lb-ing").value = "p"; $("lb-p").value = e.p; $("lb-it").value = e.p + "q"; $("lb-cap").value = e.cap; $("lb-dem").value = ""; }
+    const e = EJ[k]; $("lb-ct").value = e.ct; $("lb-ing").value = "p"; $("lb-p").value = e.p; $("lb-it").value = e.p + "q"; $("lb-cap").value = e.cap; $("lb-dem").value = "";
     lbParar();
     const m = lbModelo();
-    $("lb-q").value = String(m.ok ? m.parada : 0);
+    ponerQ(m, qInicial(m));
     renderLab();
   }
 
@@ -2047,14 +2137,18 @@ window.OBS = (() => {
       const filas1 = tablaDe(DOS.m1, q => P * q, qmax, paso), filas2 = tablaDe(DOS.m2, q => P * q, DOS.cap, paso);
       return { ok: true, dos: true, P, qmax, paso, cap: DOS.cap, filas1, filas2, f1: resumen(filas1, qmax), f2: resumen(filas2, DOS.cap) };
     }
-    const errs = []; let CT = null, IT = null;
-    const sct = $("lb-ct").value;
-    try { CT = parseFn(sct); } catch (e) { errs.push(fnError(e, "CT", sct)); }
-    if ($("lb-ing").value === "it") { const sit = $("lb-it").value; try { IT = parseFn(sit); } catch (e) { errs.push(fnError(e, "IT", sit)); } }
-    else { const P = Math.max(0, num($("lb-p").value) || 0); IT = q => P * q; }
-    const cap = Math.max(1, Math.round(num($("lb-cap").value) || 10));
-    const demV = num($("lb-dem").value), dem = isFinite(demV) && demV >= 0 ? demV : Infinity;
+    const errs = []; let CT = null, IT = null, cap, dem;
+    if (lb.ej === "m1" || lb.ej === "m2") ({ CT, IT, cap, dem } = fuenteModelo());
+    else {
+      const sct = $("lb-ct").value;
+      try { CT = parseFn(sct); } catch (e) { errs.push(fnError(e, "CT", sct)); }
+      if ($("lb-ing").value === "it") { const sit = $("lb-it").value; try { IT = parseFn(sit); } catch (e) { errs.push(fnError(e, "IT", sit)); } }
+      else { const P = Math.max(0, num($("lb-p").value) || 0); IT = q => P * q; }
+      cap = Math.max(1, Math.round(num($("lb-cap").value) || 10));
+      const demV = num($("lb-dem").value); dem = isFinite(demV) && demV >= 0 ? demV : Infinity;
+    }
     if (errs.length) return { ok: false, errs };
+    if (lb.ej === "taller") return taller(CT, IT, cap, dem);
     const paso = cap <= 150 ? 1 : Math.ceil(cap / 150);
     const filas = tablaDe(CT, IT, cap, paso);
     const limite = Math.min(cap, Math.floor(dem / paso) * paso);
@@ -2092,18 +2186,20 @@ window.OBS = (() => {
     $("lb-trastear").hidden = lb.modo !== "tr"; $("lb-practicar").hidden = lb.modo !== "pr";
     $("lb-m-tr").setAttribute("aria-pressed", String(lb.modo === "tr")); $("lb-m-pr").setAttribute("aria-pressed", String(lb.modo === "pr"));
     if (lb.modo !== "tr") return;
-    const dos = lb.ej === "dos";
-    $("lb-datos").hidden = dos; $("lb-datos-dos").hidden = !dos;
+    const dos = lb.ej === "dos", tal = lb.ej === "taller";
+    $("lb-datos").hidden = !tal; $("lb-datos-dos").hidden = !dos; $("lb-datos-m1").hidden = lb.ej !== "m1"; $("lb-datos-m2").hidden = lb.ej !== "m2";
+    ["m1", "m2", "dos", "tal"].forEach(k => { $("lb-cab-" + k).hidden = (k === "tal" ? "taller" : k) !== lb.ej; });
+    $("lb-supuestos").hidden = !(dos || tal); $("lb-reglas").hidden = !tal; $("lb-src").hidden = lb.ej === "m1";
+    salidas();
     $("lb-p-f").hidden = $("lb-ing").value !== "p"; $("lb-it-f").hidden = $("lb-ing").value !== "it";
-    document.querySelector(".sup1").hidden = lb.ej === "m2"; document.querySelector(".sup2").hidden = lb.ej === "m1";
     const m = lbModelo();
     $("lb-err").textContent = m.ok ? (m.avisos || []).join("\n") : m.errs.join("\n\n");
-    if (!m.ok) { ["lb-tot", "lb-uni"].forEach(id => $(id).replaceChildren()); $("lb-cifras").replaceChildren(); $("lb-frase").textContent = ""; $("lb-tabla").replaceChildren(); return; }
+    if (!m.ok) { ["lb-tot", "lb-uni"].forEach(id => $(id).replaceChildren()); $("lb-cifras").replaceChildren(); $("lb-frase").textContent = ""; $("lb-tabla").replaceChildren(); $("lb-reglas").replaceChildren(); return; }
     const qIn = $("lb-q");
     qIn.max = String(m.qmax); qIn.step = String(m.paso);
     let q = Math.min(+qIn.value, m.qmax); q = Math.round(q / m.paso) * m.paso; qIn.value = String(q);
     $("lb-q-out").textContent = t("lb.qv", { q: fmtA(q), n: fmtA(m.qmax) });
-    if (dos) renderDos2(m, q); else renderUno(m, q);
+    if (dos) renderDos2(m, q); else if (tal) renderTaller(m, q); else renderUno(m, q);
   }
 
   function filaDe(filas, q) { return filas.find(f => Math.abs(f.q - q) < 1e-9) || filas[filas.length - 1]; }
@@ -2153,11 +2249,13 @@ window.OBS = (() => {
     hover($("lb-uni"), $("lb-uni-tip"), G, x => { const r = filaDe(fs, Math.max(m.paso, Math.round(x / m.paso) * m.paso)); return { head: t("tip.q", { q: fmtA(r.q) }), rows: [[C.s2, "CMe", eur(r.CMe)], [C.s3, "CVMe", eur(r.CVMe)], [C.s1, "CMg", eur(r.CMg)], [C.ink, "IMg", eur(r.IMg)]] }; });
     $("lb-lg2").replaceChildren(...ley([[C.s2, t("lg.cme")], [C.s3, t("lg.cvme")], [C.s1, t("lg.cmg")], [C.ink, t("lg.img"), true]]));
     tabla(["q", "CF", "CV", "CT", "CMe", "CVMe", "CMg", "IT", "IMg", "B"], fs, q);
+    return { F, G, yT, yU };
   }
   // Capacidad y clientes, como líneas verticales
   function limites(F, m, y) {
     if (m.dos) return;
-    if (isFinite(m.dem) && m.dem < m.cap) { F.plot.append(sv("line", { x1: F.sx(m.limite), x2: F.sx(m.limite), y1: F.sy(y.lo), y2: F.sy(y.hi), class: "limite" })); label(F, m.limite, y.hi, t("lb.deml"), "end", "mark-txt", 14); }
+    const xd = m.tal ? m.dem : m.limite;
+    if (isFinite(m.dem) && m.dem < m.cap) { F.plot.append(sv("line", { x1: F.sx(xd), x2: F.sx(xd), y1: F.sy(y.lo), y2: F.sy(y.hi), class: "limite" })); label(F, xd, y.hi, t("lb.deml"), "end", "mark-txt", 14); }
   }
   // Umbral de rentabilidad y punto en que se para la empresa
   function marcas(F, m, campo, y, porUnidad) {
@@ -2186,6 +2284,72 @@ window.OBS = (() => {
     if (cur) { const top = cur.offsetTop - caja.clientHeight / 2; caja.scrollTop = Math.max(0, top); }
   }
 
+  // ---------- Taller (26/11/2026) ----------
+  // Regla del modelo 1: producir mientras la unidad siguiente aporte más de lo que cuesta, sin mirar capacidad ni clientes
+  // (la cantidad de más beneficio sin límites). Regla del modelo 2: producir hasta llenar la fábrica o hasta que no haya más clientes,
+  // si los ingresos cubren al menos los costes variables.
+  function taller(CT, IT, cap, dem) {
+    const tope = Math.max(3 * cap, 30), pasoT = tope <= 150 ? 1 : Math.ceil(tope / 150);
+    const largas = tablaDe(CT, IT, tope, pasoT);
+    let mejor = largas[0]; largas.forEach(f => { if (f.B > mejor.B + 1e-9) mejor = f; });
+    const ult = largas[largas.length - 1], sigue = mejor.q >= ult.q - 1e-9 && ult.IMg > ult.CMg + 1e-9;
+    const q1 = sigue ? null : mejor.q;
+    let qmax = q1 == null ? 2 * cap : Math.max(cap, Math.ceil(q1 * 1.15)); qmax = Math.min(qmax, tope);
+    const paso = qmax <= 150 ? 1 : Math.ceil(qmax / 150);
+    const filas = tablaDe(CT, IT, qmax, paso);
+    const lim2 = Math.min(cap, isFinite(dem) ? Math.floor(dem / paso) * paso : cap), f2 = filaDe(filas, lim2);
+    const q2 = lim2 > 0 && f2.IT - f2.CV >= -1e-9 ? lim2 : 0;
+    const q1s = q1 == null ? null : Math.min(qmax, Math.round(q1 / paso) * paso);
+    // Forma del coste marginal hasta la capacidad
+    const cm = filas.filter(f => f.q > 0 && f.q <= cap + 1e-9).map(f => f.CMg).filter(isFinite);
+    let forma = "plano";
+    if (cm.length > 1) {
+      const a = cm[0], z = cm[cm.length - 1], mn = Math.min(...cm), tol = 0.02 * Math.max(1, Math.abs(a), Math.abs(z));
+      if (cm.every(v => Math.abs(v - a) <= tol)) forma = "plano";
+      else if (mn < a - tol && z > mn + tol) forma = "u";
+      else if (z > a + tol) forma = "sube";
+      else forma = "baja";
+    }
+    const r = resumen(filas, Math.min(cap, isFinite(dem) ? dem : cap));
+    const malas = filas.some(f => !isFinite(f.CT) || !isFinite(f.IT));
+    return { ok: true, dos: false, tal: true, CT, IT, cap, dem, paso, qmax, filas, limite: qmax, umbral: r.umbral, parada: -1, razon: "mg",
+      q1: q1s, sigue, q2, razon2: isFinite(dem) && dem < cap ? "dem" : "cap", forma, avisos: malas ? [t("e.nan", { q: fmtA(filas.find(f => !isFinite(f.CT) || !isFinite(f.IT)).q) })] : [] };
+  }
+  function renderTaller(m, q) {
+    const out = renderUno(m, q);
+    const f = filaDe(m.filas, q);
+    // La frase: lo de esta unidad y, si toca, dónde se para cada regla
+    let frase = $("lb-frase").textContent;
+    if (q > m.cap + 1e-9) frase += t("lb.tal.fcap");
+    if (m.q1 != null && q > 0 && Math.abs(q - m.q1) < 1e-9) frase += t("lb.tal.f1");
+    if (m.q2 > 0 && Math.abs(q - m.q2) < 1e-9) frase += t(m.razon2 === "dem" ? "lb.tal.f2d" : "lb.tal.f2c");
+    $("lb-frase").textContent = frase;
+    // Las reglas
+    const a1 = m.q1 == null ? null : filaDe(m.filas, m.q1), s1 = m.q1 == null ? null : m.filas.find(x => x.q > m.q1 + 1e-9), a2 = filaDe(m.filas, m.q2);
+    let t1;
+    if (m.q1 == null) t1 = t("lb.tal.r1.nunca");
+    else if (m.q1 === 0) t1 = t("lb.tal.r1.no");
+    else {
+      t1 = t("lb.tal.r1", { q: fmtA(m.q1), b: signed(a1.B) }) + (s1 ? t("lb.tal.r1.sig", { cmg: eur(s1.CMg), img: eur(s1.IMg) }) : "");
+      if (m.q1 > m.cap + 1e-9) t1 += t("lb.tal.r1.cap", { c: fmtA(m.cap) });
+      else if (isFinite(m.dem) && m.q1 > m.dem + 1e-9) t1 += t("lb.tal.r1.dem", { d: fmtA(m.dem) });
+    }
+    const t2 = m.q2 > 0 ? t("lb.tal.r2", { q: fmtA(m.q2), r: t(m.razon2 === "dem" ? "lb.tal.r2d" : "lb.tal.r2c"), b: signed(a2.B) }) : t("lb.tal.r2.no");
+    $("lb-reglas").replaceChildren(
+      el("p", { class: "diag", text: t("lb.tal.d." + m.forma) }),
+      el("div", { class: "regla r1" }, el("b", { text: t("lb.tal.r1.h") }), el("span", { text: t1 })),
+      el("div", { class: "regla r2" }, el("b", { text: t("lb.tal.r2.h") }), el("span", { text: t2 })));
+    // En los gráficos: la capacidad y el punto de cada regla
+    const { F, G, yT, yU } = out;
+    [[F, yT], [G, yU]].forEach(([H, y]) => {
+      if (m.cap < m.qmax - 1e-9) { H.plot.append(sv("line", { x1: H.sx(m.cap), x2: H.sx(m.cap), y1: H.sy(y.lo), y2: H.sy(y.hi), class: "limite" })); label(H, m.cap, y.lo, t("lb.capl"), "end", "mark-txt", -6); }
+    });
+    const punto = (H, qq, yv, txt, color, dy) => { if (!isFinite(yv)) return; H.top.append(sv("circle", { cx: H.sx(qq), cy: H.sy(yv), r: 7, class: "dot", style: "fill:none;stroke:" + color + ";stroke-width:3" })); label(H, qq, yv, txt, qq > m.qmax * 0.6 ? "end" : "start", "mark-txt", dy); };
+    if (m.q1 != null && m.q1 > 0) { punto(F, m.q1, a1.CT, t("lb.tal.m1"), "var(--s2)", -12); punto(G, m.q1, a1.CMg, t("lb.tal.m1"), "var(--s2)", -12); }
+    if (m.q2 > 0) { punto(F, m.q2, a2.CT, t("lb.tal.m2"), "var(--s1)", 22); punto(G, m.q2, a2.CMg, t("lb.tal.m2"), "var(--s1)", 22); }
+    return f;
+  }
+
   // «Los dos a la vez»: la misma empresa con los dos supuestos
   function renderDos2(m, q) {
     const a = filaDe(m.filas1, q), bIn = q <= m.cap + 1e-9, b = bIn ? filaDe(m.filas2, q) : null;
@@ -2200,7 +2364,7 @@ window.OBS = (() => {
     const F = frame($("lb-tot"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
     const dib = (G, fs, campo, cls, extra = {}) => { line(G, fs.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, fs.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra); };
     dib(F, m.filas1, "IT", "c-ink"); dib(F, m.filas1, "CT", "c-s2"); dib(F, m.filas2, "CT", "c-s1");
-    F.plot.append(sv("line", { x1: F.sx(m.cap), x2: F.sx(m.cap), y1: F.sy(yT.lo), y2: F.sy(yT.hi), class: "limite" })); label(F, m.cap, yT.hi, t("lb.capl"), "end", "mark-txt", 14);
+    F.plot.append(sv("line", { x1: F.sx(m.cap), x2: F.sx(m.cap), y1: F.sy(yT.lo), y2: F.sy(yT.hi), class: "limite" })); label(F, m.cap, yT.lo, t("lb.capl"), "end", "mark-txt", -6);
     $("lb-lg1").replaceChildren(...ley([[C.ink, t("lg.it")], [C.s2, t("lb.ct1")], [C.s1, t("lb.ct2")]]));
     const f1 = m.filas1.filter(r => r.q > 0), f2 = m.filas2.filter(r => r.q > 0);
     const yU = nice(0, Math.max(40, m.P * 1.4));
@@ -2233,11 +2397,61 @@ window.OBS = (() => {
   });
   $("lb-q").addEventListener("input", () => { lbParar(); renderLab(); });
   ["lb-ct", "lb-it", "lb-p", "lb-cap", "lb-dem", "lb-p2"].forEach(id => $(id).addEventListener("input", () => { lbParar(); renderLab(); }));
+  // Deslizadores de los modelos: al moverlos, la empresa se coloca en la unidad donde se para
+  ["m1-cf", "m1-c1", "m1-s", "m1-p", "m2-cf", "m2-c", "m2-p", "m2-cap", "m2-dem"].forEach(id => $(id).addEventListener("input", () => { lbParar(); const m = lbModelo(); ponerQ(m, qInicial(m)); renderLab(); }));
   $("lb-ing").addEventListener("change", () => { lbParar(); renderLab(); });
-  document.querySelectorAll(".ej-btn").forEach(b => b.addEventListener("click", () => {
-    if (b.dataset.ej === "dos") { lb.ej = "dos"; document.querySelectorAll(".ej-btn").forEach(x => x.setAttribute("aria-pressed", String(x === b))); lbParar(); $("lb-q").value = "0"; renderLab(); }
-    else cargarEjemplo(b.dataset.ej);
-  }));
+  document.querySelectorAll(".ej-btn").forEach(b => b.addEventListener("click", () => cargarEjemplo(b.dataset.ej)));
+  // Subpestanas: a · Modelo 1 · b · Modelo 2 · c · Comparar · d · Taller
+  OBS.register({ es: {
+      "sub.lb.m1": "a · Modelo 1: cada unidad cuesta más", "sub.lb.m2": "b · Modelo 2: cada unidad cuesta lo mismo", "sub.lb.dos": "c · Comparar los dos", "sub.lb.taller": "d · Taller: escribe tu función",
+      "lb.s.cf": "Coste fijo", "lb.s.c1": "Lo que cuesta la primera unidad", "lb.s.s": "Cuánto más cuesta cada unidad que la anterior", "lb.s.p": "Precio de venta",
+      "lb.s.c": "Lo que cuesta cada unidad", "lb.s.cap": "Capacidad de la fábrica", "lb.s.dem": "Clientes como máximo", "lb.s.mas": "{v} € más", "lb.s.uds": "{v} unidades",
+      "lb.tal.cab": "Escribe la función de costes de una empresa y su precio. La herramienta la lee con la regla de cada modelo: <b>modelo 1</b>, producir mientras la unidad siguiente aporte más de lo que cuesta; <b>modelo 2</b>, producir hasta llenar la fábrica o hasta que no haya más clientes. Pulsa «Reproducir» para verlo unidad a unidad.",
+      "lb.tal.ej": "Para empezar:", "lb.tal.ej1": "Ejemplo del modelo 1", "lb.tal.ej2": "Ejemplo del modelo 2", "lb.tal.ej3": "La explotación de naranjas (SA 4)",
+      "lb.tal.d.plano": "Tu función: cada unidad cuesta lo mismo que la anterior (coste marginal plano). Encaja con el modelo 2.",
+      "lb.tal.d.sube": "Tu función: cada unidad cuesta más que la anterior (coste marginal creciente). Encaja con el modelo 1.",
+      "lb.tal.d.u": "Tu función: las primeras unidades salen cada vez más baratas y después cada vez más caras (el coste marginal baja y luego sube). Es la U de los manuales: el modelo 1.",
+      "lb.tal.d.baja": "Tu función: cada unidad cuesta menos que la anterior. No encaja con ninguno de los dos modelos: cuanto más produce, más barato le sale.",
+      "lb.tal.r1.h": "Con la regla del modelo 1", "lb.tal.r2.h": "Con la regla del modelo 2",
+      "lb.tal.r1": "Se para en la unidad {q}, con un beneficio de {b}.", "lb.tal.r1.sig": " La siguiente costaría {cmg} y solo aportaría {img}.",
+      "lb.tal.r1.cap": " Pero la fábrica solo da para {c} unidades: este modelo no tiene en cuenta ese límite.",
+      "lb.tal.r1.dem": " Pero solo hay {d} clientes: este modelo supone que puede vender todo lo que quiera.",
+      "lb.tal.r1.no": "No produce: ninguna cantidad le deja beneficio, porque cada unidad cuesta más de lo que aporta.",
+      "lb.tal.r1.nunca": "No se para nunca: cada unidad sigue aportando más de lo que cuesta. Con un coste marginal plano, esta regla no dice cuánto producir.",
+      "lb.tal.r2": "Produce hasta la unidad {q}, porque {r}. Beneficio: {b}.", "lb.tal.r2c": "la fábrica está llena", "lb.tal.r2d": "no hay más clientes",
+      "lb.tal.r2.no": "No produce: lo que ingresa no cubre ni lo que cuesta fabricar cada unidad.",
+      "lb.tal.fcap": " Esta unidad ya no cabe en la fábrica: el modelo 1 no tiene en cuenta ese límite.",
+      "lb.tal.f1": " Con la regla del modelo 1, aquí se para.", "lb.tal.f2c": " Con la regla del modelo 2, aquí se para: la fábrica está llena.", "lb.tal.f2d": " Con la regla del modelo 2, aquí se para: no hay más clientes.",
+      "lb.tal.m1": "regla 1", "lb.tal.m2": "regla 2"
+    }, va: {
+      "sub.lb.m1": "a · Model 1: cada unitat costa més", "sub.lb.m2": "b · Model 2: cada unitat costa el mateix", "sub.lb.dos": "c · Comparar-los", "sub.lb.taller": "d · Taller: escriu la teua funció",
+      "lb.s.cf": "Cost fix", "lb.s.c1": "El que costa la primera unitat", "lb.s.s": "Quant més costa cada unitat que l'anterior", "lb.s.p": "Preu de venda",
+      "lb.s.c": "El que costa cada unitat", "lb.s.cap": "Capacitat de la fàbrica", "lb.s.dem": "Clients com a màxim", "lb.s.mas": "{v} € més", "lb.s.uds": "{v} unitats",
+      "lb.tal.cab": "Escriu la funció de costos d'una empresa i el seu preu. La ferramenta la llig amb la regla de cada model: <b>model 1</b>, produir mentre la unitat següent aporte més del que costa; <b>model 2</b>, produir fins a omplir la fàbrica o fins que no hi haja més clients. Prem «Reproduir» per a veure-ho unitat a unitat.",
+      "lb.tal.ej": "Per a començar:", "lb.tal.ej1": "Exemple del model 1", "lb.tal.ej2": "Exemple del model 2", "lb.tal.ej3": "L'explotació de taronges (SA 4)",
+      "lb.tal.d.plano": "La teua funció: cada unitat costa el mateix que l'anterior (cost marginal pla). Encaixa amb el model 2.",
+      "lb.tal.d.sube": "La teua funció: cada unitat costa més que l'anterior (cost marginal creixent). Encaixa amb el model 1.",
+      "lb.tal.d.u": "La teua funció: les primeres unitats ixen cada vegada més barates i després cada vegada més cares (el cost marginal baixa i després puja). És la U dels manuals: el model 1.",
+      "lb.tal.d.baja": "La teua funció: cada unitat costa menys que l'anterior. No encaixa amb cap dels dos models: com més produeix, més barat li ix.",
+      "lb.tal.r1.h": "Amb la regla del model 1", "lb.tal.r2.h": "Amb la regla del model 2",
+      "lb.tal.r1": "S'atura en la unitat {q}, amb un benefici de {b}.", "lb.tal.r1.sig": " La següent costaria {cmg} i només aportaria {img}.",
+      "lb.tal.r1.cap": " Però la fàbrica només dona per a {c} unitats: este model no té en compte eixe límit.",
+      "lb.tal.r1.dem": " Però només hi ha {d} clients: este model suposa que pot vendre tot el que vulga.",
+      "lb.tal.r1.no": "No produeix: cap quantitat li deixa benefici, perquè cada unitat costa més del que aporta.",
+      "lb.tal.r1.nunca": "No s'atura mai: cada unitat continua aportant més del que costa. Amb un cost marginal pla, esta regla no diu quant cal produir.",
+      "lb.tal.r2": "Produeix fins a la unitat {q}, perquè {r}. Benefici: {b}.", "lb.tal.r2c": "la fàbrica està plena", "lb.tal.r2d": "no hi ha més clients",
+      "lb.tal.r2.no": "No produeix: el que ingressa no cobreix ni el que costa fabricar cada unitat.",
+      "lb.tal.fcap": " Esta unitat ja no cap en la fàbrica: el model 1 no té en compte eixe límit.",
+      "lb.tal.f1": " Amb la regla del model 1, ací s'atura.", "lb.tal.f2c": " Amb la regla del model 2, ací s'atura: la fàbrica està plena.", "lb.tal.f2d": " Amb la regla del model 2, ací s'atura: no hi ha més clients.",
+      "lb.tal.m1": "regla 1", "lb.tal.m2": "regla 2"
+    } });
+  const LBSUB = ["m1", "m2", "dos", "taller"];
+  OBS.subpestanas($("lb-trastear"), LBSUB.map(k => ({ el: $("lb-cab-" + (k === "taller" ? "tal" : k)), t: { get es() { return OBS.t("sub.lb." + k); }, get va() { return OBS.t("sub.lb." + k); } } })),
+    { antes: $("lb-cab-m1"), onChange: i => {
+      lb.ej = LBSUB[i]; lbParar();
+      const m = lbModelo(); ponerQ(m, qInicial(m));
+      renderLab();
+    } });
   $("lb-dl").addEventListener("click", async () => { $("lb-dl-st").textContent = await OBS.download(t("lb.file"), OBS.csv(lbFilasCSV), "text/csv;charset=utf-8", { downloads }); });
   $("lb-m-tr").addEventListener("click", () => { lb.modo = "tr"; renderLab(); });
   $("lb-m-pr").addEventListener("click", () => { lb.modo = "pr"; lbParar(); renderLab(); if (!pr.actual) prOtro(); });
@@ -2662,13 +2876,7 @@ window.OBS = (() => {
   {
     const tr = k => ({ get es() { return OBS.t(k); }, get va() { return OBS.t(k); } });
     // La función de costes, tras «Cambiar la función» (por defecto, la del ejemplo elegido)
-    const datos = $("lb-datos");
-    if (datos) {
-      const sum = OBS.h("summary", { "data-i18n": "lb.cambiar", text: OBS.t("lb.cambiar") });
-      const det = OBS.h("details", { class: "lab-mas lab-fn" }, sum);
-      const fCT = $("lb-ct").closest(".field"), sint = datos.querySelector("details.lab-mas");
-      datos.prepend(det); det.append(fCT); if (sint) det.append(sint);
-    }
+    // (26/11/2026) La función de costes ya no se pliega: está en el taller, a la vista
     const bloques = [...document.querySelectorAll("#view-fpp > .block")];
     if (bloques.length === 2) OBS.subpestanas($("view-fpp"), [{ el: bloques[0], t: tr("sub.p1") }, { el: bloques[1], t: tr("sub.p2") }]);
     OBS.mirar($("lb-tot"), tr("mi.tot")); OBS.mirar($("lb-uni"), tr("mi.uni"));
@@ -2691,12 +2899,13 @@ window.OBS = (() => {
       return [[t("tb.k"), t("p.s.food"), t("p.s.mach")], eff.map(p => [String(p.k), fmt(p.food), fmt(p.mach)])];
     });
     const pal = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
-    OBS.palabras($("lb-trastear"), pal(["q", "cf", "cv", "ct", "cme", "cmg", "it", "img", "ben"]));
+    OBS.palabras($("lb-trastear"), pal(["q", "cf", "cv", "ct", "cme", "cmg", "it", "img", "ben"]), { antes: $("lb-cab-m1") });
     if (bloques[0]) OBS.palabras(bloques[0], pal(["fpp", "co"]), { antes: bloques[0].querySelector(".controls, .params, .field") });
   }
   OBS.apply();
   OBS.onLang(() => { lbParar(); renderLab(); if (pr.actual) prPintar(); renderGM(); buildWorkerCards(); renderFPP(); });
   cargarEjemplo("m1");
+  { const m = lbModelo(); ponerQ(m, qInicial(m)); renderLab(); }
   renderGM();
   resetClass();
   show(location.hash.slice(1));

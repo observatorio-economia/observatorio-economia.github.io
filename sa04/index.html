@@ -118,6 +118,30 @@ input[type="text"] { font: 15px var(--font-body); color: var(--ink); background:
 .notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
 .notice strong { font-weight: 600; }
 
+/* Modelos y taller (26/11/2026) */
+.sup-cab { border-top: 3px solid var(--ink); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.sup-cab h3 { margin: 0; font-family: var(--font-display); font-size: 17px; }
+.sup-cab ul { margin: 0; padding-left: 1.1em; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 4px 24px; font-size: 15px; }
+.mando { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 28px; align-items: end; border-top: 2px solid var(--ink); padding-top: 12px; }
+.mando .controls { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.tal-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px 16px; align-items: end; }
+.tal-campos .ancho { grid-column: span 2; }
+.tal-campos > .tal-ej, .tal-campos > .tal-err, .tal-campos > details { grid-column: 1 / -1; }
+.tal-ej { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); }
+.ej-btn { font: 500 14px var(--font-body); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); padding: 7px 12px; cursor: pointer; }
+.ej-btn:hover { border-color: var(--ink); }
+.ej-btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.tal-err { white-space: pre-wrap; font-family: var(--font-mono); font-size: 13px; color: var(--bad); margin: 0; }
+.tal-err:empty { display: none; }
+.tal-frase { margin: 0; border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; font-size: 16px; line-height: 1.5; min-height: 3em; }
+.tal-cmp { font-size: 15px; }
+.tal-cmp th:first-child { text-align: left; }
+.tal-diag { margin: 0; font-size: 15px; line-height: 1.5; }
+svg .c-ok { stroke: var(--ok); }
+.charts > figure > .plot { margin-top: auto; }
+table.payoff td.hl .other { color: var(--ink); } /* contraste suficiente sobre la casilla resaltada del dilema */
+@media (max-width: 900px) { .tal-campos .ancho { grid-column: 1 / -1; } .mando { grid-template-columns: minmax(0, 1fr); } }
+
 /* Gráficos */
 .charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
 figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; position: relative; }
@@ -499,23 +523,17 @@ body.obs-proj .obs-serie { font-size: 15px; }
         <h2 data-i18n="f.h2">¿Cuántas toneladas le conviene vender?</h2>
         <p data-i18n="f.p">Una explotación de naranjas vende en un mercado con cientos de productores y una naranja igual a la de los demás. No puede elegir el precio: lo toma del mercado. Solo decide cuántas toneladas vende cada semana.</p>
       </div>
-      <div class="controls">
-        <div class="slider">
-          <div class="lab"><label for="f-p" data-i18n="lb.precioMercado">Precio de mercado</label><output id="f-p-out" for="f-p"></output></div>
-          <input type="range" id="f-p" min="60" max="450" step="5" value="320">
+      <div class="sup-cab"><h3 data-i18n="sup.h">Supuestos del modelo</h3><ul><li data-i18n="sup.f1"></li><li data-i18n="sup.f2"></li><li data-i18n="sup.f3"></li><li data-i18n="sup.f4"></li></ul></div>
+      <div class="charts">
+      <figure data-obs-result>
+        <figcaption data-i18n="f.fig2">Ingresos y costes totales</figcaption>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.it">Ingreso total</span></span>
+          <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ct">Coste total</span></span>
+          <span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="lg.cf">Coste fijo</span></span>
         </div>
-        <div class="slider">
-          <div class="lab"><label for="f-q" data-i18n="f.lbq">Toneladas que vende a la semana</label><output id="f-q-out" for="f-q"></output></div>
-          <input type="range" id="f-q" min="0" max="8" step="0.1" value="3">
-        </div>
-      </div>
-      <div class="stats" id="f-stats" data-obs-result></div>
-      <div class="state" id="f-state" aria-live="polite" data-obs-result></div>
-      <div class="actions" data-obs-result>
-        <button type="button" class="btn ghost" id="f-best" data-i18n="f.best">Mostrar la mejor cantidad</button>
-        <button type="button" class="btn quiet" id="f-go" hidden data-i18n="f.go">Vender esa cantidad</button>
-      </div>
-      <div class="notice" id="f-rule" hidden data-obs-result></div>
+        <div class="plot"><svg class="chart" id="f-tot" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.ftot"></svg><div class="tip" id="f-tot-tip" hidden></div></div>
+      </figure>
       <figure data-obs-result>
         <figcaption data-i18n="f.fig">Costes por tonelada y precio</figcaption>
         <div class="legend">
@@ -526,6 +544,27 @@ body.obs-proj .obs-serie { font-size: 15px; }
         </div>
         <div class="plot"><svg class="chart" id="f-chart" viewBox="0 0 640 380" role="img" aria-label="Curvas de coste marginal, coste total medio y coste variable medio, con la línea del precio y el beneficio o la pérdida de la cantidad elegida" data-i18n-attr="aria-label:aria.f"></svg><div class="tip" id="f-tip" hidden></div></div>
       </figure>
+      </div>
+      <div class="mando">
+      <div class="controls">
+        <div class="slider">
+          <div class="lab"><label for="f-p" data-i18n="lb.precioMercado">Precio de mercado</label><output id="f-p-out" for="f-p"></output></div>
+          <input type="range" id="f-p" min="60" max="450" step="5" value="320">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="f-q" data-i18n="f.lbq">Toneladas que vende a la semana</label><output id="f-q-out" for="f-q"></output></div>
+          <input type="range" id="f-q" min="0" max="8" step="0.1" value="3">
+        </div>
+      </div>
+        <button type="button" class="btn" id="f-play" data-i18n="rep.play">Reproducir</button>
+      </div>
+      <div class="stats" id="f-stats" data-obs-result></div>
+      <div class="state" id="f-state" aria-live="polite" data-obs-result></div>
+      <div class="actions" data-obs-result>
+        <button type="button" class="btn ghost" id="f-best" data-i18n="f.best">Mostrar la mejor cantidad</button>
+        <button type="button" class="btn quiet" id="f-go" hidden data-i18n="f.go">Vender esa cantidad</button>
+      </div>
+      <div class="notice" id="f-rule" hidden data-obs-result></div>
       <details data-obs-result>
         <summary data-i18n="f.tabla">Ver la tabla de costes</summary>
         <div class="scroll"><table id="f-table"></table></div>
@@ -540,14 +579,6 @@ body.obs-proj .obs-serie { font-size: 15px; }
         <p data-i18n="m.p">Todas las explotaciones tienen los mismos costes. Si ganan más de lo normal, entran explotaciones nuevas; si pierden, algunas cierran. Cada clic es una semana.</p>
         <p class="small" data-i18n-html="m.p2">El beneficio que aparece aquí es el <strong>extraordinario</strong>: lo que se gana por encima de la remuneración normal del agricultor, que ya está incluida en los costes.</p>
       </div>
-      <div class="actions">
-        <button type="button" class="btn" id="m-step" data-i18n="m.step">Avanzar una semana</button>
-        <button type="button" class="btn ghost" id="m-up" data-i18n="m.up">Sube la demanda</button>
-        <button type="button" class="btn ghost" id="m-down" data-i18n="m.down">Baja la demanda</button>
-        <button type="button" class="btn quiet" id="m-reset" data-i18n="m.reset">Volver a empezar</button>
-      </div>
-      <div class="stats" id="m-stats" data-obs-result></div>
-      <div class="notice" id="m-note" aria-live="polite" data-obs-result></div>
       <div class="charts">
         <figure data-obs-result>
           <figcaption data-i18n="m.fig1">El mercado</figcaption>
@@ -567,10 +598,70 @@ body.obs-proj .obs-serie { font-size: 15px; }
           <div class="plot"><svg class="chart" id="m-firm" viewBox="0 0 640 380" role="img" aria-label="Costes de una explotación y precio del mercado" data-i18n-attr="aria-label:aria.mf"></svg><div class="tip" id="m-firm-tip" hidden></div></div>
         </figure>
       </div>
+      <div class="actions mando-fila">
+        <button type="button" class="btn" id="m-play" data-i18n="rep.weeks">Reproducir semana a semana</button>
+        <button type="button" class="btn ghost" id="m-step" data-i18n="m.step">Avanzar una semana</button>
+        <button type="button" class="btn ghost" id="m-up" data-i18n="m.up">Sube la demanda</button>
+        <button type="button" class="btn ghost" id="m-down" data-i18n="m.down">Baja la demanda</button>
+        <button type="button" class="btn quiet" id="m-reset" data-i18n="m.reset">Volver a empezar</button>
+      </div>
+      <div class="stats" id="m-stats" data-obs-result></div>
+      <div class="notice" id="m-note" aria-live="polite" data-obs-result></div>
       <details open data-obs-result>
         <summary data-i18n="m.hist">Semana a semana</summary>
         <div class="scroll"><table id="m-hist"></table></div>
       </details>
+    </div>
+
+    <div class="block" id="pt-block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="pt.eyebrow">1c · Taller</span>
+        <h2 data-i18n="pt.h2">Tu mercado: ¿adónde lleva la competencia?</h2>
+        <p data-i18n="pt.p"></p>
+      </div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="m.fig1">El mercado</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.demanda">Demanda</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.oferta">Oferta (suma de las explotaciones)</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="pt-mkt" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.m"></svg><div class="tip" id="pt-mkt-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="m.fig2">Una explotación</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">CMg</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.ctme">CTMe</span></span>
+            <span><i class="dash" style="border-color:var(--ink)"></i><span data-i18n="lg.precio">Precio</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="pt-firm" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.mf"></svg><div class="tip" id="pt-firm-tip" hidden></div></div>
+        </figure>
+      </div>
+      <div class="mando">
+        <div class="tal-campos">
+          <div class="tal-ej" role="group" data-i18n-attr="aria-label:tal.ej"><span data-i18n="tal.ej">Para empezar:</span>
+            <button type="button" class="ej-btn" data-pt="nar" aria-pressed="true" data-i18n="pt.ej1">Las naranjas</button>
+            <button type="button" class="ej-btn" data-pt="sube" aria-pressed="false" data-i18n="pt.ej2">Las naranjas, con más demanda</button>
+            <button type="button" class="ej-btn" data-pt="plano" aria-pressed="false" data-i18n="pt.ej3">Coste marginal plano</button>
+          </div>
+          <div class="field ancho"><label for="pt-ct" data-i18n="pt.ct">Costes de una explotación: CT(q) =</label><input type="text" id="pt-ct" spellcheck="false" autocomplete="off"></div>
+          <div class="field ancho"><label for="pt-d" data-i18n="pt.d">Demanda de todo el mercado: Q(P) =</label><input type="text" id="pt-d" spellcheck="false" autocomplete="off"></div>
+          <div class="field"><label for="pt-n" data-i18n="pt.n">Explotaciones al empezar</label><input type="text" id="pt-n" inputmode="numeric"></div>
+          <div class="field"><label for="pt-qm" data-i18n="pt.qm">Toneladas como máximo por explotación</label><input type="text" id="pt-qm" inputmode="decimal"></div>
+          <p class="tal-err" id="pt-err" aria-live="polite"></p>
+          <details><summary data-i18n="tal.sint">Cómo se escribe una función</summary><p class="small" data-i18n="tal.sintx"></p></details>
+        </div>
+        <div class="actions" style="flex-direction:column;align-items:stretch">
+          <button type="button" class="btn" id="pt-play" data-i18n="rep.weeks">Reproducir semana a semana</button>
+          <button type="button" class="btn ghost" id="pt-step" data-i18n="m.step">Avanzar una semana</button>
+          <button type="button" class="btn quiet" id="pt-reset" data-i18n="m.reset">Volver a empezar</button>
+        </div>
+      </div>
+      <div class="stats" id="pt-stats" aria-live="polite"></div>
+      <div class="notice" id="pt-note" aria-live="polite"></div>
+      <p class="tal-diag" id="pt-diag"></p>
+      <details><summary data-i18n="m.hist">Semana a semana</summary><div class="scroll"><table id="pt-hist"></table></div></details>
     </div>
   </section>
 
@@ -583,23 +674,8 @@ body.obs-proj .obs-serie { font-size: 15px; }
         <h2 data-i18n="mo.h2">¿Qué precio le conviene fijar?</h2>
         <p data-i18n="mo.p">Una farmacéutica tiene la patente de un medicamento: nadie más puede venderlo. Ahora la empresa sí elige el precio, pero cuanto más alto lo pone, menos cajas vende.</p>
       </div>
-      <div class="controls">
-        <div class="slider">
-          <div class="lab"><label for="mo-p" data-i18n="mo.lbp">Precio que fija</label><output id="mo-p-out" for="mo-p"></output></div>
-          <input type="range" id="mo-p" min="0" max="100" step="1" value="80">
-        </div>
-        <div class="slider">
-          <div class="lab"><label for="mo-c" data-i18n="mo.lbc">Coste de fabricar una caja más</label><output id="mo-c-out" for="mo-c"></output></div>
-          <input type="range" id="mo-c" min="5" max="60" step="1" value="20">
-        </div>
-      </div>
-      <div class="stats" id="mo-stats" data-obs-result></div>
-      <div class="actions" data-obs-result>
-        <button type="button" class="btn ghost" id="mo-best" data-i18n="mo.best">Mostrar el mejor precio</button>
-        <button type="button" class="btn quiet" id="mo-go" hidden data-i18n="mo.go">Fijar ese precio</button>
-        <label class="check"><input type="checkbox" id="mo-cmp"><span data-i18n="mo.cmp"> Comparar con competencia perfecta</span></label>
-      </div>
-      <div class="notice" id="mo-rule" hidden data-obs-result></div>
+      <div class="sup-cab"><h3 data-i18n="sup.h">Supuestos del modelo</h3><ul><li data-i18n="sup.mo1"></li><li data-i18n="sup.mo2"></li><li data-i18n="sup.mo3"></li><li data-i18n="sup.mo4"></li></ul></div>
+      <div class="charts">
       <figure data-obs-result>
         <figcaption data-i18n="mo.fig">Demanda, ingreso marginal y coste</figcaption>
         <div class="legend">
@@ -612,6 +688,34 @@ body.obs-proj .obs-serie { font-size: 15px; }
         </div>
         <div class="plot"><svg class="chart" id="mo-chart" viewBox="0 0 640 380" role="img" aria-label="Demanda, ingreso marginal y coste marginal del monopolio, con el beneficio, el excedente del consumidor y la pérdida irrecuperable" data-i18n-attr="aria-label:aria.mo"></svg><div class="tip" id="mo-tip" hidden></div></div>
       </figure>
+      <figure data-obs-result>
+        <figcaption data-i18n="mo.fig2">Beneficio según el precio</figcaption>
+        <div class="legend">
+          <span><i style="border-color:var(--ok)"></i><span data-i18n="lg.beneficio">Beneficio</span></span>
+        </div>
+        <div class="plot"><svg class="chart" id="mo-ben" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.moben"></svg><div class="tip" id="mo-ben-tip" hidden></div></div>
+      </figure>
+      </div>
+      <div class="mando">
+      <div class="controls">
+        <div class="slider">
+          <div class="lab"><label for="mo-p" data-i18n="mo.lbp">Precio que fija</label><output id="mo-p-out" for="mo-p"></output></div>
+          <input type="range" id="mo-p" min="0" max="100" step="1" value="80">
+        </div>
+        <div class="slider">
+          <div class="lab"><label for="mo-c" data-i18n="mo.lbc">Coste de fabricar una caja más</label><output id="mo-c-out" for="mo-c"></output></div>
+          <input type="range" id="mo-c" min="5" max="60" step="1" value="20">
+        </div>
+      </div>
+        <button type="button" class="btn" id="mo-play" data-i18n="rep.play">Reproducir</button>
+      </div>
+      <div class="stats" id="mo-stats" data-obs-result></div>
+      <div class="actions" data-obs-result>
+        <button type="button" class="btn ghost" id="mo-best" data-i18n="mo.best">Mostrar el mejor precio</button>
+        <button type="button" class="btn quiet" id="mo-go" hidden data-i18n="mo.go">Fijar ese precio</button>
+        <label class="check"><input type="checkbox" id="mo-cmp"><span data-i18n="mo.cmp"> Comparar con competencia perfecta</span></label>
+      </div>
+      <div class="notice" id="mo-rule" hidden data-obs-result></div>
       <details data-obs-result>
         <summary data-i18n="mo.tabla">Ver la tabla de precios</summary>
         <div class="scroll"><table id="mo-table"></table></div>
@@ -646,11 +750,61 @@ body.obs-proj .obs-serie { font-size: 15px; }
       </details>
       <p class="small" data-i18n="o.foot">Como no sabemos qué gasolinera tiene enfrente cada persona, la ganancia media se calcula emparejando a cada una con todas las demás de la clase.</p>
     </div>
+
+    <div class="block" id="mt-block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="mt.eyebrow">2c · Taller</span>
+        <h2 data-i18n="mt.h2">Tu monopolio: ¿qué cambia frente a la competencia?</h2>
+        <p data-i18n="mt.p"></p>
+      </div>
+      <div class="charts">
+        <figure>
+          <figcaption data-i18n="mo.fig">Demanda, ingreso marginal y coste</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="lg.demanda">Demanda</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lg.img">Ingreso marginal (IMg)</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lg.cmg">Coste marginal (CMg)</span></span>
+            <span><i class="box" style="background:repeating-linear-gradient(45deg,var(--bad) 0 2px,transparent 2px 5px)"></i><span data-i18n="lg.pi">Pérdida irrecuperable</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="mt-chart" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.mt"></svg><div class="tip" id="mt-tip" hidden></div></div>
+        </figure>
+        <figure>
+          <figcaption data-i18n="mt.fig2">Beneficio según la cantidad</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--ok)"></i><span data-i18n="lg.beneficio">Beneficio</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="mt-ben" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:aria.mtben"></svg><div class="tip" id="mt-ben-tip" hidden></div></div>
+        </figure>
+      </div>
+      <div class="mando">
+        <div class="tal-campos">
+          <div class="tal-ej" role="group" data-i18n-attr="aria-label:tal.ej"><span data-i18n="tal.ej">Para empezar:</span>
+            <button type="button" class="ej-btn" data-mt="far" aria-pressed="true" data-i18n="mt.ej1">La farmacéutica</button>
+            <button type="button" class="ej-btn" data-mt="sube" aria-pressed="false" data-i18n="mt.ej2">Coste marginal creciente</button>
+            <button type="button" class="ej-btn" data-mt="nat" aria-pressed="false" data-i18n="mt.ej3">Monopolio natural</button>
+          </div>
+          <div class="field ancho"><label for="mt-d" data-i18n="mt.d">Demanda: P(Q) =</label><input type="text" id="mt-d" spellcheck="false" autocomplete="off"></div>
+          <div class="field ancho"><label for="mt-ct" data-i18n="mt.ct">Costes totales: CT(Q) =</label><input type="text" id="mt-ct" spellcheck="false" autocomplete="off"></div>
+          <p class="tal-err" id="mt-err" aria-live="polite"></p>
+          <details><summary data-i18n="tal.sint">Cómo se escribe una función</summary><p class="small" data-i18n="tal.sintx"></p></details>
+        </div>
+        <div class="actions" style="flex-direction:column;align-items:stretch">
+          <button type="button" class="btn" id="mt-play" data-i18n="rep.play">Reproducir</button>
+        </div>
+      </div>
+      <div class="slider">
+        <div class="lab"><label for="mt-q" data-i18n="mt.q">Cantidad (Q)</label><output id="mt-q-out" for="mt-q"></output></div>
+        <input type="range" id="mt-q" min="0" max="100" step="0.5" value="0">
+      </div>
+      <p class="tal-frase" id="mt-frase" aria-live="polite"></p>
+      <div class="scroll"><table class="tal-cmp" id="mt-cmp"></table></div>
+      <p class="tal-diag" id="mt-diag"></p>
+    </div>
   </section>
 
   <!-- ===================== 3 · COMPETENCIA REAL ===================== -->
   <section class="view" id="view-real" role="tabpanel" aria-labelledby="tab-real" hidden>
-    <p class="notice" id="c-sa3" data-i18n="c.sa3">Los dos modelos de costes (cada unidad cuesta más que la anterior, o cada unidad cuesta lo mismo hasta llenar la fábrica) se repasan en la SA 3, pestaña «Calculadora de costes».</p>
+    <p class="notice" id="c-sa3" data-i18n="c.sa3">Los dos modelos de costes (cada unidad cuesta más que la anterior, o cada unidad cuesta lo mismo hasta llenar la fábrica) se repasan en la SA 3, pestaña «Laboratorio de costes» (subpestañas a, b y c).</p>
     <div class="block" id="cmp-block" data-obs-scope hidden>
       <div class="prose">
         <span class="eyebrow" data-i18n="c.eyebrow">3a · Dos formas de dibujar los costes</span>
@@ -2574,9 +2728,470 @@ window.OBS = (() => {
       { nombre: { es: "Las mismas empresas con 1.200 € de reservas", va: "Les mateixes empreses amb 1.200 € de reserves" }, arr: [[20], [1200, 200, 260, 15, 12, 0.5], [1]] }
     ]
   });
+
+  // =====================================================================
+  // MODELOS Y TALLER (26/11/2026)
+  // Los modelos de siempre, con dos gráficos en paralelo y «Reproducir»; y dos talleres donde se escriben las funciones.
+  // Los valores de partida de los modelos no cambian.
+  // =====================================================================
+  function parseFn(src, letras = "qQ") {
+    const toks = []; let i = 0; const s = String(src);
+    const err = (key, vars) => { const e = new Error(key); e.key = key; e.vars = vars; e.pos = vars.p - 1; throw e; };
+    while (i < s.length) {
+      const ch = s[i];
+      if (/\s/.test(ch)) { i++; continue; }
+      if (/[0-9.,]/.test(ch)) {
+        const st = i; let txt = "";
+        while (i < s.length && /[0-9.,]/.test(s[i])) txt += s[i++];
+        const norm = txt.replace(",", ".");
+        if (!/^(\d+(\.\d*)?|\.\d+)$/.test(norm)) err("e.num", { p: st + 1 });
+        toks.push({ t: "num", v: parseFloat(norm), pos: st }); continue;
+      }
+      if (letras.includes(ch)) { toks.push({ t: "q", pos: i++ }); continue; }
+      if ("+-−–".includes(ch)) { toks.push({ t: "op", v: ch === "+" ? "+" : "-", pos: i++ }); continue; }
+      if ("*×·⋅".includes(ch)) { toks.push({ t: "op", v: "*", pos: i++ }); continue; }
+      if ("/÷:".includes(ch)) { toks.push({ t: "op", v: "/", pos: i++ }); continue; }
+      if (ch === "^") { toks.push({ t: "op", v: "^", pos: i++ }); continue; }
+      if (ch === "²" || ch === "³") { toks.push({ t: "op", v: "^", pos: i }); toks.push({ t: "num", v: ch === "²" ? 2 : 3, pos: i++ }); continue; }
+      if (ch === "(" || ch === "[") { toks.push({ t: "(", pos: i++ }); continue; }
+      if (ch === ")" || ch === "]") { toks.push({ t: ")", pos: i++ }); continue; }
+      err("e.char", { c: ch, p: i + 1 });
+    }
+    if (!toks.length) { const e = new Error("e.empty"); e.key = "e.empty"; e.vars = {}; e.pos = 0; throw e; }
+    let k = 0;
+    const peek = () => toks[k];
+    const endPos = () => s.length + 1;
+    const startsPrimary = tk => tk && (tk.t === "num" || tk.t === "q" || tk.t === "(");
+    function expr() {
+      let f = term();
+      while (peek() && peek().t === "op" && (peek().v === "+" || peek().v === "-")) {
+        const op = toks[k++].v, a = f, b = term();
+        f = op === "+" ? (q => a(q) + b(q)) : (q => a(q) - b(q));
+      }
+      return f;
+    }
+    function term() {
+      let f = unary();
+      for (;;) {
+        const tk = peek();
+        if (tk && tk.t === "op" && (tk.v === "*" || tk.v === "/")) {
+          k++; const a = f, b = unary();
+          f = tk.v === "*" ? (q => a(q) * b(q)) : (q => a(q) / b(q));
+        } else if (startsPrimary(tk)) {
+          const a = f, b = unary(); f = q => a(q) * b(q);
+        } else break;
+      }
+      return f;
+    }
+    function unary() {
+      const tk = peek();
+      if (tk && tk.t === "op" && (tk.v === "+" || tk.v === "-")) { k++; const a = unary(); return tk.v === "-" ? (q => -a(q)) : a; }
+      return power();
+    }
+    function power() {
+      const base = primary();
+      const tk = peek();
+      if (tk && tk.t === "op" && tk.v === "^") { k++; const ex = unary(); return q => Math.pow(base(q), ex(q)); }
+      return base;
+    }
+    function primary() {
+      const tk = peek();
+      if (!tk) err("e.expect", { p: endPos() });
+      if (tk.t === "num") { k++; const v = tk.v; return () => v; }
+      if (tk.t === "q") { k++; return q => q; }
+      if (tk.t === "(") {
+        k++; const f = expr();
+        if (!peek() || peek().t !== ")") err("e.close", { p: peek() ? peek().pos + 1 : endPos() });
+        k++; return f;
+      }
+      err("e.expect", { p: tk.pos + 1 });
+    }
+    const f = expr();
+    if (k < toks.length) { const tk = toks[k]; err(tk.t === ")" ? "e.extra" : "e.expect", { c: s[tk.pos], p: tk.pos + 1 }); }
+    return f;
+  }
+  const fnError = (e, which, src) => {
+    const msg = t("e.which", { f: which }) + t(e.key || "e.expect", e.vars || {});
+    return e.key === "e.empty" ? msg : msg + "\n" + src + "\n" + " ".repeat(Math.max(0, Math.min(e.pos, src.length))) + "^";
+  };
+
+  const escala = (lo, hi, n = 5) => {
+    if (!isFinite(lo) || !isFinite(hi)) { lo = 0; hi = 1; }
+    if (!(hi > lo)) hi = lo + 1;
+    const raw = (hi - lo) / n, mag = 10 ** Math.floor(Math.log10(raw)), st = [1, 2, 2.5, 5, 10].map(m => m * mag).find(x => x >= raw);
+    const a = Math.floor(lo / st + 1e-9) * st, b = Math.ceil(hi / st - 1e-9) * st, ticks = [];
+    for (let v = a; v <= b + st * 1e-6; v += st) ticks.push(+v.toFixed(10));
+    return { lo: a, hi: b, ticks };
+  };
+  const trazo = (F, pts, cls, extra = {}) => {
+    const y0 = F.o.yMin || 0, rg = F.o.yMax - y0;
+    const ok = pts.filter(q => isFinite(q[1])).map(q => [F.sx(q[0]), F.sy(clamp(q[1], y0 - rg, F.o.yMax + rg))]);
+    if (ok.length > 1) F.plot.append(sv("path", { d: path(ok), class: "curve " + cls, ...extra }));
+  };
+  const rotulo = (F, x, y, txt, anchor = "start", dy = -8) => F.top.append(sv("text", { x: F.sx(x) + (anchor === "end" ? -6 : 6), y: F.sy(y) + dy, "text-anchor": anchor, class: "lbl" }, txt));
+  const vertical = (F, x, cls = "guide") => F.plot.append(sv("line", { x1: F.sx(x), x2: F.sx(x), y1: F.sy(F.o.yMin || 0), y2: F.sy(F.o.yMax), class: cls }));
+  const lee = (id, letras, nombre) => { const src = $(id).value; try { return { f: parseFn(src, letras) }; } catch (e) { return { err: fnError(e, nombre, src) }; } };
+  const numero = id => { const x = parseFloat(String($(id).value).replace(",", ".")); return isFinite(x) ? x : NaN; };
+  const reproductor = (btn, paso, cada, alParar) => {
+    let reloj = null;
+    const parar = () => { if (reloj) { clearInterval(reloj); reloj = null; } btn.textContent = t(btn.dataset.i18n); if (alParar) alParar(); };
+    btn.addEventListener("click", () => {
+      if (reloj) { parar(); return; }
+      btn.textContent = t("rep.pause");
+      if (paso(true) === false) { parar(); return; }
+      reloj = setInterval(() => { if (paso(false) === false) parar(); }, cada);
+    });
+    return { parar, activo: () => !!reloj };
+  };
+
+  // ---------- 1a · La empresa: ingresos y costes totales; «Reproducir» recorre las toneladas ----------
+  function drawFirmTot() {
+    const P = +$("f-p").value, q = +$("f-q").value;
+    const yT = escala(0, Math.max(P * 8, CT(8)));
+    const F = frame($("f-tot"), { xMax: 8, yMax: yT.hi, xTicks: FX.xTicks, yTicks: yT.ticks, xLabel: () => t("ax.tq"), yLabel: () => t("ax.eurweek") });
+    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(8), y1: F.sy(CF), y2: F.sy(CF), class: "guide", style: "stroke-dasharray:5 4" }));
+    curve(F, CT, 0, 8, "c-s2"); curve(F, x => P * x, 0, 8, "c-ink");
+    endLabel(F, CT, 0, 8, "CT"); endLabel(F, x => P * x, 0, 8, "IT", 18);
+    const it = P * q, ct = CT(q);
+    F.plot.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(it), y2: F.sy(ct), style: "stroke-width:4;stroke:" + (it >= ct ? "var(--ok)" : "var(--bad)") }));
+    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(ct), r: 5, class: "dot", style: "fill:var(--s2)" }));
+    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(it), r: 5, class: "dot ink" }));
+    if (fShowBest) { const qs = qSupply(P); if (qs > 0) { F.top.append(sv("circle", { cx: F.sx(qs), cy: F.sy(CT(qs)), r: 7, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" })); } }
+    hover($("f-tot"), $("f-tot-tip"), F, x => ({ head: "q = " + tFmt(x), rows: [[C.ink, "IT", eur(P * x)], [C.s2, "CT", eur(CT(x))], [P * x >= CT(x) ? "var(--ok)" : "var(--bad)", t("w.beneficio"), signed(P * x - CT(x))]] }));
+  }
+  new MutationObserver(drawFirmTot).observe($("f-stats"), { childList: true });
+  const fRep = reproductor($("f-play"), inicio => {
+    const inp = $("f-q"), v = inicio ? 0 : Math.round((+inp.value + 0.1) * 10) / 10;
+    if (v > 8 + 1e-9) return false;
+    inp.value = String(Math.round(v * 10) / 10); renderFirm();
+  }, 60);
+  $("f-q").addEventListener("input", () => { if (fRep.activo()) fRep.parar(); });
+  $("f-p").addEventListener("input", () => { if (fRep.activo()) fRep.parar(); });
+
+  // ---------- 1b · El mercado: «Reproducir» avanza semanas hasta el equilibrio ----------
+  const mRep = reproductor($("m-play"), inicio => {
+    if (!inicio && entry(cur().pi) === 0) return false;
+    if (mkt.week >= 60) return false;
+    if (!inicio || entry(cur().pi) !== 0) $("m-step").click(); else return false;
+  }, 700);
+
+  // ---------- 2a · Monopolio: beneficio según el precio; «Reproducir» baja el precio desde 100 € ----------
+  function drawMonoBen() {
+    const P = +$("mo-p").value, c = +$("mo-c").value;
+    const B = x => (x - c) * Math.max(0, DA - x), Pm = (DA + c) / 2, Bm = B(Pm);
+    const yT = escala(-Bm * 0.5, Bm * 1.1);
+    const F = frame($("mo-ben"), { xMax: 100, yMin: yT.lo, yMax: yT.hi, xTicks: OX.xTicks, yTicks: yT.ticks, xLabel: () => t("ax.precio"), yLabel: () => t("ax.milmes") });
+    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(100), y1: F.sy(0), y2: F.sy(0), class: "guide" }));
+    curve(F, B, 0, 100, "c-ok");
+    if (moShowBest) { vertical(F, Pm); F.top.append(sv("circle", { cx: F.sx(Pm), cy: F.sy(Bm), r: 7, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" })); rotulo(F, Pm, Bm, t("mo.mejor", { p: fmt(Pm) }), Pm > 70 ? "end" : "start", -10); }
+    F.top.append(sv("circle", { cx: F.sx(P), cy: F.sy(clamp(B(P), yT.lo, yT.hi)), r: 6, class: "dot ink" }));
+    rotulo(F, c, 0, "P = CMg", "start", 16);
+    hover($("mo-ben"), $("mo-ben-tip"), F, x => ({ head: t("w.precio") + " " + fmt(x) + " €", rows: [["var(--ok)", t("w.beneficio"), eur(B(x) * 1000)]] }));
+  }
+  new MutationObserver(drawMonoBen).observe($("mo-stats"), { childList: true });
+  const moRep = reproductor($("mo-play"), inicio => {
+    const inp = $("mo-p"), c = +$("mo-c").value;
+    let v = inicio ? 100 : +inp.value - 1;
+    if (v < c - 1e-9) return false;
+    inp.value = String(v); renderMono();
+  }, 90);
+  $("mo-p").addEventListener("input", () => { if (moRep.activo()) moRep.parar(); });
+
+  // ---------- 1c · Taller de competencia perfecta ----------
+  const PT_EJ = {
+    nar: { ct: "640 + 200q - 40q^2 + 5q^3", d: "600 - 1,3P", n: 30, qm: 8 },
+    sube: { ct: "640 + 200q - 40q^2 + 5q^3", d: "840 - 1,3P", n: 30, qm: 8 },
+    plano: { ct: "200 + 15q", d: "600 - 1,3P", n: 30, qm: 8 }
+  };
+  let pt = null;
+  function ptModelo() {
+    const a = lee("pt-ct", "qQ", "CT"), b = lee("pt-d", "pP", "Q(P)");
+    const errs = [a.err, b.err].filter(Boolean);
+    const n0 = Math.round(numero("pt-n")), qm = numero("pt-qm");
+    if (!(n0 >= 1)) errs.push(t("pt.e.n")); if (!(qm > 0)) errs.push(t("pt.e.qm"));
+    if (errs.length) return { ok: false, errs };
+    const CTf = a.f, D = P => Math.max(0, b.f(P)), cf = CTf(0);
+    if (!isFinite(cf) || !(D(0) > 0)) return { ok: false, errs: [t("pt.e.d")] };
+    // Precio al que nadie compra (la demanda llega a cero)
+    let Pz = 1; while (D(Pz) > 0 && Pz < 1e7) Pz *= 2;
+    { let lo = Pz / 2, hi = Pz; if (Pz <= 1) lo = 0; for (let k = 0; k < 50; k++) { const m = (lo + hi) / 2; if (D(m) > 0) lo = m; else hi = m; } Pz = hi; }
+    const N = 400, h = qm / N, qs = Array.from({ length: N + 1 }, (_, k) => k * h), cts = qs.map(CTf);
+    // Oferta de una explotación: la cantidad de más beneficio a ese precio; si no cubre ni los costes variables, no produce
+    const oferta = P => { let best = 0, bv = 0; for (let k = 1; k <= N; k++) { const v = P * qs[k] - (cts[k] - cf); if (v > bv + 1e-9) { bv = v; best = qs[k]; } } return best; };
+    let minCTMe = Infinity, qMin = 0; for (let k = 1; k <= N; k++) { const v = cts[k] / qs[k]; if (v < minCTMe) { minCTMe = v; qMin = qs[k]; } }
+    const cmg = q => { const e = Math.max(h, 1e-3); return (CTf(Math.min(qm, q + e)) - CTf(Math.max(0, q - e))) / (Math.min(qm, q + e) - Math.max(0, q - e)); };
+    // Forma del coste marginal
+    const muestras = [0.15, 0.3, 0.5, 0.7, 0.9, 1].map(x => cmg(x * qm)), a0 = muestras[0], z = muestras[muestras.length - 1], tol = 0.02 * Math.max(1, Math.abs(a0), Math.abs(z));
+    const forma = muestras.every(v => Math.abs(v - a0) <= tol) ? "plano" : z > a0 + tol ? "sube" : "baja";
+    const equilibrio = n => {
+      const f = P => n * oferta(P) - D(P);
+      let lo = 0, hi = Pz;
+      for (let k = 0; k < 50; k++) { const m = (lo + hi) / 2; if (f(m) > 0) hi = m; else lo = m; }
+      const P = (lo + hi) / 2, q = oferta(P), pi = q > 0 ? P * q - CTf(q) : -cf;
+      return { n, P, q, Q: Math.min(n * q, D(P)), pi };
+    };
+    const base = Math.max(cf, 50);
+    const entra = pi => { if (Math.abs(pi) < base * 30 / 640) return 0; let d = clamp(Math.round(pi / (base * 70 / 640)), -6, 6); if (d === 0) d = pi > 0 ? 1 : -1; return d; };
+    return { ok: true, CTf, D, cf, qm, Pz, oferta, minCTMe, qMin, cmg, forma, equilibrio, entra, n0 };
+  }
+  function ptEmpezar() {
+    const m = ptModelo();
+    pt = m.ok ? { m, hist: [{ ...m.equilibrio(m.n0), d: null }], oscila: false } : { m, hist: [], oscila: false };
+    ptPintar();
+  }
+  function ptSemana() {
+    if (!pt || !pt.m.ok) return false;
+    const s = pt.hist[pt.hist.length - 1], d = pt.m.entra(s.pi);
+    pt.hist.push({ ...pt.m.equilibrio(Math.max(1, s.n + d)), d });
+    // Si el número de explotaciones sube y baja sin parar, el mercado no se asienta
+    const ds = pt.hist.slice(-6).map(h => h.d);
+    pt.oscila = ds.length === 6 && ds.every((x, i) => x && (i === 0 || Math.sign(x) !== Math.sign(ds[i - 1])));
+    ptPintar();
+    return d !== 0 && !pt.oscila;
+  }
+  function ptPintar() {
+    const m = pt.m;
+    $("pt-err").textContent = m.ok ? "" : m.errs.join("\n\n");
+    if (!m.ok) { ["pt-mkt", "pt-firm"].forEach(id => $(id).replaceChildren()); $("pt-stats").replaceChildren(); $("pt-note").replaceChildren(); $("pt-diag").textContent = ""; $("pt-hist").replaceChildren(); return; }
+    const s = pt.hist[pt.hist.length - 1], d = m.entra(s.pi), semana = pt.hist.length;
+    $("pt-stats").replaceChildren(
+      el("div", { class: "stat" }, el("b", { text: t("m.week", { n: semana }) }), el("span", { text: s.d == null ? t("m.n.start") : s.d > 0 ? t("m.n.enter", { n: s.d }) : s.d < 0 ? t("m.n.exit", { n: -s.d }) : t("m.n.same") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(s.n) }), el("span", { text: t("m.st.n") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(s.P, s.P < 100 ? 1 : 0) + " €" }), el("span", { text: t("m.st.p") })),
+      el("div", { class: "stat" }, el("b", { text: fmt(s.q, 1) }), el("span", { text: t("pt.st.q") })),
+      el("div", { class: "stat" }, el("b", { class: s.pi >= 0 ? "pos" : "neg", text: signed(s.pi) }), el("span", { text: t("m.st.pi") })));
+    $("pt-note").replaceChildren(pt.oscila ? rich("pt.oscila") : d === 0 ? rich("pt.eq", { p: fmt(s.P, 1) + " €" }) : d > 0 ? rich("m.plus", { n: d }) : rich("m.minus", { n: -d }));
+    $("pt-diag").textContent = t("pt.d." + m.forma, { p: fmt(m.minCTMe, 1) + " €", q: fmt(m.qMin, 1), qm: fmt(m.qm, 1) });
+    // Mercado
+    const Qmax = m.D(0) * 1.05, Ptop = Math.min(m.Pz, Math.max(s.P * 2.2, m.minCTMe * 2.2, 1)), yM = escala(0, Ptop), xM = escala(0, Qmax);
+    const F = frame($("pt-mkt"), { xMax: xM.hi, yMax: yM.hi, xTicks: xM.ticks, yTicks: yM.ticks, xLabel: () => t("ax.tQ"), yLabel: () => t("ax.eurt") });
+    const Ps = Array.from({ length: 161 }, (_, k) => yM.hi * k / 160);
+    trazo(F, Ps.map(P => [m.D(P), P]), "c-ink");
+    trazo(F, Ps.map(P => [s.n * m.oferta(P), P]), "c-s1");
+    F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(s.Q), y1: F.sy(s.P), y2: F.sy(s.P), class: "guide" }));
+    F.plot.append(sv("line", { x1: F.sx(s.Q), x2: F.sx(s.Q), y1: F.sy(0), y2: F.sy(s.P), class: "guide" }));
+    F.top.append(sv("circle", { cx: F.sx(s.Q), cy: F.sy(s.P), r: 6, class: "dot ink" }));
+    rotulo(F, s.Q, s.P, fmt(s.P, 1) + " €", s.Q > xM.hi * 0.7 ? "end" : "start", -10);
+    // Una explotación
+    const yF = escala(0, Math.max(s.P, m.minCTMe) * 1.8), q0 = m.qm / 40;
+    const G = frame($("pt-firm"), { xMax: m.qm, yMax: yF.hi, xTicks: escala(0, m.qm).ticks.filter(v => v <= m.qm + 1e-9), yTicks: yF.ticks, xLabel: () => t("ax.tq"), yLabel: () => t("ax.eurt") });
+    const xs = Array.from({ length: 121 }, (_, k) => q0 + (m.qm - q0) * k / 120);
+    trazo(G, xs.map(x => [x, m.CTf(x) / x]), "c-s2"); trazo(G, xs.map(x => [x, m.cmg(x)]), "c-s1");
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(m.qm), y1: G.sy(s.P), y2: G.sy(s.P), class: "pline" }));
+    G.top.append(sv("text", { x: G.sx(0) + 6, y: G.sy(s.P) - 7, class: "lbl" }, "P = " + fmt(s.P, 1) + " €"));
+    if (s.q > 0) {
+      const ac = m.CTf(s.q) / s.q, lo = Math.min(s.P, ac), hi2 = Math.min(Math.max(s.P, ac), yF.hi);
+      poly(G, [[0, lo], [s.q, lo], [s.q, hi2], [0, hi2]], s.P >= ac ? "a-ok" : "a-bad");
+      G.top.append(sv("circle", { cx: G.sx(s.q), cy: G.sy(s.P), r: 6, class: "dot s1" }));
+    }
+    hover($("pt-firm"), $("pt-firm-tip"), G, x => ({ head: "q = " + fmt(x, 1) + " t", rows: [[C.s1, "CMg", fmt(m.cmg(x), 1) + " €"], [C.s2, "CTMe", x > 0.01 ? fmt(m.CTf(x) / x, 1) + " €" : "—"]] }));
+    // Semana a semana
+    $("pt-hist").replaceChildren(
+      el("thead", {}, el("tr", {}, [t("m.th.week"), t("m.th.n"), t("w.precio"), t("pt.st.q"), t("m.th.pi")].map(x => el("th", { text: x })))),
+      el("tbody", {}, pt.hist.map((h, i) => el("tr", {}, el("td", { text: t("m.week", { n: i + 1 }) }), el("td", { text: fmt(h.n) }), el("td", { text: fmt(h.P, 1) + " €" }), el("td", { text: fmt(h.q, 1) }), el("td", { class: h.pi >= 0 ? "pos" : "neg", text: signed(h.pi) }))).reverse()));
+  }
+  const ptRep = reproductor($("pt-play"), inicio => {
+    if (!pt || !pt.m.ok) return false;
+    if (inicio && (pt.oscila || pt.m.entra(pt.hist[pt.hist.length - 1].pi) === 0)) { ptEmpezar(); return; }
+    if (pt.hist.length >= 60) return false;
+    if (!ptSemana()) return false;
+  }, 650);
+  $("pt-step").addEventListener("click", () => { ptRep.parar(); ptSemana(); });
+  $("pt-reset").addEventListener("click", () => { ptRep.parar(); ptEmpezar(); });
+  ["pt-ct", "pt-d", "pt-n", "pt-qm"].forEach(id => $(id).addEventListener("input", () => { ptRep.parar(); document.querySelectorAll("[data-pt]").forEach(b => b.setAttribute("aria-pressed", "false")); ptEmpezar(); }));
+  function ptEjemplo(k) {
+    const e = PT_EJ[k]; $("pt-ct").value = e.ct; $("pt-d").value = e.d; $("pt-n").value = e.n; $("pt-qm").value = e.qm;
+    document.querySelectorAll("[data-pt]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.pt === k)));
+    ptRep.parar(); ptEmpezar();
+  }
+  document.querySelectorAll("[data-pt]").forEach(b => b.addEventListener("click", () => ptEjemplo(b.dataset.pt)));
+
+  // ---------- 2c · Taller de monopolio ----------
+  const MT_EJ = {
+    far: { d: "100 - Q", ct: "20Q" },
+    sube: { d: "100 - Q", ct: "200 + 10Q + 0,5Q^2" },
+    nat: { d: "100 - Q", ct: "1500 + 10Q" }
+  };
+  let mt = null;
+  function mtModelo() {
+    const a = lee("mt-d", "qQ", "P(Q)"), b = lee("mt-ct", "qQ", "CT");
+    const errs = [a.err, b.err].filter(Boolean);
+    if (errs.length) return { ok: false, errs };
+    const Pd = a.f, CTf = b.f;
+    if (!(Pd(0) > 0)) return { ok: false, errs: [t("mt.e.d")] };
+    let Qz = 1; while (Pd(Qz) > 0 && Qz < 1e7) Qz *= 2;
+    { let lo = Qz <= 1 ? 0 : Qz / 2, hi = Qz; for (let k = 0; k < 50; k++) { const mm = (lo + hi) / 2; if (Pd(mm) > 0) lo = mm; else hi = mm; } Qz = hi; }
+    const N = 400, h = Qz / N, Qs = Array.from({ length: N + 1 }, (_, k) => k * h);
+    const fil = Qs.map(Q => ({ Q, P: Pd(Q), CT: CTf(Q) })).map(f => ({ ...f, IT: f.P * f.Q, B: f.P * f.Q - f.CT }));
+    const der = (g, Q) => { const e = h / 2, lo = Math.max(0, Q - e), hi = Math.min(Qz, Q + e); return (g(hi) - g(lo)) / (hi - lo); };
+    const IMg = Q => der(x => Pd(x) * x, Q), CMg = Q => der(CTf, Q);
+    let im = 1; fil.forEach((f, k) => { if (k > 0 && f.B > fil[im].B) im = k; });
+    let ic = 0; for (let k = 1; k <= N; k++) { if (Pd(Qs[k]) <= CMg(Qs[k])) { ic = k; break; } ic = k; }
+    const mon = fil[im], com = fil[ic];
+    const integra = (a0, b0, g) => { let sum = 0; for (let k = 0; k < N; k++) { const x0 = Qs[k], x1 = Qs[k + 1]; if (x1 <= a0 || x0 >= b0) continue; const l = Math.max(x0, a0), r = Math.min(x1, b0); sum += g((l + r) / 2) * (r - l); } return sum; };
+    const EC = f => integra(0, f.Q, x => Pd(x) - f.P);
+    const PI = com.Q > mon.Q ? integra(mon.Q, com.Q, x => Pd(x) - CMg(x)) : 0;
+    const cmgs = [0.1, 0.3, 0.5, 0.7, 0.9].map(x => CMg(x * Qz)), c0 = cmgs[0], cz = cmgs[cmgs.length - 1], tol = 0.02 * Math.max(1, Math.abs(c0), Math.abs(cz));
+    const forma = cmgs.every(v => Math.abs(v - c0) <= tol) ? "plano" : cz > c0 + tol ? "sube" : "baja";
+    return { ok: true, Pd, CTf, IMg, CMg, Qz, h, fil, mon, com, ecM: EC(mon), ecC: EC(com), PI, forma, cf: CTf(0) };
+  }
+  function mtEmpezar(q) { mt = mtModelo(); const inp = $("mt-q"); if (mt.ok) { inp.max = String(mt.Qz); inp.step = String(mt.h); inp.value = String(q != null ? q : mt.mon.Q); } mtPintar(); }
+  function mtPintar() {
+    const m = mt;
+    $("mt-err").textContent = m.ok ? "" : m.errs.join("\n\n");
+    if (!m.ok) { ["mt-chart", "mt-ben"].forEach(id => $(id).replaceChildren()); $("mt-frase").textContent = ""; $("mt-cmp").replaceChildren(); $("mt-diag").textContent = ""; return; }
+    const q = +$("mt-q").value, d = v => isFinite(v) ? v.toLocaleString("es-ES", { maximumFractionDigits: Math.abs(v) < 100 ? 1 : 0 }) : "—";
+    $("mt-q-out").textContent = d(q);
+    const img = m.IMg(q), cmg = m.CMg(q), p = m.Pd(q);
+    let fr = q <= 1e-9 ? t("mt.f0") : t("mt.f", { q: d(q), img: d(img) + " €", cmg: d(cmg) + " €" }) + " " + (q < m.mon.Q - m.h / 2 ? t("mt.f.sigue") : t("mt.f.para", { q: d(m.mon.Q) }));
+    if (q > 0) fr += " " + (q < m.com.Q - m.h / 2 ? t("mt.f.csigue", { p: d(p) + " €" }) : t("mt.f.cpara", { q: d(m.com.Q) }));
+    $("mt-frase").textContent = fr;
+    // Comparación
+    const fila = (k, a, b) => el("tr", {}, el("th", { text: t(k) }), el("td", { text: a }), el("td", { text: b }));
+    $("mt-cmp").replaceChildren(
+      el("thead", {}, el("tr", {}, el("th", { text: "" }), el("th", { text: t("mt.c.mon") }), el("th", { text: t("w.compPerf") }))),
+      el("tbody", {}, fila("w.precio", d(m.mon.P) + " €", d(m.com.P) + " €"), fila("mt.c.q", d(m.mon.Q), d(m.com.Q)),
+        fila("w.beneficio", signed(m.mon.B), signed(m.com.B)), fila("lg.ec", eur(m.ecM), eur(m.ecC)), fila("lg.pi", eur(m.PI), "—")));
+    $("mt-diag").textContent = t("mt.d." + m.forma) + (m.com.B < -1e-6 ? " " + t("mt.d.nat", { b: eur(-m.com.B) }) : "");
+    // Demanda, IMg y CMg
+    const Qs = m.fil.map(f => f.Q), xT = escala(0, m.Qz), top = Math.max(m.Pd(0), ...Qs.map(m.CMg).filter(isFinite).slice(0, Math.round(Qs.length * 0.7))), yT = escala(0, top * 1.05);
+    const F = frame($("mt-chart"), { xMax: xT.hi, yMax: yT.hi, xTicks: xT.ticks, yTicks: yT.ticks, xLabel: () => t("mt.ax.q"), yLabel: () => t("ax.eurunit") });
+    if (m.com.Q > m.mon.Q) {
+      const tramo = Qs.filter(x => x >= m.mon.Q && x <= m.com.Q);
+      poly(F, [...tramo.map(x => [x, m.Pd(x)]), ...tramo.slice().reverse().map(x => [x, m.CMg(x)])], "a-dwl", { fill: `url(#${F.hid})` });
+    }
+    trazo(F, Qs.map(x => [x, m.Pd(x)]), "c-ink"); trazo(F, Qs.map(x => [x, m.IMg(x)]), "c-s2"); trazo(F, Qs.filter(x => x > 0).map(x => [x, m.CMg(x)]), "c-s1");
+    vertical(F, q);
+    [[m.mon, "M"], [m.com, "C"]].forEach(([f, k]) => { F.top.append(sv("circle", { cx: F.sx(f.Q), cy: F.sy(f.P), r: 6, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" })); rotulo(F, f.Q, f.P, t("mt.pt." + k), f.Q > xT.hi * 0.6 ? "end" : "start", -10); });
+    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(p), r: 5, class: "dot ink" }));
+    hover($("mt-chart"), $("mt-tip"), F, x => ({ head: "Q = " + d(x), rows: [[C.ink, t("w.demanda"), d(m.Pd(x)) + " €"], [C.s2, "IMg", d(m.IMg(x)) + " €"], [C.s1, "CMg", d(m.CMg(x)) + " €"]] }));
+    // Beneficio según la cantidad
+    const Bs = m.fil.map(f => f.B).filter(isFinite), bmax = Math.max(...Bs, 1), bmin = Math.min(Math.max(Math.min(...Bs), -bmax * 1.2), m.com.B * 1.15, m.mon.B), yB = escala(Math.min(0, bmin), bmax * 1.1);
+    const G = frame($("mt-ben"), { xMax: xT.hi, yMin: yB.lo, yMax: yB.hi, xTicks: xT.ticks, yTicks: yB.ticks, xLabel: () => t("mt.ax.q"), yLabel: () => "€" });
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(xT.hi), y1: G.sy(0), y2: G.sy(0), class: "guide" }));
+    trazo(G, m.fil.map(f => [f.Q, f.B]), "c-ok");
+    vertical(G, q);
+    [[m.mon, "M"], [m.com, "C"]].forEach(([f, k]) => { G.top.append(sv("circle", { cx: G.sx(f.Q), cy: G.sy(clamp(f.B, yB.lo, yB.hi)), r: 6, class: "dot", style: "fill:none;stroke:var(--accent);stroke-width:3" })); rotulo(G, f.Q, clamp(f.B, yB.lo, yB.hi), t("mt.pt." + k), f.Q > xT.hi * 0.6 ? "end" : "start", k === "C" ? 18 : -10); });
+    const bq = m.Pd(q) * q - m.CTf(q);
+    G.top.append(sv("circle", { cx: G.sx(q), cy: G.sy(clamp(bq, yB.lo, yB.hi)), r: 5, class: "dot ink" }));
+    hover($("mt-ben"), $("mt-ben-tip"), G, x => ({ head: "Q = " + d(x), rows: [["var(--ok)", t("w.beneficio"), signed(m.Pd(x) * x - m.CTf(x))]] }));
+  }
+  const mtRep = reproductor($("mt-play"), inicio => {
+    if (!mt || !mt.ok) return false;
+    const inp = $("mt-q"), fin = Math.min(mt.Qz, Math.max(mt.com.Q, mt.mon.Q) * 1.08), paso = Math.max(mt.h, fin / 80);
+    let v = inicio ? 0 : +inp.value + paso;
+    if (v > fin + 1e-9) return false;
+    inp.value = String(v); mtPintar();
+  }, 70);
+  $("mt-q").addEventListener("input", () => { mtRep.parar(); mtPintar(); });
+  ["mt-d", "mt-ct"].forEach(id => $(id).addEventListener("input", () => { mtRep.parar(); document.querySelectorAll("[data-mt]").forEach(b => b.setAttribute("aria-pressed", "false")); mtEmpezar(); }));
+  function mtEjemplo(k) {
+    const e = MT_EJ[k]; $("mt-d").value = e.d; $("mt-ct").value = e.ct;
+    document.querySelectorAll("[data-mt]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mt === k)));
+    mtRep.parar(); mtEmpezar();
+  }
+  document.querySelectorAll("[data-mt]").forEach(b => b.addEventListener("click", () => mtEjemplo(b.dataset.mt)));
+
   // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
+  OBS.register({ es: {
+    "rep.play": "Reproducir", "rep.pause": "Pausa", "rep.weeks": "Reproducir semana a semana",
+    "sub.1c": "c · Taller: tu mercado", "sub.2c": "c · Taller: tu monopolio",
+    "sup.h": "Supuestos del modelo",
+    "sup.f1": "Hay cientos de explotaciones y la naranja de todas es igual.",
+    "sup.f2": "Ninguna puede cambiar el precio: lo toma del mercado. Por eso cada tonelada más aporta lo mismo, el precio.",
+    "sup.f3": "A partir de cierto punto, cada tonelada más cuesta más que la anterior (coste marginal creciente).",
+    "sup.f4": "Cualquiera puede entrar en el mercado o salir de él.",
+    "sup.mo1": "Una sola empresa vende el producto: la patente impide que entren otras.",
+    "sup.mo2": "La empresa elige el precio, pero la demanda decide cuántas cajas vende: si sube el precio, vende menos.",
+    "sup.mo3": "Para vender una caja más tiene que bajar el precio de todas: por eso el ingreso marginal queda por debajo del precio.",
+    "sup.mo4": "Fabricar una caja más cuesta siempre lo mismo (coste marginal constante).",
+    "f.fig2": "Ingresos y costes totales", "aria.ftot": "Ingreso total y coste total de la explotación según las toneladas, con la distancia entre los dos en la cantidad elegida",
+    "lg.cf": "Coste fijo",
+    "mi.ftot": "La distancia entre el <b>ingreso total</b> y el <b>coste total</b> es el beneficio. Pulsa «Reproducir» y mira dónde se separan más.",
+    "mo.fig2": "Beneficio según el precio", "aria.moben": "Beneficio de la farmacéutica según el precio que fija",
+    "mi.moben": "Pulsa «Reproducir»: el precio baja desde 100 € hasta el coste de una caja. Mira cómo el beneficio sube, llega a un máximo y vuelve a bajar.",
+    "mo.mejor": "mejor precio: {p} €", "ax.precio": "Precio que fija (€ por caja)", "ax.milmes": "Miles de € al mes",
+    "tal.ej": "Para empezar:", "tal.sint": "Cómo se escribe una función",
+    "tal.sintx": "Con q (o Q) para la cantidad y P para el precio: 640 + 200q − 40q^2 + 5q^3 · 600 − 1,3P · 100 − Q. Valen la coma y el punto decimal; q^2 y q² son lo mismo.",
+    "pt.eyebrow": "1c · Taller", "pt.h2": "Tu mercado: ¿adónde lleva la competencia?",
+    "pt.p": "Escribe los costes de una explotación y la demanda de todo el mercado. La herramienta aplica las reglas de la competencia perfecta: cada explotación vende la cantidad que más le conviene a ese precio (hasta que una tonelada más cuesta lo que se cobra por ella) y, si se gana más de lo normal, entran explotaciones nuevas. Pulsa «Reproducir semana a semana».",
+    "pt.ct": "Costes de una explotación: CT(q) =", "pt.d": "Demanda de todo el mercado: Q(P) =", "pt.n": "Explotaciones al empezar", "pt.qm": "Toneladas como máximo por explotación",
+    "pt.ej1": "Las naranjas", "pt.ej2": "Las naranjas, con más demanda", "pt.ej3": "Coste marginal plano",
+    "pt.st.q": "Toneladas por explotación",
+    "pt.eq": "**Equilibrio a largo plazo.** El precio ha llegado a {p} y el beneficio extraordinario es casi cero: ya no compensa entrar ni salir.",
+    "pt.oscila": "**El mercado no se asienta.** Cada semana entran o salen explotaciones y el precio salta arriba y abajo: no hay un número de explotaciones con el que el beneficio extraordinario sea cero.",
+    "pt.d.sube": "Tus costes: cada tonelada más cuesta más (coste marginal creciente), como supone el modelo. A la larga, el precio tiende al mínimo del coste medio: {p}, produciendo {q} toneladas por explotación.",
+    "pt.d.plano": "Tus costes: cada tonelada cuesta lo mismo (coste marginal plano). Con esto, la regla «vender hasta que una tonelada más cueste lo que se cobra» no dice cuánto: cada explotación vende o nada o todo lo que puede ({qm} t). El modelo de competencia perfecta necesita un coste marginal que suba.",
+    "pt.d.baja": "Tus costes: cada tonelada más cuesta menos que la anterior. Cada explotación querría crecer sin fin: con costes así, la competencia perfecta no se sostiene.",
+    "pt.e.n": "Escribe cuántas explotaciones hay al empezar (1 o más).", "pt.e.qm": "Escribe cuántas toneladas puede vender como máximo cada explotación.",
+    "pt.e.d": "La demanda tiene que ser mayor que cero cuando el precio es cero, y los costes tienen que dar un número en q = 0.",
+    "mt.eyebrow": "2c · Taller", "mt.h2": "Tu monopolio: ¿qué cambia frente a la competencia?",
+    "mt.p": "Escribe la demanda y los costes de una empresa sin competidores. La herramienta busca la cantidad que más le conviene al monopolio (vender mientras una unidad más aporte más de lo que cuesta) y la compara con la de la competencia perfecta (vender hasta que el precio iguale al coste marginal). Las cantidades y los euros van en las unidades que uses. Pulsa «Reproducir» para recorrerlo unidad a unidad.",
+    "mt.d": "Demanda: P(Q) =", "mt.ct": "Costes totales: CT(Q) =", "mt.q": "Cantidad (Q)",
+    "mt.ej1": "La farmacéutica", "mt.ej2": "Coste marginal creciente", "mt.ej3": "Monopolio natural",
+    "mt.fig2": "Beneficio según la cantidad", "aria.mt": "Demanda, ingreso marginal y coste marginal escritos en el taller, con el punto del monopolio y el de la competencia perfecta", "aria.mtben": "Beneficio según la cantidad vendida",
+    "mt.ax.q": "Cantidad (Q)",
+    "mt.f0": "Sin vender nada. Pulsa «Reproducir» o mueve la cantidad.",
+    "mt.f": "Con {q} unidades: vender una más aporta {img} y cuesta {cmg}.",
+    "mt.f.sigue": "Al monopolio todavía le conviene vender más.", "mt.f.para": "Al monopolio ya no le conviene: su mejor cantidad es {q}.",
+    "mt.f.csigue": "En competencia perfecta se seguiría vendiendo: el precio ({p}) aún cubre el coste marginal.", "mt.f.cpara": "En competencia perfecta se vendería hasta {q}, donde el precio iguala al coste marginal.",
+    "mt.c.mon": "Monopolio", "mt.c.q": "Cantidad", "mt.pt.M": "monopolio", "mt.pt.C": "competencia perfecta",
+    "mt.d.plano": "Tus costes: cada unidad cuesta lo mismo (coste marginal constante).", "mt.d.sube": "Tus costes: cada unidad más cuesta más (coste marginal creciente).", "mt.d.baja": "Tus costes: cada unidad más cuesta menos (coste marginal decreciente).",
+    "mt.d.nat": "Con el precio de la competencia perfecta, la empresa perdería {b}: no cubriría los costes fijos. Es lo que se llama un monopolio natural: una sola empresa produce más barato que varias.",
+    "mt.e.d": "La demanda tiene que dar un precio mayor que cero cuando Q = 0.",
+    "e.empty": "Escribe una función.", "e.char": "Hay un carácter que no entiendo, «{c}», en la posición {p}.", "e.expect": "Falta un número, una letra o un paréntesis en la posición {p}.",
+    "e.close": "Falta cerrar un paréntesis «)» en la posición {p}.", "e.extra": "Sobra «{c}» en la posición {p}.", "e.num": "El número de la posición {p} está mal escrito.", "e.which": "En {f}: ",
+  }, va: {
+    "rep.play": "Reproduir", "rep.pause": "Pausa", "rep.weeks": "Reproduir setmana a setmana",
+    "sub.1c": "c · Taller: el teu mercat", "sub.2c": "c · Taller: el teu monopoli",
+    "sup.h": "Supòsits del model",
+    "sup.f1": "Hi ha centenars d'explotacions i la taronja de totes és igual.",
+    "sup.f2": "Cap no pot canviar el preu: el pren del mercat. Per això cada tona més aporta el mateix, el preu.",
+    "sup.f3": "A partir de cert punt, cada tona més costa més que l'anterior (cost marginal creixent).",
+    "sup.f4": "Qualsevol pot entrar en el mercat o eixir-ne.",
+    "sup.mo1": "Una sola empresa ven el producte: la patent impedix que n'entren altres.",
+    "sup.mo2": "L'empresa tria el preu, però la demanda decidix quantes caixes ven: si puja el preu, en ven menys.",
+    "sup.mo3": "Per a vendre una caixa més ha d'abaixar el preu de totes: per això l'ingrés marginal queda per davall del preu.",
+    "sup.mo4": "Fabricar una caixa més costa sempre el mateix (cost marginal constant).",
+    "f.fig2": "Ingressos i costos totals", "aria.ftot": "Ingrés total i cost total de l'explotació segons les tones, amb la distància entre els dos en la quantitat triada",
+    "lg.cf": "Cost fix",
+    "mi.ftot": "La distància entre l'<b>ingrés total</b> i el <b>cost total</b> és el benefici. Prem «Reproduir» i mira on se separen més.",
+    "mo.fig2": "Benefici segons el preu", "aria.moben": "Benefici de la farmacèutica segons el preu que fixa",
+    "mi.moben": "Prem «Reproduir»: el preu baixa des de 100 € fins al cost d'una caixa. Mira com el benefici puja, arriba a un màxim i torna a baixar.",
+    "mo.mejor": "millor preu: {p} €", "ax.precio": "Preu que fixa (€ per caixa)", "ax.milmes": "Milers d'€ al mes",
+    "tal.ej": "Per a començar:", "tal.sint": "Com s'escriu una funció",
+    "tal.sintx": "Amb q (o Q) per a la quantitat i P per al preu: 640 + 200q − 40q^2 + 5q^3 · 600 − 1,3P · 100 − Q. Valen la coma i el punt decimal; q^2 i q² són el mateix.",
+    "pt.eyebrow": "1c · Taller", "pt.h2": "El teu mercat: on porta la competència?",
+    "pt.p": "Escriu els costos d'una explotació i la demanda de tot el mercat. La ferramenta aplica les regles de la competència perfecta: cada explotació ven la quantitat que més li convé a eixe preu (fins que una tona més costa el que se'n cobra) i, si es guanya més del normal, entren explotacions noves. Prem «Reproduir setmana a setmana».",
+    "pt.ct": "Costos d'una explotació: CT(q) =", "pt.d": "Demanda de tot el mercat: Q(P) =", "pt.n": "Explotacions en començar", "pt.qm": "Tones com a màxim per explotació",
+    "pt.ej1": "Les taronges", "pt.ej2": "Les taronges, amb més demanda", "pt.ej3": "Cost marginal pla",
+    "pt.st.q": "Tones per explotació",
+    "pt.eq": "**Equilibri a llarg termini.** El preu ha arribat a {p} i el benefici extraordinari és quasi zero: ja no compensa entrar ni eixir.",
+    "pt.oscila": "**El mercat no s'assenta.** Cada setmana entren o ixen explotacions i el preu salta amunt i avall: no hi ha un nombre d'explotacions amb què el benefici extraordinari siga zero.",
+    "pt.d.sube": "Els teus costos: cada tona més costa més (cost marginal creixent), com suposa el model. A la llarga, el preu tendix al mínim del cost mitjà: {p}, produint {q} tones per explotació.",
+    "pt.d.plano": "Els teus costos: cada tona costa el mateix (cost marginal pla). Amb això, la regla «vendre fins que una tona més coste el que se'n cobra» no diu quant: cada explotació ven o res o tot el que pot ({qm} t). El model de competència perfecta necessita un cost marginal que puge.",
+    "pt.d.baja": "Els teus costos: cada tona més costa menys que l'anterior. Cada explotació voldria créixer sense fi: amb costos així, la competència perfecta no se sosté.",
+    "pt.e.n": "Escriu quantes explotacions hi ha en començar (1 o més).", "pt.e.qm": "Escriu quantes tones pot vendre com a màxim cada explotació.",
+    "pt.e.d": "La demanda ha de ser més gran que zero quan el preu és zero, i els costos han de donar un número en q = 0.",
+    "mt.eyebrow": "2c · Taller", "mt.h2": "El teu monopoli: què canvia davant de la competència?",
+    "mt.p": "Escriu la demanda i els costos d'una empresa sense competidors. La ferramenta busca la quantitat que més li convé al monopoli (vendre mentre una unitat més aporte més del que costa) i la compara amb la de la competència perfecta (vendre fins que el preu iguale el cost marginal). Les quantitats i els euros van en les unitats que uses. Prem «Reproduir» per a recórrer-ho unitat a unitat.",
+    "mt.d": "Demanda: P(Q) =", "mt.ct": "Costos totals: CT(Q) =", "mt.q": "Quantitat (Q)",
+    "mt.ej1": "La farmacèutica", "mt.ej2": "Cost marginal creixent", "mt.ej3": "Monopoli natural",
+    "mt.fig2": "Benefici segons la quantitat", "aria.mt": "Demanda, ingrés marginal i cost marginal escrits en el taller, amb el punt del monopoli i el de la competència perfecta", "aria.mtben": "Benefici segons la quantitat venuda",
+    "mt.ax.q": "Quantitat (Q)",
+    "mt.f0": "Sense vendre res. Prem «Reproduir» o mou la quantitat.",
+    "mt.f": "Amb {q} unitats: vendre'n una més aporta {img} i costa {cmg}.",
+    "mt.f.sigue": "Al monopoli encara li convé vendre més.", "mt.f.para": "Al monopoli ja no li convé: la seua millor quantitat és {q}.",
+    "mt.f.csigue": "En competència perfecta es continuaria venent: el preu ({p}) encara cobreix el cost marginal.", "mt.f.cpara": "En competència perfecta es vendria fins a {q}, on el preu iguala el cost marginal.",
+    "mt.c.mon": "Monopoli", "mt.c.q": "Quantitat", "mt.pt.M": "monopoli", "mt.pt.C": "competència perfecta",
+    "mt.d.plano": "Els teus costos: cada unitat costa el mateix (cost marginal constant).", "mt.d.sube": "Els teus costos: cada unitat més costa més (cost marginal creixent).", "mt.d.baja": "Els teus costos: cada unitat més costa menys (cost marginal decreixent).",
+    "mt.d.nat": "Amb el preu de la competència perfecta, l'empresa perdria {b}: no cobriria els costos fixos. És el que s'anomena un monopoli natural: una sola empresa produïx més barat que diverses.",
+    "mt.e.d": "La demanda ha de donar un preu més gran que zero quan Q = 0.",
+    "e.empty": "Escriu una funció.", "e.char": "Hi ha un caràcter que no entenc, «{c}», en la posició {p}.", "e.expect": "Falta un número, una lletra o un parèntesi en la posició {p}.",
+    "e.close": "Falta tancar un parèntesi «)» en la posició {p}.", "e.extra": "Sobra «{c}» en la posició {p}.", "e.num": "El número de la posició {p} està mal escrit.", "e.which": "En {f}: ",
+  } });
   OBS.register({
-    es: { "c.sa3": "Los dos modelos de costes (cada unidad cuesta más que la anterior, o cada unidad cuesta lo mismo hasta llenar la fábrica) se repasan en la SA 3, pestaña «Calculadora de costes».",
+    es: { "c.sa3": "Los dos modelos de costes (cada unidad cuesta más que la anterior, o cada unidad cuesta lo mismo hasta llenar la fábrica) se repasan en la SA 3, pestaña «Laboratorio de costes» (subpestañas a, b y c).",
       "o.cambiar": "Cambiar las ganancias de la tabla", "o.votacion": "Votación en clase: apuntar las rondas",
       "sub.1a": "a · ¿Cuánto vender?", "sub.1b": "b · ¿Qué pasa cuando entran más?", "sub.2a": "a · Monopolio: ¿qué precio?", "sub.2b": "b · Oligopolio: ¿mantener o bajar?",
       "mi.f": "Mueve el <b>precio</b> y las <b>toneladas</b>. Fíjate en dónde se cruzan la línea del precio y la del coste de una tonelada más: ahí está la mejor cantidad.",
@@ -2595,7 +3210,7 @@ window.OBS = (() => {
       "pal.oli": "Oligopolio", "pal.oli.d": "Mercado con pocas empresas: lo que hace una afecta a las demás.",
       "pal.cuota": "Cuota de mercado", "pal.cuota.d": "La parte de las ventas totales que se lleva una empresa.",
       "pal.res": "Reservas", "pal.res.d": "El dinero que una empresa tiene ahorrado para aguantar las semanas de pérdidas." },
-    va: { "c.sa3": "Els dos models de costos (cada unitat costa més que l'anterior, o cada unitat costa el mateix fins omplir la fàbrica) es repassen en la SA 3, pestanya «Calculadora de costos».",
+    va: { "c.sa3": "Els dos models de costos (cada unitat costa més que l'anterior, o cada unitat costa el mateix fins omplir la fàbrica) es repassen en la SA 3, pestanya «Laboratori de costos» (subpestanyes a, b i c).",
       "o.cambiar": "Canviar els guanys de la taula", "o.votacion": "Votació a classe: apuntar les rondes",
       "sub.1a": "a · Quant vendre?", "sub.1b": "b · Què passa quan n'entren més?", "sub.2a": "a · Monopoli: quin preu?", "sub.2b": "b · Oligopoli: mantindre o abaixar?",
       "mi.f": "Mou el <b>preu</b> i les <b>tones</b>. Fixa't on es creuen la línia del preu i la del cost d'una tona més: allí està la millor quantitat.",
@@ -2617,8 +3232,14 @@ window.OBS = (() => {
   });
   {
     const tr = k => ({ get es() { return OBS.t(k); }, get va() { return OBS.t(k); } });
-    OBS.subpestanas($("view-perfecta"), [{ el: $("firm-block"), t: tr("sub.1a") }, { el: $("market-block"), t: tr("sub.1b") }]);
-    OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }]);
+    const pal0 = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
+    OBS.subpestanas($("view-perfecta"), [{ el: $("firm-block"), t: tr("sub.1a") }, { el: $("market-block"), t: tr("sub.1b") }, { el: $("pt-block"), t: tr("sub.1c") }],
+      { onChange: () => { if (typeof fRep !== "undefined") { fRep.parar(); mRep.parar(); ptRep.parar(); } } });
+    OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }, { el: $("mt-block"), t: tr("sub.2c") }],
+      { onChange: () => { if (typeof moRep !== "undefined") { moRep.parar(); mtRep.parar(); } } });
+    OBS.mirar($("f-tot"), tr("mi.ftot")); OBS.mirar($("mo-ben"), tr("mi.moben"));
+    OBS.palabras($("pt-block"), pal0(["cmg", "cme", "cf", "ben"]), { antes: $("pt-block").querySelector(".charts") });
+    OBS.palabras($("mt-block"), pal0(["mon", "cmg", "img", "ben"]), { antes: $("mt-block").querySelector(".charts") });
     // Lo del docente, al panel «Para el docente»: los parámetros de la guerra de precios (los escenarios ya van allí)
     const panelDoc = document.getElementById("obs-docente");
     if (panelDoc) { $("w-params").classList.add("obs-params"); panelDoc.append($("w-params")); }
@@ -2627,13 +3248,14 @@ window.OBS = (() => {
     const mw = (id, k) => { const p = OBS.h("p", { class: "obs-mirar" }); const pinta = () => { p.innerHTML = OBS.t(k); }; pinta(); OBS.onLang(pinta); $(id).before(p); };
     mw("w-perf", "mi.wp"); mw("w-real", "mi.wr");
     const pal = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
-    OBS.palabras($("firm-block"), pal(["cmg", "cme", "cf", "ben"]), { antes: $("firm-block").querySelector(".controls") });
-    OBS.palabras($("mono-block"), pal(["mon", "cmg", "img", "ben"]), { antes: $("mono-block").querySelector(".controls") });
+    OBS.palabras($("firm-block"), pal(["cmg", "cme", "cf", "ben"]), { antes: $("firm-block").querySelector(".charts") });
+    OBS.palabras($("mono-block"), pal(["mon", "cmg", "img", "ben"]), { antes: $("mono-block").querySelector(".charts") });
     OBS.palabras($("oli-block"), pal(["oli"]), { antes: $("oli-block").querySelector(".o-voto") });
     OBS.palabras($("war-block"), pal(["cf", "cmg", "cuota", "res"]), { antes: $("w-perf") });
   }
   OBS.apply();
   OBS.onLang(() => {
+    ptPintar(); mtPintar();
     setBestLabels(); buildFirmTable(); renderFirm(); renderMarket(); renderMono(); renderOli();
     renderCmp(); buildWarTable(); renderWar();
   });
@@ -2648,6 +3270,8 @@ window.OBS = (() => {
   renderCmp();
   buildWarTable();
   renderWar();
+  ptEjemplo("nar");
+  mtEjemplo("far");
   show(location.hash.slice(1));
 })();
 </script>
