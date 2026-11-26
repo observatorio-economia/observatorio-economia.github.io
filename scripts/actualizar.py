@@ -25,6 +25,7 @@ HERRAMIENTAS = [
     ("sa06", "SA06-el-mercado-laboral/material/observatorio-sa6.html"),
     ("sa08", "SA08-el-dinero/material/observatorio-sa8.html"),
     ("sa09", "SA09-comercio-internacional/material/observatorio-sa9.html"),
+    ("pueblo", "SA01-que-es-la-economia/material/juego-pueblo.html"),   # juego del pueblo (SA 1), pantalla del proyector: no se enlaza desde la portada
     ("datos", "_base-de-datos/observatorio-datos.html"),
 ]
 
@@ -673,7 +674,10 @@ def inventario():
         es = {}
         for k, v in re.findall(r'"([a-zA-Z][\w.-]*)":\s*"((?:[^"\\]|\\.)*)"', s):
             es.setdefault(k, v)
-        tx = lambda k: sin_etiquetas(json.loads('"' + es[k] + '"')) if k in es else None
+        def tx(k):
+            if k not in es: return None
+            try: return sin_etiquetas(json.loads('"' + es[k] + '"'))
+            except ValueError: return sin_etiquetas(es[k])   # textos con escapes que no son JSON (p. ej., de un archivo minificado)
         tiene_va = bool(re.search(r"\bva:\s*\{", s))
         cuerpo_html = s.split("<script", 1)[0]
 

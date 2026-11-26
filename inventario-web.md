@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-11-26 17:24
-- Commit de partida: `ce52689`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 13
+- Generado: 2026-11-26 21:35
+- Commit de partida: `6c71e7f`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 5
 
 ## Interruptores de la web
 
@@ -180,6 +180,28 @@
   - `ft.nums`: Las cifras de los años, los préstamos y la producción son un ejemplo propio para el aula: el modelo es simplificado y no reproduce ningún caso real.
   - `ft.ricardo`: David Ricardo, Principios de economía política y tributación (1817), cap. 7: ejemplo de Inglaterra y Portugal con el paño y el vino.
   - `ft.shaikh`: Anwar Shaikh, Capitalismo: competencia, conflicto y crisis, Fondo de Cultura Económica, 2023 (ed. original en inglés, 2016), cap. 11, pp. 704-747, que retoma a Smith, Marx y Harrod.
+  - `obs.fuentes`: Fuentes y notas
+- Versión en valenciano: sí
+
+### pueblo
+
+- Web: `pueblo/index.html`
+- Vault: `SA01-que-es-la-economia/material/juego-pueblo.html` (2026-11-26 21:34, 749 KB)
+- Copia: ✓ copiada
+- En el menú: no aparece
+- Pestañas: ninguna (una sola pantalla)
+  - Despu\xE9s de jugar
+- Fuentes que cita:
+  - `ft.anio`: A\xF1o
+  - `ft.ap`: Aportaci\xF3n
+  - `ft.cuid`: Personas sin cuidados
+  - `ft.esc`: Ni\xF1os sin escuela
+  - `ft.hambre`: Personas con hambre
+  - `ft.mal`: Jornadas mal colocadas (mercado / asamblea)
+  - `ft.prod`: Producci\xF3n
+  - `ft.sal`: Salario m\xE1s alto / m\xE1s bajo
+  - `ft.suceso`: Suceso
+  - `ft.turno`: Hogares con turno
   - `obs.fuentes`: Fuentes y notas
 - Versión en valenciano: sí
 

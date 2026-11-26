@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-26T17:24:11.798225+00:00",
+ "generado": "2026-11-26T21:35:09.499810+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,11 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Illa pide directivos “comprometidos” y los empresarios, menos impuestos",
+     "enlace": "https://www.expansion.com/catalunya/2026/11/26/illa-pide-directivos-comprometidos-empresarios-impuestos.html",
+     "fecha": "2026-11-26T21:20:07+00:00"
+    },
     {
      "titulo": "París y Berlín quieren blindar el presupuesto europeo frente a Marine Le Pen",
      "enlace": "https://www.expansion.com/economia/financial-times/2026/11/26/paris-berlin-quieren-blindar-presupuesto-europeo-frente-marine-le-pen.html",
@@ -26,14 +31,9 @@
      "titulo": "La aviación, entre la irrupción de China y nueva inversión en los aeropuertos españoles",
      "enlace": "https://www.expansion.com/catalunya/2026/11/26/aviacion-irrupcion-china-nueva-inversion-aeropuertos-espanoles.html",
      "fecha": "2026-11-26T14:28:41+00:00"
-    },
-    {
-     "titulo": "Illa quiere directivos \"comprometidos con la prosperidad compartida\" y la democracia",
-     "enlace": "https://www.expansion.com/catalunya/2026/11/26/illa-quiere-directivos-comprometidos-prosperidad-compartida-democracia.html",
-     "fecha": "2026-11-26T13:29:42+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:05.755763+00:00"
+   "leido": "2026-11-26T21:35:03.814083+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,16 +65,16 @@
      "fecha": "2026-11-26T13:19:27+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:06.611778+00:00"
+   "leido": "2026-11-26T21:35:04.405565+00:00"
   },
   {
    "nombre": "Invertia · El Español",
    "salmon": true,
    "items": [
     {
-     "titulo": "S&P ratifica el rating BBB+ de Iberdrola y mejora LA valoración del perfil financiero de la compañía",
-     "enlace": "https://www.elespanol.com/invertia/empresas/energia/20261126/sp-ratifica-rating-bbb-iberdrola-mejora-valoracion-perfil-financiero-compania/1003744473859_0.html",
-     "fecha": "2026-11-26T16:37:51+00:00"
+     "titulo": "Plus Ultra plantea el cierre de la aerolínea y el despido de toda la plantilla tras suspender vuelos",
+     "enlace": "https://www.elespanol.com/invertia/empresas/turismo/20261126/plus-ultra-plantea-despedir-totalidad-plantilla-suspender-vuelos/1003744473408_0.html",
+     "fecha": "2026-11-26T18:47:49+00:00"
     },
     {
      "titulo": "La tabacalera Altria estudia lanzar una oferta por la británica Imperial Brands, dueña de Nobel y Fortuna",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-26T13:43:18+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:07.374342+00:00"
+   "leido": "2026-11-26T21:35:04.970976+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,12 +109,17 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:09.094405+00:00"
+   "leido": "2026-11-26T21:35:05.791880+00:00"
   },
   {
    "nombre": "El País · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "El BCE se pertrecha ante tiempos turbulentos",
+     "enlace": "https://cincodias.elpais.com/opinion/2026-11-26/el-bce-se-pertrecha-ante-tiempos-turbulentos.html",
+     "fecha": "2026-11-26T17:46:25+00:00"
+    },
     {
      "titulo": "Cientos de transportistas se manifiestan frente a la Seguridad Social porque aún no ha anticipado su jubilación",
      "enlace": "https://elpais.com/economia/2026-11-26/cientos-de-transportistas-se-manifiestan-frente-a-la-seguridad-social-porque-aun-no-ha-anticipado-su-jubilacion.html",
@@ -134,14 +139,9 @@
      "titulo": "Hernández de Cos se convertirá en febrero en el primer español en presidir el BCE",
      "enlace": "https://elpais.com/economia/2026-11-26/hernandez-de-cos-se-convertira-en-febrero-en-el-primer-espanol-en-presidir-el-bce.html",
      "fecha": "2026-11-26T13:19:27+00:00"
-    },
-    {
-     "titulo": "Digi lidera la captación de clientes pero sufre el mayor índice de fugas entre operadoras",
-     "enlace": "https://cincodias.elpais.com/companias/2026-11-26/digi-lidera-la-captacion-de-clientes-pero-sufre-el-mayor-indice-de-fugas-entre-operadoras.html",
-     "fecha": "2026-11-26T12:54:52+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:09.705799+00:00"
+   "leido": "2026-11-26T21:35:06.743397+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,12 +173,27 @@
      "fecha": "2026-11-26T12:07:10+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:10.235492+00:00"
+   "leido": "2026-11-26T21:35:07.230776+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "La mitad de los pilotos en España considera que la aerolínea donde trabajan no se preocupa por su bienestar emocional",
+     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/26/6b088085e4d4d85c5c8b4596.html",
+     "fecha": "2026-11-26T19:12:55+00:00"
+    },
+    {
+     "titulo": "El Corte Inglés rompe con Securitas y deja su seguridad en manos de Sicor",
+     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/26/6b0869e5fdddff53608b459b.html",
+     "fecha": "2026-11-26T17:47:45+00:00"
+    },
+    {
+     "titulo": "Los cuatro rostros que han dirigido el euro: quién ocupó el sillón del BCE antes de Hernández de Cos",
+     "enlace": "https://www.elmundo.es/economia/2026/11/26/6b083bc2fc6c83a9198b45c0.html",
+     "fecha": "2026-11-26T17:23:00+00:00"
+    },
     {
      "titulo": "Un armador turco, una ruta \"habitual\" y una diferencia crucial con el Prestige: todas las claves del Med Emre, el barco volcado cerca de Ibiza",
      "enlace": "https://www.elmundo.es/economia/empresas/2026/11/26/6b082435e85ecede028b4582.html",
@@ -188,33 +203,28 @@
      "titulo": "Hernández de Cos será el próximo presidente del BCE y consigue el cargo europeo de mayor poder en la historia de España",
      "enlace": "https://www.elmundo.es/economia/2026/11/26/6b083332fdddff741f8b4595.html",
      "fecha": "2026-11-26T13:29:00+00:00"
-    },
-    {
-     "titulo": "Las empresas catalanas escriben su 'carta a los Reyes Magos' de la próxima legislatura: menos impuestos y más respaldo público",
-     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/26/6b082606e4d4d869358b4595.html",
-     "fecha": "2026-11-26T13:17:41+00:00"
-    },
-    {
-     "titulo": "Euríbor hoy, jueves 26 de noviembre: nueva bajada de la tasa diaria para aliviar la tendencia",
-     "enlace": "https://www.elmundo.es/economia/vivienda/2026/11/26/6b0828c4fdddffa13c8b4575.html",
-     "fecha": "2026-11-26T12:46:08+00:00"
-    },
-    {
-     "titulo": "¿Estás de baja? Tu empresa puede dejarte sin cesta de Navidad, pero hay una excepción que debes conocer",
-     "enlace": "https://www.elmundo.es/economia/2026/11/26/6b07ef1bfc6c83c32c8b45a4.html",
-     "fecha": "2026-11-26T11:32:30+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:10.768090+00:00"
+   "leido": "2026-11-26T21:35:07.642030+00:00"
   },
   {
    "nombre": "ABC · Economía",
    "salmon": false,
    "items": [
     {
+     "titulo": "Fainé no repetirá como presidente de la Confederación Española de Directivos y Ejecutivos y cede el testigo a Ramón Adell",
+     "enlace": "https://www.abc.es/economia/faine-repetira-presidente-confederacion-espanola-directivos-ejecutivos-20261126095535-nt.html",
+     "fecha": "2026-11-26T18:10:19+00:00"
+    },
+    {
+     "titulo": "Impact Bridge, IE University y Transcendent destacan el potencial de la compra social como palanca de empleo e inclusión",
+     "enlace": "https://www.abc.es/economia/impact-bridge-university-transcendent-destacan-potencial-compra-20261126183855-nt.html",
+     "fecha": "2026-11-26T17:38:56+00:00"
+    },
+    {
      "titulo": "Los líderes europeos eligen a Hernández de Cos como nuevo presidente del BCE",
      "enlace": "https://www.abc.es/economia/consejo-europeo-elige-pablo-hernandez-cos-nuevo-20261126142403-nt.html",
-     "fecha": "2026-11-26T16:28:25+00:00"
+     "fecha": "2026-11-26T17:28:19+00:00"
     },
     {
      "titulo": "Hernández de Cos, un economista de las instituciones",
@@ -225,24 +235,24 @@
      "titulo": "Garamendi reclama «paz social» tras el 29N y los empresarios instan al próximo Gobierno a favorecer la actividad económica",
      "enlace": "https://www.abc.es/economia/garamendi-reclama-paz-social-tras-29n-empresarios-20261126122732-nt.html",
      "fecha": "2026-11-26T13:58:31+00:00"
-    },
-    {
-     "titulo": "Fainé no repetirá como presidente de la Confederación Española de Directivos y Ejecutivos y cede el testigo a Ramón Adell",
-     "enlace": "https://www.abc.es/economia/faine-repetira-presidente-confederacion-espanola-directivos-ejecutivos-20261126095535-nt.html",
-     "fecha": "2026-11-26T11:07:41+00:00"
-    },
-    {
-     "titulo": "El Gobierno anuncia a tres días de las elecciones la convocatoria de 14.000 plazas de empleo público",
-     "enlace": "https://www.abc.es/economia/gobierno-anuncia-tres-dias-elecciones-convocatoria-14000-20261126104130-nt.html",
-     "fecha": "2026-11-26T09:41:30+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:11.383124+00:00"
+   "leido": "2026-11-26T21:35:08.639945+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Empresas | Nuria Lloret gana las elecciones y se convierte en la nueva presidenta de EVAP",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/empresas1/nuria-lloret-gana-las-elecciones-y-se-convierte-en-la-nueva-presidenta-de-evap",
+     "fecha": "2026-11-26T20:05:17+00:00"
+    },
+    {
+     "titulo": "Comarca y empresa | Casas Bajas conquista a miles de visitantes en una multitudinaria Feria de la Manzana Esperiega que reivindica el valor de los pequeños pueblos",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/casas-bajas-conquista-a-miles-de-visitantes-en-una-multitudinaria-feria-de-la-manzana-esperiega-que-reivindica-el-valor-de-los-pequenos-pueblos",
+     "fecha": "2026-11-26T18:21:54+00:00"
+    },
     {
      "titulo": "Música y ópera | El CIBM Ciutat de València 2027 reunirá bandas de España, Suiza, Italia, Bélgica, Alemania y China",
      "enlace": "https://valenciaplaza.com/musica-opera-valencia-comunitat-valenciana/el-cibm-ciutat-de-valencia-2027-reunira-bandas-de-espana-suiza-italia-belgica-alemania-y-china",
@@ -257,19 +267,9 @@
      "titulo": "Teatro y danza | El Teatro Rialto se convierte en el escenario de una ruptura amorosa en 'Al final de las cosas'",
      "enlace": "https://valenciaplaza.com/teatro-danza-valencia-comunitat-valenciana/el-teatro-rialto-se-convierte-en-el-escenario-de-una-ruptura-amorosa-en-al-final-de-las-cosas",
      "fecha": "2026-11-26T16:20:25+00:00"
-    },
-    {
-     "titulo": "Educación | Suspenden las manifestaciones educativas del sábado después de que la Junta Electoral denegase la de Castellón",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/educacion/suspenden-las-manifestaciones-educativas-del-sabado-despues-de-que-la-junta-electoral-denegase-la-de-castellon",
-     "fecha": "2026-11-26T16:18:13+00:00"
-    },
-    {
-     "titulo": "Comarca y empresa | Ontinyent serà seu del Festival TAC! d'Arquitectura Urbana 2027 impulsat pel Ministeri d'Habitatge",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/ontinyent-sera-seu-del-festival-tac-darquitectura-urbana-2027-impulsat-pel-ministeri-dhabitatge",
-     "fecha": "2026-11-26T16:11:12+00:00"
     }
    ],
-   "leido": "2026-11-26T17:24:11.798179+00:00"
+   "leido": "2026-11-26T21:35:09.499764+00:00"
   }
  ]
 }
