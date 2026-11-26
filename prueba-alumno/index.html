@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icono/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icono/apple-touch-icon.png">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Observatorio">
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/estado-web.js"></script>
+<script src="../assets/menu.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="t.alumno">Prueba del pueblo · vecino</title>
+<style>:root { --bg: #faf7ef; --ink: #23262b; --muted: #5d636c; --paper: #ffffff; --rule: #d9d3c3; --ok: #2d6a4f; --bad: #a4372c; --acc: #2f4f8a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; } }
+:root[data-theme="dark"] { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 16px; }
+main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+h1 { font-size: 28px; margin: 0; }
+.small { font-size: 14px; color: var(--muted); }
+.caja { background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+label { font-size: 14px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+input, select { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); min-height: 44px; }
+button { font: 600 16px system-ui, sans-serif; padding: 10px 14px; border-radius: 10px; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; min-height: 48px; }
+button.prim { background: var(--ink); color: var(--bg); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.rejilla button[aria-pressed="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
+.idiomas { display: flex; gap: 6px; justify-content: flex-end; }
+.idiomas button { min-height: 36px; padding: 4px 10px; font-size: 14px; }
+.ok { color: var(--ok); font-weight: 600; } .mal { color: var(--bad); font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--rule); padding: 5px 8px; text-align: left; }
+.cifras { display: flex; flex-wrap: wrap; gap: 10px; }
+.cifras div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 12px; min-width: 140px; }
+.cifras b { display: block; font-size: 28px; }
+.scroll { overflow-x: auto; }
+a { overflow-wrap: anywhere; }
+[hidden] { display: none !important; }
+</style>
+<main>
+  <div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div>
+  <h1 data-t="t.alumno">Prueba del pueblo · vecino</h1>
+  <p class="small" data-t="a.intro">Esta página solo sirve para probar si las respuestas llegan al proyector. Elige tu código de puesto y pulsa un sector.</p>
+  <div class="caja">
+    <label><span data-t="a.codigo">Código de tu puesto (está en la tarjeta)</span><select id="codigo"></select></label>
+    <label id="url-l" hidden><span data-t="a.url">Dirección del programa de Google (la da el docente)</span><input id="url" type="url" inputmode="url"></label>
+  </div>
+  <div class="caja">
+    <h2 data-t="a.donde" style="margin:0;font-size:20px">¿Dónde trabajas este año?</h2>
+    <div class="rejilla" id="sectores"></div>
+    <p id="estado" aria-live="polite" class="small"></p>
+  </div>
+  <div class="caja">
+    <button type="button" id="rafaga" data-t="a.rafaga">Prueba de golpe: enviar 10 respuestas seguidas</button>
+    <p class="small" data-t="a.rafaga.p">Solo cuando lo pida el docente: sirve para ver si Google bloquea muchos envíos a la vez desde la red del centro.</p>
+  </div>
+</main>
+<script>// Piezas comunes de la prueba: idioma, dirección del programa de Google y guardado en el navegador
+const T = {
+  es: {}, va: {}
+};
+let LANG = (() => { try { return localStorage.getItem("prueba-lang") || "es"; } catch { return "es"; } })();
+const tr = k => (T[LANG] && T[LANG][k]) || T.es[k] || k;
+function aplicar() { document.documentElement.lang = LANG; document.querySelectorAll("[data-t]").forEach(n => { n.textContent = tr(n.dataset.t); }); document.querySelectorAll("[data-tl]").forEach(n => { n.setAttribute("aria-label", tr(n.dataset.tl)); }); }
+function idioma(l) { LANG = l; try { localStorage.setItem("prueba-lang", l); } catch {} aplicar(); if (window.alIdioma) window.alIdioma(); }
+function leerURL() {
+  const q = new URLSearchParams(location.search).get("u");
+  if (q) { try { localStorage.setItem("prueba-url", q); } catch {} return q; }
+  try { return localStorage.getItem("prueba-url") || ""; } catch { return ""; }
+}
+function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {} }
+
+Object.assign(T.es, {
+  "t.alumno": "Prueba del pueblo · vecino", "a.intro": "Esta página solo sirve para probar si las respuestas llegan al proyector. Elige tu código de puesto y pulsa un sector.",
+  "a.codigo": "Código de tu puesto (está en la tarjeta)", "a.url": "Dirección del programa de Google (la da el docente)", "a.donde": "¿Dónde trabajas este año?",
+  "a.rafaga": "Prueba de golpe: enviar 10 respuestas seguidas", "a.rafaga.p": "Solo cuando lo pida el docente: sirve para ver si Google bloquea muchos envíos a la vez desde la red del centro.",
+  "a.enviando": "Enviando…", "a.enviado": "Enviado: {v}. Mira el proyector.", "a.error": "No se ha podido enviar: avisa al docente.", "a.sinurl": "Falta la dirección del programa de Google.", "a.elige": "Elige primero tu código.",
+  "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía y agua", "s.suelo": "Vivero", "s.investigacion": "Laboratorio"
+});
+Object.assign(T.va, {
+  "t.alumno": "Prova del poble · veí", "a.intro": "Esta pàgina només servix per a provar si les respostes arriben al projector. Tria el codi del teu lloc i prem un sector.",
+  "a.codigo": "Codi del teu lloc (està en la targeta)", "a.url": "Adreça del programa de Google (la dona el docent)", "a.donde": "On treballes este any?",
+  "a.rafaga": "Prova de colp: enviar 10 respostes seguides", "a.rafaga.p": "Només quan ho demane el docent: servix per a veure si Google bloqueja molts enviaments alhora des de la xarxa del centre.",
+  "a.enviando": "Enviant…", "a.enviado": "Enviat: {v}. Mira el projector.", "a.error": "No s'ha pogut enviar: avisa el docent.", "a.sinurl": "Falta l'adreça del programa de Google.", "a.elige": "Tria primer el teu codi.",
+  "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia i aigua", "s.suelo": "Viver", "s.investigacion": "Laboratori"
+});
+const $ = id => document.getElementById(id);
+let URL_G = leerURL();
+$("url").value = URL_G; $("url-l").hidden = !!URL_G;
+$("url").addEventListener("change", () => { URL_G = $("url").value.trim(); guardarURL(URL_G); });
+const sel = $("codigo"); sel.append(new Option("—", ""));
+for (let k = 1; k <= 25; k++) { const c = "P" + String(k).padStart(2, "0"); sel.append(new Option(c, c)); }
+try { sel.value = localStorage.getItem("prueba-codigo") || ""; } catch {}
+sel.addEventListener("change", () => { try { localStorage.setItem("prueba-codigo", sel.value); } catch {} });
+const SECT = ["huertos", "talleres", "ocio", "cuidados", "educacion", "red", "suelo", "investigacion"];
+let elegido = null;
+function botones() {
+  $("sectores").replaceChildren(...SECT.map(s => { const b = document.createElement("button"); b.type = "button"; b.textContent = tr("s." + s); b.setAttribute("aria-pressed", String(elegido === s)); b.addEventListener("click", () => enviar(s)); return b; }));
+}
+async function enviar(valor, silencio) {
+  if (!sel.value) { $("estado").textContent = tr("a.elige"); return; }
+  if (!URL_G) { $("estado").textContent = tr("a.sinurl"); $("url-l").hidden = false; return; }
+  elegido = valor; botones();
+  if (!silencio) $("estado").textContent = tr("a.enviando");
+  try {
+    await fetch(URL_G, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ codigo: sel.value, fase: "prueba", valor, envio_ms: Date.now() }) });
+    if (!silencio) $("estado").textContent = tr("a.enviado").replace("{v}", tr("s." + valor));
+  } catch { $("estado").textContent = tr("a.error"); }
+}
+$("rafaga").addEventListener("click", async () => { for (let k = 0; k < 10; k++) { await enviar(SECT[k % SECT.length], true); } $("estado").textContent = tr("a.enviado").replace("{v}", "×10"); });
+window.alIdioma = botones;
+aplicar(); botones();
+</script>
+
+<!-- Añadido por actualizar.sh: línea gráfica de la web, la última para que mande -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600&family=Jost:wght@500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<link rel="stylesheet" href="../assets/estilo.css">

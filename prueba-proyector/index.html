@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Añadido por actualizar.sh: hoja y menú comunes de la web. El resto es la herramienta tal como está en el vault. -->
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icono/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/icono/apple-touch-icon.png">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Observatorio">
+<link rel="stylesheet" href="../assets/observatorio.css">
+<script src="../assets/estado-web.js"></script>
+<script src="../assets/menu.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-t="t.proy">Prueba del pueblo · proyector</title>
+<style>:root { --bg: #faf7ef; --ink: #23262b; --muted: #5d636c; --paper: #ffffff; --rule: #d9d3c3; --ok: #2d6a4f; --bad: #a4372c; --acc: #2f4f8a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; } }
+:root[data-theme="dark"] { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 16px; }
+main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+h1 { font-size: 28px; margin: 0; }
+.small { font-size: 14px; color: var(--muted); }
+.caja { background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+label { font-size: 14px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+input, select { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); min-height: 44px; }
+button { font: 600 16px system-ui, sans-serif; padding: 10px 14px; border-radius: 10px; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; min-height: 48px; }
+button.prim { background: var(--ink); color: var(--bg); }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
+.rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+.rejilla button[aria-pressed="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
+.idiomas { display: flex; gap: 6px; justify-content: flex-end; }
+.idiomas button { min-height: 36px; padding: 4px 10px; font-size: 14px; }
+.ok { color: var(--ok); font-weight: 600; } .mal { color: var(--bad); font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 15px; }
+th, td { border-bottom: 1px solid var(--rule); padding: 5px 8px; text-align: left; }
+.cifras { display: flex; flex-wrap: wrap; gap: 10px; }
+.cifras div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 12px; min-width: 140px; }
+.cifras b { display: block; font-size: 28px; }
+.scroll { overflow-x: auto; }
+a { overflow-wrap: anywhere; }
+[hidden] { display: none !important; }
+</style>
+<main>
+  <div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div>
+  <h1 data-t="t.proy">Prueba del pueblo · proyector</h1>
+  <p class="small" data-t="p.intro">Lee cada pocos segundos lo que envía el alumnado y mide cuánto tarda en llegar.</p>
+  <div class="caja">
+    <label><span data-t="p.url">Dirección del programa de Google</span><input id="url" type="url" inputmode="url"></label>
+    <p class="small"><span data-t="p.enlace">Enlace para el alumnado:</span> <a id="enlace" href="#"></a></p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="prim" id="empezar" data-t="p.empezar">Empezar a leer</button><button type="button" id="vaciar" data-t="p.vaciar">Vaciar la hoja</button></div>
+  </div>
+  <div class="cifras" aria-live="polite">
+    <div><b id="n-cod">0 / 25</b><span class="small" data-t="p.cod">puestos que han respondido</span></div>
+    <div><b id="n-tot">0</b><span class="small" data-t="p.tot">respuestas recibidas</span></div>
+    <div><b id="lat">—</b><span class="small" data-t="p.lat">segundos desde que se pulsa hasta que se ve aquí (media / máxima)</span></div>
+    <div><b id="lect">—</b><span class="small" data-t="p.lect">segundos que tarda cada lectura</span></div>
+  </div>
+  <p id="estado" class="small" aria-live="polite"></p>
+  <div class="caja"><h2 style="margin:0;font-size:20px" data-t="p.falta">Puestos que faltan</h2><p id="faltan"></p></div>
+  <div class="caja scroll" tabindex="0"><table id="tabla"><thead><tr><th data-t="p.th.cod">Puesto</th><th data-t="p.th.val">Último sector</th><th data-t="p.th.n">Envíos</th><th data-t="p.th.lat">Tardó (s)</th></tr></thead><tbody></tbody></table></div>
+</main>
+<script>// Piezas comunes de la prueba: idioma, dirección del programa de Google y guardado en el navegador
+const T = {
+  es: {}, va: {}
+};
+let LANG = (() => { try { return localStorage.getItem("prueba-lang") || "es"; } catch { return "es"; } })();
+const tr = k => (T[LANG] && T[LANG][k]) || T.es[k] || k;
+function aplicar() { document.documentElement.lang = LANG; document.querySelectorAll("[data-t]").forEach(n => { n.textContent = tr(n.dataset.t); }); document.querySelectorAll("[data-tl]").forEach(n => { n.setAttribute("aria-label", tr(n.dataset.tl)); }); }
+function idioma(l) { LANG = l; try { localStorage.setItem("prueba-lang", l); } catch {} aplicar(); if (window.alIdioma) window.alIdioma(); }
+function leerURL() {
+  const q = new URLSearchParams(location.search).get("u");
+  if (q) { try { localStorage.setItem("prueba-url", q); } catch {} return q; }
+  try { return localStorage.getItem("prueba-url") || ""; } catch { return ""; }
+}
+function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {} }
+
+Object.assign(T.es, {
+  "t.proy": "Prueba del pueblo · proyector", "p.intro": "Lee cada pocos segundos lo que envía el alumnado y mide cuánto tarda en llegar.",
+  "p.url": "Dirección del programa de Google", "p.enlace": "Enlace para el alumnado:", "p.empezar": "Empezar a leer", "p.parar": "Parar", "p.vaciar": "Vaciar la hoja", "p.vaciar.seguro": "¿Seguro? Pulsa otra vez",
+  "p.cod": "puestos que han respondido", "p.tot": "respuestas recibidas", "p.lat": "segundos desde que se pulsa hasta que se ve aquí (media / máxima)", "p.lect": "segundos que tarda cada lectura",
+  "p.falta": "Puestos que faltan", "p.th.cod": "Puesto", "p.th.val": "Último sector", "p.th.n": "Envíos", "p.th.lat": "Tardó (s)",
+  "p.leyendo": "Leyendo… última lectura a las {h}.", "p.error": "No se puede leer la hoja: {e}. Revisa la dirección y que la aplicación web esté implementada para «Cualquier usuario».", "p.ninguno": "ninguno",
+  "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía y agua", "s.suelo": "Vivero", "s.investigacion": "Laboratorio"
+});
+Object.assign(T.va, {
+  "t.proy": "Prova del poble · projector", "p.intro": "Llig cada pocs segons el que envia l'alumnat i mesura quant tarda a arribar.",
+  "p.url": "Adreça del programa de Google", "p.enlace": "Enllaç per a l'alumnat:", "p.empezar": "Començar a llegir", "p.parar": "Parar", "p.vaciar": "Buidar el full", "p.vaciar.seguro": "Segur? Prem una altra vegada",
+  "p.cod": "llocs que han respost", "p.tot": "respostes rebudes", "p.lat": "segons des que es prem fins que es veu ací (mitjana / màxima)", "p.lect": "segons que tarda cada lectura",
+  "p.falta": "Llocs que falten", "p.th.cod": "Lloc", "p.th.val": "Últim sector", "p.th.n": "Enviaments", "p.th.lat": "Va tardar (s)",
+  "p.leyendo": "Llegint… última lectura a les {h}.", "p.error": "No es pot llegir el full: {e}. Revisa l'adreça i que l'aplicació web estiga implementada per a «Qualsevol usuari».", "p.ninguno": "cap",
+  "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia i aigua", "s.suelo": "Viver", "s.investigacion": "Laboratori"
+});
+const $ = id => document.getElementById(id);
+let URL_G = leerURL(), timer = null, desde = 0;
+const porCod = new Map(), lats = [];
+$("url").value = URL_G;
+function enlace() { const a = new URL("../prueba-alumno/", location.href); if (location.protocol === "file:") a.href = location.href.split("?")[0].replace("prueba-proyector/", "prueba-alumno/").replace(/proyector\.html$/, "alumno.html"); a.search = "?u=" + encodeURIComponent(URL_G); $("enlace").href = a.href; $("enlace").textContent = a.href; }
+$("url").addEventListener("change", () => { URL_G = $("url").value.trim(); guardarURL(URL_G); enlace(); });
+const fmt = (v, d = 1) => (+v).toLocaleString("es-ES", { maximumFractionDigits: d, minimumFractionDigits: d });
+function pintar() {
+  const cods = [...porCod.keys()];
+  $("n-cod").textContent = cods.length + " / 25"; $("n-tot").textContent = [...porCod.values()].reduce((a, x) => a + x.n, 0);
+  $("lat").textContent = lats.length ? fmt(lats.reduce((a, b) => a + b, 0) / lats.length) + " / " + fmt(Math.max(...lats)) : "—";
+  const faltan = []; for (let k = 1; k <= 25; k++) { const c = "P" + String(k).padStart(2, "0"); if (!porCod.has(c)) faltan.push(c); }
+  $("faltan").textContent = faltan.length ? faltan.join(" · ") : tr("p.ninguno");
+  $("tabla").tBodies[0].replaceChildren(...cods.sort().map(c => { const x = porCod.get(c), tr_ = document.createElement("tr"); [c, tr("s." + x.valor) , x.n, fmt(x.lat)].forEach(v => { const td = document.createElement("td"); td.textContent = v; tr_.append(td); }); return tr_; }));
+}
+async function leer() {
+  const t0 = performance.now();
+  try {
+    const r = await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "desde=" + desde, { cache: "no-store" });
+    const d = await r.json(); const ahoraLocal = Date.now();
+    for (const [llegada, codigo, fase, valor, envio] of d.filas) {
+      const lat = (ahoraLocal - (envio || llegada)) / 1000;   // desde que se pulsó (reloj del ordenador del alumno) hasta que se ve aquí
+      const x = porCod.get(codigo) || { n: 0 }; porCod.set(codigo, { n: x.n + 1, valor, lat }); lats.push(Math.max(0, lat));
+    }
+    desde = d.total;
+    $("lect").textContent = fmt((performance.now() - t0) / 1000);
+    $("estado").textContent = tr("p.leyendo").replace("{h}", new Date().toLocaleTimeString());
+    pintar();
+  } catch (e) { $("estado").textContent = tr("p.error").replace("{e}", e.message); }
+}
+$("empezar").addEventListener("click", () => {
+  if (timer) { clearInterval(timer); timer = null; $("empezar").textContent = tr("p.empezar"); return; }
+  URL_G = $("url").value.trim(); guardarURL(URL_G); enlace(); leer(); timer = setInterval(leer, 3000); $("empezar").textContent = tr("p.parar");
+});
+let armado = false;
+$("vaciar").addEventListener("click", async () => {
+  if (!armado) { armado = true; $("vaciar").textContent = tr("p.vaciar.seguro"); setTimeout(() => { armado = false; $("vaciar").textContent = tr("p.vaciar"); }, 4000); return; }
+  armado = false; $("vaciar").textContent = tr("p.vaciar");
+  try { await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "vaciar=1", { cache: "no-store" }); } catch {}
+  porCod.clear(); lats.length = 0; desde = 0; pintar();
+});
+window.alIdioma = () => { pintar(); $("empezar").textContent = tr(timer ? "p.parar" : "p.empezar"); };
+aplicar(); enlace(); pintar();
+</script>
+
+<!-- Añadido por actualizar.sh: línea gráfica de la web, la última para que mande -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600&family=Jost:wght@500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<link rel="stylesheet" href="../assets/estilo.css">

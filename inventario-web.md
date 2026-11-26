@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-11-26 21:35
-- Commit de partida: `6c71e7f`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 5
+- Generado: 2026-11-26 21:41
+- Commit de partida: `9010587`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 6
 
 ## Interruptores de la web
 
@@ -203,6 +203,28 @@
   - `ft.suceso`: Suceso
   - `ft.turno`: Hogares con turno
   - `obs.fuentes`: Fuentes y notas
+- Versión en valenciano: sí
+
+### prueba-alumno
+
+- Web: `prueba-alumno/index.html`
+- Vault: `SA01-que-es-la-economia/material/prueba-sala/alumno.html` (2026-11-26 21:41, 8 KB)
+- Copia: ✓ copiada
+- En el menú: no aparece
+- Pestañas: ninguna (una sola pantalla)
+  - ¿Dónde trabajas este año?
+- Fuentes que cita: no se han localizado claves de fuente (`src`, `ref`…); revisar a mano
+- Versión en valenciano: sí
+
+### prueba-proyector
+
+- Web: `prueba-proyector/index.html`
+- Vault: `SA01-que-es-la-economia/material/prueba-sala/proyector.html` (2026-11-26 21:41, 10 KB)
+- Copia: ✓ copiada
+- En el menú: no aparece
+- Pestañas: ninguna (una sola pantalla)
+  - Puestos que faltan
+- Fuentes que cita: no se han localizado claves de fuente (`src`, `ref`…); revisar a mano
 - Versión en valenciano: sí
 
 ### datos
