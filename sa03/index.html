@@ -798,7 +798,7 @@ body.obs-proj .obs-serie { font-size: 15px; }
         </div>
         <div class="du-mando">
           <button type="button" class="btn" id="du-play" data-i18n="lb.play">Reproducir</button>
-          <a class="btn ghost" id="du-mercat" href="#"><span data-i18n="du.mercat">Porta-les al mercat (SA 4) →</span></a>
+          <a class="btn ghost" id="du-mercat" href="#"><span data-i18n="du.mercat">Mirad qué pasa en el mercado (SA 4) →</span></a>
         </div>
         <p class="small" data-i18n="du.mercat.p"></p>
       </div>
@@ -1161,9 +1161,8 @@ window.OBS = (() => {
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
       aula.querySelector(".obs-aula__btns").append(impr, conRes);
-      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
-      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
+      // 26/11/2026: el selector de «Antes de ver» ya no se muestra (decisión de Jordi: el velo de pantalla se retira de todas las herramientas)
+      onLang(() => { conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
     const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
@@ -1242,7 +1241,8 @@ window.OBS = (() => {
   // ---------- «Antes de ver» ----------
   let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
   let aperturaOn = false;
-  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  // 26/11/2026: «Antes de ver» retirado de la pantalla en todas las herramientas (la ficha imprimible conserva sus huecos de predicción)
+  const veloActivo = () => false;
   const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
   function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
   function barDe(s) {
@@ -2508,8 +2508,8 @@ window.OBS = (() => {
       "du.real.avis.sube": "Esta función no respeta el supuesto de la competencia real: cada unidad cuesta más que la anterior (coste marginal creciente). Es una empresa neoclásica.",
       "du.real.avis.u": "Esta función no respeta el supuesto de la competencia real: el coste de una unidad más cambia (la U de los manuales). Es una empresa neoclásica.",
       "du.real.avis.baja": "Esta función no respeta el supuesto de la competencia real: cada unidad cuesta menos que la anterior.",
-      "du.mercat": "Llévalas al mercado (SA 4) →",
-      "du.mercat.p": "Cada empresa va a su mercado: la neoclásica, a la competencia perfecta; la de la competencia real, a la guerra de precios.",
+      "du.mercat": "Mirad qué pasa en el mercado (SA 4) →",
+      "du.mercat.p": "En la SA 4 se ve cómo se entiende el mercado con cada tipo de empresa: con la neoclásica, la competencia perfecta; con la de la competencia real, empresas que fijan sus precios y compiten bajándolos.",
       "du.prop": "Propuesta {n}", "du.prop.h": "Funciones para el alumnado (las dos empresas)",
       "du.prop.p": "Una función por línea; si quieres, con un nombre delante: «Taller de cerámica = 300 + 8q + 0,5q^2». Aparecen como botones en «c · Las dos empresas». El enlace las lleva a los ordenadores del alumnado.",
       "du.prop.copia": "Copiar el enlace para el alumnado", "du.prop.ok": "Enlace copiado.", "du.prop.sel": "Copia este enlace:",
@@ -2553,8 +2553,8 @@ window.OBS = (() => {
       "du.real.avis.sube": "Esta funció no respecta el supòsit de la competència real: cada unitat costa més que l'anterior (cost marginal creixent). És una empresa neoclàssica.",
       "du.real.avis.u": "Esta funció no respecta el supòsit de la competència real: el cost d'una unitat més canvia (la U dels manuals). És una empresa neoclàssica.",
       "du.real.avis.baja": "Esta funció no respecta el supòsit de la competència real: cada unitat costa menys que l'anterior.",
-      "du.mercat": "Porta-les al mercat (SA 4) →",
-      "du.mercat.p": "Cada empresa va al seu mercat: la neoclàssica, a la competència perfecta; la de la competència real, a la guerra de preus.",
+      "du.mercat": "Mireu què passa en el mercat (SA 4) →",
+      "du.mercat.p": "En la SA 4 es veu com s'entén el mercat amb cada tipus d'empresa: amb la neoclàssica, la competència perfecta; amb la de la competència real, empreses que fixen els seus preus i competixen abaixant-los.",
       "du.prop": "Proposta {n}", "du.prop.h": "Funcions per a l'alumnat (les dues empreses)",
       "du.prop.p": "Una funció per línia; si vols, amb un nom davant: «Taller de ceràmica = 300 + 8q + 0,5q^2». Ixen com a botons en «c · Les dues empreses». L'enllaç les porta als ordinadors de l'alumnat.",
       "du.prop.copia": "Copiar l'enllaç per a l'alumnat", "du.prop.ok": "Enllaç copiat.", "du.prop.sel": "Copia este enllaç:",
@@ -3059,7 +3059,8 @@ window.OBS = (() => {
     const v = id => encodeURIComponent($(id).value.trim());
     return "neo=" + v("du-neo-ct") + "&qm=" + v("du-neo-qm") + "&real=" + v("du-real-ct") + "&p0=" + v("du-real-p") + "&cap=" + v("du-real-cap");
   }
-  const duEnllac = () => rutaSA4() + "#mercats?" + duParams();
+  // 26/11/2026: la SA 4 se ha rehecho; el enlace lleva a su pantalla del mercado (sin pasar funciones)
+  const duEnllac = () => rutaSA4() + "#mercado";
   function duParar() { if (du.reloj) { cancelAnimationFrame(du.reloj); du.reloj = null; } $("du-play").textContent = t("lb.play"); }
   $("du-play").addEventListener("click", () => {
     if (du.reloj) { duParar(); duPintar(); return; }

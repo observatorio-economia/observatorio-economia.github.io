@@ -846,9 +846,8 @@ window.OBS = (() => {
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
       aula.querySelector(".obs-aula__btns").append(impr, conRes);
-      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
-      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
+      // 26/11/2026: el selector de «Antes de ver» ya no se muestra (decisión de Jordi: el velo de pantalla se retira de todas las herramientas)
+      onLang(() => { conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
     const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
@@ -927,7 +926,8 @@ window.OBS = (() => {
   // ---------- «Antes de ver» ----------
   let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
   let aperturaOn = false;
-  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  // 26/11/2026: «Antes de ver» retirado de la pantalla en todas las herramientas (la ficha imprimible conserva sus huecos de predicción)
+  const veloActivo = () => false;
   const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
   function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
   function barDe(s) {
@@ -1271,6 +1271,11 @@ window.Pizarra = (() => {
 .pz .pz-edge.pos { stroke: var(--s1); } .pz .pz-edge.neg { stroke: var(--s2); } .pz .pz-edge.flow { stroke: var(--ink); stroke-opacity: .55; }
 .pz .pz-edge.flow.real { stroke-dasharray: 9 6; }
 .pz .pz-edge.sel { stroke-width: 4.5; }
+.pz .pz-edge.pos, .pz .pz-edge.neg { stroke-dasharray: 10 7; animation: pz-flujo 1.3s linear infinite; }
+@keyframes pz-flujo { to { stroke-dashoffset: -17; } }
+@media (prefers-reduced-motion: reduce) { .pz .pz-edge.pos, .pz .pz-edge.neg { animation: none; stroke-dasharray: none; } }
+.pz .pz-ico { pointer-events: none; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pz .pz-ico .rell { fill: var(--ink); stroke: none; }
 .pz .pz-hit { fill: none; stroke: transparent; stroke-width: 22; cursor: pointer; }
 .pz .pz-head.pos { fill: var(--s1); } .pz .pz-head.neg { fill: var(--s2); } .pz .pz-head.flow { fill: var(--ink); fill-opacity: .55; }
 .pz .pz-sign { font: 700 17px var(--font-body); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
@@ -1314,6 +1319,42 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
   let cssDone = false;
   function injectCSS() { if (cssDone) return; cssDone = true; const s = document.createElement("style"); s.textContent = CSS; document.head.append(s); }
 
+
+  // ---------- Iconos (26/11/2026): un dibujo según el nombre del elemento ----------
+  const ICO = {
+    fabrica: '<path d="M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17Z"/><path d="M7 17h2M12 17h2"/>',
+    nube: '<path d="M7 18h10a4 4 0 0 0 .5-8 6 6 0 0 0-11.4-1.2A4.6 4.6 0 0 0 7 18Z"/>',
+    termo: '<path d="M10 14.5V5a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0Z"/><circle class="rell" cx="12" cy="17.5" r="2"/><path d="M12 15.5V9"/>',
+    olas: '<path d="M2 9c2.5-2.5 4.5 2.5 7 0s4.5 2.5 7 0 4.5 2.5 6 1"/><path d="M2 14c2.5-2.5 4.5 2.5 7 0s4.5 2.5 7 0 4.5 2.5 6 1"/><path d="M2 19c2.5-2.5 4.5 2.5 7 0s4.5 2.5 7 0 4.5 2.5 6 1"/>',
+    arbol: '<path d="M12 3 6 11h3l-4 6h14l-4-6h3Z"/><path d="M12 17v4"/>',
+    moneda: '<circle cx="12" cy="12" r="8.5"/><path d="M15 8.5a4 4 0 1 0 0 7M7.5 11h6M7.5 13.5h6"/>',
+    personas: '<circle cx="8.5" cy="8" r="2.6"/><circle cx="15.5" cy="8" r="2.6"/><path d="M3.5 19a5 5 0 0 1 10 0M10.5 19a5 5 0 0 1 10 0"/>',
+    carro: '<path d="M3 4h2.5l2.2 10.5h10.5L20.5 7H7"/><circle class="rell" cx="9" cy="19" r="1.6"/><circle class="rell" cx="17" cy="19" r="1.6"/>',
+    rayo: '<path d="M13 2 5 13.5h6L10 22l9-12.5h-6Z"/>',
+    engranaje: '<circle cx="12" cy="12" r="3.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="6.2"/>',
+    casa: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v10h13V10"/><path d="M10 20v-5h4v5"/>',
+    tormenta: '<path d="M7 15h10a3.6 3.6 0 0 0 .4-7.2 5.4 5.4 0 0 0-10.3-1A4.1 4.1 0 0 0 7 15Z"/><path d="M12.5 13 10 18h3l-1.5 4"/>'
+  };
+  const ICO_CLAVES = [
+    ["extrem", "tormenta"], ["fenomen", "tormenta"], ["tempest", "tormenta"], ["tormenta", "tormenta"], ["dana", "tormenta"],
+    ["emisi", "nube"], ["co2", "nube"], ["co₂", "nube"], ["carbono", "nube"], ["contamin", "nube"], ["gases", "nube"],
+    ["temperat", "termo"], ["calent", "termo"], ["escalf", "termo"], ["calor", "termo"], ["clima", "termo"],
+    ["riada", "olas"], ["inunda", "olas"], ["dano", "olas"], ["dany", "olas"], ["catastrof", "olas"], ["sequ", "olas"],
+    ["natur", "arbol"], ["aliment", "arbol"], ["cosecha", "arbol"], ["collita", "arbol"], ["bosque", "arbol"], ["bosc", "arbol"], ["arbol", "arbol"], ["arbre", "arbol"], ["absorc", "arbol"], ["recurs", "arbol"], ["planeta", "arbol"],
+    ["energ", "rayo"], ["petrol", "rayo"], ["combust", "rayo"], ["electric", "rayo"],
+    ["tecnol", "engranaje"], ["tecnic", "engranaje"], ["eficien", "engranaje"], ["innova", "engranaje"], ["maquin", "engranaje"], ["productiv", "engranaje"],
+    ["produc", "fabrica"], ["empresa", "fabrica"], ["industr", "fabrica"], ["fabric", "fabrica"],
+    ["dinero", "moneda"], ["diners", "moneda"], ["invers", "moneda"], ["benefic", "moneda"], ["renta", "moneda"], ["renda", "moneda"], ["ingres", "moneda"], ["capital", "moneda"], ["salari", "moneda"], ["ahorro", "moneda"], ["estalvi", "moneda"], ["deuda", "moneda"], ["deute", "moneda"], ["credit", "moneda"], ["banc", "moneda"], ["gasto", "moneda"], ["despesa", "moneda"],
+    ["consum", "carro"], ["demanda", "carro"], ["compra", "carro"], ["venta", "carro"], ["vendes", "carro"],
+    ["famil", "casa"], ["hogar", "casa"], ["llar", "casa"],
+    ["poblac", "personas"], ["persona", "personas"], ["gente", "personas"], ["emple", "personas"], ["ocupa", "personas"], ["trabaj", "personas"], ["treball", "personas"], ["paro", "personas"], ["desocupa", "personas"]
+  ];
+  const sinAcentos = x => String(x || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  function iconoDe(label) {
+    const l = sinAcentos(label);
+    for (const [k, ic] of ICO_CLAVES) if (l.includes(sinAcentos(k))) return ICO[ic] ? ic : null;
+    return null;
+  }
   function create(container, opts = {}) {
     injectCSS();
     const mode = opts.mode === "flow" ? "flow" : "causal";
@@ -1401,6 +1442,8 @@ body.obs-proj .pz .pz-elabel { font-size: 16px; }
         if (lv !== 0) grp.append(sv("circle", { r: Math.max(2, r - 5), class: "lvl", style: `fill:${lv > 0 ? "var(--s1)" : "var(--s2)"};fill-opacity:${(0.12 + 0.4 * Math.abs(lv)).toFixed(2)}` }));
         else if (ty && ty.color) grp.append(fund ? sv("rect", { x: -r * 1.15 + 5, y: -r * 0.8 + 5, width: r * 2.3 - 10, height: r * 1.6 - 10, rx: 7, class: "lvl", style: `fill:${ty.color};fill-opacity:.15` }) : sv("circle", { r: r - 5, class: "lvl", style: `fill:${ty.color};fill-opacity:.15` }));
         const label = String(n.label || "").length > 30 ? String(n.label).slice(0, 29) + "…" : String(n.label || "");
+        const ic = opts.iconos === false ? null : iconoDe(n.label);
+        if (ic) { const sc = (r * 1.15) / 24, gi = sv("g", { class: "pz-ico", transform: `translate(${-12 * sc} ${-12 * sc}) scale(${sc})` }); gi.innerHTML = ICO[ic]; grp.append(gi); }
         grp.append(sv("text", { y: r + 20 }, label));
         const tyName = ty && (ty[lang()] || ty.es);
         if (ty && mode === "flow" && tyName && tyName !== n.label) grp.append(sv("text", { y: -r - 10, style: "font-size:12px;font-weight:500;fill:var(--muted)" }, tyName));

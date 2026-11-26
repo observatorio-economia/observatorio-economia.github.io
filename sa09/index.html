@@ -418,6 +418,33 @@ body.obs-proj .obs-marca text { font-size: 14px; }
 /* ===== Auditoría de accesibilidad y comprensión (25/11/2026) ===== */
 /* Lo del docente solo se ve con el panel «Para el docente» abierto */
 body:not(.obs-docente-on) [data-obs-docente] { display: none !important; }
+/* ---------- ¿Adónde va la riqueza? (26/11/2026) ---------- */
+:root { --oro: #a07800; --vino: #7d2b5c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --oro: #e2bb4b; --vino: #d58bb8; } }
+:root[data-theme="dark"] { --oro: #e2bb4b; --vino: #d58bb8; }
+.rq-modo { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.rq-modo button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 12px 14px; border: 2px solid var(--rule); border-radius: 8px; background: var(--paper); color: var(--ink); font: inherit; cursor: pointer; min-height: 44px; }
+.rq-modo button span { font-size: 13px; color: var(--muted); }
+.rq-modo button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 -4px var(--accent); }
+.rq-modo button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.rq-fig { border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); padding: 6px; }
+.rq-svg { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--font-body); }
+.rq-svg .pan { fill: var(--bg); stroke: var(--rule); stroke-width: 1.5; }
+.rq-svg .pais { font-weight: 700; fill: var(--ink); }
+.rq-svg .cap { fill: var(--muted); }
+.rq-svg .val { fill: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rq-svg .carril { stroke: var(--rule); stroke-width: 3; fill: none; }
+.rq-svg .carril.on { stroke: var(--muted); }
+.rq-svg .flecha { fill: var(--muted); }
+.rq-svg .hueco { fill: none; stroke: var(--rule); stroke-width: 1.4; stroke-dasharray: 3 3; }
+.rq-svg .pila-oro { fill: var(--oro); }
+.rq-svg .pila-deuda { fill: var(--bad); }
+.rq-svg .pila-pag { fill: var(--ok); }
+.rq-svg .base { stroke: var(--ink); stroke-width: 1.5; }
+.rq-svg .c-c { color: var(--s1); } .rq-svg .c-w { color: var(--vino); } .rq-svg .c-m { color: var(--oro); } .rq-svg .c-i { color: var(--bad); } .rq-svg .c-p { color: var(--ok); }
+.rq-svg .tok use, .rq-svg .fab use { pointer-events: none; }
+body.obs-proj .rq-modo button { font-size: 20px; }
+
 .obs-aula__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
 .obs-docente details.obs-esc, .obs-docente details.obs-params { margin-top: 14px; }
 /* Saltar a la herramienta: invisible hasta que llega el foco */
@@ -498,8 +525,9 @@ body.obs-proj .obs-serie { font-size: 15px; }
 
   <nav class="tabs" role="tablist" data-i18n-attr="aria-label:aria.tabs">
     <button role="tab" id="tab-ricardo" aria-selected="true" data-view="ricardo"><span class="n">1</span><span data-i18n="tab.ricardo">Ricardo</span></button>
-    <button role="tab" id="tab-supuestos" aria-selected="false" data-view="supuestos"><span class="n">2</span><span data-i18n="tab.sup">Comparar supuestos</span></button>
-    <button role="tab" id="tab-shaikh" aria-selected="false" data-view="shaikh" data-obs-docente><span class="n">3</span><span data-i18n="tab.shaikh">Shaikh</span></button>
+    <button role="tab" id="tab-riqueza" aria-selected="false" data-view="riqueza"><span class="n">2</span><span data-i18n="tab.rq">¿Adónde va la riqueza?</span></button>
+    <button role="tab" id="tab-supuestos" aria-selected="false" data-view="supuestos"><span class="n">3</span><span data-i18n="tab.sup">Comparar supuestos</span></button>
+    <button role="tab" id="tab-shaikh" aria-selected="false" data-view="shaikh" data-obs-docente><span class="n">4</span><span data-i18n="tab.shaikh">Shaikh</span></button>
   </nav>
 
   <!-- ===================== 1 · RICARDO ===================== -->
@@ -565,11 +593,44 @@ body.obs-proj .obs-serie { font-size: 15px; }
     </div>
   </section>
 
+  <!-- ===================== 2 · ¿ADÓNDE VA LA RIQUEZA? (26/11/2026) ===================== -->
+  <section class="view" id="view-riqueza" role="tabpanel" aria-labelledby="tab-riqueza" hidden>
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="rq.eyebrow">2 · ¿Adónde va la riqueza?</span>
+        <h2 data-i18n="rq.h2">Lo que cruza la frontera y lo que se queda en cada país</h2>
+        <p data-i18n="rq.p1"></p>
+      </div>
+      <div class="rq-modo" role="group" data-i18n-attr="aria-label:rq.modo">
+        <button type="button" id="rq-m-r" aria-pressed="true"><b data-i18n="rq.m.r">Si el comercio se equilibra solo</b><span data-i18n="rq.m.r2">Ricardo</span></button>
+        <button type="button" id="rq-m-s" aria-pressed="false"><b data-i18n="rq.m.s">Si el comercio no se equilibra</b><span data-i18n="rq.m.s2">Shaikh</span></button>
+      </div>
+      <div class="timeline">
+        <span class="wk" id="rq-label">Año 0</span>
+        <div class="slider"><div class="lab"><label for="rq-t" data-i18n="yrs">Años</label><output id="rq-t-out" for="rq-t"></output></div><input type="range" id="rq-t" min="0" max="20" step="1" value="0"></div>
+        <button type="button" class="btn" id="rq-play" data-i18n="rq.play">Reproducir los 20 años</button>
+      </div>
+      <figure class="rq-fig">
+        <svg id="rq-svg" class="rq-svg" role="img" data-i18n-attr="aria-label:rq.fig"></svg>
+      </figure>
+      <div class="notice" id="rq-note" aria-live="polite"></div>
+      <div class="stats" id="rq-stats"></div>
+      <details>
+        <summary data-i18n="yearbyyear">Año a año</summary>
+        <div class="scroll"><table id="rq-tabla"></table></div>
+      </details>
+      <details>
+        <summary data-i18n="rq.calc">Cómo se calcula</summary>
+        <div class="prose small" id="rq-calc"></div>
+      </details>
+    </div>
+  </section>
+
   <!-- ===================== 2 · SHAIKH ===================== -->
   <section class="view" id="view-shaikh" role="tabpanel" aria-labelledby="tab-shaikh" hidden>
     <div class="block">
       <div class="prose">
-        <span class="eyebrow" data-i18n="s.eyebrow">2 · Ventaja absoluta</span>
+        <span class="eyebrow" data-i18n="s.eyebrow">4 · Ventaja absoluta</span>
         <h2 data-i18n="s.h2">¿Y si el comercio no se equilibra solo?</h2>
         <p data-i18n="s.p1"></p>
         <p data-i18n="s.p2"></p>
@@ -809,9 +870,8 @@ window.OBS = (() => {
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
       aula.querySelector(".obs-aula__btns").append(impr, conRes);
-      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
-      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
+      // 26/11/2026: el selector de «Antes de ver» ya no se muestra (decisión de Jordi: el velo de pantalla se retira de todas las herramientas)
+      onLang(() => { conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
     const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
@@ -890,7 +950,8 @@ window.OBS = (() => {
   // ---------- «Antes de ver» ----------
   let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
   let aperturaOn = false;
-  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  // 26/11/2026: «Antes de ver» retirado de la pantalla en todas las herramientas (la ficha imprimible conserva sus huecos de predicción)
+  const veloActivo = () => false;
   const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
   function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
   function barDe(s) {
@@ -1211,7 +1272,31 @@ window.OBS = (() => {
       "h.cP": "Portugal · horas por unidad de paño", "h.wP": "Portugal · horas por unidad de vino",
       "h.reset": "Volver a las cifras de Ricardo", "hours": "{n} h",
       "rt.country": "País", "rt.cloth": "Paño (horas)", "rt.wine": "Vino (horas)", "rt.opp": "Coste de un vino, en paño", "rt.abs": "Ventaja absoluta en",
-      "E": "Inglaterra", "P": "Portugal", "cloth": "paño", "wine": "vino", "Cloth": "Paño", "Wine": "Vino",
+      "E": "Inglaterra", "P": "Portugal", 
+      "tab.rq": "¿Adónde va la riqueza?", "rq.eyebrow": "2 · ¿Adónde va la riqueza?", "rq.h2": "Lo que cruza la frontera y lo que se queda en cada país",
+      "rq.p1": "Las mercancías van en un sentido y el dinero en el otro. Mirad qué se acumula en cada país al cabo de los años: oro, deuda o fábricas. Elegid cómo funciona el comercio y pulsad «Reproducir».",
+      "rq.modo": "Cómo funciona el comercio", "rq.m.r": "Si el comercio se equilibra solo", "rq.m.r2": "Ricardo: el oro mueve los precios", "rq.m.s": "Si el comercio no se equilibra", "rq.m.s2": "Shaikh: el déficit se paga con préstamos",
+      "rq.play": "Reproducir los 20 años", "rq.fig": "Inglaterra y Portugal: lo que cruza la frontera y lo que se acumula en cada país",
+      "rq.l.gEP": "Lo que vende Inglaterra", "rq.l.gPE": "Lo que vende Portugal", "rq.l.oro": "Oro para pagar el déficit", "rq.l.din": "Dinero para pagar el déficit",
+      "rq.l.pre": "Préstamos de Portugal", "rq.l.int": "Intereses de la deuda", "rq.cero": "nada", "rq.u.r": "{v} onzas", "rq.u.s": "{v} M £",
+      "rq.fab.r": "{n} fábricas en marcha", "rq.fab.s": "{n} de 20 fábricas en marcha",
+      "rq.p.oro": "Oro del país", "rq.p.deuda": "Lo que debe a {o}", "rq.p.pag": "Pagarés de {o}", "rq.p.precios": "Precios: {r} % de los portugueses",
+      "rq.ambos": "paño y vino", "rq.nada": "nada",
+      "rq.st.vE": "Vende Inglaterra", "rq.st.vP": "Vende Portugal", "rq.st.oroE": "Onzas de oro de Inglaterra", "rq.st.ratio": "Precios ingleses frente a los portugueses",
+      "rq.st.imp": "Inglaterra compra a Portugal este año", "rq.st.exp": "Inglaterra vende a Portugal este año", "rq.st.pre": "Inglaterra pide prestado este año",
+      "rq.st.deuda": "Inglaterra ya debe a Portugal", "rq.st.cred": "Portugal ya debe a Inglaterra", "rq.st.int": "Intereses de este año", "rq.st.fab": "Fábricas inglesas en marcha", "rq.st.fabv": "{n} de 20",
+      "rq.n.r0": "**Año 0.** Con los mismos salarios, Portugal es más barato en paño y en vino: Inglaterra lo compra todo fuera y paga con oro. **Salen {g} onzas de oro de Inglaterra.**",
+      "rq.n.r1": "Con menos oro, los precios ingleses bajan ({r} % de los portugueses) y el paño inglés ya es el más barato. **Ahora cada país vende algo:** Inglaterra {vE} y Portugal {vP}. El comercio casi se equilibra y el oro deja de salir. **Según Ricardo, ningún país se queda la riqueza del otro: los dos ganan.**",
+      "rq.n.r2": "Los precios se van ajustando ({r} % de los portugueses). Inglaterra vende {vE} y Portugal vende {vP}; el oro sigue moviéndose hasta que el comercio se equilibra.",
+      "rq.n.s0": "**Año 0.** Portugal produce más barato el paño y el vino, pero los compradores todavía no han cambiado de proveedor.",
+      "rq.n.s1": "Los compradores ingleses se pasan a Portugal. Cada año sale dinero para pagar el déficit ({def} M £) y vuelve como préstamo ({pre} M £, con los intereses). **El dinero vuelve, pero Portugal se queda los pagarés: Inglaterra ya le debe {d} M £** y este año paga {i} M £ de intereses. **En Inglaterra quedan {f} de 20 fábricas en marcha.**",
+      "rq.n.s2": "Inglaterra no tiene déficit este año: no le hace falta pedir prestado.",
+      "rq.th.y": "Año", "rq.th.vE": "Vende Inglaterra", "rq.th.vP": "Vende Portugal", "rq.th.sale": "Oro que sale de Inglaterra", "rq.th.oroE": "Oro de Inglaterra", "rq.th.oroP": "Oro de Portugal", "rq.th.ratio": "Precios ingleses (% de los portugueses)",
+      "rq.th.exp": "Exportaciones inglesas", "rq.th.imp": "Importaciones inglesas", "rq.th.int": "Intereses", "rq.th.pre": "Préstamo nuevo", "rq.th.deuda": "Deuda de Inglaterra", "rq.th.fab": "Fábricas inglesas",
+      "rq.calc": "Cómo se calcula",
+      "rq.calc.r": "Mismo modelo que «¿Se equilibra solo el comercio?» (pestaña 1). Las cifras de mercancías son el valor de lo que vende cada país, en onzas de oro.\nOro que sale de Inglaterra = lo que compra − lo que vende (el déficit).\nOro de Inglaterra = oro del año anterior − oro que sale. Cada país empieza con {s0} onzas, la cantidad con la que la relación entre el oro de los dos países coincide con la relación de precios del modelo.\nCon menos oro bajan los precios y los salarios ingleses; con más oro suben los portugueses. Cuando cada país vende el bien en que tiene ventaja comparativa, el oro casi deja de moverse.",
+      "rq.calc.s": "Mismo modelo que la pestaña de Shaikh (docente), con sus palancas. Cifras en millones de libras.\nDéficit = importaciones − exportaciones.\nPréstamo nuevo = déficit + intereses (Inglaterra pide prestado también para pagar los intereses).\nIntereses = deuda del año anterior × 4 %.\nDeuda = deuda del año anterior × 1,04 + déficit.\nFábricas: 20 huecos por país; cada mercado (el inglés y el portugués, de paño y de vino) da trabajo a 5 fábricas cuando lo abastece entero. Las fábricas inglesas cierran a medida que los compradores se pasan a Portugal.",
+      "cloth": "paño", "wine": "vino", "Cloth": "Paño", "Wine": "Vino",
       "both": "los dos", "none": "ninguno",
       "card.spec": "{c} se especializa en", "card.why": "Renuncia a {o} de {other} por cada unidad de {good}; el otro país, a {o2}.",
       "card.same": "Sin ventaja comparativa", "card.samewhy": "Los dos países renuncian a lo mismo para producir cada bien: especializarse no aumenta la producción.",
@@ -1235,7 +1320,7 @@ window.OBS = (() => {
       "ra.fig.bal": "Saldo comercial de Inglaterra", "ra.leg.bal": "Exportaciones menos importaciones",
       "ax.years": "Años", "ax.ratio": "Inglaterra ÷ Portugal", "ax.gold": "Onzas de oro al año", "ax.mill": "Millones de libras",
       "tip.ratio": "Nivel relativo", "tip.bal": "Saldo",
-      "s.eyebrow": "2 · Ventaja absoluta", "s.h2": "¿Y si el comercio no se equilibra solo?",
+      "s.eyebrow": "4 · Ventaja absoluta", "s.h2": "¿Y si el comercio no se equilibra solo?",
       "s.p1": "Para Anwar Shaikh, como para Adam Smith, no comercian los países sino empresas que buscan ganancia. En cada producto vende más quien produce más barato en términos absolutos: lo deciden los salarios y la productividad de cada país, no el oro que entra o sale.",
       "s.p2": "El dinero que llega a Portugal no sube sus precios: abarata allí el crédito y vuelve a Inglaterra en forma de préstamos. Así se tapa el déficit, pero Inglaterra se endeuda año tras año.",
       "s.quote": "«Los países con menos capitales competitivos sufrirán déficits crónicos en la balanza comercial que serán cubiertos por endeudamiento externo crónico».",
@@ -1290,7 +1375,31 @@ window.OBS = (() => {
       "h.cP": "Portugal · hores per unitat de drap", "h.wP": "Portugal · hores per unitat de vi",
       "h.reset": "Tornar a les xifres de Ricardo", "hours": "{n} h",
       "rt.country": "País", "rt.cloth": "Drap (hores)", "rt.wine": "Vi (hores)", "rt.opp": "Cost d'un vi, en drap", "rt.abs": "Avantatge absolut en",
-      "E": "Anglaterra", "P": "Portugal", "cloth": "drap", "wine": "vi", "Cloth": "Drap", "Wine": "Vi",
+      "E": "Anglaterra", "P": "Portugal", 
+      "tab.rq": "On va la riquesa?", "rq.eyebrow": "2 · On va la riquesa?", "rq.h2": "El que creua la frontera i el que es queda en cada país",
+      "rq.p1": "Les mercaderies van en un sentit i els diners en l'altre. Mireu què s'acumula en cada país al cap dels anys: or, deute o fàbriques. Trieu com funciona el comerç i premeu «Reproduir».",
+      "rq.modo": "Com funciona el comerç", "rq.m.r": "Si el comerç s'equilibra a soles", "rq.m.r2": "Ricardo: l'or mou els preus", "rq.m.s": "Si el comerç no s'equilibra", "rq.m.s2": "Shaikh: el dèficit es paga amb préstecs",
+      "rq.play": "Reproduir els 20 anys", "rq.fig": "Anglaterra i Portugal: el que creua la frontera i el que s'acumula en cada país",
+      "rq.l.gEP": "El que ven Anglaterra", "rq.l.gPE": "El que ven Portugal", "rq.l.oro": "Or per a pagar el dèficit", "rq.l.din": "Diners per a pagar el dèficit",
+      "rq.l.pre": "Préstecs de Portugal", "rq.l.int": "Interessos del deute", "rq.cero": "res", "rq.u.r": "{v} unces", "rq.u.s": "{v} M £",
+      "rq.fab.r": "{n} fàbriques en marxa", "rq.fab.s": "{n} de 20 fàbriques en marxa",
+      "rq.p.oro": "Or del país", "rq.p.deuda": "El que deu a {o}", "rq.p.pag": "Pagarés de {o}", "rq.p.precios": "Preus: {r} % dels portuguesos",
+      "rq.ambos": "drap i vi", "rq.nada": "res",
+      "rq.st.vE": "Ven Anglaterra", "rq.st.vP": "Ven Portugal", "rq.st.oroE": "Unces d'or d'Anglaterra", "rq.st.ratio": "Preus anglesos davant dels portuguesos",
+      "rq.st.imp": "Anglaterra compra a Portugal este any", "rq.st.exp": "Anglaterra ven a Portugal este any", "rq.st.pre": "Anglaterra demana prestat este any",
+      "rq.st.deuda": "Anglaterra ja deu a Portugal", "rq.st.cred": "Portugal ja deu a Anglaterra", "rq.st.int": "Interessos d'este any", "rq.st.fab": "Fàbriques angleses en marxa", "rq.st.fabv": "{n} de 20",
+      "rq.n.r0": "**Any 0.** Amb els mateixos salaris, Portugal és més barat en drap i en vi: Anglaterra ho compra tot fora i paga amb or. **Ixen {g} unces d'or d'Anglaterra.**",
+      "rq.n.r1": "Amb menys or, els preus anglesos baixen ({r} % dels portuguesos) i el drap anglés ja és el més barat. **Ara cada país ven alguna cosa:** Anglaterra {vE} i Portugal {vP}. El comerç quasi s'equilibra i l'or deixa d'eixir. **Segons Ricardo, cap país es queda la riquesa de l'altre: els dos guanyen.**",
+      "rq.n.r2": "Els preus es van ajustant ({r} % dels portuguesos). Anglaterra ven {vE} i Portugal ven {vP}; l'or continua movent-se fins que el comerç s'equilibra.",
+      "rq.n.s0": "**Any 0.** Portugal produeix més barat el drap i el vi, però els compradors encara no han canviat de proveïdor.",
+      "rq.n.s1": "Els compradors anglesos se'n van a Portugal. Cada any ixen diners per a pagar el dèficit ({def} M £) i tornen com a préstec ({pre} M £, amb els interessos). **Els diners tornen, però Portugal es queda els pagarés: Anglaterra ja li deu {d} M £** i este any paga {i} M £ d'interessos. **A Anglaterra queden {f} de 20 fàbriques en marxa.**",
+      "rq.n.s2": "Anglaterra no té dèficit este any: no li cal demanar prestat.",
+      "rq.th.y": "Any", "rq.th.vE": "Ven Anglaterra", "rq.th.vP": "Ven Portugal", "rq.th.sale": "Or que ix d'Anglaterra", "rq.th.oroE": "Or d'Anglaterra", "rq.th.oroP": "Or de Portugal", "rq.th.ratio": "Preus anglesos (% dels portuguesos)",
+      "rq.th.exp": "Exportacions angleses", "rq.th.imp": "Importacions angleses", "rq.th.int": "Interessos", "rq.th.pre": "Préstec nou", "rq.th.deuda": "Deute d'Anglaterra", "rq.th.fab": "Fàbriques angleses",
+      "rq.calc": "Com es calcula",
+      "rq.calc.r": "El mateix model que «S'equilibra a soles el comerç?» (pestanya 1). Les xifres de mercaderies són el valor del que ven cada país, en unces d'or.\nOr que ix d'Anglaterra = el que compra − el que ven (el dèficit).\nOr d'Anglaterra = or de l'any anterior − or que ix. Cada país comença amb {s0} unces, la quantitat amb què la relació entre l'or dels dos països coincideix amb la relació de preus del model.\nAmb menys or baixen els preus i els salaris anglesos; amb més or pugen els portuguesos. Quan cada país ven el bé en què té avantatge comparatiu, l'or quasi deixa de moure's.",
+      "rq.calc.s": "El mateix model que la pestanya de Shaikh (docent), amb les seues palanques. Xifres en milions de lliures.\nDèficit = importacions − exportacions.\nPréstec nou = dèficit + interessos (Anglaterra demana prestat també per a pagar els interessos).\nInteressos = deute de l'any anterior × 4 %.\nDeute = deute de l'any anterior × 1,04 + dèficit.\nFàbriques: 20 buits per país; cada mercat (l'anglés i el portugués, de drap i de vi) dona treball a 5 fàbriques quan l'abasteix sencer. Les fàbriques angleses tanquen a mesura que els compradors se'n van a Portugal.",
+      "cloth": "drap", "wine": "vi", "Cloth": "Drap", "Wine": "Vi",
       "both": "els dos", "none": "cap",
       "card.spec": "{c} s'especialitza en", "card.why": "Renuncia a {o} de {other} per cada unitat de {good}; l'altre país, a {o2}.",
       "card.same": "Sense avantatge comparatiu", "card.samewhy": "Els dos països renuncien al mateix per a produir cada bé: especialitzar-se no augmenta la producció.",
@@ -1314,7 +1423,7 @@ window.OBS = (() => {
       "ra.fig.bal": "Saldo comercial d'Anglaterra", "ra.leg.bal": "Exportacions menys importacions",
       "ax.years": "Anys", "ax.ratio": "Anglaterra ÷ Portugal", "ax.gold": "Unces d'or a l'any", "ax.mill": "Milions de lliures",
       "tip.ratio": "Nivell relatiu", "tip.bal": "Saldo",
-      "s.eyebrow": "2 · Avantatge absolut", "s.h2": "I si el comerç no s'equilibra a soles?",
+      "s.eyebrow": "4 · Avantatge absolut", "s.h2": "I si el comerç no s'equilibra a soles?",
       "s.p1": "Per a Anwar Shaikh, com per a Adam Smith, no comercien els països sinó empreses que busquen guany. En cada producte ven més qui produïx més barat en termes absoluts: ho decidixen els salaris i la productivitat de cada país, no l'or que entra o ix.",
       "s.p2": "Els diners que arriben a Portugal no hi pugen els preus: hi abaratixen el crèdit i tornen a Anglaterra en forma de préstecs. Així es tapa el dèficit, però Anglaterra s'endeuta any rere any.",
       "s.quote": "«Los países con menos capitales competitivos sufrirán déficits crónicos en la balanza comercial que serán cubiertos por endeudamiento externo crónico».",
@@ -1400,10 +1509,11 @@ window.OBS = (() => {
   const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ---------- Pestañas ----------
-  const VIEWS = ["ricardo", "shaikh", "supuestos"];
+  const VIEWS = ["ricardo", "riqueza", "shaikh", "supuestos"];
   function show(view) {
     if (!VIEWS.includes(view)) view = "ricardo";
     for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
+    if (view === "riqueza" && window.rqMostrar) window.rqMostrar();
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
   window.addEventListener("hashchange", () => show(location.hash.slice(1)));
@@ -1573,7 +1683,7 @@ window.OBS = (() => {
       const qc = 10 * Math.pow(100 / pc, 2), qw = 10 * Math.pow(100 / pw, 2);
       const exp = (clothE ? qc * pc : 0) + (wineE ? qw * pw : 0), imp = (!clothE ? qc * pc : 0) + (!wineE ? qw * pw : 0);
       const bal = exp - imp;
-      out.push({ y, ratio: wE / wP, clothE, wineE, bal });
+      out.push({ y, ratio: wE / wP, clothE, wineE, bal, exp, imp });
       const f = Math.exp(0.2 * bal / Math.max(exp + imp, 1)); wE *= Math.sqrt(f); wP /= Math.sqrt(f);
     }
     const thC = h.cP / h.cE, thW = h.wP / h.wE; // Inglaterra vende paño si nivel < thC; vino si nivel < thW
@@ -1634,7 +1744,7 @@ window.OBS = (() => {
       const bal = exp - imp;
       if (y > 0) debt = debt * (1 + r) - bal;
       const ind = 100 * ((sEE.c + sEP.c) + (sEE.w + sEP.w)) / 2;
-      out.push({ y, sc: sEE.c, sw: sEE.w, bal, debt, ind, regC: pE.c < pP.c ? "E" : "P", regW: pE.w < pP.w ? "E" : "P" });
+      out.push({ y, sc: sEE.c, sw: sEE.w, pc: sEP.c, pw: sEP.w, exp, imp, bal, debt, ind, regC: pE.c < pP.c ? "E" : "P", regW: pE.w < pP.w ? "E" : "P" });
     }
     return out;
   }
@@ -1711,11 +1821,261 @@ window.OBS = (() => {
   }
   const stopR = player("ra-play", "ra-t", renderRicardoYear);
   const stopS = player("sa-play", "sa-t", renderShaikh);
-  ["h-cE", "h-wE", "h-cP", "h-wP"].forEach(id => $(id).addEventListener("input", () => { renderStatic(); renderRicardoYear(); renderShaikh(); }));
-  ["s-g", "s-d", "s-pt"].forEach(id => $(id).addEventListener("input", renderShaikh));
+  ["h-cE", "h-wE", "h-cP", "h-wP"].forEach(id => $(id).addEventListener("input", () => { renderStatic(); renderRicardoYear(); renderShaikh(); renderRiqueza(); }));
+  ["s-g", "s-d", "s-pt"].forEach(id => $(id).addEventListener("input", () => { renderShaikh(); if (RQ.modo === "s") renderRiqueza(); }));
   $("h-reset").addEventListener("click", () => { for (const k in RIC) $("h-" + k).value = RIC[k]; renderStatic(); renderRicardoYear(); renderShaikh(); });
 
-  function renderAll() { renderStatic(); renderRicardoYear(); renderShaikh(); renderCompare(); stopR(); stopS(); }
+
+  // =====================================================================
+  // 2 · ¿Adónde va la riqueza? (26/11/2026)
+  // Mismos modelos que las pestañas de Ricardo y de Shaikh. Aquí se dibuja lo que cruza la frontera
+  // (mercancías en un sentido, dinero en el otro) y lo que se acumula en cada país.
+  // =====================================================================
+  const RQ = { modo: "r", yf: 0, play: false, t0: 0, raf: 0, ancho: null, filas: null, ult: -1, toks: {}, ultT: 0 };
+  const RQ_ANIO = 900; // milisegundos por año al reproducir
+  function rqDatos() {
+    const h = H();
+    if (RQ.modo === "r") {
+      const P = ricardoPath(h).out; let G = 0;
+      const cum = P.map(o => (G += -o.bal));
+      const rF = P[YEARS].ratio, Gf = cum[YEARS];
+      // Oro inicial de cada país: el que hace que, con el oro que ha cambiado de manos, la relación de precios sea la del modelo.
+      let S0 = Math.abs(1 - rF) > 0.01 && Math.abs(Gf) > 1 ? Math.abs(Gf * (1 + rF) / (1 - rF)) : 24000;
+      S0 = Math.round(clamp(S0, 5000, 100000) / 100) * 100;
+      return P.map((o, y) => {
+        const tEP = [o.clothE && "c", o.wineE && "w"].filter(Boolean), tPE = [!o.clothE && "c", !o.wineE && "w"].filter(Boolean);
+        const esp = y > 0 && o.clothE !== o.wineE;
+        const fabE = esp ? (o.clothE ? { c: 10, w: 0 } : { c: 0, w: 10 }) : { c: 5, w: 5 };
+        const fabP = esp ? (o.clothE ? { c: 0, w: 10 } : { c: 10, w: 0 }) : { c: 5, w: 5 };
+        return { y, gEP: o.exp, gPE: o.imp, tEP, tPE, din: -o.bal, pre: 0, int: 0, oroE: S0 - cum[y], oroP: S0 + cum[y], S0, ratio: o.ratio, fabE, fabP, esp, clothE: o.clothE, wineE: o.wineE };
+      });
+    }
+    const g = +$("s-g").value / 100, d = +$("s-d").value / 100, pt = +$("s-pt").value / 100;
+    const S = shaikhPath(h, g, d, pt);
+    return S.map((o, y) => {
+      const prev = y ? S[y - 1].debt : 0;
+      const tEP = [o.pc > 0.01 && "c", o.pw > 0.01 && "w"].filter(Boolean), tPE = [o.sc < 0.99 && "c", o.sw < 0.99 && "w"].filter(Boolean);
+      const fabE = { c: Math.round(5 * (o.sc + o.pc)), w: Math.round(5 * (o.sw + o.pw)) };
+      const fabP = { c: Math.min(10, Math.round(5 * (2 - o.sc - o.pc))), w: Math.min(10, Math.round(5 * (2 - o.sw - o.pw))) };
+      return { y, gEP: o.exp, gPE: o.imp, tEP, tPE, din: -o.bal, pre: o.debt - prev, int: y ? prev * 0.04 : 0, deuda: o.debt, fabE, fabP, ind: o.ind };
+    });
+  }
+  const rqLerp = (a, b, f) => a + (b - a) * f;
+  function rqEn(yf) {
+    const F = RQ.filas, i = Math.floor(clamp(yf, 0, YEARS)), j = Math.min(YEARS, i + 1), f = clamp(yf, 0, YEARS) - i, A = F[i], B = F[j];
+    const o = { ...A };
+    for (const k of ["gEP", "gPE", "din", "pre", "int", "oroE", "oroP", "deuda", "ratio"]) if (typeof A[k] === "number") o[k] = rqLerp(A[k], B[k], f);
+    return o;
+  }
+  // ---------- Geometría (ancha para ordenador y pizarra, estrecha para el móvil) ----------
+  function rqGeo() {
+    const fig = $("rq-svg").parentElement, w = fig.clientWidth || 900, n = w < 620;
+    if (!n) return { n, W: 960, H: 470, E: { x: 14, y: 14, w: 272, h: 442 }, P: { x: 674, y: 14, w: 272, h: 442 }, x0: 300, x1: 660,
+      lanes: { gEP: 100, gPE: 182, din: 264, pre: 346, int: 428 }, fs: 15, fsT: 21, cols: 10, cell: 25, gx: 11, gy: 52, ico: 22, pila: [190, 380], pw: 92, tok: 26 };
+    return { n, W: 420, H: 660, E: { x: 4, y: 6, w: 126, h: 648 }, P: { x: 290, y: 6, w: 126, h: 648 }, x0: 136, x1: 284,
+      lanes: { gEP: 120, gPE: 232, din: 344, pre: 456, int: 568 }, fs: 15, fsT: 18, cols: 4, cell: 28, gx: 7, gy: 44, ico: 24, pila: [340, 566], pw: 62, tok: 24 };
+  }
+  const RQ_ICO = {
+    c: '<symbol id="rq-i-c" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h13a3.2 6 0 0 1 0 12H3Z"/><ellipse cx="16" cy="12" rx="2" ry="4.2" fill="none" stroke="var(--bg)" stroke-width="1.4"/><path d="M5 9.5h8M5 14.5h8" stroke="var(--bg)" stroke-width="1.2"/></symbol>',
+    w: '<symbol id="rq-i-w" viewBox="0 0 24 24"><path fill="currentColor" d="M10 2h4v5.2l2.4 3.4V22H7.6V10.6L10 7.2Z"/><rect x="9" y="13" width="6" height="5" fill="var(--bg)"/></symbol>',
+    m: '<symbol id="rq-i-m" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="currentColor"/><circle cx="12" cy="12" r="6.5" fill="none" stroke="var(--bg)" stroke-width="1.3"/><path d="M14.5 8.6a3 3 0 0 0-5 2.2V16h5.5M8.5 12.6h4.5" fill="none" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round"/></symbol>',
+    p: '<symbol id="rq-i-p" viewBox="0 0 24 24"><path fill="currentColor" d="M5 2h10l4 4v16H5Z"/><path d="M8 9h8M8 12.5h8M8 16h5" stroke="var(--bg)" stroke-width="1.4"/></symbol>',
+    f: '<symbol id="rq-i-f" viewBox="0 0 24 24"><path d="M3 21V11l5 3v-3l5 3v-3l5 3V4h3v17Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>'
+  };
+  // Carriles: qué cruza, de dónde a dónde y con qué dibujo
+  const RQ_CARR = [
+    { k: "gEP", dir: 1, cls: o => o.tEP, lab: "rq.l.gEP" },
+    { k: "gPE", dir: -1, cls: o => o.tPE, lab: "rq.l.gPE" },
+    { k: "din", dir: o => (o.din >= 0 ? 1 : -1), cls: () => ["m"], lab: o => (RQ.modo === "r" ? "rq.l.oro" : "rq.l.din") },
+    { k: "pre", dir: o => (o.pre >= 0 ? -1 : 1), cls: () => ["m"], lab: () => "rq.l.pre", s: true },
+    { k: "int", dir: o => (o.int >= 0 ? 1 : -1), cls: () => ["m"], lab: () => "rq.l.int", s: true, color: "i" }
+  ];
+  // Texto en una o varias líneas (para el móvil); «arriba» sube la primera línea para que la última quede en su sitio
+  function rqLineas(tx, txt, max, arriba) {
+    const lh = 17, pal = String(txt).split(" "), lines = []; let a = "";
+    for (const w of pal) { if (a && (a + " " + w).length > max) { lines.push(a); a = w; } else a = a ? a + " " + w : w; }
+    if (a) lines.push(a);
+    const x = tx.getAttribute("x"), y0 = +tx.dataset.y;
+    tx.setAttribute("y", arriba ? y0 - (lines.length - 1) * lh : y0);
+    tx.replaceChildren(...lines.map((l, i) => sv("tspan", { x, dy: i ? lh : 0 }, l)));
+  }
+  const rqVal = (v) => RQ.modo === "r" ? t("rq.u.r", { v: fmt(Math.abs(v)) }) : t("rq.u.s", { v: fmt(Math.abs(v)) });
+  function rqDibujarFijo() {
+    const G = RQ.geo = rqGeo(), svg = $("rq-svg");
+    svg.setAttribute("viewBox", `0 0 ${G.W} ${G.H}`);
+    svg.replaceChildren();
+    const defs = sv("defs"); defs.innerHTML = Object.values(RQ_ICO).join("") +
+      '<marker id="rq-fl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" class="flecha"/></marker>';
+    svg.append(defs);
+    for (const [id, P] of [["E", G.E], ["P", G.P]]) {
+      const g = sv("g", { id: "rq-pan-" + id });
+      g.append(sv("rect", { x: P.x, y: P.y, width: P.w, height: P.h, rx: 10, class: "pan" }));
+      g.append(sv("text", { x: P.x + P.w / 2, y: P.y + 30, "text-anchor": "middle", class: "pais", "font-size": G.fsT }, t(id)));
+      const fab = sv("g", { class: "fab", id: "rq-fab-" + id }); g.append(fab);
+      g.append(sv("text", { x: P.x + P.w / 2, y: P.y + G.gy + G.cell * (20 / G.cols) + 20, "text-anchor": "middle", class: "cap", "font-size": G.fs - 1, id: "rq-fabt-" + id, "data-y": P.y + G.gy + G.cell * (20 / G.cols) + 20 }));
+      g.append(sv("text", { x: P.x + P.w / 2, y: G.pila[0] - 22, "data-y": G.pila[0] - 22, "text-anchor": "middle", class: "cap", "font-size": G.fs - 1, id: "rq-pilat-" + id }));
+      g.append(sv("rect", { x: P.x + (P.w - G.pw) / 2, y: G.pila[1], width: G.pw, height: 0, rx: 3, id: "rq-pila-" + id }));
+      g.append(sv("line", { x1: P.x + (P.w - G.pw) / 2 - 10, x2: P.x + (P.w + G.pw) / 2 + 10, y1: G.pila[1], y2: G.pila[1], class: "base" }));
+      g.append(sv("text", { x: P.x + P.w / 2, y: G.pila[1] + 24, "text-anchor": "middle", class: "val", "font-size": G.fs + 1, id: "rq-pilav-" + id }));
+      g.append(sv("text", { x: P.x + P.w / 2, y: G.pila[1] + 46, "data-y": G.pila[1] + 46, "text-anchor": "middle", class: "cap", "font-size": G.fs - 2, id: "rq-pilan-" + id }));
+      svg.append(g);
+    }
+    const lanes = sv("g", { id: "rq-lanes" }); svg.append(lanes);
+    for (const c of RQ_CARR) {
+      const y = G.lanes[c.k], g = sv("g", { id: "rq-c-" + c.k });
+      g.append(sv("line", { x1: G.x0 + 6, x2: G.x1 - 6, y1: y, y2: y, class: "carril", id: "rq-cl-" + c.k }));
+      g.append(sv("text", { x: (G.x0 + G.x1) / 2, y: y - 42, "data-y": y - 42, "text-anchor": "middle", class: "cap", "font-size": G.fs - 1, id: "rq-ct-" + c.k }));
+      g.append(sv("text", { x: (G.x0 + G.x1) / 2, y: y - 21, "text-anchor": "middle", class: "val", "font-size": G.fs, id: "rq-cv-" + c.k }));
+      g.append(sv("g", { class: "tok", id: "rq-tk-" + c.k }));
+      lanes.append(g);
+    }
+    RQ.toks = {}; RQ.ult = -1;
+  }
+  function rqFabricas(id, fab, cerr) {
+    const G = RQ.geo, P = G[id], g = $("rq-fab-" + id); g.replaceChildren();
+    const tipos = [...Array(fab.c).fill("c"), ...Array(fab.w).fill("w")];
+    for (let i = 0; i < 20; i++) {
+      const cx = P.x + G.gx + (i % G.cols) * G.cell, cy = P.y + G.gy + Math.floor(i / G.cols) * G.cell, tp = tipos[i];
+      if (tp) g.append(sv("use", { href: "#rq-i-" + tp, x: cx, y: cy, width: G.ico, height: G.ico, class: "c-" + tp }));
+      else g.append(sv("rect", { x: cx + 2, y: cy + 2, width: G.ico - 4, height: G.ico - 4, rx: 3, class: "hueco" }));
+    }
+    rqLineas($("rq-fabt-" + id), t(cerr ? "rq.fab.s" : "rq.fab.r", { n: tipos.length }), G.n ? 13 : 40);
+  }
+  // Partes que cambian cada año (texto, fábricas, carriles visibles)
+  function rqAnio(y) {
+    const o = RQ.filas[y], sh = RQ.modo === "s";
+    rqFabricas("E", o.fabE, sh); rqFabricas("P", o.fabP, sh);
+    for (const c of RQ_CARR) {
+      const vis = !c.s || sh; $("rq-c-" + c.k).style.display = vis ? "" : "none";
+      rqLineas($("rq-ct-" + c.k), t(typeof c.lab === "function" ? c.lab(o) : c.lab), RQ.geo.n ? 17 : 44, true);
+    }
+    for (const id of ["E", "P"]) {
+      const c = !sh ? "pila-oro" : ((o.deuda >= 0) === (id === "E") ? "pila-deuda" : "pila-pag");
+      const ky = !sh ? "rq.p.oro" : (c === "pila-deuda" ? "rq.p.deuda" : "rq.p.pag");
+      rqLineas($("rq-pilat-" + id), t(ky, { o: t(id === "E" ? "P" : "E") }), RQ.geo.n ? 14 : 40, true);
+      rqLineas($("rq-pilan-" + id), !sh && id === "E" ? t("rq.p.precios", { r: fmt(o.ratio * 100) }) : "", RQ.geo.n ? 15 : 40);
+    }
+    $("rq-label").textContent = t("year", { n: y }); $("rq-t-out").textContent = t("yof", { t: y, n: YEARS });
+    // Cifras y explicación
+    const st = (b, span, cls) => el("div", { class: "stat" }, el("b", { class: cls || null, text: b }), el("span", { text: span }));
+    const quien = arr => arr.length === 2 ? t("rq.ambos") : arr.length ? t(arr[0] === "c" ? "cloth" : "wine") : t("rq.nada");
+    if (!sh) {
+      $("rq-stats").replaceChildren(
+        st(quien(o.tEP), t("rq.st.vE")), st(quien(o.tPE), t("rq.st.vP")),
+        st(fmt(o.oroE), t("rq.st.oroE"), o.oroE < o.S0 - 1 ? "neg" : null), st(fmt(o.ratio * 100) + " %", t("rq.st.ratio")));
+      const k = y === 0 ? "rq.n.r0" : o.esp && Math.abs(o.din) < 0.05 * Math.max(o.gEP, o.gPE, 1) ? "rq.n.r1" : "rq.n.r2";
+      $("rq-note").replaceChildren(rich(k, { g: fmt(o.S0 - o.oroE), r: fmt(o.ratio * 100), vE: quien(o.tEP), vP: quien(o.tPE) }));
+    } else {
+      const deb = o.deuda > 0.5, n = o.fabE.c + o.fabE.w;
+      $("rq-stats").replaceChildren(
+        st(fmt(o.gPE) + " M £", t("rq.st.imp")), st(fmt(o.gEP) + " M £", t("rq.st.exp")),
+        st(fmt(Math.max(0, o.pre)) + " M £", t("rq.st.pre")), st(fmt(Math.abs(o.deuda)) + " M £", t(o.deuda >= -0.5 ? "rq.st.deuda" : "rq.st.cred"), deb ? "neg" : null),
+        st(fmt(o.int) + " M £", t("rq.st.int")), st(t("rq.st.fabv", { n }), t("rq.st.fab"), n < 10 ? "neg" : null));
+      const k = y === 0 ? "rq.n.s0" : deb ? "rq.n.s1" : "rq.n.s2";
+      $("rq-note").replaceChildren(rich(k, { d: fmt(o.deuda), i: fmt(o.int), f: n, def: fmt(o.din), pre: fmt(o.pre) }));
+    }
+    $("rq-svg").setAttribute("aria-label", t("rq.fig") + ". " + $("rq-note").textContent);
+  }
+  // Partes que cambian en cada fotograma (pilas y cifras de los carriles)
+  function rqContinuo(o) {
+    const G = RQ.geo, sh = RQ.modo === "s", h = G.pila[1] - G.pila[0];
+    let vE, vP, cE, cP, mx;
+    if (!sh) { mx = RQ.maxOro; vE = o.oroE; vP = o.oroP; cE = cP = "pila-oro"; }
+    else { mx = RQ.maxDeuda; const dd = o.deuda; vE = Math.abs(dd); vP = Math.abs(dd); cE = dd >= 0 ? "pila-deuda" : "pila-pag"; cP = dd >= 0 ? "pila-pag" : "pila-deuda"; }
+    for (const [id, v, c] of [["E", vE, cE], ["P", vP, cP]]) {
+      const hh = clamp(v / mx, 0, 1) * h, rc = $("rq-pila-" + id);
+      rc.setAttribute("y", G.pila[1] - hh); rc.setAttribute("height", hh); rc.setAttribute("class", c);
+      $("rq-pilav-" + id).textContent = sh ? fmt(v) + " M £" : fmt(v);
+    }
+    for (const c of RQ_CARR) {
+      if (c.s && !sh) continue;
+      const v = o[c.k], on = Math.abs(v) > RQ.umbral, dir = typeof c.dir === "function" ? c.dir(o) : c.dir;
+      $("rq-cv-" + c.k).textContent = on ? rqVal(v) : t("rq.cero");
+      const ln = $("rq-cl-" + c.k);
+      ln.setAttribute("class", "carril" + (on ? " on" : ""));
+      if (on) { ln.setAttribute("marker-end", dir > 0 ? "url(#rq-fl)" : ""); ln.setAttribute("marker-start", dir < 0 ? "url(#rq-fl)" : ""); }
+      else { ln.removeAttribute("marker-end"); ln.removeAttribute("marker-start"); }
+    }
+  }
+  // Fichas que viajan: más fichas cuanto mayor es el flujo
+  function rqFichas(o, dt) {
+    const G = RQ.geo, sh = RQ.modo === "s", quieto = reduced(), viaje = 2600;
+    for (const c of RQ_CARR) {
+      const g = $("rq-tk-" + c.k); if (!g) continue;
+      const S = RQ.toks[c.k] || (RQ.toks[c.k] = { l: [], acc: 0, rr: 0 });
+      const v = o[c.k], on = (!c.s || sh) && Math.abs(v) > RQ.umbral, dir = typeof c.dir === "function" ? c.dir(o) : c.dir;
+      const tipos = c.cls(o); const rate = on ? 3 * Math.sqrt(Math.abs(v) / RQ.maxFlujo) : 0;
+      if (quieto) {
+        const n = on ? Math.max(1, Math.round(rate * 1.6)) : 0;
+        S.l = Array.from({ length: n }, (_, i) => ({ p: (i + 0.5) / n, tp: tipos[i % Math.max(1, tipos.length)] || "m", d: dir }));
+      } else {
+        S.l.forEach(k => { k.p += dt / viaje; });
+        S.l = S.l.filter(k => k.p < 1);
+        if (on && tipos.length) { S.acc += rate * dt / 1000; while (S.acc >= 1) { S.acc -= 1; S.l.push({ p: 0, tp: tipos[S.rr++ % tipos.length], d: dir }); } }
+        else S.acc = 0;
+      }
+      while (g.childNodes.length < S.l.length) g.append(sv("use", { width: G.tok, height: G.tok }));
+      while (g.childNodes.length > S.l.length) g.lastChild.remove();
+      const y = G.lanes[c.k] - G.tok / 2, a = G.x0 + 4, b = G.x1 - 4 - G.tok;
+      S.l.forEach((k, i) => {
+        const u = g.childNodes[i], x = k.d > 0 ? a + (b - a) * k.p : b - (b - a) * k.p;
+        u.setAttribute("href", "#rq-i-" + k.tp); u.setAttribute("x", x.toFixed(1)); u.setAttribute("y", y);
+        u.setAttribute("class", "c-" + (c.color || k.tp)); u.style.opacity = quieto ? 1 : Math.min(1, k.p * 6, (1 - k.p) * 6).toFixed(2);
+      });
+    }
+  }
+  function rqTablas() {
+    const F = RQ.filas, sh = RQ.modo === "s";
+    const cols = sh ? ["rq.th.y", "rq.th.exp", "rq.th.imp", "rq.th.int", "rq.th.pre", "rq.th.deuda", "rq.th.fab"] : ["rq.th.y", "rq.th.vE", "rq.th.vP", "rq.th.sale", "rq.th.oroE", "rq.th.oroP", "rq.th.ratio"];
+    $("rq-tabla").replaceChildren(el("thead", {}, el("tr", {}, cols.map(k => el("th", { text: t(k) })))),
+      el("tbody", {}, F.map(o => el("tr", {}, (sh
+        ? [o.y, fmt(o.gEP), fmt(o.gPE), fmt(o.int, 1), fmt(o.pre, 1), fmt(o.deuda, 1), o.fabE.c + o.fabE.w]
+        : [o.y, fmt(o.gEP), fmt(o.gPE), signed(o.din), fmt(o.oroE), fmt(o.oroP), fmt(o.ratio * 100, 1) + " %"]).map(v => el("td", { text: v }))))));
+    $("rq-calc").replaceChildren(...t(sh ? "rq.calc.s" : "rq.calc.r", { s0: fmt(F[0].S0 || 0) }).split("\n").map(x => el("p", { text: x })));
+  }
+  function rqRecalcular() {
+    RQ.filas = rqDatos();
+    const F = RQ.filas;
+    RQ.maxFlujo = Math.max(1, ...F.flatMap(o => [o.gEP, o.gPE, Math.abs(o.din), Math.abs(o.pre), Math.abs(o.int)]));
+    RQ.umbral = 0.004 * RQ.maxFlujo;
+    RQ.maxOro = Math.max(1, ...F.flatMap(o => [o.oroE || 0, o.oroP || 0]));
+    RQ.maxDeuda = Math.max(50, ...F.map(o => Math.abs(o.deuda || 0)));
+    RQ.ult = -1; rqTablas();
+  }
+  function rqPintar(dt = 0) {
+    if (!RQ.geo) rqDibujarFijo();
+    const y = Math.min(YEARS, Math.floor(RQ.yf + 1e-6));
+    if (y !== RQ.ult) { RQ.ult = y; rqAnio(y); }
+    const o = rqEn(RQ.yf); rqContinuo(o); rqFichas(o, dt);
+  }
+  function rqBucle(ts) {
+    if ($("view-riqueza").hidden) { RQ.raf = 0; return; }
+    const dt = RQ.ultT ? Math.min(80, ts - RQ.ultT) : 16; RQ.ultT = ts;
+    if (RQ.play) {
+      RQ.yf = Math.min(YEARS, RQ.yf + dt / (reduced() ? 1400 : RQ_ANIO));
+      const yi = Math.floor(RQ.yf + 1e-6); if (+$("rq-t").value !== yi) $("rq-t").value = yi;
+      if (RQ.yf >= YEARS) rqParar();
+    }
+    rqPintar(dt);
+    RQ.raf = requestAnimationFrame(rqBucle);
+  }
+  function rqParar() { RQ.play = false; $("rq-play").textContent = t("rq.play"); }
+  window.rqMostrar = () => { const n = rqGeo().n; if (!RQ.geo || RQ.geo.n !== n) { RQ.geo = null; } if (!RQ.raf) { RQ.ultT = 0; RQ.raf = requestAnimationFrame(rqBucle); } };
+  function rqModo(m) {
+    RQ.modo = m; $("rq-m-r").setAttribute("aria-pressed", String(m === "r")); $("rq-m-s").setAttribute("aria-pressed", String(m === "s"));
+    RQ.toks = {}; RQ.geo = null; rqRecalcular(); rqPintar();
+  }
+  $("rq-m-r").addEventListener("click", () => rqModo("r"));
+  $("rq-m-s").addEventListener("click", () => rqModo("s"));
+  $("rq-play").addEventListener("click", () => {
+    if (RQ.play) { rqParar(); return; }
+    if (RQ.yf >= YEARS) { RQ.yf = 0; $("rq-t").value = 0; }
+    RQ.play = true; $("rq-play").textContent = t("pause"); window.rqMostrar();
+  });
+  $("rq-t").addEventListener("input", () => { rqParar(); RQ.yf = +$("rq-t").value; rqPintar(); });
+  if (window.ResizeObserver) new ResizeObserver(() => { if (!$("view-riqueza").hidden && RQ.geo && rqGeo().n !== RQ.geo.n) { RQ.geo = null; rqPintar(); } }).observe($("rq-svg").parentElement);
+  function renderRiqueza() { rqRecalcular(); RQ.geo = null; if (!RQ.play) $("rq-play").textContent = t("rq.play"); if (!$("view-riqueza").hidden) rqPintar(); }
+  function renderAll() { renderStatic(); renderRicardoYear(); renderShaikh(); renderCompare(); renderRiqueza(); stopR(); stopS(); }
   OBS.mountBar($("obs-bar"), { ficha: FICHA });
   OBS.onLang(renderAll);
   // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------

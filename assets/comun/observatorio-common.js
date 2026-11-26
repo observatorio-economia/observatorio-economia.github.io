@@ -174,9 +174,8 @@ window.OBS = (() => {
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
       aula.querySelector(".obs-aula__btns").append(impr, conRes);
-      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
-      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
+      // 26/11/2026: el selector de «Antes de ver» ya no se muestra (decisión de Jordi: el velo de pantalla se retira de todas las herramientas)
+      onLang(() => { conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
     const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
@@ -255,7 +254,8 @@ window.OBS = (() => {
   // ---------- «Antes de ver» ----------
   let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
   let aperturaOn = false;
-  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  // 26/11/2026: «Antes de ver» retirado de la pantalla en todas las herramientas (la ficha imprimible conserva sus huecos de predicción)
+  const veloActivo = () => false;
   const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
   function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
   function barDe(s) {

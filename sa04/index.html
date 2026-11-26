@@ -118,6 +118,44 @@ input[type="text"] { font: 15px var(--font-body); color: var(--ink); background:
 .notice { border-left: 3px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; }
 .notice strong { font-weight: 600; }
 
+/* El mercado: competencia perfecta y real (26/11/2026) */
+@media (min-width: 1240px) { #view-mercado { width: min(1400px, 96vw); margin-left: calc(50% - min(700px, 48vw)); } }
+.bg-efectos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 26px; }
+.bg-ef { border-left: 5px solid var(--s2); padding: 6px 0 6px 14px; }
+.bg-ef-r { border-left-color: var(--s1); }
+.bg-ef h3 { margin: 0 0 4px; font-family: var(--font-display); font-size: 17px; text-transform: uppercase; letter-spacing: .02em; }
+.bg-ef p { margin: 0; font-family: var(--font-read); font-size: 17px; line-height: 1.5; }
+.bg-graf { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 24px; align-items: start; }
+.bg-graf figure { margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+@media (min-width: 1240px) { .bg-graf { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); } .bg-neo { order: 1; } .bg-mkt { order: 2; } .bg-real { order: 3; } }
+@media (min-width: 700px) and (max-width: 1239px) { .bg-graf { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bg-mkt { grid-column: 1 / -1; } }
+.bg-arrastra { cursor: grab; touch-action: pan-y; }
+.bg-arrastra.agarrando { cursor: grabbing; }
+.bg-arrastra:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+svg .bg-hit { stroke: transparent; stroke-width: 26; fill: none; pointer-events: stroke; }
+svg .bg-ghost { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; opacity: .7; }
+svg .curve.bg-sel { stroke-width: 4.5; }
+.bg-mueve-fila { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-size: 14px; color: var(--muted); }
+.bg-mueve-fila span:not(:first-child) { margin-left: 10px; }
+.bg-mueve { min-width: 44px; min-height: 40px; padding: 4px 10px; font-size: 17px; }
+.bg-firmas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.bg-ficha { position: relative; border: 1px solid var(--rule); border-top: 5px solid var(--c); padding: 8px 10px 10px; background: var(--paper, var(--bg)); overflow: hidden; }
+.bg-ficha h4 { margin: 0 0 6px; font-family: var(--font-display); font-size: 15px; }
+.bg-ficha dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; margin: 0 0 8px; font-size: 14px; }
+.bg-ficha dt { color: var(--muted); } .bg-ficha dd { margin: 0; text-align: right; font-weight: 600; }
+.bg-caja-lab { display: flex; justify-content: space-between; font-size: 14px; }
+.bg-caja { height: 14px; background: var(--rule); margin-top: 3px; }
+.bg-caja i { display: block; height: 100%; background: var(--c); transition: width .1s linear; }
+.bg-ficha.cerrada > :not(.bg-sello) { opacity: .3; }
+.bg-sello { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; font-family: var(--font-display); font-size: 22px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--bad); border: 4px solid var(--bad); margin: 18% 6%; transform: rotate(-8deg); background: color-mix(in srgb, var(--bg) 70%, transparent); }
+.bg-mando { display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: end; border-top: 2px solid var(--ink); padding-top: 12px; }
+.bg-mando .slider { flex: 1 1 260px; }
+.bg-cifras { font-size: 15px; }
+.bg-cifras th:first-child { text-align: left; }
+.bg-cifras thead th.n { box-shadow: inset 0 -4px var(--s2); } .bg-cifras thead th.r { box-shadow: inset 0 -4px var(--s1); }
+.bg-como div p { margin: 6px 0; font-size: 15px; line-height: 1.55; }
+.bg-como code { font-family: var(--font-mono); font-size: 14px; background: var(--accent-soft); padding: 1px 4px; }
+@media (max-width: 700px) { .bg-efectos { grid-template-columns: minmax(0, 1fr); } }
 /* Modelos y taller (26/11/2026) */
 .sup-cab { border-top: 3px solid var(--ink); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
 .sup-cab h3 { margin: 0; font-family: var(--font-display); font-size: 17px; }
@@ -522,14 +560,71 @@ body.obs-proj .obs-serie { font-size: 15px; }
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Modelos" data-i18n-attr="aria-label:aria.tabs">
-    <button role="tab" id="tab-perfecta" aria-selected="true" data-view="perfecta"><span class="n">1</span><span data-i18n="tab.1">Competencia perfecta</span></button>
-    <button role="tab" id="tab-imperfecta" aria-selected="false" data-view="imperfecta"><span class="n">2</span><span data-i18n="tab.2">Competencia imperfecta</span></button>
-    <button role="tab" id="tab-real" aria-selected="false" data-view="real"><span class="n">3</span><span data-i18n="tab.3">Competencia real</span></button>
-    <button role="tab" id="tab-mercats" aria-selected="false" data-view="mercats"><span class="n">4</span><span data-i18n="tab.mercats">Los dos mercados</span></button>
+    <button role="tab" id="tab-mercado" aria-selected="true" data-view="mercado"><span class="n">1</span><span data-i18n="tab.bg">El mercado</span></button>
+    <button role="tab" id="tab-imperfecta" aria-selected="false" data-view="imperfecta"><span class="n">2</span><span data-i18n="tab.2b">Pocas empresas o una</span></button>
+    <button role="tab" id="tab-perfecta" aria-selected="false" data-view="perfecta" hidden><span class="n">·</span><span data-i18n="tab.1">Competencia perfecta</span></button>
+    <button role="tab" id="tab-real" aria-selected="false" data-view="real" hidden><span class="n">·</span><span data-i18n="tab.3">Competencia real</span></button>
+    <button role="tab" id="tab-mercats" aria-selected="false" data-view="mercats" hidden><span class="n">·</span><span data-i18n="tab.mercats">Los dos mercados</span></button>
   </nav>
 
+  <!-- ===================== 1 · EL MERCADO (26/11/2026) ===================== -->
+  <section class="view" id="view-mercado" role="tabpanel" aria-labelledby="tab-mercado">
+    <div class="block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="bg.eyebrow">1 · El mismo mercado, dos maneras de entenderlo</span>
+        <h2 data-i18n="bg.h2">Competencia perfecta y competencia real</h2>
+        <p data-i18n-html="bg.p"></p>
+      </div>
+      <div class="bg-efectos" aria-live="polite">
+        <div class="bg-ef bg-ef-n"><h3 data-i18n="bg.ballet">Competencia perfecta</h3><p id="bg-ef-n"></p></div>
+        <div class="bg-ef bg-ef-r"><h3 data-i18n="bg.guerra">Competencia real</h3><p id="bg-ef-r"></p></div>
+      </div>
+      <div class="bg-graf">
+        <figure class="bg-mkt">
+          <figcaption data-i18n="bg.f.mkt">El mercado: arrastra las curvas</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="bg.lg.d">Demanda</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="bg.lg.s">Oferta (competencia perfecta)</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="bg.lg.p">Precio que fijan las empresas (competencia real)</span></span>
+            <span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="bg.lg.antes">Al principio</span></span>
+          </div>
+          <div class="plot"><svg class="chart bg-arrastra" id="bg-mkt" viewBox="0 0 560 420" tabindex="0" role="application" data-i18n-attr="aria-label:bg.aria.mkt"></svg></div>
+          <div class="bg-mueve-fila">
+            <span data-i18n="bg.mueve.d">Demanda</span><button type="button" class="btn ghost bg-mueve" id="bg-d-menos" data-i18n-attr="aria-label:bg.a.dl" aria-label="Demanda a la izquierda">←</button><button type="button" class="btn ghost bg-mueve" id="bg-d-mas" data-i18n-attr="aria-label:bg.a.dr" aria-label="Demanda a la derecha">→</button>
+            <span data-i18n="bg.mueve.s">Oferta</span><button type="button" class="btn ghost bg-mueve" id="bg-s-menos" data-i18n-attr="aria-label:bg.a.sl" aria-label="Oferta a la izquierda">←</button><button type="button" class="btn ghost bg-mueve" id="bg-s-mas" data-i18n-attr="aria-label:bg.a.sr" aria-label="Oferta a la derecha">→</button>
+          </div>
+        </figure>
+        <figure class="bg-neo">
+          <figcaption data-i18n="bg.f.neo">Una empresa neoclásica (competencia perfecta)</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="bg.lg.cmg">Coste marginal</span></span>
+            <span><i class="dash" style="border-color:var(--s2)"></i><span data-i18n="bg.lg.cme">Coste medio</span></span>
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="bg.lg.precio">Precio</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="bg-neo" viewBox="0 0 480 400" role="img" data-i18n-attr="aria-label:bg.aria.neo"></svg></div>
+        </figure>
+        <figure class="bg-real">
+          <figcaption data-i18n="bg.f.real">Las dos empresas de la competencia real</figcaption>
+          <div class="bg-firmas" id="bg-firmas" aria-live="polite"></div>
+          <div class="legend">
+            <span><i style="border-color:var(--s3)"></i><span data-i18n="bg.lg.a2">A: técnica de siempre</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="bg.lg.b2">B: técnica nueva, más barata</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="bg-real" viewBox="0 0 480 300" role="img" data-i18n-attr="aria-label:bg.aria.caja"></svg></div>
+        </figure>
+      </div>
+      <div class="bg-mando">
+        <button type="button" class="btn" id="bg-play" data-i18n="bg.play">Reproducir el largo plazo</button>
+        <div class="slider"><div class="lab"><label for="bg-t" data-i18n="bg.semana">Semana</label><output id="bg-t-out" for="bg-t"></output></div><input type="range" id="bg-t" min="1" max="14" step="1" value="1"></div>
+        <button type="button" class="btn quiet" id="bg-reset" data-i18n="bg.reset">Volver al principio</button>
+      </div>
+      <div class="scroll"><table class="bg-cifras" id="bg-cifras"></table></div>
+      <details class="bg-como"><summary data-i18n="bg.como">Cómo se construye (y las fórmulas para los problemas)</summary><div id="bg-formulas"></div></details>
+    </div>
+  </section>
+
   <!-- ===================== 1 · COMPETENCIA PERFECTA ===================== -->
-  <section class="view" id="view-perfecta" role="tabpanel" aria-labelledby="tab-perfecta">
+  <section class="view" id="view-perfecta" role="tabpanel" aria-labelledby="tab-perfecta" hidden>
 
     <div class="block" id="firm-block" data-obs-scope>
       <div class="prose">
@@ -1248,9 +1343,8 @@ window.OBS = (() => {
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
       aula.querySelector(".obs-aula__btns").append(impr, conRes);
-      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
-      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
+      // 26/11/2026: el selector de «Antes de ver» ya no se muestra (decisión de Jordi: el velo de pantalla se retira de todas las herramientas)
+      onLang(() => { conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
     const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
@@ -1329,7 +1423,8 @@ window.OBS = (() => {
   // ---------- «Antes de ver» ----------
   let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
   let aperturaOn = false;
-  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  // 26/11/2026: «Antes de ver» retirado de la pantalla en todas las herramientas (la ficha imprimible conserva sus huecos de predicción)
+  const veloActivo = () => false;
   const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
   function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
   function barDe(s) {
@@ -2177,10 +2272,9 @@ window.OBS = (() => {
   const lab = x => typeof x === "function" ? x() : x;
 
   // ---------- Pestañas ----------
-  const VIEWS = ["perfecta", "imperfecta", "real", "mercats"];
+  const VIEWS = ["mercado", "imperfecta"];
   function show(view) {
-    if (view === "supuestos") view = "mercats";
-    if (!VIEWS.includes(view)) view = "perfecta";
+    if (!VIEWS.includes(view)) view = "mercado";
     for (const v of VIEWS) { $("view-" + v).hidden = v !== view; $("tab-" + v).setAttribute("aria-selected", String(v === view)); }
   }
   document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
@@ -3456,8 +3550,230 @@ window.OBS = (() => {
     $("pt-play").click(); $("rt-play").click();
   });
 
+  // =====================================================================
+  // 1 · EL MERCADO: COMPETENCIA PERFECTA Y COMPETENCIA REAL (26/11/2026)
+  // Demanda: P = a − 0,05·Q. Competencia perfecta: 50 empresas iguales con CT = 100 + c·q + 1,5·q² (CMg = c + 3q),
+  // oferta P = c + (3/n)·Q; a largo plazo entran empresas mientras haya beneficio extraordinario.
+  // Competencia real (Shaikh, cap. 7, simplificado): las empresas fijan el precio (coste por unidad de A × 1,4); la demanda decide la cantidad.
+  // A: CT = 1500 + cA·q; B, técnica nueva: CT = 2000 + cB·q (cB = cA − 5); capacidad 300; B baja 1 € por semana hasta su coste más
+  // un margen mínimo (× 7/6); A la sigue sin bajar de su coste; los clientes se pasan un 5 % por cada euro de diferencia; reservas 3000 €.
+  // Arrastrar la oferta es un cambio de costes: mueve c en la competencia perfecta y los costes de A y B en la real.
+  // =====================================================================
+  const BG = { b: 0.05, a0: 60, c0: 5, F: 100, k: 1.5, n0: 50, cA0: 25, gap: 5, FA: 1500, FB: 2000, K: 300, R0: 3000, corte: 1, marg: 1.4, W: 14 };
+  const bg = { a: BG.a0, dc: 0, tw: 1, reloj: null, sel: null, H: null };
+  const bgEq = (n, a, c) => { const Q = Math.max(0, (a - c) / (BG.b + 2 * BG.k / n)), P = a - BG.b * Q, q = Q / n; return { n, P, Q, q, pi: P * q - (BG.F + c * q + BG.k * q * q) }; };
+  function bgHistorias() {
+    const c = BG.c0 + bg.dc, a = bg.a;
+    // Competencia perfecta: entran (o salen) empresas mientras haya beneficio (o pérdida) extraordinario
+    const neo = []; let n = BG.n0;
+    for (let t = 1; t <= BG.W; t++) { const e = bgEq(n, a, c); const d = Math.abs(e.pi) < 3 ? 0 : clamp(Math.round(e.pi / 6), -8, 8); neo.push({ t, ...e, d }); n = Math.max(2, n + d); }
+    // Competencia real
+    const cA = BG.cA0 + bg.dc, cB = cA - BG.gap, suelo = cB * 7 / 6, war = [];
+    let pA = cA * BG.marg, pB = pA, sB = 0.5, rA = BG.R0, rB = BG.R0, vivaA = true, cierre = null;
+    for (let t = 1; t <= BG.W; t++) {
+      if (t > 1) { const prev = pB; if (vivaA) { pB = Math.max(pB - BG.corte, suelo); pA = Math.max(prev, cA); sB = clamp(sB + 0.05 * (pA - pB), 0, 1); } else pB = suelo * 29 / 28; }
+      const s = vivaA ? sB : 1, pav = vivaA ? s * pB + (1 - s) * pA : pB, Q = Math.max(0, (a - pav) / BG.b);
+      let qB = s * Q, qA = vivaA ? (1 - s) * Q : 0; if (qA > BG.K) { qB += qA - BG.K; qA = BG.K; }
+      const piA = vivaA ? pA * qA - (BG.FA + cA * qA) : 0, piB = pB * qB - (BG.FB + cB * qB);
+      rA += piA; rB += piB;
+      war.push({ t, pA, pB, pav, Q, qA, qB, piA, piB, rA, rB, viva: vivaA, sa: Q > 0 ? qA / Q : 0 });
+      if (vivaA && rA < 0) { vivaA = false; cierre = t + 1; }
+    }
+    bg.H = { neo, war, c, cA, cB, cierre, pLr: c + 2 * Math.sqrt(BG.F * BG.k) };
+  }
+  const bgEn = (arr, tw) => { const i = Math.floor(tw + 1e-9), k = tw - i; if (k < 1e-6 || i >= arr.length) return arr[Math.min(i, arr.length) - 1]; const a = arr[i - 1], b = arr[i], o = { ...a }; for (const key in b) if (typeof b[key] === "number" && typeof a[key] === "number") o[key] = a[key] + (b[key] - a[key]) * k; return o; };
+  const e0 = v => fmt(v, Math.abs(v) < 100 ? 1 : 0).replace(/,0$/, "");
+  const euro = v => e0(v) + " €";
+  let bgF = null;
+  function bgPintar() {
+    if (!bg.H) bgHistorias();
+    const H = bg.H, tw = bg.tw, sem = Math.min(BG.W, Math.floor(tw + 1e-9)), N = bgEn(H.neo, tw), R = bgEn(H.war, tw), Ri = H.war[sem - 1];
+    const ini = { n: bgEq(BG.n0, bg.a, H.c), base: bgEq(BG.n0, BG.a0, BG.c0) };
+    const yMax = 80;
+    // ---- Mercado ----
+    const F = bgF = frame($("bg-mkt"), { w: 560, h: 420, xMax: 1200, yMax, xTicks: [0, 200, 400, 600, 800, 1000, 1200], yTicks: [0, 20, 40, 60, 80], xLabel: () => t("bg.ax.Q"), yLabel: () => t("bg.ax.P") });
+    const D = Q => bg.a - BG.b * Q, S = Q => H.c + (2 * BG.k / N.n) * Q;
+    const recta = (fn, cls, extra = {}) => { F.plot.append(sv("path", { d: path([[F.sx(0), F.sy(fn(0))], [F.sx(1200), F.sy(fn(1200))]]), class: cls, ...extra })); };
+    if (bg.a !== BG.a0) recta(Q => BG.a0 - BG.b * Q, "bg-ghost");
+    if (bg.dc !== 0 || N.n !== BG.n0) recta(Q => BG.c0 + (2 * BG.k / BG.n0) * Q, "bg-ghost");
+    if (bg.dc !== 0) recta(() => BG.cA0 * BG.marg, "bg-ghost");
+    recta(D, "curve c-ink" + (bg.sel === "d" ? " bg-sel" : ""));
+    recta(S, "curve c-s2" + (bg.sel === "s" ? " bg-sel" : ""));
+    const pr = R.viva || sem < (H.cierre || 99) ? R.pav : R.pB;
+    recta(() => pr, "curve c-s1");
+    // Puntos: competencia perfecta (cruce) y real (demanda al precio fijado)
+    const guia = (Q, P, col) => { F.plot.append(sv("line", { x1: F.sx(Q), x2: F.sx(Q), y1: F.sy(0), y2: F.sy(P), class: "guide", style: "stroke:" + col })); F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(Q), y1: F.sy(P), y2: F.sy(P), class: "guide", style: "stroke:" + col })); };
+    guia(N.Q, N.P, "var(--s2)"); guia(R.Q, pr, "var(--s1)");
+    F.top.append(sv("circle", { cx: F.sx(N.Q), cy: F.sy(N.P), r: 7, class: "dot", style: "fill:var(--s2)" }));
+    F.top.append(sv("circle", { cx: F.sx(R.Q), cy: F.sy(pr), r: 7, class: "dot", style: "fill:var(--s1)" }));
+    rotulo(F, N.Q, N.P, t("bg.pt.n", { p: euro(N.P) }), N.Q > 800 ? "end" : "start", -12);
+    rotulo(F, R.Q, pr, t("bg.pt.r", { p: euro(pr) }), R.Q > 800 ? "end" : "start", pr > N.P ? -12 : 20);
+    const enX = (fn, Q) => ({ x: F.sx(Q), y: F.sy(fn(Q)) });
+    const qd = clamp((bg.a - 4) / BG.b, 0, 1150), lD = enX(D, Math.min(1150, qd)); F.top.append(sv("text", { x: lD.x - 6, y: lD.y - 8, "text-anchor": "end", class: "lbl" }, t("bg.lg.d")));
+    const qs = clamp((yMax - 6 - H.c) / (2 * BG.k / N.n), 0, 1150), lS = enX(S, qs); F.top.append(sv("text", { x: lS.x - 6, y: lS.y + 4, "text-anchor": "end", class: "lbl" }, t("bg.lg.s")));
+    // Zonas que se agarran (más anchas que la línea)
+    [["d", D], ["s", S]].forEach(([k, fn]) => F.plot.append(sv("path", { d: path([[F.sx(0), F.sy(fn(0))], [F.sx(1200), F.sy(fn(1200))]]), class: "bg-hit", "data-k": k })));
+    // ---- Empresa neoclásica ----
+    const G = frame($("bg-neo"), { w: 480, h: 400, xMax: 16, yMax, xTicks: [0, 4, 8, 12, 16], yTicks: [0, 20, 40, 60, 80], xLabel: () => t("bg.ax.q"), yLabel: () => t("bg.ax.eu") });
+    const c = H.c, CMe = q => BG.F / q + c + BG.k * q, CMg = q => c + 2 * BG.k * q;
+    curve(G, CMg, 0, 16, "c-s2"); curve(G, CMe, 0.5, 16, "c-s2", 160); G.plot.lastChild.setAttribute("style", "stroke-dasharray:6 4");
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(16), y1: G.sy(N.P), y2: G.sy(N.P), class: "curve c-ink" }));
+    if (N.q > 0) { const me = CMe(N.q); poly(G, [[0, Math.min(N.P, me)], [N.q, Math.min(N.P, me)], [N.q, Math.max(N.P, me)], [0, Math.max(N.P, me)]], N.pi >= 0 ? "a-ok" : "a-bad"); G.top.append(sv("circle", { cx: G.sx(N.q), cy: G.sy(N.P), r: 6, class: "dot", style: "fill:var(--s2)" })); }
+    rotulo(G, 0, N.P, t("bg.precio", { p: euro(N.P) }), "start", -8);
+    rotulo(G, N.q, 0, "q = " + e0(N.q), N.q > 12 ? "end" : "start", -8);
+    // ---- Empresas de la competencia real: fichas con su dinero en caja, y el dinero en caja semana a semana ----
+    const cajaMax = Math.max(...H.war.flatMap(x => [x.rA, x.rB]), BG.R0);
+    const ficha = (k, viva, p, q, pi, caja, cuota, col) => {
+      const f = el("div", { class: "bg-ficha" + (viva ? "" : " cerrada"), style: "--c:" + col },
+        el("h4", { text: t("bg.ficha." + k) }),
+        el("dl", {}, el("dt", { text: t("bg.c.p") }), el("dd", { text: viva ? euro(p) : "—" }),
+          el("dt", { text: t("bg.ficha.vende") }), el("dd", { text: viva ? e0(q) + " · " + Math.round(cuota * 100) + " %" : "—" }),
+          el("dt", { text: t("bg.ficha.sem") }), el("dd", { class: pi >= 0 ? "pos" : "neg", text: viva ? (pi >= 0 ? t("bg.ficha.gana", { b: euro(pi) }) : t("bg.ficha.pierde", { b: euro(-pi) })) : "—" })),
+        el("div", { class: "bg-caja-lab" }, el("span", { text: t("bg.ficha.caja") }), el("b", { text: euro(Math.max(0, caja)) })),
+        el("div", { class: "bg-caja" }, el("i", { style: "width:" + Math.max(0, Math.min(100, caja / cajaMax * 100)).toFixed(1) + "%" })));
+      if (!viva) f.append(el("div", { class: "bg-sello", text: t("bg.sello", { n: H.cierre }) }));
+      return f;
+    };
+    const cuotaA = R.Q > 0 ? R.qA / R.Q : 0;
+    $("bg-firmas").replaceChildren(ficha("A", Ri.viva, R.pA, R.qA, R.piA, R.rA, cuotaA, "var(--s3)"), ficha("B", true, R.pB, R.qB, R.piB, R.rB, 1 - cuotaA, "var(--s1)"));
+    const yC = escala(Math.min(0, ...H.war.map(x => x.rA)), cajaMax);
+    const J = frame($("bg-real"), { w: 480, h: 300, xMax: BG.W, yMin: yC.lo, yMax: yC.hi, xTicks: [1, 4, 7, 10, 14], yTicks: yC.ticks, yFmt: v => fmt(v / 1000), xLabel: () => t("bg.semana"), yLabel: () => t("bg.ax.caja") });
+    J.plot.append(sv("line", { x1: J.sx(0), x2: J.sx(BG.W), y1: J.sy(0), y2: J.sy(0), style: "stroke:var(--bad);stroke-width:2;stroke-dasharray:6 4" }));
+    J.top.append(sv("text", { x: J.sx(0.3), y: J.sy(0) - 6, class: "lbl", style: "fill:var(--bad)" }, t("bg.cero")));
+    const hastaT = campo => { const pts = H.war.filter(x => x.t <= tw + 1e-9).map(x => [x.t, x[campo]]); if (tw > sem + 1e-9 && H.war[sem]) pts.push([tw, R[campo]]); return pts; };
+    const finA = H.cierre ? H.cierre - 1 : BG.W;
+    J.plot.append(sv("path", { d: path(hastaT("rA").filter(p2 => p2[0] <= finA + 1e-9).map(p2 => [J.sx(p2[0]), J.sy(p2[1])])), class: "curve", style: "stroke:var(--s3);stroke-width:3.5" }));
+    J.plot.append(sv("path", { d: path(hastaT("rB").map(p2 => [J.sx(p2[0]), J.sy(p2[1])])), class: "curve", style: "stroke:var(--s1);stroke-width:3.5" }));
+    if (H.cierre && tw >= finA - 1e-9) {
+      const x = finA, y = H.war[finA - 1].rA;
+      J.top.append(sv("circle", { cx: J.sx(x), cy: J.sy(y), r: 9, style: "fill:none;stroke:var(--bad);stroke-width:3" }));
+      J.top.append(sv("text", { x: J.sx(x) + (x > BG.W * 0.6 ? -12 : 12), y: J.sy(y) + 22, "text-anchor": x > BG.W * 0.6 ? "end" : "start", class: "lbl", style: "fill:var(--bad);font-weight:700" }, t("bg.cierra", { n: H.cierre })));
+    }
+    // ---- Lo que pasa (efectos) ----
+    const fin = sem >= BG.W;
+    const dP = x => Math.abs(x) < 0.05 ? null : x;
+    let tn, tr2;
+    if (sem === 1 && tw < 1.001) {
+      const cb = { P: ini.n.P - ini.base.P, Q: ini.n.Q - ini.base.Q };
+      const rb = { P: (H.cA - BG.cA0) * BG.marg, Q: H.war[0].Q - ((BG.a0 - BG.cA0 * BG.marg) / BG.b) };
+      tn = t("bg.n.cp", { p: euro(N.P), Q: e0(N.Q), q: e0(N.q), g: t(N.pi >= 0 ? "bg.gana" : "bg.pierde", { b: euro(Math.abs(N.pi)) }) }) + " " + t(N.pi > 3 ? "bg.n.entra" : N.pi < -3 ? "bg.n.sale" : "bg.n.quieto");
+      tr2 = t("bg.r.cp", { p: euro(pr), Q: e0(R.Q) }) + " " + t("bg.r.b");
+      if (dP(cb.P) != null || Math.abs(cb.Q) > 0.5) tn = t(bg.dc === 0 ? "bg.n.shockd" : "bg.n.shock", { dp: (cb.P >= 0 ? "+" : "−") + euro(Math.abs(cb.P)), dq: (cb.Q >= 0 ? "+" : "−") + e0(Math.abs(cb.Q)) }) + " " + tn;
+      if (dP(rb.P) != null || Math.abs(rb.Q) > 0.5) tr2 = t(dP(rb.P) == null ? "bg.r.shockq" : "bg.r.shock", { dp: (rb.P >= 0 ? "+" : "−") + euro(Math.abs(rb.P)), dq: (rb.Q >= 0 ? "+" : "−") + e0(Math.abs(rb.Q)) }) + " " + tr2;
+    } else {
+      const N1 = H.neo[0];
+      tn = fin || N.d === 0 && sem > 1 ? t(N.n >= N1.n ? "bg.n.fin" : "bg.n.fin2", { dn: Math.abs(Math.round(N.n - N1.n)), p: euro(N.P), m: euro(H.pLr) }) : t("bg.n.va", { n: Math.round(N.n), p: euro(N.P), g: t(N.pi >= 0 ? "bg.gana" : "bg.pierde", { b: euro(Math.abs(N.pi)) }) });
+      tr2 = !Ri.viva || (H.cierre && sem >= H.cierre) ? t("bg.r.fin", { n: H.cierre, p: euro(R.pB) }) : t("bg.r.va", { p: euro(R.pB), l: euro(Math.max(0, -R.piA)), r: euro(Math.max(0, R.rA)) });
+    }
+    $("bg-ef-n").textContent = tn; $("bg-ef-r").textContent = tr2;
+    // ---- Cifras para calcular ----
+    const fila = (k, a, b2, c2) => el("tr", {}, el("th", { text: t(k) }), el("td", { text: a }), el("td", { text: b2 }), el("td", { text: c2 }));
+    $("bg-cifras").replaceChildren(
+      el("thead", {}, el("tr", {}, el("th", { text: t("bg.c.sem", { n: sem }) }), el("th", { class: "n", text: t("bg.c.n") }), el("th", { class: "r", text: t("bg.c.a") }), el("th", { class: "r", text: t("bg.c.b") }))),
+      el("tbody", {},
+        fila("bg.c.p", euro(N.P), Ri.viva ? euro(R.pA) : "—", euro(R.pB)),
+        el("tr", {}, el("th", { text: t("bg.c.Q") }), el("td", { text: e0(N.Q) }), el("td", { colspan: "2", text: e0(R.Q) })),
+        fila("bg.c.q", e0(N.q), Ri.viva ? e0(R.qA) : t("bg.cerradaC"), e0(R.qB)),
+        fila("bg.c.pi", signed(N.pi), Ri.viva ? signed(R.piA) : "—", signed(R.piB)),
+        el("tr", {}, el("th", { text: t("bg.c.emp") }), el("td", { text: String(Math.round(N.n)) }), el("td", { colspan: "2", text: Ri.viva ? "2" : "1" }))));
+    // ---- Fórmulas ----
+    const n2 = f => fmt(f, 2).replace(/,00$/, "");
+    $("bg-formulas").replaceChildren(...[
+      ["bg.fx.d", { a: e0(bg.a) }], ["bg.fx.s", { c: e0(c), k: n2(2 * BG.k / N.n), n: Math.round(N.n) }], ["bg.fx.eq", { a: e0(bg.a), c: e0(c), k: n2(BG.b + 2 * BG.k / N.n), Q: e0(N.Q), p: e0(N.P) }],
+      ["bg.fx.emp", { c: e0(c), p: e0(N.P), q: e0(N.q) }], ["bg.fx.lp", { m: e0(H.pLr) }],
+      ["bg.fx.r", { cA: e0(H.cA), p: e0(H.cA * BG.marg), a: e0(bg.a), Q: e0(H.war[0].Q) }], ["bg.fx.g", { cB: e0(H.cB), s: e0(H.cB * 7 / 6) }], ["bg.fx.nota", {}]
+    ].map(([k, v]) => { const pp = el("p"); pp.innerHTML = t(k, v); return pp; }));
+    $("bg-t-out").textContent = t("bg.t.out", { n: sem, w: BG.W });
+    $("bg-t").value = String(sem);
+  }
+  // ---- Arrastrar las curvas (ratón, dedo) ----
+  const bgSvgPt = ev => { const svg = $("bg-mkt"), pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; const m = svg.getScreenCTM(); if (!m) return null; const q = pt.matrixTransform(m.inverse()); const Fx = bgF; return { Q: (q.x - M.l) / Fx.pw * 1200, P: (M.t + Fx.ph - q.y) / Fx.ph * Fx.o.yMax, x: q.x, y: q.y }; };
+  let bgDrag = null;
+  $("bg-mkt").addEventListener("pointerdown", ev => {
+    if (!bgF) return;
+    const d = bgSvgPt(ev); if (!d) return;
+    const N = bgEn(bg.H.neo, bg.tw), px = v => Math.abs(v) / bgF.o.yMax * bgF.ph;
+    const dd = px(d.P - (bg.a - BG.b * d.Q)), ds = px(d.P - (bg.H.c + (2 * BG.k / N.n) * d.Q));
+    const k = Math.min(dd, ds) > 26 ? null : dd <= ds ? "d" : "s"; if (!k) return;
+    bgParar(); bg.tw = 1;
+    bgDrag = { k, Q0: d.Q, P0: d.P, a0: bg.a, dc0: bg.dc }; bg.sel = k;
+    $("bg-mkt").setPointerCapture(ev.pointerId); $("bg-mkt").classList.add("agarrando"); ev.preventDefault();
+  });
+  $("bg-mkt").addEventListener("pointermove", ev => {
+    if (!bgDrag) return;
+    const d = bgSvgPt(ev); if (!d) return;
+    if (bgDrag.k === "d") bg.a = clamp(Math.round((bgDrag.a0 + (d.P - bgDrag.P0) + BG.b * (d.Q - bgDrag.Q0)) * 2) / 2, 35, 90);
+    else bg.dc = clamp(Math.round((bgDrag.dc0 + (d.P - bgDrag.P0) - (2 * BG.k / BG.n0) * (d.Q - bgDrag.Q0)) * 2) / 2, -10, 25);
+    bgHistorias(); bgPintar();
+  });
+  const bgSuelta = () => { if (!bgDrag) return; bgDrag = null; bg.sel = null; $("bg-mkt").classList.remove("agarrando"); bgPintar(); };
+  $("bg-mkt").addEventListener("pointerup", bgSuelta); $("bg-mkt").addEventListener("pointercancel", bgSuelta);
+  // ---- Botones y teclado (mover a la derecha = más demanda; oferta a la derecha = costes más bajos) ----
+  const bgMueve = (k, sentido) => { bgParar(); bg.tw = 1; if (k === "d") bg.a = clamp(bg.a + 2.5 * sentido, 35, 90); else bg.dc = clamp(bg.dc - 2.5 * sentido, -10, 25); bgHistorias(); bgPintar(); };
+  [["bg-d-menos", "d", -1], ["bg-d-mas", "d", 1], ["bg-s-menos", "s", -1], ["bg-s-mas", "s", 1]].forEach(([id, k, sg]) => $(id).addEventListener("click", () => bgMueve(k, sg)));
+  let bgTecla = "d";
+  $("bg-mkt").addEventListener("keydown", ev => {
+    if (ev.key === "d" || ev.key === "D") { bgTecla = "d"; bg.sel = "d"; bgPintar(); ev.preventDefault(); }
+    else if (ev.key === "o" || ev.key === "O" || ev.key === "s" || ev.key === "S") { bgTecla = "s"; bg.sel = "s"; bgPintar(); ev.preventDefault(); }
+    else if (ev.key === "ArrowRight" || ev.key === "ArrowUp") { bgMueve(bgTecla, 1); ev.preventDefault(); }
+    else if (ev.key === "ArrowLeft" || ev.key === "ArrowDown") { bgMueve(bgTecla, -1); ev.preventDefault(); }
+  });
+  $("bg-mkt").addEventListener("blur", () => { if (bg.sel) { bg.sel = null; bgPintar(); } });
+  // ---- El largo plazo: semana a semana, sin saltos ----
+  function bgParar() { if (bg.reloj) { cancelAnimationFrame(bg.reloj); bg.reloj = null; } $("bg-play").textContent = t("bg.play"); }
+  $("bg-play").addEventListener("click", () => {
+    if (bg.reloj) { bgParar(); bgPintar(); return; }
+    const w0 = bg.tw >= BG.W ? 1 : bg.tw, t0 = performance.now(), dur = (BG.W - w0) * 800;
+    $("bg-play").textContent = t("bg.pausa");
+    const paso = ahora => { if (!bg.reloj) return; const k = Math.min(1, (ahora - t0) / dur); bg.tw = w0 + (BG.W - w0) * k; bgPintar(); if (k < 1) bg.reloj = requestAnimationFrame(paso); else { bgParar(); bg.tw = BG.W; bgPintar(); } };
+    bg.reloj = requestAnimationFrame(paso);
+  });
+  $("bg-t").addEventListener("input", () => { bgParar(); bg.tw = +$("bg-t").value; bgPintar(); });
+  $("bg-reset").addEventListener("click", () => { bgParar(); bg.a = BG.a0; bg.dc = 0; bg.tw = 1; bgHistorias(); bgPintar(); });
+
   // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
   OBS.register({ es: {
+    "tab.bg": "El mercado", "tab.2b": "Pocas empresas o una",
+    "bg.ficha.A": "A · técnica de siempre", "bg.ficha.B": "B · técnica nueva, más barata", "bg.ficha.vende": "Vende", "bg.ficha.sem": "Cada semana",
+    "bg.ficha.gana": "gana {b}", "bg.ficha.pierde": "pierde {b}", "bg.ficha.caja": "Dinero en caja", "bg.sello": "Cerrada · semana {n}",
+    "bg.lg.a2": "A: técnica de siempre", "bg.lg.b2": "B: técnica nueva, más barata", "bg.ax.caja": "Dinero en caja (miles de €)", "bg.cero": "sin dinero: cierra", "bg.cierra": "A cierra (semana {n})",
+    "bg.aria.caja": "Dinero en caja de cada empresa semana a semana; la que llega a cero, cierra",
+
+    "bg.eyebrow": "1 · El mismo mercado, dos maneras de entenderlo", "bg.h2": "Competencia perfecta y competencia real",
+    "bg.p": "En la <b>competencia perfecta</b>, el mercado es un proceso armonioso: si se deja actuar a la oferta y la demanda, se llega a un resultado óptimo y estable. En la <b>competencia real</b> (Shaikh), las empresas fijan sus precios y luchan por los clientes bajándolos: el resultado es turbulento y acaba con cierres de empresas. <b>Arrastra la demanda o la oferta</b> y mira cómo reaccionan las empresas de cada lado; después, pulsa «Reproducir el largo plazo».",
+    "bg.ballet": "Competencia perfecta", "bg.guerra": "Competencia real",
+    "bg.f.mkt": "El mercado: arrastra las curvas", "bg.f.neo": "Una empresa neoclásica (competencia perfecta)", "bg.f.real": "Las dos empresas de la competencia real",
+    "bg.lg.d": "Demanda", "bg.lg.s": "Oferta (competencia perfecta)", "bg.lg.p": "Precio que fijan las empresas (competencia real)", "bg.lg.antes": "Al principio",
+    "bg.lg.cmg": "Coste marginal", "bg.lg.cme": "Coste medio", "bg.lg.precio": "Precio", "bg.lg.a": "A: técnica de siempre", "bg.lg.b": "B: técnica nueva, más barata",
+    "bg.mueve.d": "Demanda", "bg.mueve.s": "Oferta", "bg.a.dl": "Demanda a la izquierda", "bg.a.dr": "Demanda a la derecha", "bg.a.sl": "Oferta a la izquierda", "bg.a.sr": "Oferta a la derecha",
+    "bg.aria.mkt": "Mercado con la demanda, la oferta de la competencia perfecta y el precio que fijan las empresas de la competencia real. Arrastra una curva con el ratón o el dedo; con el teclado, pulsa D (demanda) u O (oferta) y las flechas.",
+    "bg.aria.neo": "Coste marginal, coste medio y precio de una empresa neoclásica, con el beneficio o la pérdida", "bg.aria.real": "Costes y precio de las dos empresas de la competencia real, con lo que vende cada una",
+    "bg.ax.Q": "Cantidad del mercado (Q)", "bg.ax.P": "Precio (€)", "bg.ax.q": "Lo que produce cada empresa (q)", "bg.ax.eu": "€ por unidad",
+    "bg.pt.n": "c. perfecta: {p}", "bg.pt.r": "c. real: {p}", "bg.precio": "precio {p}", "bg.cap": "capacidad", "bg.cerrada": "{e} ha cerrado", "bg.cerradaC": "cerrada",
+    "bg.play": "Reproducir el largo plazo", "bg.pausa": "Pausa", "bg.semana": "Semana", "bg.t.out": "{n} de {w}", "bg.reset": "Volver al principio",
+    "bg.n.cp": "El precio es {p} y se venden {Q} unidades. Cada empresa produce {q} y {g}.", "bg.gana": "gana {b} más de lo normal", "bg.pierde": "pierde {b}",
+    "bg.n.entra": "Ese beneficio extra atraerá empresas nuevas.", "bg.n.sale": "Con pérdidas, saldrán empresas.", "bg.n.quieto": "Nadie gana de más: no entra ni sale nadie.",
+    "bg.n.shock": "Respecto al principio, el precio cambia {dp} y la cantidad {dq}.", "bg.n.shockd": "Respecto al principio, el precio cambia {dp} y la cantidad {dq}: el ajuste se hace por el precio.",
+    "bg.n.va": "Entran o salen empresas: ya son {n}. El precio es {p} y cada una {g}.",
+    "bg.n.fin2": "Han salido {dn} empresas. El precio ha subido a {p}, casi el mínimo del coste medio ({m}): nadie pierde y el mercado vuelve al equilibrio.", "bg.n.fin": "Han entrado {dn} empresas. El precio ha bajado a {p}, casi el mínimo del coste medio ({m}): nadie gana de más y el mercado vuelve al equilibrio.",
+    "bg.r.cp": "Las empresas fijan el precio en {p}: lo que les cuesta cada unidad más un margen. La demanda decide cuánto venden: {Q} unidades.",
+    "bg.r.b": "Pero B tiene una técnica más barata: puede bajar el precio para quitarle clientes a A.",
+    "bg.r.shock": "Respecto al principio, el precio cambia {dp} (porque cambian los costes) y la cantidad {dq}.",
+    "bg.r.shockq": "Respecto al principio, el precio no cambia: lo fijan los costes. Cambia la cantidad, {dq}: el ajuste es por cantidad.",
+    "bg.r.va": "B baja el precio a {p}. A la sigue, pero pierde {l} a la semana; le quedan {r} de reservas.",
+    "bg.r.fin": "A ha cerrado en la semana {n}. B se queda con todo el mercado a {p} y amplía la fábrica. No hay equilibrio: la competencia acaba concentrando el mercado.",
+    "bg.c.sem": "Semana {n}", "bg.c.n": "Competencia perfecta", "bg.c.a": "Competencia real: A", "bg.c.b": "Competencia real: B",
+    "bg.c.p": "Precio", "bg.c.Q": "Cantidad del mercado", "bg.c.q": "Lo que produce cada empresa", "bg.c.pi": "Beneficio de cada empresa (a la semana)", "bg.c.emp": "Empresas en el mercado",
+    "bg.como": "Cómo se construye (y las fórmulas para los problemas)",
+    "bg.fx.d": "<b>Demanda:</b> <code>P = {a} − 0,05·Q</code>. Arrastrarla a la derecha sube el {a}.",
+    "bg.fx.s": "<b>Competencia perfecta · oferta:</b> {n} empresas iguales, cada una con <code>CT = 100 + {c}·q + 1,5·q²</code> (coste marginal <code>CMg = {c} + 3q</code>). Sumadas: <code>P = {c} + {k}·Q</code>. Arrastrar la oferta cambia los costes (el {c}).",
+    "bg.fx.eq": "<b>Equilibrio:</b> <code>{a} − 0,05·Q = {c} + {k}·Q</code> → <code>Q = ({a} − {c}) / {k} = {Q}</code> y <code>P = {p} €</code>.",
+    "bg.fx.emp": "<b>Cada empresa</b> produce donde el precio iguala su coste marginal: <code>{p} = {c} + 3q</code> → <code>q = {q}</code>.",
+    "bg.fx.lp": "<b>A largo plazo</b> entran empresas mientras se gane más de lo normal, hasta que el precio llega al mínimo del coste medio: <code>{m} €</code>.",
+    "bg.fx.r": "<b>Competencia real · precio:</b> no hay curva de oferta; las empresas fijan el precio sumando un margen a lo que les cuesta cada unidad: <code>P = 1,4 × {cA} = {p} €</code>. La demanda decide la cantidad: <code>Q = ({a} − {p}) / 0,05 = {Q}</code>.",
+    "bg.fx.g": "<b>Competencia real · las empresas:</b> A tiene la técnica de siempre (<code>CT = 1500 + {cA}·q</code>); B, una más barata (<code>CT = 2000 + {cB}·q</code>). Cada semana B baja el precio 1 € (sin bajar de <code>{s} €</code>); A la sigue sin bajar de lo que le cuesta una unidad; por cada euro de diferencia, un 5 % de los clientes se pasa a la más barata. Cada una empieza con 3000 € de reservas; quien se queda sin reservas, cierra.",
+    "bg.fx.nota": "<b>Simplificación.</b> Shaikh (2023, cap. 7) explica que los precios que fijan las empresas también responden algo a la demanda, y que «la oferta y la demanda desempeñan un papel en el proceso pero no en el resultado final». Aquí, para ver la diferencia, el precio de la competencia real solo cambia con los costes.",
+
     "sub.3a": "a · La guerra de precios", "sub.3b": "b · Comparar con la competencia perfecta", "sub.3c": "c · Taller: tus dos empresas",
     "w.eyebrow": "3b · Las mismas empresas, en los dos mundos",
     "sup.r1": "Cada empresa fija su precio: no hay un precio de mercado que todas acepten.",
@@ -3539,6 +3855,47 @@ window.OBS = (() => {
     "e.empty": "Escribe una función.", "e.char": "Hay un carácter que no entiendo, «{c}», en la posición {p}.", "e.expect": "Falta un número, una letra o un paréntesis en la posición {p}.",
     "e.close": "Falta cerrar un paréntesis «)» en la posición {p}.", "e.extra": "Sobra «{c}» en la posición {p}.", "e.num": "El número de la posición {p} está mal escrito.", "e.which": "En {f}: ",
   }, va: {
+    "tab.bg": "El mercat", "tab.2b": "Poques empreses o una",
+    "bg.ficha.A": "A · tècnica de sempre", "bg.ficha.B": "B · tècnica nova, més barata", "bg.ficha.vende": "Ven", "bg.ficha.sem": "Cada setmana",
+    "bg.ficha.gana": "guanya {b}", "bg.ficha.pierde": "perd {b}", "bg.ficha.caja": "Diners en caixa", "bg.sello": "Tancada · setmana {n}",
+    "bg.lg.a2": "A: tècnica de sempre", "bg.lg.b2": "B: tècnica nova, més barata", "bg.ax.caja": "Diners en caixa (milers d'€)", "bg.cero": "sense diners: tanca", "bg.cierra": "A tanca (setmana {n})",
+    "bg.aria.caja": "Diners en caixa de cada empresa setmana a setmana; la que arriba a zero, tanca",
+
+    "bg.eyebrow": "1 · El mateix mercat, dues maneres d'entendre'l", "bg.h2": "Competència perfecta i competència real",
+    "bg.p": "En la <b>competència perfecta</b>, el mercat és un procés harmoniós: si es deixa actuar l'oferta i la demanda, s'arriba a un resultat òptim i estable. En la <b>competència real</b> (Shaikh), les empreses fixen els seus preus i lluiten pels clients abaixant-los: el resultat és turbulent i acaba amb tancaments d'empreses. <b>Arrossega la demanda o l'oferta</b> i mira com reaccionen les empreses de cada costat; després, prem «Reproduir el llarg termini».",
+    "bg.ballet": "Competència perfecta", "bg.guerra": "Competència real",
+    "bg.f.mkt": "El mercat: arrossega les corbes", "bg.f.neo": "Una empresa neoclàssica (competència perfecta)", "bg.f.real": "Les dues empreses de la competència real",
+    "bg.lg.d": "Demanda", "bg.lg.s": "Oferta (competència perfecta)", "bg.lg.p": "Preu que fixen les empreses (competència real)", "bg.lg.antes": "Al principi",
+    "bg.lg.cmg": "Cost marginal", "bg.lg.cme": "Cost mitjà", "bg.lg.precio": "Preu", "bg.lg.a": "A: tècnica de sempre", "bg.lg.b": "B: tècnica nova, més barata",
+    "bg.mueve.d": "Demanda", "bg.mueve.s": "Oferta", "bg.a.dl": "Demanda a l'esquerra", "bg.a.dr": "Demanda a la dreta", "bg.a.sl": "Oferta a l'esquerra", "bg.a.sr": "Oferta a la dreta",
+    "bg.aria.mkt": "Mercat amb la demanda, l'oferta de la competència perfecta i el preu que fixen les empreses de la competència real. Arrossega una corba amb el ratolí o el dit; amb el teclat, prem D (demanda) o O (oferta) i les fletxes.",
+    "bg.aria.neo": "Cost marginal, cost mitjà i preu d'una empresa neoclàssica, amb el benefici o la pèrdua", "bg.aria.real": "Costos i preu de les dues empreses de la competència real, amb el que ven cadascuna",
+    "bg.ax.Q": "Quantitat del mercat (Q)", "bg.ax.P": "Preu (€)", "bg.ax.q": "El que produïx cada empresa (q)", "bg.ax.eu": "€ per unitat",
+    "bg.pt.n": "c. perfecta: {p}", "bg.pt.r": "c. real: {p}", "bg.precio": "preu {p}", "bg.cap": "capacitat", "bg.cerrada": "{e} ha tancat", "bg.cerradaC": "tancada",
+    "bg.play": "Reproduir el llarg termini", "bg.pausa": "Pausa", "bg.semana": "Setmana", "bg.t.out": "{n} de {w}", "bg.reset": "Tornar al principi",
+    "bg.n.cp": "El preu és {p} i es venen {Q} unitats. Cada empresa produïx {q} i {g}.", "bg.gana": "guanya {b} més del normal", "bg.pierde": "perd {b}",
+    "bg.n.entra": "Eixe benefici extra atraurà empreses noves.", "bg.n.sale": "Amb pèrdues, n'eixiran empreses.", "bg.n.quieto": "Ningú guanya de més: no entra ni ix ningú.",
+    "bg.n.shock": "Respecte al principi, el preu canvia {dp} i la quantitat {dq}.", "bg.n.shockd": "Respecte al principi, el preu canvia {dp} i la quantitat {dq}: l'ajust es fa pel preu.",
+    "bg.n.va": "Entren o ixen empreses: ja en són {n}. El preu és {p} i cadascuna {g}.",
+    "bg.n.fin2": "Han eixit {dn} empreses. El preu ha pujat a {p}, quasi el mínim del cost mitjà ({m}): ningú perd i el mercat torna a l'equilibri.", "bg.n.fin": "Han entrat {dn} empreses. El preu ha baixat a {p}, quasi el mínim del cost mitjà ({m}): ningú guanya de més i el mercat torna a l'equilibri.",
+    "bg.r.cp": "Les empreses fixen el preu en {p}: el que els costa cada unitat més un marge. La demanda decidix quant venen: {Q} unitats.",
+    "bg.r.b": "Però B té una tècnica més barata: pot abaixar el preu per a llevar-li clients a A.",
+    "bg.r.shock": "Respecte al principi, el preu canvia {dp} (perquè canvien els costos) i la quantitat {dq}.",
+    "bg.r.shockq": "Respecte al principi, el preu no canvia: el fixen els costos. Canvia la quantitat, {dq}: l'ajust és per quantitat.",
+    "bg.r.va": "B abaixa el preu a {p}. A la seguix, però perd {l} a la setmana; li queden {r} de reserves.",
+    "bg.r.fin": "A ha tancat en la setmana {n}. B es queda amb tot el mercat a {p} i amplia la fàbrica. No hi ha equilibri: la competència acaba concentrant el mercat.",
+    "bg.c.sem": "Setmana {n}", "bg.c.n": "Competència perfecta", "bg.c.a": "Competència real: A", "bg.c.b": "Competència real: B",
+    "bg.c.p": "Preu", "bg.c.Q": "Quantitat del mercat", "bg.c.q": "El que produïx cada empresa", "bg.c.pi": "Benefici de cada empresa (a la setmana)", "bg.c.emp": "Empreses en el mercat",
+    "bg.como": "Com es construïx (i les fórmules per als problemes)",
+    "bg.fx.d": "<b>Demanda:</b> <code>P = {a} − 0,05·Q</code>. Arrossegar-la a la dreta puja el {a}.",
+    "bg.fx.s": "<b>Competència perfecta · oferta:</b> {n} empreses iguals, cadascuna amb <code>CT = 100 + {c}·q + 1,5·q²</code> (cost marginal <code>CMg = {c} + 3q</code>). Sumades: <code>P = {c} + {k}·Q</code>. Arrossegar l'oferta canvia els costos (el {c}).",
+    "bg.fx.eq": "<b>Equilibri:</b> <code>{a} − 0,05·Q = {c} + {k}·Q</code> → <code>Q = ({a} − {c}) / {k} = {Q}</code> i <code>P = {p} €</code>.",
+    "bg.fx.emp": "<b>Cada empresa</b> produïx on el preu iguala el seu cost marginal: <code>{p} = {c} + 3q</code> → <code>q = {q}</code>.",
+    "bg.fx.lp": "<b>A llarg termini</b> entren empreses mentre es guanye més del normal, fins que el preu arriba al mínim del cost mitjà: <code>{m} €</code>.",
+    "bg.fx.r": "<b>Competència real · preu:</b> no hi ha corba d'oferta; les empreses fixen el preu sumant un marge al que els costa cada unitat: <code>P = 1,4 × {cA} = {p} €</code>. La demanda decidix la quantitat: <code>Q = ({a} − {p}) / 0,05 = {Q}</code>.",
+    "bg.fx.g": "<b>Competència real · les empreses:</b> A té la tècnica de sempre (<code>CT = 1500 + {cA}·q</code>); B, una més barata (<code>CT = 2000 + {cB}·q</code>). Cada setmana B abaixa el preu 1 € (sense baixar de <code>{s} €</code>); A la seguix sense baixar del que li costa una unitat; per cada euro de diferència, un 5 % dels clients es passa a la més barata. Cadascuna comença amb 3000 € de reserves; qui es queda sense reserves, tanca.",
+    "bg.fx.nota": "<b>Simplificació.</b> Shaikh (2023, cap. 7) explica que els preus que fixen les empreses també responen un poc a la demanda, i que «l'oferta i la demanda tenen un paper en el procés però no en el resultat final». Ací, per a veure la diferència, el preu de la competència real només canvia amb els costos.",
+
     "sub.3a": "a · La guerra de preus", "sub.3b": "b · Comparar amb la competència perfecta", "sub.3c": "c · Taller: les teues dues empreses",
     "w.eyebrow": "3b · Les mateixes empreses, en els dos mons",
     "sup.r1": "Cada empresa fixa el seu preu: no hi ha un preu de mercat que totes accepten.",
@@ -3665,7 +4022,7 @@ window.OBS = (() => {
     const pal0 = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
     OBS.subpestanas($("view-perfecta"), [{ el: $("firm-block"), t: tr("sub.1a") }, { el: $("market-block"), t: tr("sub.1b") }],
       { onChange: () => { if (typeof fRep !== "undefined") { fRep.parar(); mRep.parar(); ptRep.parar(); } } });
-    OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }, { el: $("mt-block"), t: tr("sub.2c") }],
+    OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }],
       { onChange: () => { if (typeof moRep !== "undefined") { moRep.parar(); mtRep.parar(); } } });
     OBS.subpestanas($("view-real"), [{ el: $("rm-block"), t: tr("sub.3a") }, { el: $("war-block"), t: tr("sub.3b") }],
       { onChange: () => { if (typeof rmRep !== "undefined") { rmRep.parar(); rtRep.parar(); stopPlay(); } } });
@@ -3688,6 +4045,47 @@ window.OBS = (() => {
     OBS.palabras($("war-block"), pal(["cf", "cmg", "cuota", "res"]), { antes: $("w-perf") });
   }
   OBS.register({ es: {
+    "tab.bg": "El mercado", "tab.2b": "Pocas empresas o una",
+    "bg.ficha.A": "A · técnica de siempre", "bg.ficha.B": "B · técnica nueva, más barata", "bg.ficha.vende": "Vende", "bg.ficha.sem": "Cada semana",
+    "bg.ficha.gana": "gana {b}", "bg.ficha.pierde": "pierde {b}", "bg.ficha.caja": "Dinero en caja", "bg.sello": "Cerrada · semana {n}",
+    "bg.lg.a2": "A: técnica de siempre", "bg.lg.b2": "B: técnica nueva, más barata", "bg.ax.caja": "Dinero en caja (miles de €)", "bg.cero": "sin dinero: cierra", "bg.cierra": "A cierra (semana {n})",
+    "bg.aria.caja": "Dinero en caja de cada empresa semana a semana; la que llega a cero, cierra",
+
+    "bg.eyebrow": "1 · El mismo mercado, dos maneras de entenderlo", "bg.h2": "Competencia perfecta y competencia real",
+    "bg.p": "En la <b>competencia perfecta</b>, el mercado es un proceso armonioso: si se deja actuar a la oferta y la demanda, se llega a un resultado óptimo y estable. En la <b>competencia real</b> (Shaikh), las empresas fijan sus precios y luchan por los clientes bajándolos: el resultado es turbulento y acaba con cierres de empresas. <b>Arrastra la demanda o la oferta</b> y mira cómo reaccionan las empresas de cada lado; después, pulsa «Reproducir el largo plazo».",
+    "bg.ballet": "Competencia perfecta", "bg.guerra": "Competencia real",
+    "bg.f.mkt": "El mercado: arrastra las curvas", "bg.f.neo": "Una empresa neoclásica (competencia perfecta)", "bg.f.real": "Las dos empresas de la competencia real",
+    "bg.lg.d": "Demanda", "bg.lg.s": "Oferta (competencia perfecta)", "bg.lg.p": "Precio que fijan las empresas (competencia real)", "bg.lg.antes": "Al principio",
+    "bg.lg.cmg": "Coste marginal", "bg.lg.cme": "Coste medio", "bg.lg.precio": "Precio", "bg.lg.a": "A: técnica de siempre", "bg.lg.b": "B: técnica nueva, más barata",
+    "bg.mueve.d": "Demanda", "bg.mueve.s": "Oferta", "bg.a.dl": "Demanda a la izquierda", "bg.a.dr": "Demanda a la derecha", "bg.a.sl": "Oferta a la izquierda", "bg.a.sr": "Oferta a la derecha",
+    "bg.aria.mkt": "Mercado con la demanda, la oferta de la competencia perfecta y el precio que fijan las empresas de la competencia real. Arrastra una curva con el ratón o el dedo; con el teclado, pulsa D (demanda) u O (oferta) y las flechas.",
+    "bg.aria.neo": "Coste marginal, coste medio y precio de una empresa neoclásica, con el beneficio o la pérdida", "bg.aria.real": "Costes y precio de las dos empresas de la competencia real, con lo que vende cada una",
+    "bg.ax.Q": "Cantidad del mercado (Q)", "bg.ax.P": "Precio (€)", "bg.ax.q": "Lo que produce cada empresa (q)", "bg.ax.eu": "€ por unidad",
+    "bg.pt.n": "c. perfecta: {p}", "bg.pt.r": "c. real: {p}", "bg.precio": "precio {p}", "bg.cap": "capacidad", "bg.cerrada": "{e} ha cerrado", "bg.cerradaC": "cerrada",
+    "bg.play": "Reproducir el largo plazo", "bg.pausa": "Pausa", "bg.semana": "Semana", "bg.t.out": "{n} de {w}", "bg.reset": "Volver al principio",
+    "bg.n.cp": "El precio es {p} y se venden {Q} unidades. Cada empresa produce {q} y {g}.", "bg.gana": "gana {b} más de lo normal", "bg.pierde": "pierde {b}",
+    "bg.n.entra": "Ese beneficio extra atraerá empresas nuevas.", "bg.n.sale": "Con pérdidas, saldrán empresas.", "bg.n.quieto": "Nadie gana de más: no entra ni sale nadie.",
+    "bg.n.shock": "Respecto al principio, el precio cambia {dp} y la cantidad {dq}.", "bg.n.shockd": "Respecto al principio, el precio cambia {dp} y la cantidad {dq}: el ajuste se hace por el precio.",
+    "bg.n.va": "Entran o salen empresas: ya son {n}. El precio es {p} y cada una {g}.",
+    "bg.n.fin2": "Han salido {dn} empresas. El precio ha subido a {p}, casi el mínimo del coste medio ({m}): nadie pierde y el mercado vuelve al equilibrio.", "bg.n.fin": "Han entrado {dn} empresas. El precio ha bajado a {p}, casi el mínimo del coste medio ({m}): nadie gana de más y el mercado vuelve al equilibrio.",
+    "bg.r.cp": "Las empresas fijan el precio en {p}: lo que les cuesta cada unidad más un margen. La demanda decide cuánto venden: {Q} unidades.",
+    "bg.r.b": "Pero B tiene una técnica más barata: puede bajar el precio para quitarle clientes a A.",
+    "bg.r.shock": "Respecto al principio, el precio cambia {dp} (porque cambian los costes) y la cantidad {dq}.",
+    "bg.r.shockq": "Respecto al principio, el precio no cambia: lo fijan los costes. Cambia la cantidad, {dq}: el ajuste es por cantidad.",
+    "bg.r.va": "B baja el precio a {p}. A la sigue, pero pierde {l} a la semana; le quedan {r} de reservas.",
+    "bg.r.fin": "A ha cerrado en la semana {n}. B se queda con todo el mercado a {p} y amplía la fábrica. No hay equilibrio: la competencia acaba concentrando el mercado.",
+    "bg.c.sem": "Semana {n}", "bg.c.n": "Competencia perfecta", "bg.c.a": "Competencia real: A", "bg.c.b": "Competencia real: B",
+    "bg.c.p": "Precio", "bg.c.Q": "Cantidad del mercado", "bg.c.q": "Lo que produce cada empresa", "bg.c.pi": "Beneficio de cada empresa (a la semana)", "bg.c.emp": "Empresas en el mercado",
+    "bg.como": "Cómo se construye (y las fórmulas para los problemas)",
+    "bg.fx.d": "<b>Demanda:</b> <code>P = {a} − 0,05·Q</code>. Arrastrarla a la derecha sube el {a}.",
+    "bg.fx.s": "<b>Competencia perfecta · oferta:</b> {n} empresas iguales, cada una con <code>CT = 100 + {c}·q + 1,5·q²</code> (coste marginal <code>CMg = {c} + 3q</code>). Sumadas: <code>P = {c} + {k}·Q</code>. Arrastrar la oferta cambia los costes (el {c}).",
+    "bg.fx.eq": "<b>Equilibrio:</b> <code>{a} − 0,05·Q = {c} + {k}·Q</code> → <code>Q = ({a} − {c}) / {k} = {Q}</code> y <code>P = {p} €</code>.",
+    "bg.fx.emp": "<b>Cada empresa</b> produce donde el precio iguala su coste marginal: <code>{p} = {c} + 3q</code> → <code>q = {q}</code>.",
+    "bg.fx.lp": "<b>A largo plazo</b> entran empresas mientras se gane más de lo normal, hasta que el precio llega al mínimo del coste medio: <code>{m} €</code>.",
+    "bg.fx.r": "<b>Competencia real · precio:</b> no hay curva de oferta; las empresas fijan el precio sumando un margen a lo que les cuesta cada unidad: <code>P = 1,4 × {cA} = {p} €</code>. La demanda decide la cantidad: <code>Q = ({a} − {p}) / 0,05 = {Q}</code>.",
+    "bg.fx.g": "<b>Competencia real · las empresas:</b> A tiene la técnica de siempre (<code>CT = 1500 + {cA}·q</code>); B, una más barata (<code>CT = 2000 + {cB}·q</code>). Cada semana B baja el precio 1 € (sin bajar de <code>{s} €</code>); A la sigue sin bajar de lo que le cuesta una unidad; por cada euro de diferencia, un 5 % de los clientes se pasa a la más barata. Cada una empieza con 3000 € de reservas; quien se queda sin reservas, cierra.",
+    "bg.fx.nota": "<b>Simplificación.</b> Shaikh (2023, cap. 7) explica que los precios que fijan las empresas también responden algo a la demanda, y que «la oferta y la demanda desempeñan un papel en el proceso pero no en el resultado final». Aquí, para ver la diferencia, el precio de la competencia real solo cambia con los costes.",
+
     "tab.mercats": "Los dos mercados",
     "dm.eyebrow": "4 · De la empresa al mercado", "dm.h2": "¿Cómo se entiende el mercado con cada empresa?",
     "dm.p": "Cada empresa va a su mercado. La neoclásica, a la competencia perfecta: muchas empresas iguales que aceptan el precio, y entran o salen hasta el equilibrio. La de la competencia real, a la guerra de precios contra una rival con la técnica de siempre. Las funciones llegan de la SA 3 («c · Las dos empresas») o se escriben aquí.",
@@ -3709,6 +4107,47 @@ window.OBS = (() => {
     "rt.p": "Vuestra empresa (B) compite con una rival (A). La que tiene la unidad más barata baja el precio cada semana; la otra la sigue sin bajar de lo que le cuesta una unidad.",
     "rt.cta": "Costes de la rival (A): CT(q) =", "rt.ctb": "Costes de vuestra empresa (B): CT(q) =",
   }, va: {
+    "tab.bg": "El mercat", "tab.2b": "Poques empreses o una",
+    "bg.ficha.A": "A · tècnica de sempre", "bg.ficha.B": "B · tècnica nova, més barata", "bg.ficha.vende": "Ven", "bg.ficha.sem": "Cada setmana",
+    "bg.ficha.gana": "guanya {b}", "bg.ficha.pierde": "perd {b}", "bg.ficha.caja": "Diners en caixa", "bg.sello": "Tancada · setmana {n}",
+    "bg.lg.a2": "A: tècnica de sempre", "bg.lg.b2": "B: tècnica nova, més barata", "bg.ax.caja": "Diners en caixa (milers d'€)", "bg.cero": "sense diners: tanca", "bg.cierra": "A tanca (setmana {n})",
+    "bg.aria.caja": "Diners en caixa de cada empresa setmana a setmana; la que arriba a zero, tanca",
+
+    "bg.eyebrow": "1 · El mateix mercat, dues maneres d'entendre'l", "bg.h2": "Competència perfecta i competència real",
+    "bg.p": "En la <b>competència perfecta</b>, el mercat és un procés harmoniós: si es deixa actuar l'oferta i la demanda, s'arriba a un resultat òptim i estable. En la <b>competència real</b> (Shaikh), les empreses fixen els seus preus i lluiten pels clients abaixant-los: el resultat és turbulent i acaba amb tancaments d'empreses. <b>Arrossega la demanda o l'oferta</b> i mira com reaccionen les empreses de cada costat; després, prem «Reproduir el llarg termini».",
+    "bg.ballet": "Competència perfecta", "bg.guerra": "Competència real",
+    "bg.f.mkt": "El mercat: arrossega les corbes", "bg.f.neo": "Una empresa neoclàssica (competència perfecta)", "bg.f.real": "Les dues empreses de la competència real",
+    "bg.lg.d": "Demanda", "bg.lg.s": "Oferta (competència perfecta)", "bg.lg.p": "Preu que fixen les empreses (competència real)", "bg.lg.antes": "Al principi",
+    "bg.lg.cmg": "Cost marginal", "bg.lg.cme": "Cost mitjà", "bg.lg.precio": "Preu", "bg.lg.a": "A: tècnica de sempre", "bg.lg.b": "B: tècnica nova, més barata",
+    "bg.mueve.d": "Demanda", "bg.mueve.s": "Oferta", "bg.a.dl": "Demanda a l'esquerra", "bg.a.dr": "Demanda a la dreta", "bg.a.sl": "Oferta a l'esquerra", "bg.a.sr": "Oferta a la dreta",
+    "bg.aria.mkt": "Mercat amb la demanda, l'oferta de la competència perfecta i el preu que fixen les empreses de la competència real. Arrossega una corba amb el ratolí o el dit; amb el teclat, prem D (demanda) o O (oferta) i les fletxes.",
+    "bg.aria.neo": "Cost marginal, cost mitjà i preu d'una empresa neoclàssica, amb el benefici o la pèrdua", "bg.aria.real": "Costos i preu de les dues empreses de la competència real, amb el que ven cadascuna",
+    "bg.ax.Q": "Quantitat del mercat (Q)", "bg.ax.P": "Preu (€)", "bg.ax.q": "El que produïx cada empresa (q)", "bg.ax.eu": "€ per unitat",
+    "bg.pt.n": "c. perfecta: {p}", "bg.pt.r": "c. real: {p}", "bg.precio": "preu {p}", "bg.cap": "capacitat", "bg.cerrada": "{e} ha tancat", "bg.cerradaC": "tancada",
+    "bg.play": "Reproduir el llarg termini", "bg.pausa": "Pausa", "bg.semana": "Setmana", "bg.t.out": "{n} de {w}", "bg.reset": "Tornar al principi",
+    "bg.n.cp": "El preu és {p} i es venen {Q} unitats. Cada empresa produïx {q} i {g}.", "bg.gana": "guanya {b} més del normal", "bg.pierde": "perd {b}",
+    "bg.n.entra": "Eixe benefici extra atraurà empreses noves.", "bg.n.sale": "Amb pèrdues, n'eixiran empreses.", "bg.n.quieto": "Ningú guanya de més: no entra ni ix ningú.",
+    "bg.n.shock": "Respecte al principi, el preu canvia {dp} i la quantitat {dq}.", "bg.n.shockd": "Respecte al principi, el preu canvia {dp} i la quantitat {dq}: l'ajust es fa pel preu.",
+    "bg.n.va": "Entren o ixen empreses: ja en són {n}. El preu és {p} i cadascuna {g}.",
+    "bg.n.fin2": "Han eixit {dn} empreses. El preu ha pujat a {p}, quasi el mínim del cost mitjà ({m}): ningú perd i el mercat torna a l'equilibri.", "bg.n.fin": "Han entrat {dn} empreses. El preu ha baixat a {p}, quasi el mínim del cost mitjà ({m}): ningú guanya de més i el mercat torna a l'equilibri.",
+    "bg.r.cp": "Les empreses fixen el preu en {p}: el que els costa cada unitat més un marge. La demanda decidix quant venen: {Q} unitats.",
+    "bg.r.b": "Però B té una tècnica més barata: pot abaixar el preu per a llevar-li clients a A.",
+    "bg.r.shock": "Respecte al principi, el preu canvia {dp} (perquè canvien els costos) i la quantitat {dq}.",
+    "bg.r.shockq": "Respecte al principi, el preu no canvia: el fixen els costos. Canvia la quantitat, {dq}: l'ajust és per quantitat.",
+    "bg.r.va": "B abaixa el preu a {p}. A la seguix, però perd {l} a la setmana; li queden {r} de reserves.",
+    "bg.r.fin": "A ha tancat en la setmana {n}. B es queda amb tot el mercat a {p} i amplia la fàbrica. No hi ha equilibri: la competència acaba concentrant el mercat.",
+    "bg.c.sem": "Setmana {n}", "bg.c.n": "Competència perfecta", "bg.c.a": "Competència real: A", "bg.c.b": "Competència real: B",
+    "bg.c.p": "Preu", "bg.c.Q": "Quantitat del mercat", "bg.c.q": "El que produïx cada empresa", "bg.c.pi": "Benefici de cada empresa (a la setmana)", "bg.c.emp": "Empreses en el mercat",
+    "bg.como": "Com es construïx (i les fórmules per als problemes)",
+    "bg.fx.d": "<b>Demanda:</b> <code>P = {a} − 0,05·Q</code>. Arrossegar-la a la dreta puja el {a}.",
+    "bg.fx.s": "<b>Competència perfecta · oferta:</b> {n} empreses iguals, cadascuna amb <code>CT = 100 + {c}·q + 1,5·q²</code> (cost marginal <code>CMg = {c} + 3q</code>). Sumades: <code>P = {c} + {k}·Q</code>. Arrossegar l'oferta canvia els costos (el {c}).",
+    "bg.fx.eq": "<b>Equilibri:</b> <code>{a} − 0,05·Q = {c} + {k}·Q</code> → <code>Q = ({a} − {c}) / {k} = {Q}</code> i <code>P = {p} €</code>.",
+    "bg.fx.emp": "<b>Cada empresa</b> produïx on el preu iguala el seu cost marginal: <code>{p} = {c} + 3q</code> → <code>q = {q}</code>.",
+    "bg.fx.lp": "<b>A llarg termini</b> entren empreses mentre es guanye més del normal, fins que el preu arriba al mínim del cost mitjà: <code>{m} €</code>.",
+    "bg.fx.r": "<b>Competència real · preu:</b> no hi ha corba d'oferta; les empreses fixen el preu sumant un marge al que els costa cada unitat: <code>P = 1,4 × {cA} = {p} €</code>. La demanda decidix la quantitat: <code>Q = ({a} − {p}) / 0,05 = {Q}</code>.",
+    "bg.fx.g": "<b>Competència real · les empreses:</b> A té la tècnica de sempre (<code>CT = 1500 + {cA}·q</code>); B, una més barata (<code>CT = 2000 + {cB}·q</code>). Cada setmana B abaixa el preu 1 € (sense baixar de <code>{s} €</code>); A la seguix sense baixar del que li costa una unitat; per cada euro de diferència, un 5 % dels clients es passa a la més barata. Cadascuna comença amb 3000 € de reserves; qui es queda sense reserves, tanca.",
+    "bg.fx.nota": "<b>Simplificació.</b> Shaikh (2023, cap. 7) explica que els preus que fixen les empreses també responen un poc a la demanda, i que «l'oferta i la demanda tenen un paper en el procés però no en el resultat final». Ací, per a veure la diferència, el preu de la competència real només canvia amb els costos.",
+
     "tab.mercats": "Els dos mercats",
     "dm.eyebrow": "4 · De l'empresa al mercat", "dm.h2": "Com s'entén el mercat amb cada empresa?",
     "dm.p": "Cada empresa va al seu mercat. La neoclàssica, a la competència perfecta: moltes empreses iguals que accepten el preu, i entren o ixen fins a l'equilibri. La de la competència real, a la guerra de preus contra una rival amb la tècnica de sempre. Les funcions arriben de la SA 3 («c · Les dues empreses») o s'escriuen ací.",
@@ -3732,7 +4171,7 @@ window.OBS = (() => {
   } });
   OBS.apply();
   OBS.onLang(() => {
-    ptPintar(); mtPintar(); renderRm(); rtPintar(); dmConcl(); if (!$("dm-origen").hidden) $("dm-origen").textContent = t("dm.origen");
+    ptPintar(); mtPintar(); renderRm(); rtPintar(); dmConcl(); bgParar(); bgPintar(); if (!$("dm-origen").hidden) $("dm-origen").textContent = t("dm.origen");
     setBestLabels(); buildFirmTable(); renderFirm(); renderMarket(); renderMono(); renderOli();
     renderCmp(); buildWarTable(); renderWar();
   });
@@ -3754,6 +4193,9 @@ window.OBS = (() => {
   dmListo = true;
   dmLligEnllac();
   dmConcl();
+  bgHistorias(); bgPintar();
+  // Lo que ya no se ve (competencia perfecta y real por separado, los dos mercados, los talleres): fuera del panel docente también
+  ["w-params", "w-esc"].forEach(id => { const x = $(id); if (x) (x.closest("details") || x).hidden = true; });
   show(location.hash.slice(1).split("?")[0]);
 })();
 </script>

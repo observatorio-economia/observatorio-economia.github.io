@@ -82,6 +82,29 @@ input[type="range"] { width: 100%; accent-color: var(--accent); margin: 4px 0; }
 .log { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
 
 /* Dos mundos */
+/* Mercado de trabajo: dos maneras de entenderlo (26/11/2026) */
+.lt { display: flex; flex-direction: column; gap: 16px; }
+.lt-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 26px; align-items: start; }
+.lt-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; border-top: 5px solid var(--s2); padding-top: 10px; }
+.lt-g { border-top-color: var(--s1); }
+.lt-col .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lt-col h3 { margin: 0; font-size: 19px; }
+.lt-ef { margin: 0; font-family: var(--font-read); font-size: 17px; line-height: 1.5; min-height: 6em; }
+.lt-col figure { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.lt-arrastra { cursor: grab; touch-action: pan-y; }
+.lt-arrastra.agarrando { cursor: grabbing; }
+.lt-arrastra:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+svg .lt-hit { stroke: transparent; stroke-width: 26; fill: none; pointer-events: stroke; }
+svg .lt-ghost { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; opacity: .7; }
+.lt-mueve { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; font-size: 14px; color: var(--muted); }
+.lt-mueve span:not(:first-child) { margin-left: 8px; }
+.lt-mueve .btn { min-width: 44px; min-height: 40px; padding: 4px 10px; font-size: 17px; }
+.lt-ctrl { display: flex; flex-direction: column; gap: 10px; }
+.lt-cifras { font-size: 15px; }
+.lt-cifras th { text-align: left; }
+.lt-como #lt-formulas p { margin: 6px 0; font-size: 15px; line-height: 1.55; }
+.lt-como code { font-family: var(--font-mono); font-size: 14px; background: var(--accent-soft, var(--bg)); padding: 1px 4px; }
+@media (max-width: 860px) { .lt-cols { grid-template-columns: minmax(0, 1fr); } }
 .duo { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
 .world { display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--rule); border-top: 4px solid var(--ink); background: var(--paper); padding: 16px; min-width: 0; }
 .world .k { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
@@ -385,9 +408,60 @@ body.obs-proj .obs-serie { font-size: 15px; }
     <p class="lede" data-i18n-html="hdr.lede"></p>
   </header>
 
+  <section class="lt" id="lt" aria-labelledby="lt-h">
+    <div class="prose">
+      <h2 id="lt-h" data-i18n="lt.h">El mismo mercado de trabajo, dos maneras de entenderlo</h2>
+      <p data-i18n-html="lt.p"></p>
+    </div>
+    <div class="lt-cols">
+      <section class="lt-col lt-n" aria-labelledby="lt-nh">
+        <span class="k" data-i18n="lt.n.k">El salario como precio (neoclásico)</span>
+        <h3 id="lt-nh" data-i18n="lt.n.h">¿Qué pasa si sube el salario mínimo?</h3>
+        <p class="lt-ef" id="lt-n-ef" aria-live="polite"></p>
+        <figure>
+          <figcaption data-i18n="lt.n.fig">Oferta y demanda de trabajo: arrastra las curvas o la línea del salario mínimo</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="lt.lg.d">Demanda de trabajo (empresas)</span></span>
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="lt.lg.s">Oferta de trabajo (personas)</span></span>
+            <span><i class="dash" style="border-color:var(--accent)"></i><span data-i18n="lt.lg.m">Salario mínimo</span></span>
+            <span><i class="box" style="background:var(--accent);opacity:.3"></i><span data-i18n="lt.lg.paro">Paro</span></span>
+          </div>
+          <div class="plot"><svg class="chart lt-arrastra" id="lt-n-g" viewBox="0 0 480 380" tabindex="0" role="application" data-i18n-attr="aria-label:lt.n.aria"></svg></div>
+        </figure>
+        <div class="lt-mueve">
+          <span data-i18n="lt.m.m">Salario mínimo</span><button type="button" class="btn ghost" id="lt-m-baja" data-i18n-attr="aria-label:lt.a.mb" aria-label="Bajar el salario mínimo">↓</button><button type="button" class="btn ghost" id="lt-m-sube" data-i18n-attr="aria-label:lt.a.ms" aria-label="Subir el salario mínimo">↑</button>
+          <span data-i18n="lt.m.d">Demanda</span><button type="button" class="btn ghost" id="lt-d-menos" data-i18n-attr="aria-label:lt.a.dl" aria-label="Demanda a la izquierda">←</button><button type="button" class="btn ghost" id="lt-d-mas" data-i18n-attr="aria-label:lt.a.dr" aria-label="Demanda a la derecha">→</button>
+          <span data-i18n="lt.m.s">Oferta</span><button type="button" class="btn ghost" id="lt-s-menos" data-i18n-attr="aria-label:lt.a.sl" aria-label="Oferta a la izquierda">←</button><button type="button" class="btn ghost" id="lt-s-mas" data-i18n-attr="aria-label:lt.a.sr" aria-label="Oferta a la derecha">→</button>
+        </div>
+        <div class="scroll"><table class="lt-cifras" id="lt-n-cif"></table></div>
+      </section>
+      <section class="lt-col lt-g" aria-labelledby="lt-gh">
+        <span class="k" data-i18n="lt.g.k">El salario como negociación (Goodwin, Shaikh)</span>
+        <h3 id="lt-gh" data-i18n="lt.g.h">¿Qué pasa si los trabajadores tienen más fuerza?</h3>
+        <p class="lt-ef" id="lt-g-ef" aria-live="polite"></p>
+        <figure>
+          <figcaption data-i18n="lt.g.fig">Paro y parte de los salarios en la renta, año a año</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="lt.lg.u">Paro (%)</span></span>
+            <span><i style="border-color:var(--ink)"></i><span data-i18n="lt.lg.w">Parte de los salarios en la renta (%)</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="lt-g-g" viewBox="0 0 480 380" role="img" data-i18n-attr="aria-label:lt.g.aria"></svg></div>
+        </figure>
+        <div class="lt-ctrl">
+          <div class="slider"><div class="lab"><label for="lt-F" data-i18n="lt.F">Fuerza negociadora de los trabajadores</label><output id="lt-F-out" for="lt-F"></output></div><input type="range" id="lt-F" min="18" max="30" step="1" value="22"></div>
+          <div class="slider"><div class="lab"><label for="lt-t" data-i18n="lt.t">Año</label><output id="lt-t-out" for="lt-t"></output></div><input type="range" id="lt-t" min="0" max="40" step="1" value="40"></div>
+          <button type="button" class="btn" id="lt-play" data-i18n="lt.play">Reproducir 40 años</button>
+        </div>
+        <div class="scroll"><table class="lt-cifras" id="lt-g-cif"></table></div>
+      </section>
+    </div>
+    <details class="lt-como"><summary data-i18n="lt.como">Cómo se construye (y las fórmulas para los problemas)</summary><div id="lt-formulas"></div>
+      <details><summary data-i18n="lt.anyo">Goodwin año a año</summary><div class="scroll"><table class="lt-cifras" id="lt-g-tabla"></table></div></details>
+    </details>
+  </section>
   <p class="notice" id="q-top" data-i18n="tb.qtop">La pregunta: ¿qué mundo se parece más a lo que pasó en España en los años ochenta, cuando el paro llegó a superar el 20 %?</p>
 
-  <div class="timeline">
+  <div class="timeline" hidden>
     <span class="yr" id="yr-label"></span>
     <div class="slider">
       <div class="lab"><label for="yr" data-i18n="tl.years">Años</label><output id="yr-out" for="yr"></output></div>
@@ -396,7 +470,7 @@ body.obs-proj .obs-serie { font-size: 15px; }
     <button type="button" class="btn" id="play" data-i18n="tl.play">Reproducir</button>
   </div>
 
-  <div class="shocks">
+  <div class="shocks" hidden>
     <div class="prose">
       <h2 data-i18n="sh.title">Mismo cambio, dos respuestas</h2>
       <p class="small" data-i18n="sh.help">Cada botón aplica el cambio en los dos mundos a la vez, a partir del año en que estáis. Seguid avanzando los años para ver qué pasa después.</p>
@@ -409,9 +483,8 @@ body.obs-proj .obs-serie { font-size: 15px; }
     <span class="log" id="sh-log" aria-live="polite"></span>
     <div id="sh-esc"></div>
   </div>
-  <div data-obs-prompt></div>
 
-  <div class="duo">
+  <div class="duo" hidden>
     <section class="world" id="w-neo" aria-labelledby="neo-h">
       <span class="k" data-i18n="neo.k">Mundo 1</span>
       <h3 id="neo-h" data-i18n="neo.h">El salario como precio</h3>
@@ -688,9 +761,8 @@ window.OBS = (() => {
       impr = h("button", { type: "button", class: "obs-toggle obs-imprimir", text: t("obs.pr.ficha") });
       impr.addEventListener("click", () => imprimir(false));
       aula.querySelector(".obs-aula__btns").append(impr, conRes);
-      aula.append(h("label", { class: "obs-apertura__fila" }, h("span", { text: t("obs.velo.modo") }), sel));
-      onLang(() => { aula.querySelector("label > span").textContent = t("obs.velo.modo");
-        sel.setAttribute("aria-label", t("obs.velo.modo")); [...sel.options].forEach(o => { o.textContent = t("obs.velo." + o.value); }); conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
+      // 26/11/2026: el selector de «Antes de ver» ya no se muestra (decisión de Jordi: el velo de pantalla se retira de todas las herramientas)
+      onLang(() => { conRes.textContent = t("obs.pr.con"); impr.textContent = t("obs.pr.ficha"); });
     }
     const hayPanel = true;
     const doc = h("button", { type: "button", class: "obs-toggle obs-docente-btn", "aria-expanded": "false", "aria-controls": "obs-docente", "data-i18n": "obs.docente", text: t("obs.docente") });
@@ -769,7 +841,8 @@ window.OBS = (() => {
   // ---------- «Antes de ver» ----------
   let veloModo = ["proj", "on", "off"].includes(store.get("obs-velo")) ? store.get("obs-velo") : "proj";
   let aperturaOn = false;
-  const veloActivo = () => aperturaOn && (veloModo === "on" || (veloModo === "proj" && proj));
+  // 26/11/2026: «Antes de ver» retirado de la pantalla en todas las herramientas (la ficha imprimible conserva sus huecos de predicción)
+  const veloActivo = () => false;
   const scopeDe = n => n.closest("[data-obs-scope]") || document.body;
   function scopes() { const s = new Set(); document.querySelectorAll("[data-obs-result]").forEach(n => s.add(scopeDe(n))); return [...s]; }
   function barDe(s) {
@@ -1510,8 +1583,201 @@ window.OBS = (() => {
     const pal = keys => keys.map(k => ({ t: tr("pal." + k), d: tr("pal." + k + ".d") }));
     OBS.palabras(document.querySelector(".shocks"), pal(["min", "prod", "inv", "parte", "fuerza", "inversion"]), { antes: document.querySelector(".duo") });
   }
+
+  // =====================================================================
+  // MERCADO DE TRABAJO (26/11/2026)
+  // Neoclásico: demanda w = a − L, oferta w = c + 0,5·L (L en millones, w en € por hora); salario mínimo m.
+  // Negociación (Goodwin, 1967; Shaikh, 2023, cap. 14), por años y en %:
+  //   1) subida del salario real = F − 2 × paro;  2) parte de los salarios: ω' = ω × (1 + (subida − 2)/100)  (productividad +2 %);
+  //   3) crecimiento de la producción = 0,15 × (100 − ω') − 3;  4) empleo: e' = e × (1 + (crecimiento − 3)/100)  (productividad 2 % + población activa 1 %).
+  // =====================================================================
+  const LT = { a0: 30, c0: 0, m0: 8, F0: 22, u0: 7, w0: 60, T: 40 };
+  const lt = { a: LT.a0, c: LT.c0, m: LT.m0, F: LT.F0, tw: LT.T, reloj: null, drag: null, tecla: "m", Fn: null };
+  const n1 = v => fmt(v, Math.abs(v - Math.round(v)) < 0.05 ? 0 : 1);
+  function ltNeo() {
+    const L = (lt.a - lt.c) / 1.5, w = lt.a - L, muerde = lt.m > w + 1e-9;
+    const Ld = muerde ? lt.a - lt.m : L, Ls = muerde ? (lt.m - lt.c) / 0.5 : L;
+    return { L, w, muerde, Ld, Ls, paro: Math.max(0, Ls - Ld), tasa: muerde ? (Ls - Ld) / Ls * 100 : 0 };
+  }
+  function ltGoodwin(F) {
+    const H = []; let u = LT.u0, om = LT.w0;
+    for (let y = 0; y <= LT.T; y++) {
+      const sub = F - 2 * u, om2 = om * (1 + (sub - 2) / 100), gy = 0.15 * (100 - om2) - 3;
+      H.push({ y, u, om, sub, gy });
+      u = 100 - (100 - u) * (1 + (gy - 3) / 100); om = om2;
+    }
+    return H;
+  }
+  let ltF = null;
+  function ltPintar() {
+    const N = ltNeo();
+    // ---- Neoclásico ----
+    const F = ltF = frame($("lt-n-g"), { w: 480, h: 380, xMax: 40, yMax: 30, xTicks: [0, 10, 20, 30, 40], yTicks: [0, 5, 10, 15, 20, 25, 30], xLabel: t("lt.ax.L"), yLabel: t("lt.ax.w") });
+    const recta = (fn, x0, x1, cls, extra = {}) => F.plot.append(sv("path", { d: path([[F.sx(x0), F.sy(fn(x0))], [F.sx(x1), F.sy(fn(x1))]]), class: cls, ...extra }));
+    if (lt.a !== LT.a0) recta(L => LT.a0 - L, 0, 40, "lt-ghost");
+    if (lt.c !== LT.c0) recta(L => LT.c0 + 0.5 * L, 0, 40, "lt-ghost");
+    if (N.muerde) F.plot.append(sv("rect", { x: F.sx(N.Ld), y: F.sy(lt.m) - 10, width: Math.max(0, F.sx(N.Ls) - F.sx(N.Ld)), height: 20, class: "gap" }));
+    recta(L => lt.a - L, 0, 40, "curve", { style: "stroke:var(--ink);stroke-width:" + (lt.drag && lt.drag.k === "d" ? 4.5 : 2.5) });
+    recta(L => lt.c + 0.5 * L, 0, 40, "curve", { style: "stroke:var(--s2);stroke-width:" + (lt.drag && lt.drag.k === "s" ? 4.5 : 2.5) });
+    recta(() => lt.m, 0, 40, "curve", { style: "stroke:var(--accent);stroke-dasharray:7 5;stroke-width:" + (lt.drag && lt.drag.k === "m" ? 4 : 2.5) });
+    const guia = (x, y) => { F.plot.append(sv("line", { x1: F.sx(x), x2: F.sx(x), y1: F.sy(0), y2: F.sy(y), class: "guide" })); };
+    F.top.append(sv("circle", { cx: F.sx(N.L), cy: F.sy(N.w), r: 6, class: "dot", style: "fill:var(--ink)" }));
+    F.top.append(sv("text", { x: F.sx(N.L) + 8, y: F.sy(N.w) + 18, class: "lbl" }, t("lt.eq", { w: n1(N.w), L: n1(N.L) })));
+    if (N.muerde) {
+      guia(N.Ld, lt.m); guia(N.Ls, lt.m);
+      F.top.append(sv("text", { x: (F.sx(N.Ld) + F.sx(N.Ls)) / 2, y: F.sy(lt.m) - 16, "text-anchor": "middle", class: "lbl", style: "fill:var(--accent);font-weight:700" }, t("lt.paro", { p: n1(N.paro) })));
+    }
+    F.top.append(sv("text", { x: F.sx(39.5), y: F.sy(lt.m) - 6, "text-anchor": "end", class: "lbl", style: "fill:var(--accent)" }, t("lt.smi", { m: n1(lt.m) })));
+    [["d", L => lt.a - L], ["s", L => lt.c + 0.5 * L], ["m", () => lt.m]].forEach(([k, fn]) => F.plot.append(sv("path", { d: path([[F.sx(0), F.sy(fn(0))], [F.sx(40), F.sy(fn(40))]]), class: "lt-hit" })));
+    $("lt-n-ef").textContent = N.muerde ? t("lt.n.ef2", { m: n1(lt.m), Ld: n1(N.Ld), Ls: n1(N.Ls), p: n1(N.paro), tasa: n1(N.tasa), w: n1(N.w) }) : t("lt.n.ef1", { w: n1(N.w), L: n1(N.L), m: n1(lt.m) });
+    const fila = (k, v) => el("tr", {}, el("th", { text: t(k) }), el("td", { text: v }));
+    $("lt-n-cif").replaceChildren(el("tbody", {}, fila("lt.c.weq", n1(N.w) + " €"), fila("lt.c.smi", n1(lt.m) + " €"), fila("lt.c.Ld", n1(N.Ld)), fila("lt.c.Ls", n1(N.Ls)), fila("lt.c.paro", n1(N.paro) + " (" + n1(N.tasa) + " %)")));
+    // ---- Goodwin ----
+    const H = ltGoodwin(lt.F), H0 = ltGoodwin(LT.F0), tw = lt.tw, y = Math.min(LT.T, Math.floor(tw + 1e-9));
+    const G = frame($("lt-g-g"), { w: 480, h: 380, xMax: LT.T, yMax: 80, xTicks: [0, 10, 20, 30, 40], yTicks: [0, 20, 40, 60, 80], xLabel: t("lt.ax.y"), yLabel: "%" });
+    const hasta = campo => { const pts = H.filter(h => h.y <= tw + 1e-9).map(h => [h.y, h[campo]]); const nx = H[y + 1]; if (nx && tw > y + 1e-9) pts.push([tw, H[y][campo] + (nx[campo] - H[y][campo]) * (tw - y)]); return pts; };
+    const dib = (pts, col, w) => G.plot.append(sv("path", { d: path(pts.map(q => [G.sx(q[0]), G.sy(q[1])])), class: "curve", style: "stroke:" + col + ";stroke-width:" + w }));
+    dib(H.map(h => [h.y, h.u]), "var(--s1)", 1.5); G.plot.lastChild.style.opacity = ".25"; dib(H.map(h => [h.y, h.om]), "var(--ink)", 1.5); G.plot.lastChild.style.opacity = ".25";
+    const cu = (lt.F - 2) / 2;
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(LT.T), y1: G.sy(cu), y2: G.sy(cu), class: "guide", style: "stroke:var(--s1)" }));
+    G.top.append(sv("text", { x: G.sx(LT.T) - 4, y: G.sy(cu) + 16, "text-anchor": "end", class: "lbl", style: "fill:var(--s1)" }, t("lt.centro", { c: n1(cu) })));
+    dib(hasta("u"), "var(--s1)", 3); dib(hasta("om"), "var(--ink)", 3);
+    const hu = hasta("u"), ho = hasta("om"), pu = hu[hu.length - 1], po = ho[ho.length - 1];
+    G.top.append(sv("circle", { cx: G.sx(pu[0]), cy: G.sy(pu[1]), r: 5, class: "dot", style: "fill:var(--s1)" }), sv("circle", { cx: G.sx(po[0]), cy: G.sy(po[1]), r: 5, class: "dot", style: "fill:var(--ink)" }));
+    const hy = H[y], us = H.map(h => h.u), umin = Math.min(...us), umax = Math.max(...us);
+    let fase = "";
+    if (tw < LT.T - 1e-9 || lt.reloj) { const nx = H[Math.min(LT.T, y + 1)], dom = nx.om - hy.om, du = nx.u - hy.u;
+      fase = t(du < 0 && dom > 0 ? "lt.g.f1" : dom > 0 ? "lt.g.f2" : du > 0 ? "lt.g.f3" : "lt.g.f4"); }
+    let ef = fase ? t("lt.g.ano", { y: y, u: n1(hy.u), s: n1(hy.sub), w: n1(hy.om) }) + " " + fase
+      : t("lt.g.ef", { a: n1(umin), b: n1(umax), c: n1(cu) });
+    if (!fase && lt.F !== LT.F0) ef += " " + t("lt.g.ef2", { c0: n1((LT.F0 - 2) / 2), c: n1(cu) });
+    $("lt-g-ef").textContent = ef;
+    $("lt-g-cif").replaceChildren(el("tbody", {}, fila("lt.c.ano", String(y)), fila("lt.c.u", n1(hy.u) + " %"), fila("lt.c.sub", n1(hy.sub) + " %"), fila("lt.c.om", n1(hy.om) + " %"), fila("lt.c.gy", n1(hy.gy) + " %")));
+    $("lt-g-tabla").replaceChildren(el("thead", {}, el("tr", {}, ["lt.c.ano", "lt.c.u", "lt.c.sub", "lt.c.om", "lt.c.gy"].map(k => el("th", { text: t(k) })))),
+      el("tbody", {}, H.map(h => el("tr", {}, [String(h.y), n1(h.u) + " %", n1(h.sub) + " %", n1(h.om) + " %", n1(h.gy) + " %"].map(v => el("td", { text: v }))))));
+    $("lt-F-out").textContent = t("lt.F.out", { f: lt.F }); $("lt-t-out").textContent = String(y); $("lt-t").value = String(y);
+    // ---- Fórmulas ----
+    $("lt-formulas").replaceChildren(...[["lt.fx.n1", { a: n1(lt.a), c: n1(lt.c) }], ["lt.fx.n2", { a: n1(lt.a), c: n1(lt.c), L: n1(N.L), w: n1(N.w) }], ["lt.fx.n3", { m: n1(lt.m), Ld: n1(N.Ld), Ls: n1(N.Ls), p: n1(N.paro) }],
+      ["lt.fx.g1", { F: lt.F }], ["lt.fx.g2", {}], ["lt.fx.g3", {}], ["lt.fx.g4", {}], ["lt.fx.g5", { c: n1(cu) }], ["lt.fx.nota", {}]].map(([k, v]) => { const q = el("p"); q.innerHTML = t(k, v); return q; }));
+  }
+  // ---- Arrastrar (ratón, dedo) ----
+  const ltPt = ev => { const svg = $("lt-n-g"), pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; const m = svg.getScreenCTM(); if (!m || !ltF) return null; const q = pt.matrixTransform(m.inverse()); return { L: (q.x - M.l) / ltF.pw * 40, w: (M.t + ltF.ph - q.y) / ltF.ph * 30 }; };
+  $("lt-n-g").addEventListener("pointerdown", ev => {
+    const d = ltPt(ev); if (!d) return;
+    const px = v => Math.abs(v) / 30 * ltF.ph;
+    const ds = [["d", px(d.w - (lt.a - d.L))], ["s", px(d.w - (lt.c + 0.5 * d.L))], ["m", px(d.w - lt.m)]].sort((x, y2) => x[1] - y2[1]);
+    if (ds[0][1] > 24) return;
+    lt.drag = { k: ds[0][0], L0: d.L, w0: d.w, a0: lt.a, c0: lt.c, m0: lt.m }; lt.tecla = ds[0][0];
+    $("lt-n-g").setPointerCapture(ev.pointerId); $("lt-n-g").classList.add("agarrando"); ev.preventDefault(); ltPintar();
+  });
+  $("lt-n-g").addEventListener("pointermove", ev => {
+    const g = lt.drag; if (!g) return; const d = ltPt(ev); if (!d) return;
+    const r2 = v => Math.round(v * 2) / 2;
+    if (g.k === "d") lt.a = clamp(r2(g.a0 + (d.w - g.w0) + (d.L - g.L0)), 18, 42);
+    else if (g.k === "s") lt.c = clamp(r2(g.c0 + (d.w - g.w0) - 0.5 * (d.L - g.L0)), -8, 10);
+    else lt.m = clamp(r2(g.m0 + (d.w - g.w0)), 0, 28);
+    ltPintar();
+  });
+  const ltSuelta = () => { if (!lt.drag) return; lt.drag = null; $("lt-n-g").classList.remove("agarrando"); ltPintar(); };
+  $("lt-n-g").addEventListener("pointerup", ltSuelta); $("lt-n-g").addEventListener("pointercancel", ltSuelta);
+  // ---- Botones y teclado ----
+  const ltMueve = (k, sg) => { if (k === "d") lt.a = clamp(lt.a + 1.5 * sg, 18, 42); else if (k === "s") lt.c = clamp(lt.c - 0.75 * sg, -8, 10); else lt.m = clamp(lt.m + 0.5 * sg, 0, 28); ltPintar(); };
+  [["lt-m-baja", "m", -1], ["lt-m-sube", "m", 1], ["lt-d-menos", "d", -1], ["lt-d-mas", "d", 1], ["lt-s-menos", "s", -1], ["lt-s-mas", "s", 1]].forEach(([id, k, sg]) => $(id).addEventListener("click", () => ltMueve(k, sg)));
+  $("lt-n-g").addEventListener("keydown", ev => {
+    const k = ev.key.toLowerCase();
+    if (k === "d" || k === "o" || k === "m" || k === "s") { lt.tecla = k === "o" ? "s" : k; ev.preventDefault(); return; }
+    if (ev.key === "ArrowUp" || ev.key === "ArrowRight") { ltMueve(lt.tecla, 1); ev.preventDefault(); }
+    else if (ev.key === "ArrowDown" || ev.key === "ArrowLeft") { ltMueve(lt.tecla, -1); ev.preventDefault(); }
+  });
+  // ---- Goodwin: fuerza negociadora y reproducir ----
+  function ltParar() { if (lt.reloj) { cancelAnimationFrame(lt.reloj); lt.reloj = null; } $("lt-play").textContent = t("lt.play"); }
+  $("lt-F").addEventListener("input", () => { ltParar(); lt.F = +$("lt-F").value; ltPintar(); });
+  $("lt-t").addEventListener("input", () => { ltParar(); lt.tw = +$("lt-t").value; ltPintar(); });
+  $("lt-play").addEventListener("click", () => {
+    if (lt.reloj) { ltParar(); ltPintar(); return; }
+    const t0 = performance.now(), dur = 12000; lt.tw = 0;
+    $("lt-play").textContent = t("lt.pausa");
+    const paso = ahora => { if (!lt.reloj) return; const k = Math.min(1, (ahora - t0) / dur); lt.tw = LT.T * k; ltPintar(); if (k < 1) lt.reloj = requestAnimationFrame(paso); else { ltParar(); lt.tw = LT.T; ltPintar(); } };
+    lt.reloj = requestAnimationFrame(paso);
+  });
+  OBS.register({ es: {
+    "lt.h": "El mismo mercado de trabajo, dos maneras de entenderlo",
+    "lt.p": "A la izquierda, el <b>salario como precio</b>: el mercado de trabajo funciona como cualquier otro, y el paro aparece cuando algo, como un salario mínimo, impide que el salario baje. A la derecha, el <b>salario como negociación</b>: lo que cobran los trabajadores depende de su fuerza, y su fuerza depende del paro que haya.",
+    "lt.n.k": "El salario como precio (neoclásico)", "lt.n.h": "¿Qué pasa si sube el salario mínimo?",
+    "lt.g.k": "El salario como negociación (Goodwin, Shaikh)", "lt.g.h": "¿Qué pasa si los trabajadores tienen más fuerza?",
+    "lt.n.fig": "Oferta y demanda de trabajo: arrastra las curvas o la línea del salario mínimo", "lt.g.fig": "Paro y parte de los salarios en la renta, año a año",
+    "lt.lg.d": "Demanda de trabajo (empresas)", "lt.lg.s": "Oferta de trabajo (personas)", "lt.lg.m": "Salario mínimo", "lt.lg.paro": "Paro",
+    "lt.lg.u": "Paro (%)", "lt.lg.w": "Parte de los salarios en la renta (%)",
+    "lt.n.aria": "Mercado de trabajo con la demanda, la oferta y el salario mínimo. Arrastra una línea con el ratón o el dedo; con el teclado, pulsa M (salario mínimo), D (demanda) u O (oferta) y las flechas.",
+    "lt.g.aria": "Paro y parte de los salarios en la renta a lo largo de 40 años",
+    "lt.m.m": "Salario mínimo", "lt.m.d": "Demanda", "lt.m.s": "Oferta",
+    "lt.a.mb": "Bajar el salario mínimo", "lt.a.ms": "Subir el salario mínimo", "lt.a.dl": "Demanda a la izquierda", "lt.a.dr": "Demanda a la derecha", "lt.a.sl": "Oferta a la izquierda", "lt.a.sr": "Oferta a la derecha",
+    "lt.ax.L": "Empleo (millones de personas)", "lt.ax.w": "Salario (€ por hora)", "lt.ax.y": "Años",
+    "lt.eq": "equilibrio: {w} € · {L} M", "lt.paro": "paro: {p} M", "lt.smi": "salario mínimo: {m} €",
+    "lt.n.ef1": "El salario se fija donde se cruzan la oferta y la demanda: {w} € por hora y {L} millones de empleos. Quien quiere trabajar a ese salario, trabaja: no hay paro involuntario. El salario mínimo ({m} €) está por debajo y no cambia nada. Prueba a subirlo.",
+    "lt.n.ef2": "Con un salario mínimo de {m} € por hora, las empresas quieren contratar a {Ld} millones de personas y quieren trabajar {Ls} millones: {p} millones en paro ({tasa} %). En este modelo, el paro lo crea el salario mínimo: si bajara a {w} €, desaparecería.",
+    "lt.F": "Fuerza negociadora de los trabajadores", "lt.F.out": "{f}", "lt.t": "Año", "lt.play": "Reproducir 40 años", "lt.pausa": "Pausa",
+    "lt.centro": "paro medio: {c} %",
+    "lt.g.ano": "Año {y}: paro del {u} %, los salarios suben un {s} % y se llevan el {w} % de la renta.",
+    "lt.g.f1": "Hay poco paro y los trabajadores tienen fuerza: los salarios suben más que la productividad y se comen beneficios.",
+    "lt.g.f2": "Con menos beneficios, las empresas invierten menos: el paro empieza a subir.",
+    "lt.g.f3": "Con mucho paro, los trabajadores pierden fuerza: los salarios suben menos que la productividad y los beneficios se recuperan.",
+    "lt.g.f4": "Con más beneficios, las empresas invierten más: el paro baja… y vuelve a empezar.",
+    "lt.g.ef": "El paro nunca desaparece: sube y baja entre el {a} % y el {b} %, alrededor del {c} %. Es lo que frena los salarios (el «ejército de reserva» del que habla Marx). Pulsa «Reproducir» para ver el ciclo paso a paso.",
+    "lt.g.ef2": "Con esta fuerza negociadora, el paro medio pasa del {c0} % al {c} %: para que los beneficios se recuperen, hace falta más paro.",
+    "lt.c.weq": "Salario de equilibrio", "lt.c.smi": "Salario mínimo", "lt.c.Ld": "Quieren contratar (millones)", "lt.c.Ls": "Quieren trabajar (millones)", "lt.c.paro": "Paro (millones)",
+    "lt.c.ano": "Año", "lt.c.u": "Paro", "lt.c.sub": "Subida de salarios", "lt.c.om": "Parte de los salarios", "lt.c.gy": "Crecimiento de la producción",
+    "lt.como": "Cómo se construye (y las fórmulas para los problemas)", "lt.anyo": "Goodwin año a año",
+    "lt.fx.n1": "<b>Neoclásico.</b> Demanda de trabajo: <code>w = {a} − L</code>. Oferta de trabajo: <code>w = {c} + 0,5·L</code> (w en € por hora, L en millones).",
+    "lt.fx.n2": "<b>Equilibrio:</b> <code>{a} − L = {c} + 0,5·L</code> → <code>L = ({a} − {c}) / 1,5 = {L}</code> y <code>w = {w} €</code>.",
+    "lt.fx.n3": "<b>Con salario mínimo</b> (si está por encima del equilibrio): quieren contratar <code>L = {a} − m</code>; quieren trabajar <code>L = (m − {c}) / 0,5</code>. Con <code>m = {m}</code>: {Ld} y {Ls} millones; paro = {p} millones.",
+    "lt.fx.g1": "<b>Negociación (Goodwin), año a año y en %.</b> 1) Los salarios suben más cuanto menos paro hay: <code>subida = {F} − 2 × paro</code>.",
+    "lt.fx.g2": "2) La productividad crece un 2 % al año, así que la parte de los salarios en la renta cambia según la diferencia: <code>parte nueva = parte × (1 + (subida − 2) / 100)</code>.",
+    "lt.fx.g3": "3) Lo que no son salarios son beneficios, y los beneficios se invierten: <code>crecimiento de la producción = 0,15 × (100 − parte nueva) − 3</code>.",
+    "lt.fx.g4": "4) Si la producción crece más del 3 % (2 % de productividad y 1 % de población activa), sube el empleo: <code>empleo nuevo = empleo × (1 + (crecimiento − 3) / 100)</code>; <code>paro = 100 − empleo</code>.",
+    "lt.fx.g5": "<b>El centro del ciclo:</b> el paro medio es <code>(fuerza − 2) / 2 = {c} %</code> y la parte de los salarios, el 60 %.",
+    "lt.fx.nota": "<b>Para pensar.</b> En el modelo de Goodwin, más fuerza negociadora no sube la parte media de los salarios: solo sube el paro medio. Shaikh (2023, cap. 14, pp. 903-909) lo señala como una limitación y repasa modelos que la corrigen (por ejemplo, cuando las empresas responden a los salarios con nuevas técnicas). Las cifras son inventadas para el aula.",
+  }, va: {
+    "lt.h": "El mateix mercat de treball, dues maneres d'entendre'l",
+    "lt.p": "A l'esquerra, el <b>salari com a preu</b>: el mercat de treball funciona com qualsevol altre, i la desocupació apareix quan alguna cosa, com un salari mínim, impedix que el salari baixe. A la dreta, el <b>salari com a negociació</b>: el que cobren els treballadors depén de la seua força, i la seua força depén de la desocupació que hi haja.",
+    "lt.n.k": "El salari com a preu (neoclàssic)", "lt.n.h": "Què passa si puja el salari mínim?",
+    "lt.g.k": "El salari com a negociació (Goodwin, Shaikh)", "lt.g.h": "Què passa si els treballadors tenen més força?",
+    "lt.n.fig": "Oferta i demanda de treball: arrossega les corbes o la línia del salari mínim", "lt.g.fig": "Desocupació i part dels salaris en la renda, any a any",
+    "lt.lg.d": "Demanda de treball (empreses)", "lt.lg.s": "Oferta de treball (persones)", "lt.lg.m": "Salari mínim", "lt.lg.paro": "Desocupació",
+    "lt.lg.u": "Desocupació (%)", "lt.lg.w": "Part dels salaris en la renda (%)",
+    "lt.n.aria": "Mercat de treball amb la demanda, l'oferta i el salari mínim. Arrossega una línia amb el ratolí o el dit; amb el teclat, prem M (salari mínim), D (demanda) o O (oferta) i les fletxes.",
+    "lt.g.aria": "Desocupació i part dels salaris en la renda al llarg de 40 anys",
+    "lt.m.m": "Salari mínim", "lt.m.d": "Demanda", "lt.m.s": "Oferta",
+    "lt.a.mb": "Abaixar el salari mínim", "lt.a.ms": "Pujar el salari mínim", "lt.a.dl": "Demanda a l'esquerra", "lt.a.dr": "Demanda a la dreta", "lt.a.sl": "Oferta a l'esquerra", "lt.a.sr": "Oferta a la dreta",
+    "lt.ax.L": "Ocupació (milions de persones)", "lt.ax.w": "Salari (€ per hora)", "lt.ax.y": "Anys",
+    "lt.eq": "equilibri: {w} € · {L} M", "lt.paro": "desocupació: {p} M", "lt.smi": "salari mínim: {m} €",
+    "lt.n.ef1": "El salari es fixa on es creuen l'oferta i la demanda: {w} € per hora i {L} milions d'ocupacions. Qui vol treballar a eixe salari, treballa: no hi ha desocupació involuntària. El salari mínim ({m} €) està per davall i no canvia res. Prova a pujar-lo.",
+    "lt.n.ef2": "Amb un salari mínim de {m} € per hora, les empreses volen contractar {Ld} milions de persones i en volen treballar {Ls} milions: {p} milions en desocupació ({tasa} %). En este model, la desocupació la crea el salari mínim: si baixara a {w} €, desapareixeria.",
+    "lt.F": "Força negociadora dels treballadors", "lt.F.out": "{f}", "lt.t": "Any", "lt.play": "Reproduir 40 anys", "lt.pausa": "Pausa",
+    "lt.centro": "desocupació mitjana: {c} %",
+    "lt.g.ano": "Any {y}: desocupació del {u} %, els salaris pugen un {s} % i s'emporten el {w} % de la renda.",
+    "lt.g.f1": "Hi ha poca desocupació i els treballadors tenen força: els salaris pugen més que la productivitat i es mengen beneficis.",
+    "lt.g.f2": "Amb menys beneficis, les empreses invertixen menys: la desocupació comença a pujar.",
+    "lt.g.f3": "Amb molta desocupació, els treballadors perden força: els salaris pugen menys que la productivitat i els beneficis es recuperen.",
+    "lt.g.f4": "Amb més beneficis, les empreses invertixen més: la desocupació baixa… i torna a començar.",
+    "lt.g.ef": "La desocupació no desapareix mai: puja i baixa entre el {a} % i el {b} %, al voltant del {c} %. És el que frena els salaris (l'«exèrcit de reserva» del qual parla Marx). Prem «Reproduir» per a veure el cicle pas a pas.",
+    "lt.g.ef2": "Amb esta força negociadora, la desocupació mitjana passa del {c0} % al {c} %: perquè els beneficis es recuperen, cal més desocupació.",
+    "lt.c.weq": "Salari d'equilibri", "lt.c.smi": "Salari mínim", "lt.c.Ld": "Volen contractar (milions)", "lt.c.Ls": "Volen treballar (milions)", "lt.c.paro": "Desocupació (milions)",
+    "lt.c.ano": "Any", "lt.c.u": "Desocupació", "lt.c.sub": "Pujada de salaris", "lt.c.om": "Part dels salaris", "lt.c.gy": "Creixement de la producció",
+    "lt.como": "Com es construïx (i les fórmules per als problemes)", "lt.anyo": "Goodwin any a any",
+    "lt.fx.n1": "<b>Neoclàssic.</b> Demanda de treball: <code>w = {a} − L</code>. Oferta de treball: <code>w = {c} + 0,5·L</code> (w en € per hora, L en milions).",
+    "lt.fx.n2": "<b>Equilibri:</b> <code>{a} − L = {c} + 0,5·L</code> → <code>L = ({a} − {c}) / 1,5 = {L}</code> i <code>w = {w} €</code>.",
+    "lt.fx.n3": "<b>Amb salari mínim</b> (si està per damunt de l'equilibri): volen contractar <code>L = {a} − m</code>; volen treballar <code>L = (m − {c}) / 0,5</code>. Amb <code>m = {m}</code>: {Ld} i {Ls} milions; desocupació = {p} milions.",
+    "lt.fx.g1": "<b>Negociació (Goodwin), any a any i en %.</b> 1) Els salaris pugen més com menys desocupació hi ha: <code>pujada = {F} − 2 × desocupació</code>.",
+    "lt.fx.g2": "2) La productivitat creix un 2 % a l'any, així que la part dels salaris en la renda canvia segons la diferència: <code>part nova = part × (1 + (pujada − 2) / 100)</code>.",
+    "lt.fx.g3": "3) El que no són salaris són beneficis, i els beneficis s'invertixen: <code>creixement de la producció = 0,15 × (100 − part nova) − 3</code>.",
+    "lt.fx.g4": "4) Si la producció creix més del 3 % (2 % de productivitat i 1 % de població activa), puja l'ocupació: <code>ocupació nova = ocupació × (1 + (creixement − 3) / 100)</code>; <code>desocupació = 100 − ocupació</code>.",
+    "lt.fx.g5": "<b>El centre del cicle:</b> la desocupació mitjana és <code>(força − 2) / 2 = {c} %</code> i la part dels salaris, el 60 %.",
+    "lt.fx.nota": "<b>Per a pensar.</b> En el model de Goodwin, més força negociadora no puja la part mitjana dels salaris: només puja la desocupació mitjana. Shaikh (2023, cap. 14, pp. 903-909) ho assenyala com una limitació i repassa models que la corregixen (per exemple, quan les empreses responen als salaris amb tècniques noves). Les xifres són inventades per a l'aula.",
+  } });
   OBS.apply();
-  OBS.onLang(() => { $("play").textContent = timer ? t("tl.pause") : t("tl.play"); render(); });
+  OBS.onLang(() => { $("play").textContent = timer ? t("tl.pause") : t("tl.play"); render(); ltParar(); ltPintar(); });
+  ltPintar();
   recompute(); syncSliders(); render();
 })();
 </script>
