@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-26T21:41:54.605810+00:00",
+ "generado": "2026-11-26T22:33:55.892907+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,7 +33,7 @@
      "fecha": "2026-11-26T14:28:41+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:49.168207+00:00"
+   "leido": "2026-11-26T22:33:51.035562+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-26T13:19:27+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:50.015464+00:00"
+   "leido": "2026-11-26T22:33:51.815983+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-26T13:43:18+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:50.537762+00:00"
+   "leido": "2026-11-26T22:33:52.339187+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:51.219303+00:00"
+   "leido": "2026-11-26T22:33:53.104294+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-26T13:19:27+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:51.919146+00:00"
+   "leido": "2026-11-26T22:33:53.676185+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,7 +173,7 @@
      "fecha": "2026-11-26T12:07:10+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:52.650814+00:00"
+   "leido": "2026-11-26T22:33:54.260117+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,12 +205,22 @@
      "fecha": "2026-11-26T13:29:00+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:53.350773+00:00"
+   "leido": "2026-11-26T22:33:54.771488+00:00"
   },
   {
    "nombre": "ABC · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Feijóo sale ileso de un áspero debate entre las izquierdas y Abascal sobre vivienda",
+     "enlace": "https://www.abc.es/economia/feijoo-sale-ileso-aspero-debate-izquierdas-abascal-20261126224930-nt.html",
+     "fecha": "2026-11-26T22:16:34+00:00"
+    },
+    {
+     "titulo": "PP, Vox y Colau retratan una España que no llega a fin de mes y dejan tocada la gestión económica de Sánchez",
+     "enlace": "https://www.abc.es/economia/pp-vox-colau-retratan-espana-llega-fin-20261126230421-nt.html",
+     "fecha": "2026-11-26T22:09:04+00:00"
+    },
     {
      "titulo": "Fainé no repetirá como presidente de la Confederación Española de Directivos y Ejecutivos y cede el testigo a Ramón Adell",
      "enlace": "https://www.abc.es/economia/faine-repetira-presidente-confederacion-espanola-directivos-ejecutivos-20261126095535-nt.html",
@@ -225,19 +235,9 @@
      "titulo": "Los líderes europeos eligen a Hernández de Cos como nuevo presidente del BCE",
      "enlace": "https://www.abc.es/economia/consejo-europeo-elige-pablo-hernandez-cos-nuevo-20261126142403-nt.html",
      "fecha": "2026-11-26T17:28:19+00:00"
-    },
-    {
-     "titulo": "Hernández de Cos, un economista de las instituciones",
-     "enlace": "https://www.abc.es/economia/cuentas-corrientes/hernandez-cos-economista-instituciones-20261126170335-nt.html",
-     "fecha": "2026-11-26T16:13:13+00:00"
-    },
-    {
-     "titulo": "Garamendi reclama «paz social» tras el 29N y los empresarios instan al próximo Gobierno a favorecer la actividad económica",
-     "enlace": "https://www.abc.es/economia/garamendi-reclama-paz-social-tras-29n-empresarios-20261126122732-nt.html",
-     "fecha": "2026-11-26T13:58:31+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:54.092686+00:00"
+   "leido": "2026-11-26T22:33:55.426860+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -269,7 +269,7 @@
      "fecha": "2026-11-26T16:20:25+00:00"
     }
    ],
-   "leido": "2026-11-26T21:41:54.605761+00:00"
+   "leido": "2026-11-26T22:33:55.892861+00:00"
   }
  ]
 }
