@@ -139,6 +139,7 @@ input[type="text"] { font: 15px var(--font-body); color: var(--ink); background:
 .tal-diag { margin: 0; font-size: 15px; line-height: 1.5; }
 svg .c-ok { stroke: var(--ok); }
 .charts > figure > .plot { margin-top: auto; }
+#rm-block .duo, #rt-block .duo { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 22px; }
 table.payoff td.hl .other { color: var(--ink); } /* contraste suficiente sobre la casilla resaltada del dilema */
 @media (max-width: 900px) { .tal-campos .ancho { grid-column: 1 / -1; } .mando { grid-template-columns: minmax(0, 1fr); } }
 
@@ -553,7 +554,7 @@ body.obs-proj .obs-serie { font-size: 15px; }
         </div>
         <div class="slider">
           <div class="lab"><label for="f-q" data-i18n="f.lbq">Toneladas que vende a la semana</label><output id="f-q-out" for="f-q"></output></div>
-          <input type="range" id="f-q" min="0" max="8" step="0.1" value="3">
+          <input type="range" id="f-q" min="0" max="8" step="0.01" value="3">
         </div>
       </div>
         <button type="button" class="btn" id="f-play" data-i18n="rep.play">Reproducir</button>
@@ -700,7 +701,7 @@ body.obs-proj .obs-serie { font-size: 15px; }
       <div class="controls">
         <div class="slider">
           <div class="lab"><label for="mo-p" data-i18n="mo.lbp">Precio que fija</label><output id="mo-p-out" for="mo-p"></output></div>
-          <input type="range" id="mo-p" min="0" max="100" step="1" value="80">
+          <input type="range" id="mo-p" min="0" max="100" step="0.1" value="80">
         </div>
         <div class="slider">
           <div class="lab"><label for="mo-c" data-i18n="mo.lbc">Coste de fabricar una caja más</label><output id="mo-c-out" for="mo-c"></output></div>
@@ -864,6 +865,52 @@ body.obs-proj .obs-serie { font-size: 15px; }
       <p class="small" data-i18n="c.foot">La idea de partida es la crítica de Sraffa (1926) a los rendimientos decrecientes; el coste marginal constante lo usan Shaikh y los postkeynesianos (por ejemplo, Lavoie). Cifras del ejemplo, inventadas para el aula.</p>
     </div>
 
+
+    <div class="block" id="rm-block" data-obs-scope>
+      <div class="prose">
+        <span class="eyebrow" data-i18n="rm.eyebrow">3a · Competencia real</span>
+        <h2 data-i18n="rm.h2">¿Quién gana la guerra de precios?</h2>
+        <p data-i18n-html="rm.p"></p>
+      </div>
+      <div class="sup-cab"><h3 data-i18n="sup.h">Supuestos del modelo</h3><ul><li data-i18n="sup.r1"></li><li data-i18n="sup.r2"></li><li data-i18n="sup.r3"></li><li data-i18n="sup.r4"></li></ul></div>
+      <div class="charts">
+        <figure data-obs-result>
+          <figcaption data-i18n="r.fig1">El precio de cada empresa</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="r.lgA">Empresa A</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="r.lgB">Empresa B</span></span>
+            <span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="r.lgC">Lo que le cuesta cada unidad</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="rm-precios" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:r.aria1"></svg></div>
+        </figure>
+        <figure data-obs-result>
+          <figcaption data-i18n="w.acc.h">Reservas: lo que cada empresa va acumulando</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="r.lgA">Empresa A</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="r.lgB">Empresa B</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="rm-res" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:w.acc.h"></svg></div>
+        </figure>
+      </div>
+      <div class="field" data-obs-result><span class="small" data-i18n="w.share">Cuota de mercado entre las dos</span><div class="share" id="rm-share"></div></div>
+      <div class="duo" data-obs-result>
+        <div><b data-i18n="r.lgA">Empresa A</b><div class="fstats" id="rm-a-stats"></div></div>
+        <div><b data-i18n="r.lgB">Empresa B</b><div class="fstats" id="rm-b-stats"></div></div>
+      </div>
+      <div class="notice" id="rm-note" aria-live="polite" data-obs-result></div>
+      <div class="mando">
+        <div class="controls">
+          <div class="slider"><div class="lab"><label for="rm-ca" data-i18n="rm.s.ca"></label><output id="rm-ca-out" for="rm-ca"></output></div><input type="range" id="rm-ca" min="8" max="20" step="0.5" value="15"></div>
+          <div class="slider"><div class="lab"><label for="rm-cb" data-i18n="rm.s.cb"></label><output id="rm-cb-out" for="rm-cb"></output></div><input type="range" id="rm-cb" min="8" max="20" step="0.5" value="12"></div>
+          <div class="slider"><div class="lab"><label for="rm-fa" data-i18n="rm.s.fa"></label><output id="rm-fa-out" for="rm-fa"></output></div><input type="range" id="rm-fa" min="100" max="400" step="10" value="200"></div>
+          <div class="slider"><div class="lab"><label for="rm-fb" data-i18n="rm.s.fb"></label><output id="rm-fb-out" for="rm-fb"></output></div><input type="range" id="rm-fb" min="100" max="400" step="10" value="260"></div>
+          <div class="slider"><div class="lab"><label for="rm-res" data-i18n="rm.s.res"></label><output id="rm-res-out" for="rm-res"></output></div><input type="range" id="rm-res" min="0" max="2000" step="50" value="400"></div>
+          <div class="slider"><div class="lab"><label for="rm-cut" data-i18n="rm.s.cut"></label><output id="rm-cut-out" for="rm-cut"></output></div><input type="range" id="rm-cut" min="0" max="2" step="0.1" value="0.5"></div>
+          <div class="slider"><div class="lab"><label for="rm-t" data-i18n="w.weeks"></label><output id="rm-t-out" for="rm-t"></output></div><input type="range" id="rm-t" min="1" max="20" step="1" value="1"></div>
+        </div>
+        <button type="button" class="btn" id="rm-play" data-i18n="rep.play">Reproducir</button>
+      </div>
+    </div>
     <div class="block" id="war-block" data-obs-scope>
       <div class="prose">
         <span class="eyebrow" data-i18n="w.eyebrow">3b · Dos empresas, 20 semanas</span>
@@ -925,6 +972,63 @@ body.obs-proj .obs-serie { font-size: 15px; }
         <summary data-i18n="m.hist">Semana a semana</summary>
         <div class="scroll"><table id="w-hist"></table></div>
       </details>
+    </div>
+
+    <div class="block" id="rt-block">
+      <div class="prose">
+        <span class="eyebrow" data-i18n="rt.eyebrow">3c · Taller</span>
+        <h2 data-i18n="rt.h2">Tus dos empresas: ¿quién aguanta la guerra?</h2>
+        <p data-i18n="rt.p"></p>
+      </div>
+      <div class="charts">
+        <figure data-obs-result>
+          <figcaption data-i18n="r.fig1">El precio de cada empresa</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="r.lgA">Empresa A</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="r.lgB">Empresa B</span></span>
+            <span><i class="dash" style="border-color:var(--muted)"></i><span data-i18n="r.lgC">Lo que le cuesta cada unidad</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="rt-precios" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:r.aria1"></svg></div>
+        </figure>
+        <figure data-obs-result>
+          <figcaption data-i18n="w.acc.h">Reservas: lo que cada empresa va acumulando</figcaption>
+          <div class="legend">
+            <span><i style="border-color:var(--s2)"></i><span data-i18n="r.lgA">Empresa A</span></span>
+            <span><i style="border-color:var(--s1)"></i><span data-i18n="r.lgB">Empresa B</span></span>
+          </div>
+          <div class="plot"><svg class="chart" id="rt-res" viewBox="0 0 640 380" role="img" data-i18n-attr="aria-label:w.acc.h"></svg></div>
+        </figure>
+      </div>
+      <div class="field" data-obs-result><span class="small" data-i18n="w.share">Cuota de mercado entre las dos</span><div class="share" id="rt-share"></div></div>
+      <div class="duo" data-obs-result>
+        <div><b data-i18n="r.lgA">Empresa A</b><div class="fstats" id="rt-a-stats"></div></div>
+        <div><b data-i18n="r.lgB">Empresa B</b><div class="fstats" id="rt-b-stats"></div></div>
+      </div>
+      <div class="notice" id="rt-note" aria-live="polite" data-obs-result></div>
+      <p class="tal-diag" id="rt-diag"></p>
+      <div class="mando">
+        <div class="tal-campos">
+          <div class="tal-ej" role="group" data-i18n-attr="aria-label:tal.ej"><span data-i18n="tal.ej">Para empezar:</span>
+            <button type="button" class="ej-btn" data-rt="mod" aria-pressed="true" data-i18n="rt.ej1">Las dos empresas del modelo</button>
+            <button type="button" class="ej-btn" data-rt="igual" aria-pressed="false" data-i18n="rt.ej2">Las dos con la misma técnica</button>
+            <button type="button" class="ej-btn" data-rt="mucho" aria-pressed="false" data-i18n="rt.ej3">B mucho más barata</button>
+          </div>
+          <div class="field ancho"><label for="rt-cta" data-i18n="rt.cta">Costes de A: CT(q) =</label><input type="text" id="rt-cta" spellcheck="false" autocomplete="off"></div>
+          <div class="field ancho"><label for="rt-ctb" data-i18n="rt.ctb">Costes de B: CT(q) =</label><input type="text" id="rt-ctb" spellcheck="false" autocomplete="off"></div>
+          <div class="field ancho"><label for="rt-d" data-i18n="rt.d">Demanda del mercado: Q(P) =</label><input type="text" id="rt-d" spellcheck="false" autocomplete="off"></div>
+          <div class="field"><label for="rt-p0" data-i18n="rt.p0">Precio al empezar (€)</label><input type="text" id="rt-p0" inputmode="decimal"></div>
+          <div class="field"><label for="rt-res0" data-i18n="rt.res0">Reservas de cada empresa (€)</label><input type="text" id="rt-res0" inputmode="decimal"></div>
+          <div class="field"><label for="rt-cut" data-i18n="rt.cut">Cuánto baja el precio cada semana la más barata (€)</label><input type="text" id="rt-cut" inputmode="decimal"></div>
+          <div class="field"><label for="rt-cap" data-i18n="rt.cap">Capacidad de cada fábrica (unidades)</label><input type="text" id="rt-cap" inputmode="decimal"></div>
+          <p class="tal-err" id="rt-err" aria-live="polite"></p>
+          <details><summary data-i18n="tal.sint">Cómo se escribe una función</summary><p class="small" data-i18n="tal.sintx"></p></details>
+        </div>
+        <div class="actions" style="flex-direction:column;align-items:stretch">
+          <button type="button" class="btn" id="rt-play" data-i18n="rep.play">Reproducir</button>
+          <div class="slider"><div class="lab"><label for="rt-t" data-i18n="w.weeks">Semanas</label><output id="rt-t-out" for="rt-t"></output></div><input type="range" id="rt-t" min="1" max="20" step="1" value="1"></div>
+        </div>
+      </div>
+      <details><summary data-i18n="m.hist">Semana a semana</summary><div class="scroll"><table id="rt-hist"></table></div></details>
     </div>
   </section>
 
@@ -2224,7 +2328,7 @@ window.OBS = (() => {
   // Demanda del mercado: Q = A − 1,3·P (toneladas a la semana)
   const DEM_B = 1.3, DEM_A0 = 600, N0 = 30, DEM_STEP = 120;
   const MX = { w: 440, h: 360, xMax: 900, yMax: 500, xTicks: [0, 300, 600, 900], yTicks: [0, 100, 200, 300, 400, 500], xLabel: () => t("ax.tQ"), yLabel: () => t("ax.eurt") };
-  let mkt;
+  let mkt, mktK = 1;
   const equilibrium = (n, A) => {
     const f = P => n * qSupply(P) - (A - DEM_B * P);
     let lo = MIN_CVME, hi = 600;
@@ -2255,14 +2359,14 @@ window.OBS = (() => {
   $("m-reset").addEventListener("click", () => { resetMarket(); OBS.velo.cubrir($("market-block")); });
 
   function renderMarket() {
-    const s = cur();
+    const s = mktK < 1 && mkt.hist.length > 1 ? mezclaObj(mkt.hist[mkt.hist.length - 2], cur(), mktK) : cur();
     $("m-stats").replaceChildren(
       el("div", { class: "stat" }, el("b", { text: t("m.week", { n: mkt.week }) }), el("span", { text: noteText(s.note) })),
       el("div", { class: "stat" }, el("b", { text: fmt(s.n) }), el("span", { text: t("m.st.n") })),
       el("div", { class: "stat" }, el("b", { text: pFmt(s.P) }), el("span", { text: t("m.st.p") })),
       el("div", { class: "stat" }, el("b", { text: tFmt(s.q) }), el("span", { text: t("m.st.q") })),
       el("div", { class: "stat" }, el("b", { class: s.pi >= 0 ? "pos" : "neg", text: signed(s.pi) }), el("span", { text: t("m.st.pi") })));
-    const d = entry(s.pi);
+    const d = entry(cur().pi);
     $("m-note").replaceChildren(d === 0
       ? rich("m.eq", { p: pFmt(MIN_CTME) })
       : d > 0 ? rich("m.plus", { n: d }) : rich("m.minus", { n: -d }));
@@ -2555,6 +2659,14 @@ window.OBS = (() => {
 
   // ---- 3b · Dos empresas durante 20 semanas ----
   const WEEKS = 20;
+  function enSemana(arr, tw) {
+    const i = Math.floor(tw + 1e-9), k = tw - i;
+    if (i < 1) return arr[0];
+    if (k < 1e-6 || i >= arr.length) return arr[Math.min(i, arr.length) - 1];
+    const a = arr[i - 1], b = arr[i], o = { ...a };
+    for (const key in b) if (typeof b[key] === "number" && typeof a[key] === "number") o[key] = a[key] + (b[key] - a[key]) * k;
+    return o;
+  }
   const PA_U = { F: 200, k: 1 }, PB_U = { F: 260, k: 0.85 };
   // Reservas iniciales de cada empresa (€). Las reservas suman todos los beneficios y restan todas las pérdidas;
   // cuando A se queda sin reservas, cierra la semana siguiente (con 400 €, en la semana 15).
@@ -2607,7 +2719,7 @@ window.OBS = (() => {
       F.top.append(sv("text", { x: F.sx(last.t) + 6, y: F.sy(last.resA) + 16, class: "lbl", style: "fill:var(--bad)" }, t("w.acc.close", { n: CLOSE_WEEK })));
     }
     F.top.append(sv("line", { x1: F.sx(wk), x2: F.sx(wk), y1: M.t, y2: F.sy(yMin), stroke: "var(--ink)", "stroke-width": 1, "stroke-dasharray": "2 3" }));
-    const r = BT.real[wk - 1], p = BT.perf[wk - 1];
+    const r = enSemana(BT.real, wk), p = enSemana(BT.perf, wk);
     if (r.alive) F.top.append(sv("circle", { cx: F.sx(wk), cy: F.sy(r.resA), r: 5, fill: C.s2, class: "dot" }));
     F.top.append(sv("circle", { cx: F.sx(wk), cy: F.sy(r.resB), r: 5, fill: C.s1, class: "dot" }));
     hover($("w-acc"), $("w-acc-tip"), F, x => {
@@ -2642,7 +2754,7 @@ window.OBS = (() => {
   }
   const fst = (id, items) => $(id).replaceChildren(...items.map(([k, v, cls]) => el("span", {}, k + " ", el("b", { class: cls || null, text: v }))));
   function renderWar() {
-    const t = +$("w-t").value, p = BT.perf[t - 1], r = BT.real[t - 1];
+    const tw = warVista != null ? warVista : +$("w-t").value, t = Math.min(WEEKS, Math.floor(tw + 1e-9)), p = enSemana(BT.perf, tw), r = enSemana(BT.real, tw);
     $("w-label").textContent = OBS.t("m.week", { n: t }); $("w-t-out").textContent = OBS.t("w.of", { t, n: WEEKS });
     // Perfecta
     drawUfirm($("wp-a"), $("wp-a-tip"), PA_U, p.P, p.qa, bx);
@@ -2667,7 +2779,7 @@ window.OBS = (() => {
     else msg = [rich("w.real.closed", { n: CLOSE_WEEK })];
     if (r.capB > RB.cap + 0.5) msg.push(el("span", { text: " " }), rich("w.real.capB", { c: fmt(r.capB), r: eur0(r.resB) }));
     $("w-real-note").replaceChildren(...msg);
-    drawAcc(t);
+    drawAcc(tw);
     const v = leerWar();
     $("w-acc-p").textContent = OBS.t(esPartida(v) ? "w.acc.p" : "w.acc.pc", { r: eur0(RESERVES) });
   }
@@ -2679,17 +2791,21 @@ window.OBS = (() => {
       el("td", { class: r.pa >= 0 ? "pos" : "neg", text: r.alive ? eur0(r.pa) : "—" }), el("td", { class: r.pb >= 0 ? "pos" : "neg", text: eur0(r.pb) })); });
     $("w-hist").replaceChildren(el("thead", {}, head), el("tbody", {}, rows));
   }
-  let playTimer = null;
-  function stopPlay() { if (playTimer) { clearInterval(playTimer); playTimer = null; } $("w-play").textContent = t("w.play"); }
+  // «Reproducir» fluido (26/11/2026): las semanas avanzan sin saltos (0,7 s por semana)
+  let playTimer = null, warVista = null;
+  function stopPlay() { if (playTimer) { cancelAnimationFrame(playTimer); playTimer = null; } warVista = null; $("w-play").textContent = t("w.play"); }
   $("w-play").addEventListener("click", () => {
-    if (playTimer) { stopPlay(); return; }
-    if (+$("w-t").value >= WEEKS) $("w-t").value = 1;
-    $("w-play").textContent = t("w.pause"); renderWar();
-    playTimer = setInterval(() => {
-      const v = +$("w-t").value;
-      if (v >= WEEKS) { stopPlay(); return; }
-      $("w-t").value = v + 1; renderWar();
-    }, 900);
+    if (playTimer) { stopPlay(); renderWar(); return; }
+    let w0 = +$("w-t").value; if (w0 >= WEEKS) w0 = 1;
+    const dur = (WEEKS - w0) * 700, t0 = performance.now();
+    $("w-play").textContent = t("w.pause");
+    const paso = ahora => {
+      if (!playTimer) return;
+      const k = Math.min(1, (ahora - t0) / dur), tw = w0 + (WEEKS - w0) * k;
+      warVista = tw; $("w-t").value = String(Math.floor(tw + 1e-9)); renderWar();
+      if (k < 1) playTimer = requestAnimationFrame(paso); else { stopPlay(); renderWar(); }
+    };
+    playTimer = requestAnimationFrame(paso);
   });
   $("w-t").addEventListener("input", () => { stopPlay(); renderWar(); });
 
@@ -2832,17 +2948,49 @@ window.OBS = (() => {
   const vertical = (F, x, cls = "guide") => F.plot.append(sv("line", { x1: F.sx(x), x2: F.sx(x), y1: F.sy(F.o.yMin || 0), y2: F.sy(F.o.yMax), class: cls }));
   const lee = (id, letras, nombre) => { const src = $(id).value; try { return { f: parseFn(src, letras) }; } catch (e) { return { err: fnError(e, nombre, src) }; } };
   const numero = id => { const x = parseFloat(String($(id).value).replace(",", ".")); return isFinite(x) ? x : NaN; };
-  const reproductor = (btn, paso, cada, alParar) => {
-    let reloj = null;
-    const parar = () => { if (reloj) { clearInterval(reloj); reloj = null; } btn.textContent = t(btn.dataset.i18n); if (alParar) alParar(); };
+  // «Reproducir» fluido (26/11/2026), con requestAnimationFrame: un valor que avanza sin saltos...
+  const continuo = (btn, o) => {
+    let id = null;
+    const parar = () => { if (id) cancelAnimationFrame(id); id = null; btn.textContent = t(btn.dataset.i18n); };
     btn.addEventListener("click", () => {
-      if (reloj) { parar(); return; }
+      if (id) { parar(); return; }
+      const v0 = o.desde(), v1 = o.hasta(), dur = o.dur(), t0 = performance.now();
       btn.textContent = t("rep.pause");
-      if (paso(true) === false) { parar(); return; }
-      reloj = setInterval(() => { if (paso(false) === false) parar(); }, cada);
+      const paso = ahora => {
+        if (!id) return;
+        const k = Math.min(1, (ahora - t0) / dur);
+        o.pinta(v0 + (v1 - v0) * k);
+        if (k < 1) id = requestAnimationFrame(paso); else parar();
+      };
+      id = requestAnimationFrame(paso);
     });
-    return { parar, activo: () => !!reloj };
+    return { parar, activo: () => !!id };
   };
+  // ...o semana a semana, pasando de una semana a la siguiente poco a poco (pinta recibe k, de 0 a 1)
+  const porSemanas = (btn, o) => {
+    let id = null, t0 = 0, sigue = false;
+    const dur = o.dur || 650;
+    const parar = () => { const estaba = !!id; if (id) cancelAnimationFrame(id); id = null; btn.textContent = t(btn.dataset.i18n); if (estaba) o.pinta(1); };
+    const paso = ahora => {
+      if (!id) return;
+      const k = Math.min(1, (ahora - t0) / dur);
+      o.pinta(k);
+      if (k < 1) { id = requestAnimationFrame(paso); return; }
+      if (!sigue) { parar(); return; }
+      const r = o.avanza(false);
+      if (r === null) { parar(); return; }
+      sigue = r; t0 = ahora; id = requestAnimationFrame(paso);
+    };
+    btn.addEventListener("click", () => {
+      if (id) { parar(); return; }
+      const r = o.avanza(true);
+      if (r === null) { parar(); return; }
+      sigue = r; btn.textContent = t("rep.pause"); t0 = performance.now(); id = requestAnimationFrame(paso);
+    });
+    return { parar, activo: () => !!id };
+  };
+  // Mezcla dos estados (los números, poco a poco; lo demás, el de llegada)
+  const mezclaObj = (a, b, k) => { if (!a || k >= 1) return b; const o = { ...b }; for (const key in b) if (typeof b[key] === "number" && typeof a[key] === "number") o[key] = a[key] + (b[key] - a[key]) * k; return o; };
 
   // ---------- 1a · La empresa: ingresos y costes totales; «Reproducir» recorre las toneladas ----------
   function drawFirmTot() {
@@ -2860,20 +3008,15 @@ window.OBS = (() => {
     hover($("f-tot"), $("f-tot-tip"), F, x => ({ head: "q = " + tFmt(x), rows: [[C.ink, "IT", eur(P * x)], [C.s2, "CT", eur(CT(x))], [P * x >= CT(x) ? "var(--ok)" : "var(--bad)", t("w.beneficio"), signed(P * x - CT(x))]] }));
   }
   new MutationObserver(drawFirmTot).observe($("f-stats"), { childList: true });
-  const fRep = reproductor($("f-play"), inicio => {
-    const inp = $("f-q"), v = inicio ? 0 : Math.round((+inp.value + 0.1) * 10) / 10;
-    if (v > 8 + 1e-9) return false;
-    inp.value = String(Math.round(v * 10) / 10); renderFirm();
-  }, 60);
+  const fRep = continuo($("f-play"), { desde: () => 0, hasta: () => 8, dur: () => 5000, pinta: v => { $("f-q").value = String(v); renderFirm(); } });
   $("f-q").addEventListener("input", () => { if (fRep.activo()) fRep.parar(); });
   $("f-p").addEventListener("input", () => { if (fRep.activo()) fRep.parar(); });
 
   // ---------- 1b · El mercado: «Reproducir» avanza semanas hasta el equilibrio ----------
-  const mRep = reproductor($("m-play"), inicio => {
-    if (!inicio && entry(cur().pi) === 0) return false;
-    if (mkt.week >= 60) return false;
-    if (!inicio || entry(cur().pi) !== 0) $("m-step").click(); else return false;
-  }, 700);
+  const mRep = porSemanas($("m-play"), {
+    avanza: () => { if (entry(cur().pi) === 0 || mkt.week >= 60) return null; mktK = 0; $("m-step").click(); return entry(cur().pi) !== 0 && mkt.week < 60; },
+    pinta: k => { mktK = k; renderMarket(); }
+  });
 
   // ---------- 2a · Monopolio: beneficio según el precio; «Reproducir» baja el precio desde 100 € ----------
   function drawMonoBen() {
@@ -2889,12 +3032,7 @@ window.OBS = (() => {
     hover($("mo-ben"), $("mo-ben-tip"), F, x => ({ head: t("w.precio") + " " + fmt(x) + " €", rows: [["var(--ok)", t("w.beneficio"), eur(B(x) * 1000)]] }));
   }
   new MutationObserver(drawMonoBen).observe($("mo-stats"), { childList: true });
-  const moRep = reproductor($("mo-play"), inicio => {
-    const inp = $("mo-p"), c = +$("mo-c").value;
-    let v = inicio ? 100 : +inp.value - 1;
-    if (v < c - 1e-9) return false;
-    inp.value = String(v); renderMono();
-  }, 90);
+  const moRep = continuo($("mo-play"), { desde: () => 100, hasta: () => +$("mo-c").value, dur: () => 4500, pinta: v => { $("mo-p").value = String(v); renderMono(); } });
   $("mo-p").addEventListener("input", () => { if (moRep.activo()) moRep.parar(); });
 
   // ---------- 1c · Taller de competencia perfecta ----------
@@ -2903,7 +3041,7 @@ window.OBS = (() => {
     sube: { ct: "640 + 200q - 40q^2 + 5q^3", d: "840 - 1,3P", n: 30, qm: 8 },
     plano: { ct: "200 + 15q", d: "600 - 1,3P", n: 30, qm: 8 }
   };
-  let pt = null;
+  let pt = null, ptK = 1;
   function ptModelo() {
     const a = lee("pt-ct", "qQ", "CT"), b = lee("pt-d", "pP", "Q(P)");
     const errs = [a.err, b.err].filter(Boolean);
@@ -2937,6 +3075,13 @@ window.OBS = (() => {
   function ptEmpezar() {
     const m = ptModelo();
     pt = m.ok ? { m, hist: [{ ...m.equilibrio(m.n0), d: null }], oscila: false } : { m, hist: [], oscila: false };
+    if (m.ok) {
+      const P0 = pt.hist[0].P;
+      pt.Ptop = Math.min(m.Pz, Math.max(P0 * 1.4, m.minCTMe * 2.2, 1));
+      pt.yF = Math.max(P0, m.minCTMe) * 1.6;
+      pt.Ps = Array.from({ length: 161 }, (_, k) => escala(0, pt.Ptop).hi * k / 160);
+      pt.qs = pt.Ps.map(m.oferta);
+    }
     ptPintar();
   }
   function ptSemana() {
@@ -2947,13 +3092,13 @@ window.OBS = (() => {
     const ds = pt.hist.slice(-6).map(h => h.d);
     pt.oscila = ds.length === 6 && ds.every((x, i) => x && (i === 0 || Math.sign(x) !== Math.sign(ds[i - 1])));
     ptPintar();
-    return d !== 0 && !pt.oscila;
+    return pt.m.entra(pt.hist[pt.hist.length - 1].pi) !== 0 && !pt.oscila && pt.hist.length < 60;
   }
   function ptPintar() {
     const m = pt.m;
     $("pt-err").textContent = m.ok ? "" : m.errs.join("\n\n");
     if (!m.ok) { ["pt-mkt", "pt-firm"].forEach(id => $(id).replaceChildren()); $("pt-stats").replaceChildren(); $("pt-note").replaceChildren(); $("pt-diag").textContent = ""; $("pt-hist").replaceChildren(); return; }
-    const s = pt.hist[pt.hist.length - 1], d = m.entra(s.pi), semana = pt.hist.length;
+    const fin = pt.hist[pt.hist.length - 1], s = ptK < 1 ? mezclaObj(pt.hist[pt.hist.length - 2], fin, ptK) : fin, d = m.entra(fin.pi), semana = pt.hist.length;
     $("pt-stats").replaceChildren(
       el("div", { class: "stat" }, el("b", { text: t("m.week", { n: semana }) }), el("span", { text: s.d == null ? t("m.n.start") : s.d > 0 ? t("m.n.enter", { n: s.d }) : s.d < 0 ? t("m.n.exit", { n: -s.d }) : t("m.n.same") })),
       el("div", { class: "stat" }, el("b", { text: fmt(s.n) }), el("span", { text: t("m.st.n") })),
@@ -2963,17 +3108,16 @@ window.OBS = (() => {
     $("pt-note").replaceChildren(pt.oscila ? rich("pt.oscila") : d === 0 ? rich("pt.eq", { p: fmt(s.P, 1) + " €" }) : d > 0 ? rich("m.plus", { n: d }) : rich("m.minus", { n: -d }));
     $("pt-diag").textContent = t("pt.d." + m.forma, { p: fmt(m.minCTMe, 1) + " €", q: fmt(m.qMin, 1), qm: fmt(m.qm, 1) });
     // Mercado
-    const Qmax = m.D(0) * 1.05, Ptop = Math.min(m.Pz, Math.max(s.P * 2.2, m.minCTMe * 2.2, 1)), yM = escala(0, Ptop), xM = escala(0, Qmax);
+    const Qmax = m.D(0) * 1.05, yM = escala(0, pt.Ptop), xM = escala(0, Qmax);
     const F = frame($("pt-mkt"), { xMax: xM.hi, yMax: yM.hi, xTicks: xM.ticks, yTicks: yM.ticks, xLabel: () => t("ax.tQ"), yLabel: () => t("ax.eurt") });
-    const Ps = Array.from({ length: 161 }, (_, k) => yM.hi * k / 160);
-    trazo(F, Ps.map(P => [m.D(P), P]), "c-ink");
-    trazo(F, Ps.map(P => [s.n * m.oferta(P), P]), "c-s1");
+    trazo(F, pt.Ps.map(P => [m.D(P), P]), "c-ink");
+    trazo(F, pt.Ps.map((P, k) => [s.n * pt.qs[k], P]), "c-s1");
     F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(s.Q), y1: F.sy(s.P), y2: F.sy(s.P), class: "guide" }));
     F.plot.append(sv("line", { x1: F.sx(s.Q), x2: F.sx(s.Q), y1: F.sy(0), y2: F.sy(s.P), class: "guide" }));
     F.top.append(sv("circle", { cx: F.sx(s.Q), cy: F.sy(s.P), r: 6, class: "dot ink" }));
     rotulo(F, s.Q, s.P, fmt(s.P, 1) + " €", s.Q > xM.hi * 0.7 ? "end" : "start", -10);
     // Una explotación
-    const yF = escala(0, Math.max(s.P, m.minCTMe) * 1.8), q0 = m.qm / 40;
+    const yF = escala(0, pt.yF), q0 = m.qm / 40;
     const G = frame($("pt-firm"), { xMax: m.qm, yMax: yF.hi, xTicks: escala(0, m.qm).ticks.filter(v => v <= m.qm + 1e-9), yTicks: yF.ticks, xLabel: () => t("ax.tq"), yLabel: () => t("ax.eurt") });
     const xs = Array.from({ length: 121 }, (_, k) => q0 + (m.qm - q0) * k / 120);
     trazo(G, xs.map(x => [x, m.CTf(x) / x]), "c-s2"); trazo(G, xs.map(x => [x, m.cmg(x)]), "c-s1");
@@ -2990,12 +3134,15 @@ window.OBS = (() => {
       el("thead", {}, el("tr", {}, [t("m.th.week"), t("m.th.n"), t("w.precio"), t("pt.st.q"), t("m.th.pi")].map(x => el("th", { text: x })))),
       el("tbody", {}, pt.hist.map((h, i) => el("tr", {}, el("td", { text: t("m.week", { n: i + 1 }) }), el("td", { text: fmt(h.n) }), el("td", { text: fmt(h.P, 1) + " €" }), el("td", { text: fmt(h.q, 1) }), el("td", { class: h.pi >= 0 ? "pos" : "neg", text: signed(h.pi) }))).reverse()));
   }
-  const ptRep = reproductor($("pt-play"), inicio => {
-    if (!pt || !pt.m.ok) return false;
-    if (inicio && (pt.oscila || pt.m.entra(pt.hist[pt.hist.length - 1].pi) === 0)) { ptEmpezar(); return; }
-    if (pt.hist.length >= 60) return false;
-    if (!ptSemana()) return false;
-  }, 650);
+  const ptRep = porSemanas($("pt-play"), {
+    avanza: inicio => {
+      if (!pt || !pt.m.ok) return null;
+      if (inicio && (pt.oscila || pt.m.entra(pt.hist[pt.hist.length - 1].pi) === 0)) ptEmpezar();
+      if (pt.hist.length >= 60) return null;
+      ptK = 0; return ptSemana();
+    },
+    pinta: k => { ptK = k; ptPintar(); }
+  });
   $("pt-step").addEventListener("click", () => { ptRep.parar(); ptSemana(); });
   $("pt-reset").addEventListener("click", () => { ptRep.parar(); ptEmpezar(); });
   ["pt-ct", "pt-d", "pt-n", "pt-qm"].forEach(id => $(id).addEventListener("input", () => { ptRep.parar(); document.querySelectorAll("[data-pt]").forEach(b => b.setAttribute("aria-pressed", "false")); ptEmpezar(); }));
@@ -3076,13 +3223,8 @@ window.OBS = (() => {
     G.top.append(sv("circle", { cx: G.sx(q), cy: G.sy(clamp(bq, yB.lo, yB.hi)), r: 5, class: "dot ink" }));
     hover($("mt-ben"), $("mt-ben-tip"), G, x => ({ head: "Q = " + d(x), rows: [["var(--ok)", t("w.beneficio"), signed(m.Pd(x) * x - m.CTf(x))]] }));
   }
-  const mtRep = reproductor($("mt-play"), inicio => {
-    if (!mt || !mt.ok) return false;
-    const inp = $("mt-q"), fin = Math.min(mt.Qz, Math.max(mt.com.Q, mt.mon.Q) * 1.08), paso = Math.max(mt.h, fin / 80);
-    let v = inicio ? 0 : +inp.value + paso;
-    if (v > fin + 1e-9) return false;
-    inp.value = String(v); mtPintar();
-  }, 70);
+  const mtRep = continuo($("mt-play"), { desde: () => 0, hasta: () => mt && mt.ok ? Math.min(mt.Qz, Math.max(mt.com.Q, mt.mon.Q) * 1.08) : 0, dur: () => 5000,
+    pinta: v => { if (!mt || !mt.ok) return; $("mt-q").value = String(v); mtPintar(); } });
   $("mt-q").addEventListener("input", () => { mtRep.parar(); mtPintar(); });
   ["mt-d", "mt-ct"].forEach(id => $(id).addEventListener("input", () => { mtRep.parar(); document.querySelectorAll("[data-mt]").forEach(b => b.setAttribute("aria-pressed", "false")); mtEmpezar(); }));
   function mtEjemplo(k) {
@@ -3092,8 +3234,187 @@ window.OBS = (() => {
   }
   document.querySelectorAll("[data-mt]").forEach(b => b.addEventListener("click", () => mtEjemplo(b.dataset.mt)));
 
+  // =====================================================================
+  // 3 · COMPETENCIA REAL (26/11/2026): a · el modelo solo, b · la comparación, c · el taller
+  // =====================================================================
+  // Dibujo común: precios y reservas de las dos empresas hasta la semana tw (con decimales), cuota, cifras de cada una
+  function pintaGuerra(pre, R, tw, o) {
+    const W = R.length, sem = Math.min(W, Math.floor(tw + 1e-9)), r = enSemana(R, tw), ri = R[sem - 1];
+    const vivaB = x => x.aliveB !== false;
+    const hasta = (campo, cond) => { const pts = []; for (const x of R) { if (x.t > tw + 1e-9) break; if (cond(x)) pts.push([x.t, x[campo]]); } const u = R[sem]; if (u && tw > sem + 1e-9 && cond(R[sem - 1])) pts.push([tw, r[campo]]); return pts; };
+    const xT = [1, 5, 10, 15, 20].filter(v => v <= W);
+    // Precios
+    const ps = R.flatMap(x => [x.alive ? x.pA : NaN, vivaB(x) ? x.pB : NaN]).concat([o.cA, o.cB]).filter(isFinite);
+    const yP = escala(Math.min(...ps) * 0.92, Math.max(...ps) * 1.04);
+    const F = frame($(pre + "-precios"), { xMax: W, yMin: yP.lo, yMax: yP.hi, xTicks: xT, yTicks: yP.ticks, xLabel: () => t("w.weeks"), yLabel: () => t("ax.eurunit") });
+    [[o.cA, "var(--s2)", "A"], [o.cB, "var(--s1)", "B"]].forEach(([c, col, k]) => { F.plot.append(sv("line", { x1: F.sx(0), x2: F.sx(W), y1: F.sy(c), y2: F.sy(c), style: "stroke:" + col + ";stroke-width:1.5;stroke-dasharray:5 4;opacity:.8" })); rotulo(F, W, c, t("r.coste", { e: k, c: fmt(c, 1) }), "end", k === "A" ? -6 : 14); });
+    trazo(F, R.filter(x => x.alive).map(x => [x.t, x.pA]), "c-s2 faint", { style: "opacity:.25" }); trazo(F, R.filter(vivaB).map(x => [x.t, x.pB]), "c-s1", { style: "opacity:.25" });
+    trazo(F, hasta("pA", x => x.alive), "c-s2"); trazo(F, hasta("pB", vivaB), "c-s1");
+    if (ri.alive) F.top.append(sv("circle", { cx: F.sx(tw), cy: F.sy(r.pA), r: 6, class: "dot", style: "fill:var(--s2)" }));
+    if (vivaB(ri)) F.top.append(sv("circle", { cx: F.sx(tw), cy: F.sy(r.pB), r: 6, class: "dot", style: "fill:var(--s1)" }));
+    // Reservas
+    const rs = R.flatMap(x => [x.resA, x.resB]).filter(isFinite), yR = escala(Math.min(0, ...rs), Math.max(...rs) * 1.05);
+    const G = frame($(pre + "-res"), { xMax: W, yMin: yR.lo, yMax: yR.hi, xTicks: xT, yTicks: yR.ticks, xLabel: () => t("w.weeks"), yLabel: () => t("w.acc.y") });
+    G.plot.append(sv("line", { x1: G.sx(0), x2: G.sx(W), y1: G.sy(0), y2: G.sy(0), class: "guide" }));
+    trazo(G, R.filter(x => x.alive || x.broke).map(x => [x.t, x.resA]), "c-s2", { style: "opacity:.25" }); trazo(G, R.filter(x => vivaB(x) || x.brokeB).map(x => [x.t, x.resB]), "c-s1", { style: "opacity:.25" });
+    trazo(G, hasta("resA", x => x.alive || x.broke), "c-s2"); trazo(G, hasta("resB", x => vivaB(x) || x.brokeB), "c-s1");
+    if (ri.alive || ri.broke) G.top.append(sv("circle", { cx: G.sx(tw), cy: G.sy(r.resA), r: 6, class: "dot", style: "fill:var(--s2)" }));
+    if (vivaB(ri) || ri.brokeB) G.top.append(sv("circle", { cx: G.sx(tw), cy: G.sy(r.resB), r: 6, class: "dot", style: "fill:var(--s1)" }));
+    if (o.cierre && tw >= o.cierre.t - 1) rotulo(G, o.cierre.t - 1, o.cierre.res, t("r.cierra", { e: o.cierre.e, n: o.cierre.t }), o.cierre.t > W * 0.6 ? "end" : "start", 16);
+    // Cuota y cifras
+    share(pre + "-share", r.sa, "A", "B");
+    const T = OBS.t;
+    fst(pre + "-a-stats", ri.alive ? [[T("w.s.p"), uFmt(Math.round(r.pA * 10) / 10) + " €"], [T("w.s.q"), fmt(r.qa)], [T("w.s.pi"), eur0(r.pa), r.pa >= 0 ? "pos" : "neg"], [T("w.s.res"), eur0(Math.max(0, r.resA)), r.resA > 0 ? null : "neg"]] : [[T("w.s.state"), T("w.s.closed"), "neg"]]);
+    fst(pre + "-b-stats", vivaB(ri) ? [[T("w.s.p"), uFmt(Math.round(r.pB * 10) / 10) + " €"], [T("w.s.q"), fmt(r.qb)], [T("w.s.pi"), eur0(r.pb), r.pb >= 0 ? "pos" : "neg"], [T("w.s.res"), eur0(Math.max(0, r.resB)), r.resB > 0 ? null : "neg"]] : [[T("w.s.state"), T("w.s.closed"), "neg"]]);
+    return { sem, ri };
+  }
+
+  // ---- 3a · El modelo: las mismas empresas y cifras que la 3b, sin la competencia perfecta ----
+  const RM = { ca: "wp-ca", cb: "wp-cb", fa: "wp-fa", fb: "wp-fb", res: "wp-res", cut: "wp-cut" };
+  let rmVista = null;
+  function rmSalidas() {
+    const e = id => fmt(+$(id).value, +$(id).step < 1 ? 1 : 0) + " €";
+    ["rm-ca", "rm-cb", "rm-fa", "rm-fb", "rm-res", "rm-cut"].forEach(id => { $(id + "-out").textContent = e(id); });
+    $("rm-t-out").textContent = OBS.t("w.of", { t: +$("rm-t").value, n: WEEKS });
+  }
+  function renderRm() {
+    rmSalidas();
+    const tw = rmVista != null ? rmVista : +$("rm-t").value;
+    const cierre = CLOSE_WEEK ? { t: CLOSE_WEEK, e: "A", res: BT.real[CLOSE_WEEK - 2].resA } : null;
+    const { sem, ri } = pintaGuerra("rm", BT.real, tw, { cA: RA.c, cB: RB.c, cierre });
+    const T = OBS.t;
+    let msg;
+    if (sem === 1) msg = [el("span", { text: T("w.real.t1") })];
+    else if (ri.broke) msg = [rich("w.real.broke", { l: eur0(-ri.pa) })];
+    else if (ri.alive && ri.pa >= 0) msg = [rich("w.real.cut", { p: uFmt(ri.pB) })];
+    else if (ri.alive) msg = [rich(ri.pA <= RA.c ? "w.real.lose1" : "w.real.lose2", { r: eur0(Math.max(0, ri.resA)) })];
+    else msg = [rich("w.real.closed", { n: CLOSE_WEEK })];
+    if (ri.capB > RB.cap + 0.5) msg.push(el("span", { text: " " }), rich("w.real.capB", { c: fmt(ri.capB), r: eur0(ri.resB) }));
+    $("rm-note").replaceChildren(...msg);
+  }
+  // Los deslizadores mueven los mismos parámetros que la 3b (y que los escenarios del panel docente)
+  Object.entries(RM).forEach(([k, wp]) => $("rm-" + k).addEventListener("input", () => { rmRep.parar(); $(wp).value = $("rm-" + k).value; warCambia(); rmVista = null; renderRm(); }));
+  new MutationObserver(() => { Object.entries(RM).forEach(([k, wp]) => { $("rm-" + k).value = $(wp).value; }); renderRm(); }).observe($("w-hist"), { childList: true });
+  $("rm-t").addEventListener("input", () => { rmRep.parar(); rmVista = null; renderRm(); });
+  const rmRep = continuo($("rm-play"), { desde: () => +$("rm-t").value >= WEEKS ? 1 : +$("rm-t").value, hasta: () => WEEKS, dur: () => 13000,
+    pinta: v => { rmVista = v; $("rm-t").value = String(Math.floor(v + 1e-9)); renderRm(); } });
+
+  // ---- 3c · Taller: los costes de las dos empresas los pone la clase ----
+  const RT_EJ = {
+    mod: { a: "200 + 15q", b: "260 + 12q", d: "320 - 8P", p0: 20, res: 400, cut: 0.5, cap: 100 },
+    igual: { a: "200 + 15q", b: "200 + 15q", d: "320 - 8P", p0: 20, res: 400, cut: 0.5, cap: 100 },
+    mucho: { a: "200 + 15q", b: "300 + 9q", d: "320 - 8P", p0: 20, res: 400, cut: 1, cap: 100 }
+  };
+  let rt = null, rtVista = null;
+  // Las mismas reglas que la 3b: la empresa con la unidad más barata baja el precio cada semana (sin bajar de su coste por unidad más un margen
+  // del 17 %: con las cifras del modelo, 12 € → 14 €; si la otra cierra, lo sube un poco, 14,5 €);
+  // la otra la sigue una semana después sin bajar de lo que le cuesta una unidad; los clientes se pasan poco a poco a la más barata;
+  // lo que no cabe en una fábrica lo produce la otra, que amplía; quien se queda sin reservas cierra la semana siguiente.
+  function rtSimula() {
+    const fa = lee("rt-cta", "qQ", "CT (A)"), fb = lee("rt-ctb", "qQ", "CT (B)"), fd = lee("rt-d", "pP", "Q(P)");
+    const errs = [fa.err, fb.err, fd.err].filter(Boolean);
+    const p0 = numero("rt-p0"), res0 = numero("rt-res0"), cut = numero("rt-cut"), cap = numero("rt-cap");
+    if (!(p0 > 0)) errs.push(t("rt.e.p0")); if (!(res0 >= 0)) errs.push(t("rt.e.res")); if (!(cut >= 0)) errs.push(t("rt.e.cut")); if (!(cap > 0)) errs.push(t("rt.e.cap"));
+    if (errs.length) return { ok: false, errs };
+    const CT = { A: fa.f, B: fb.f }, D = P => Math.max(0, fd.f(P));
+    const cmg = (k, q) => { const lo = Math.max(0, q - 0.5); return (CT[k](q + 0.5) - CT[k](lo)) / (q + 0.5 - lo); };
+    const c = { A: cmg("A", cap / 2), B: cmg("B", cap / 2) };
+    if (!isFinite(c.A) || !isFinite(c.B)) return { ok: false, errs: [t("rt.e.nan")] };
+    const atk = Math.abs(c.A - c.B) < 1e-6 ? null : c.B < c.A ? "B" : "A", def = atk === "A" ? "B" : "A";
+    const suelo = atk ? c[atk] * 7 / 6 : 0;
+    const pr = { A: p0, B: p0 }, vivo = { A: true, B: true }, res = { A: res0, B: res0 }, q = { A: 0, B: 0 };
+    let sAtk = 0.5, cierre = null; const R = [];
+    for (let sem = 1; sem <= WEEKS; sem++) {
+      if (sem > 1 && atk) {
+        const prev = pr[atk];
+        if (vivo[def]) { pr[atk] = Math.max(pr[atk] - cut, suelo); pr[def] = Math.max(prev, cmg(def, q[def])); sAtk = clamp(sAtk + 0.05 * (pr[def] - pr[atk]), 0, 1); }
+        else pr[atk] = suelo * 29 / 28;
+      }
+      const sh = { A: atk ? (atk === "A" ? sAtk : 1 - sAtk) : 0.5 }; sh.B = 1 - sh.A;
+      if (!vivo.A) { sh.A = 0; sh.B = 1; } if (!vivo.B) { sh.B = 0; sh.A = vivo.A ? 1 : 0; }
+      const pav = sh.A * pr.A + sh.B * pr.B, Q = D(pav);
+      q.A = sh.A * Q; q.B = sh.B * Q;
+      for (const [k, o] of [["A", "B"], ["B", "A"]]) if (q[k] > cap && vivo[o]) { if (atk === o || !atk) { q[o] += q[k] - cap; q[k] = cap; } }
+      const be = { A: vivo.A ? pr.A * q.A - CT.A(q.A) : 0, B: vivo.B ? pr.B * q.B - CT.B(q.B) : 0 };
+      res.A += be.A; res.B += be.B;
+      const broke = vivo.A && res.A < 0, brokeB = vivo.B && res.B < 0;
+      R.push({ t: sem, pA: pr.A, pB: pr.B, qa: q.A, qb: q.B, pa: be.A, pb: be.B, sa: Q > 0 ? q.A / (q.A + q.B || 1) : sh.A, alive: vivo.A, aliveB: vivo.B, resA: res.A, resB: res.B, broke, brokeB, capB: q.B });
+      if (broke) { vivo.A = false; if (!cierre) cierre = { t: sem + 1, e: "A", res: res.A }; }
+      if (brokeB) { vivo.B = false; if (!cierre) cierre = { t: sem + 1, e: "B", res: res.B }; }
+      if (!vivo.A && !vivo.B) break;
+    }
+    while (R.length < WEEKS) { const u = R[R.length - 1]; R.push({ ...u, t: R.length + 1, alive: false, aliveB: false, broke: false, brokeB: false, pa: 0, pb: 0, qa: 0, qb: 0 }); }
+    return { ok: true, R, c, atk, def, suelo, cierre, p0 };
+  }
+  function rtPintar() {
+    const m = rt;
+    $("rt-err").textContent = m.ok ? "" : m.errs.join("\n\n");
+    $("rt-t-out").textContent = OBS.t("w.of", { t: +$("rt-t").value, n: WEEKS });
+    if (!m.ok) { ["rt-precios", "rt-res", "rt-share", "rt-a-stats", "rt-b-stats", "rt-note", "rt-hist"].forEach(id => $(id).replaceChildren()); $("rt-diag").textContent = ""; return; }
+    const tw = rtVista != null ? rtVista : +$("rt-t").value;
+    const { sem, ri } = pintaGuerra("rt", m.R, tw, { cA: m.c.A, cB: m.c.B, cierre: m.cierre });
+    const T = OBS.t, X = m.atk, Y = m.def;
+    let msg;
+    if (!X) msg = t("rt.n.igual", { c: fmt(m.c.A, 1) });
+    else if (sem === 1) msg = t("rt.n.t1", { x: X, y: Y, p: fmt(m.p0, 1), cx: fmt(m.c[X], 1), cy: fmt(m.c[Y], 1) });
+    else if (m.cierre && sem >= m.cierre.t) msg = t("rt.n.cerrada", { y: m.cierre.e, n: m.cierre.t, x: m.cierre.e === "A" ? "B" : "A" });
+    else if ((Y === "A" ? ri.broke : ri.brokeB)) msg = t("rt.n.broke", { y: Y });
+    else if ((Y === "A" ? ri.pa : ri.pb) < 0) msg = t((Y === "A" ? ri.pA : ri.pB) <= m.c[Y] + 1e-6 ? "rt.n.pierde" : "rt.n.pierde2", { y: Y, x: X, r: eur0(Math.max(0, Y === "A" ? ri.resA : ri.resB)) });
+    else msg = t("rt.n.baja", { x: X, y: Y, p: uFmt(Math.round((X === "A" ? ri.pA : ri.pB) * 10) / 10) });
+    $("rt-note").replaceChildren(el("span", { text: msg }));
+    $("rt-diag").textContent = !X ? t("rt.d.igual") : m.cierre ? t("rt.d.cierra", { y: m.cierre.e, n: m.cierre.t, x: m.cierre.e === "A" ? "B" : "A", s: fmt(m.suelo, 1) }) : t("rt.d.aguanta", { x: X, y: Y });
+    $("rt-hist").replaceChildren(
+      el("thead", {}, el("tr", {}, ["w.th.week", "rt.th.pa", "rt.th.pb", "w.th.qa", "w.th.qb", "w.th.pia", "w.th.pib"].map(k => el("th", { text: t(k) })))),
+      el("tbody", {}, m.R.map(x => el("tr", {}, el("td", { text: x.t }), el("td", { text: x.alive ? uFmt(Math.round(x.pA * 10) / 10) + " €" : T("w.s.closed") }), el("td", { text: x.aliveB !== false ? uFmt(Math.round(x.pB * 10) / 10) + " €" : T("w.s.closed") }),
+        el("td", { text: fmt(x.qa) }), el("td", { text: fmt(x.qb) }), el("td", { class: x.pa >= 0 ? "pos" : "neg", text: x.alive ? eur0(x.pa) : "—" }), el("td", { class: x.pb >= 0 ? "pos" : "neg", text: x.aliveB !== false ? eur0(x.pb) : "—" })))));
+  }
+  function rtEmpezar() { rtVista = null; rt = rtSimula(); rtPintar(); }
+  function rtEjemplo(k) {
+    const e = RT_EJ[k]; $("rt-cta").value = e.a; $("rt-ctb").value = e.b; $("rt-d").value = e.d; $("rt-p0").value = e.p0; $("rt-res0").value = e.res; $("rt-cut").value = e.cut; $("rt-cap").value = e.cap;
+    document.querySelectorAll("[data-rt]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.rt === k)));
+    rtRep.parar(); $("rt-t").value = "1"; rtEmpezar();
+  }
+  const rtRep = continuo($("rt-play"), { desde: () => +$("rt-t").value >= WEEKS ? 1 : +$("rt-t").value, hasta: () => WEEKS, dur: () => 13000,
+    pinta: v => { if (!rt || !rt.ok) return; rtVista = v; $("rt-t").value = String(Math.floor(v + 1e-9)); rtPintar(); } });
+  $("rt-t").addEventListener("input", () => { rtRep.parar(); rtVista = null; rtPintar(); });
+  ["rt-cta", "rt-ctb", "rt-d", "rt-p0", "rt-res0", "rt-cut", "rt-cap"].forEach(id => $(id).addEventListener("input", () => { rtRep.parar(); document.querySelectorAll("[data-rt]").forEach(b => b.setAttribute("aria-pressed", "false")); rtEmpezar(); }));
+  document.querySelectorAll("[data-rt]").forEach(b => b.addEventListener("click", () => rtEjemplo(b.dataset.rt)));
+
   // ---------- Auditoría de accesibilidad y comprensión (25/11/2026) ----------
   OBS.register({ es: {
+    "sub.3a": "a · La guerra de precios", "sub.3b": "b · Comparar con la competencia perfecta", "sub.3c": "c · Taller: tus dos empresas",
+    "w.eyebrow": "3b · Las mismas empresas, en los dos mundos",
+    "sup.r1": "Cada empresa fija su precio: no hay un precio de mercado que todas acepten.",
+    "sup.r2": "Cada unidad cuesta lo mismo hasta llenar la fábrica (coste marginal plano): cuanto más vende, más barato le sale cada unidad de media.",
+    "sup.r3": "La empresa con la técnica más barata baja el precio para quitarle clientes a la otra: competir es una guerra, no un equilibrio.",
+    "sup.r4": "Quien se queda sin reservas cierra; la que gana se queda con el mercado y amplía su fábrica.",
+    "rm.eyebrow": "3a · Competencia real", "rm.h2": "¿Quién gana la guerra de precios?",
+    "rm.p": "Dos empresas venden lo mismo. <strong>B</strong> tiene una técnica más moderna: cada unidad le cuesta menos, pero tiene más coste fijo. Mueve los costes y pulsa «Reproducir» para ver las 20 semanas.",
+    "rm.s.ca": "Lo que le cuesta a A cada unidad", "rm.s.cb": "Lo que le cuesta a B cada unidad", "rm.s.fa": "Coste fijo de A (a la semana)", "rm.s.fb": "Coste fijo de B (a la semana)",
+    "rm.s.res": "Reservas de cada empresa al empezar", "rm.s.cut": "Cuánto baja B su precio cada semana",
+    "r.fig1": "El precio de cada empresa", "r.lgA": "Empresa A", "r.lgB": "Empresa B", "r.lgC": "Lo que le cuesta cada unidad", "r.aria1": "Precio que fija cada empresa semana a semana, con lo que le cuesta cada unidad",
+    "r.coste": "coste de {e}: {c} €", "r.cierra": "{e} cierra (semana {n})",
+    "mi.rmp": "Mira cómo <b>B</b> baja el precio semana a semana y cómo <b>A</b> la sigue, hasta que ya no puede bajar más sin perder en cada unidad.",
+    "mi.rmr": "Las reservas suman los beneficios y restan las pérdidas. Cuando una empresa se queda sin reservas, cierra.",
+    "rt.eyebrow": "3c · Taller", "rt.h2": "Tus dos empresas: ¿quién aguanta la guerra?",
+    "rt.p": "Escribe los costes de dos empresas y la demanda del mercado. La herramienta aplica las reglas de la competencia real: la que tiene la unidad más barata baja el precio cada semana, la otra la sigue una semana después sin bajar de lo que le cuesta una unidad, y los clientes se pasan poco a poco a la más barata. Pulsa «Reproducir».",
+    "rt.cta": "Costes de A: CT(q) =", "rt.ctb": "Costes de B: CT(q) =", "rt.d": "Demanda del mercado: Q(P) =", "rt.p0": "Precio al empezar (€)", "rt.res0": "Reservas de cada empresa (€)",
+    "rt.cut": "Cuánto baja el precio cada semana la más barata (€)", "rt.cap": "Capacidad de cada fábrica (unidades)",
+    "rt.ej1": "Las dos empresas del modelo", "rt.ej2": "Las dos con la misma técnica", "rt.ej3": "B mucho más barata",
+    "rt.th.pa": "Precio de A", "rt.th.pb": "Precio de B",
+    "rt.n.igual": "Las dos tienen la misma técnica (cada unidad les cuesta {c} €): a ninguna le compensa bajar el precio, así que conviven.",
+    "rt.n.t1": "Las dos venden a {p} €. A {x} cada unidad le cuesta {cx} € y a {y}, {cy} €: {x} puede permitirse bajar el precio.",
+    "rt.n.baja": "{x} baja el precio a {p} €. {y} la sigue una semana después, pero mientras tanto algunos clientes se pasan a {x}.",
+    "rt.n.pierde": "{y} ya pierde dinero: no puede bajar el precio sin perder en cada unidad. Le quedan {r} de reservas.",
+    "rt.n.pierde2": "{y} ya pierde dinero: sigue a {x} para no perder clientes, pero el margen ya no cubre sus costes fijos. Le quedan {r} de reservas.",
+    "rt.n.broke": "{y} se ha quedado sin reservas: la semana que viene cierra.",
+    "rt.n.cerrada": "{y} ha cerrado en la semana {n}. {x} se queda con todo el mercado.",
+    "rt.d.igual": "Resultado: con la misma técnica no hay guerra de precios y las dos empresas siguen.",
+    "rt.d.cierra": "Resultado: {y} cierra en la semana {n} y {x} se queda con el mercado. {x} no baja de {s} €: lo que le cuesta cada unidad más un margen del 17 %.",
+    "rt.d.aguanta": "Resultado: {y} aguanta las 20 semanas. Prueba con menos reservas, o con más distancia entre los costes de {x} y de {y}.",
+    "rt.e.p0": "Escribe el precio al empezar (mayor que cero).", "rt.e.res": "Escribe las reservas de cada empresa (cero o más).", "rt.e.cut": "Escribe cuánto baja el precio cada semana (cero o más).",
+    "rt.e.cap": "Escribe la capacidad de cada fábrica (mayor que cero).", "rt.e.nan": "Los costes no dan un número con esa capacidad: revisa las funciones.",
+
     "rep.play": "Reproducir", "rep.pause": "Pausa", "rep.weeks": "Reproducir semana a semana",
     "sub.1c": "c · Taller: tu mercado", "sub.2c": "c · Taller: tu monopolio",
     "sup.h": "Supuestos del modelo",
@@ -3142,6 +3463,39 @@ window.OBS = (() => {
     "e.empty": "Escribe una función.", "e.char": "Hay un carácter que no entiendo, «{c}», en la posición {p}.", "e.expect": "Falta un número, una letra o un paréntesis en la posición {p}.",
     "e.close": "Falta cerrar un paréntesis «)» en la posición {p}.", "e.extra": "Sobra «{c}» en la posición {p}.", "e.num": "El número de la posición {p} está mal escrito.", "e.which": "En {f}: ",
   }, va: {
+    "sub.3a": "a · La guerra de preus", "sub.3b": "b · Comparar amb la competència perfecta", "sub.3c": "c · Taller: les teues dues empreses",
+    "w.eyebrow": "3b · Les mateixes empreses, en els dos mons",
+    "sup.r1": "Cada empresa fixa el seu preu: no hi ha un preu de mercat que totes accepten.",
+    "sup.r2": "Cada unitat costa el mateix fins a omplir la fàbrica (cost marginal pla): com més ven, més barat li ix cada unitat de mitjana.",
+    "sup.r3": "L'empresa amb la tècnica més barata abaixa el preu per a llevar-li clients a l'altra: competir és una guerra, no un equilibri.",
+    "sup.r4": "Qui es queda sense reserves tanca; la que guanya es queda el mercat i amplia la fàbrica.",
+    "rm.eyebrow": "3a · Competència real", "rm.h2": "Qui guanya la guerra de preus?",
+    "rm.p": "Dues empreses venen el mateix. <strong>B</strong> té una tècnica més moderna: cada unitat li costa menys, però té més cost fix. Mou els costos i prem «Reproduir» per a veure les 20 setmanes.",
+    "rm.s.ca": "El que li costa a A cada unitat", "rm.s.cb": "El que li costa a B cada unitat", "rm.s.fa": "Cost fix d'A (a la setmana)", "rm.s.fb": "Cost fix de B (a la setmana)",
+    "rm.s.res": "Reserves de cada empresa en començar", "rm.s.cut": "Quant abaixa B el preu cada setmana",
+    "r.fig1": "El preu de cada empresa", "r.lgA": "Empresa A", "r.lgB": "Empresa B", "r.lgC": "El que li costa cada unitat", "r.aria1": "Preu que fixa cada empresa setmana a setmana, amb el que li costa cada unitat",
+    "r.coste": "cost de {e}: {c} €", "r.cierra": "{e} tanca (setmana {n})",
+    "mi.rmp": "Mira com <b>B</b> abaixa el preu setmana a setmana i com <b>A</b> la seguix, fins que ja no pot abaixar més sense perdre en cada unitat.",
+    "mi.rmr": "Les reserves sumen els beneficis i resten les pèrdues. Quan una empresa es queda sense reserves, tanca.",
+    "rt.eyebrow": "3c · Taller", "rt.h2": "Les teues dues empreses: qui aguanta la guerra?",
+    "rt.p": "Escriu els costos de dues empreses i la demanda del mercat. La ferramenta aplica les regles de la competència real: la que té la unitat més barata abaixa el preu cada setmana, l'altra la seguix una setmana després sense baixar del que li costa una unitat, i els clients es passen a poc a poc a la més barata. Prem «Reproduir».",
+    "rt.cta": "Costos d'A: CT(q) =", "rt.ctb": "Costos de B: CT(q) =", "rt.d": "Demanda del mercat: Q(P) =", "rt.p0": "Preu en començar (€)", "rt.res0": "Reserves de cada empresa (€)",
+    "rt.cut": "Quant abaixa el preu cada setmana la més barata (€)", "rt.cap": "Capacitat de cada fàbrica (unitats)",
+    "rt.ej1": "Les dues empreses del model", "rt.ej2": "Les dues amb la mateixa tècnica", "rt.ej3": "B molt més barata",
+    "rt.th.pa": "Preu d'A", "rt.th.pb": "Preu de B",
+    "rt.n.igual": "Les dues tenen la mateixa tècnica (cada unitat els costa {c} €): a cap no li compensa abaixar el preu, així que conviuen.",
+    "rt.n.t1": "Les dues venen a {p} €. A {x} cada unitat li costa {cx} € i a {y}, {cy} €: {x} es pot permetre abaixar el preu.",
+    "rt.n.baja": "{x} abaixa el preu a {p} €. {y} la seguix una setmana després, però mentrestant alguns clients es passen a {x}.",
+    "rt.n.pierde": "{y} ja perd diners: no pot abaixar el preu sense perdre en cada unitat. Li queden {r} de reserves.",
+    "rt.n.pierde2": "{y} ja perd diners: seguix {x} per a no perdre clients, però el marge ja no cobreix els costos fixos. Li queden {r} de reserves.",
+    "rt.n.broke": "{y} s'ha quedat sense reserves: la setmana que ve tanca.",
+    "rt.n.cerrada": "{y} ha tancat en la setmana {n}. {x} es queda amb tot el mercat.",
+    "rt.d.igual": "Resultat: amb la mateixa tècnica no hi ha guerra de preus i les dues empreses continuen.",
+    "rt.d.cierra": "Resultat: {y} tanca en la setmana {n} i {x} es queda el mercat. {x} no baixa de {s} €: el que li costa cada unitat més un marge del 17 %.",
+    "rt.d.aguanta": "Resultat: {y} aguanta les 20 setmanes. Prova amb menys reserves, o amb més distància entre els costos de {x} i de {y}.",
+    "rt.e.p0": "Escriu el preu en començar (més gran que zero).", "rt.e.res": "Escriu les reserves de cada empresa (zero o més).", "rt.e.cut": "Escriu quant abaixa el preu cada setmana (zero o més).",
+    "rt.e.cap": "Escriu la capacitat de cada fàbrica (més gran que zero).", "rt.e.nan": "Els costos no donen un número amb eixa capacitat: revisa les funcions.",
+
     "rep.play": "Reproduir", "rep.pause": "Pausa", "rep.weeks": "Reproduir setmana a setmana",
     "sub.1c": "c · Taller: el teu mercat", "sub.2c": "c · Taller: el teu monopoli",
     "sup.h": "Supòsits del model",
@@ -3237,6 +3591,10 @@ window.OBS = (() => {
       { onChange: () => { if (typeof fRep !== "undefined") { fRep.parar(); mRep.parar(); ptRep.parar(); } } });
     OBS.subpestanas($("view-imperfecta"), [{ el: $("mono-block"), t: tr("sub.2a") }, { el: $("oli-block"), t: tr("sub.2b") }, { el: $("mt-block"), t: tr("sub.2c") }],
       { onChange: () => { if (typeof moRep !== "undefined") { moRep.parar(); mtRep.parar(); } } });
+    OBS.subpestanas($("view-real"), [{ el: $("rm-block"), t: tr("sub.3a") }, { el: $("war-block"), t: tr("sub.3b") }, { el: $("rt-block"), t: tr("sub.3c") }],
+      { onChange: () => { if (typeof rmRep !== "undefined") { rmRep.parar(); rtRep.parar(); stopPlay(); } } });
+    OBS.palabras($("rm-block"), pal0(["cf", "cmg", "cuota", "res"]), { antes: $("rm-block").querySelector(".charts") });
+    OBS.mirar($("rm-precios"), tr("mi.rmp")); OBS.mirar($("rm-res"), tr("mi.rmr"));
     OBS.mirar($("f-tot"), tr("mi.ftot")); OBS.mirar($("mo-ben"), tr("mi.moben"));
     OBS.palabras($("pt-block"), pal0(["cmg", "cme", "cf", "ben"]), { antes: $("pt-block").querySelector(".charts") });
     OBS.palabras($("mt-block"), pal0(["mon", "cmg", "img", "ben"]), { antes: $("mt-block").querySelector(".charts") });
@@ -3255,7 +3613,7 @@ window.OBS = (() => {
   }
   OBS.apply();
   OBS.onLang(() => {
-    ptPintar(); mtPintar();
+    ptPintar(); mtPintar(); renderRm(); rtPintar();
     setBestLabels(); buildFirmTable(); renderFirm(); renderMarket(); renderMono(); renderOli();
     renderCmp(); buildWarTable(); renderWar();
   });
@@ -3272,6 +3630,8 @@ window.OBS = (() => {
   renderWar();
   ptEjemplo("nar");
   mtEjemplo("far");
+  renderRm();
+  rtEjemplo("mod");
   show(location.hash.slice(1));
 })();
 </script>

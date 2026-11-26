@@ -2202,6 +2202,17 @@ window.OBS = (() => {
     if (dos) renderDos2(m, q); else if (tal) renderTaller(m, q); else renderUno(m, q);
   }
 
+  // Para dibujar mientras se reproduce: hasta dónde (con decimales) y el valor interpolado entre dos unidades
+  const qDib = (m, q) => lb.qf != null ? Math.max(q, Math.min(lb.qf, m.qmax)) : q;
+  function valEn(fs, campo, x) {
+    const i = fs.findIndex(r => r.q > x + 1e-9);
+    if (i < 0) { const u = fs[fs.length - 1]; return u ? u[campo] : NaN; }
+    if (i === 0) return Math.abs(fs[0].q - x) < 1e-9 ? fs[0][campo] : NaN;
+    const a = fs[i - 1], b = fs[i];
+    if (Math.abs(x - a.q) < 1e-9) return a[campo];
+    return a[campo] + (b[campo] - a[campo]) * (x - a.q) / (b.q - a.q);
+  }
+  const tramo = (fs, campo, x) => { const pts = fs.filter(r => r.q <= x + 1e-9).map(r => [r.q, r[campo]]); const ult = pts[pts.length - 1]; if (ult && x > ult[0] + 1e-9) pts.push([x, valEn(fs, campo, x)]); return pts; };
   function filaDe(filas, q) { return filas.find(f => Math.abs(f.q - q) < 1e-9) || filas[filas.length - 1]; }
   const cifra = (k, v, cls) => el("div", {}, el("b", { class: cls || null, text: v }), el("span", { text: t(k) }));
 
@@ -2221,19 +2232,20 @@ window.OBS = (() => {
     $("lb-frase").textContent = frase;
     todos(f);
     // Gráfico de totales
-    const fs = m.filas, xs = fs.map(r => r.q), xT = nice(0, m.qmax);
+    const fs = m.filas, xs = fs.map(r => r.q), xT = nice(0, m.qmax), qd = qDib(m, q);
     const yT = nice(Math.min(0, ...fs.map(r => Math.min(r.CT, r.IT)).filter(isFinite)), Math.max(...fs.map(r => Math.max(r.CT, r.IT)).filter(isFinite)));
     const F = frame($("lb-tot"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
     const dibuja = (G, campo, cls, extra = {}) => {
       line(G, fs.map(r => [r.q, r[campo]]), "curve faint " + cls, extra);
-      line(G, fs.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra);
+      line(G, tramo(fs, campo, qd), "curve " + cls, extra);
     };
     dibuja(F, "CF", "", { style: "stroke:var(--muted);stroke-dasharray:5 4" });
     dibuja(F, "CV", "c-s3"); dibuja(F, "CT", "c-s2"); dibuja(F, "IT", "c-ink");
     limites(F, m, yT);
-    F.top.append(sv("line", { x1: F.sx(q), x2: F.sx(q), y1: F.sy(f.IT), y2: F.sy(f.CT), class: f.B >= 0 ? "gap-ok" : "gap-bad" }));
-    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(f.CT), r: 5, class: "dot", style: "fill:var(--s2)" }));
-    F.top.append(sv("circle", { cx: F.sx(q), cy: F.sy(f.IT), r: 5, class: "dot ink" }));
+    { const ctd = valEn(fs, "CT", qd), itd = valEn(fs, "IT", qd);
+      F.top.append(sv("line", { x1: F.sx(qd), x2: F.sx(qd), y1: F.sy(itd), y2: F.sy(ctd), class: itd >= ctd ? "gap-ok" : "gap-bad" }));
+      F.top.append(sv("circle", { cx: F.sx(qd), cy: F.sy(ctd), r: 5, class: "dot", style: "fill:var(--s2)" }));
+      F.top.append(sv("circle", { cx: F.sx(qd), cy: F.sy(itd), r: 5, class: "dot ink" })); }
     marcas(F, m, r => r.CT, yT);
     hover($("lb-tot"), $("lb-tot-tip"), F, x => { const r = filaDe(fs, Math.round(x / m.paso) * m.paso); return { head: t("tip.q", { q: fmtA(r.q) }), rows: [[C.ink, "IT", eur(r.IT)], [C.s2, "CT", eur(r.CT)], [C.s3, "CV", eur(r.CV)], [r.B >= 0 ? C.ok : C.bad, t("t.ben"), signed(r.B)]] }; });
     $("lb-lg1").replaceChildren(...ley([[C.ink, t("lg.it")], [C.s2, t("lg.ct")], [C.s3, t("lg.cv")], [C.muted, t("lg.cf"), true]]));
@@ -2241,10 +2253,12 @@ window.OBS = (() => {
     const fu = fs.filter(r => r.q > 0), vals = fu.flatMap(r => [r.CMe, r.CVMe, r.CMg, r.IMg]).filter(isFinite).sort((a, b) => a - b);
     const yU = nice(Math.min(0, vals[0] ?? 0), (vals[Math.floor(vals.length * 0.95)] ?? 1) * 1.12);
     const G = frame($("lb-uni"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yU.lo, yMax: yU.hi, yTicks: yU.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eurU") });
-    const dibujaU = (campo, cls, extra = {}) => { line(G, fu.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, fu.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra); };
+    const dibujaU = (campo, cls, extra = {}) => { line(G, fu.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, tramo(fu, campo, qd), "curve " + cls, extra); };
     dibujaU("IMg", "", { style: "stroke:var(--ink);stroke-dasharray:6 4" }); dibujaU("CMe", "c-s2"); dibujaU("CVMe", "c-s3"); dibujaU("CMg", "c-s1");
     limites(G, m, yU);
-    if (q > 0) { G.top.append(sv("circle", { cx: G.sx(q), cy: G.sy(f.CMg), r: 5, class: "dot s1" })); G.top.append(sv("circle", { cx: G.sx(q), cy: G.sy(f.IMg), r: 5, class: "dot ink" })); }
+    { const cd = valEn(fu, "CMg", qd), id = valEn(fu, "IMg", qd);
+      if (qd > 0 && isFinite(cd)) G.top.append(sv("circle", { cx: G.sx(qd), cy: G.sy(cd), r: 5, class: "dot s1" }));
+      if (qd > 0 && isFinite(id)) G.top.append(sv("circle", { cx: G.sx(qd), cy: G.sy(id), r: 5, class: "dot ink" })); }
     marcas(G, m, r => r.CMg, yU, true);
     hover($("lb-uni"), $("lb-uni-tip"), G, x => { const r = filaDe(fs, Math.max(m.paso, Math.round(x / m.paso) * m.paso)); return { head: t("tip.q", { q: fmtA(r.q) }), rows: [[C.s2, "CMe", eur(r.CMe)], [C.s3, "CVMe", eur(r.CVMe)], [C.s1, "CMg", eur(r.CMg)], [C.ink, "IMg", eur(r.IMg)]] }; });
     $("lb-lg2").replaceChildren(...ley([[C.s2, t("lg.cme")], [C.s3, t("lg.cvme")], [C.s1, t("lg.cmg")], [C.ink, t("lg.img"), true]]));
@@ -2362,7 +2376,7 @@ window.OBS = (() => {
     const xT = nice(0, m.qmax), all = [...m.filas1, ...m.filas2];
     const yT = nice(0, Math.max(...all.map(r => Math.max(r.CT, r.IT)).filter(isFinite)));
     const F = frame($("lb-tot"), { xMax: m.qmax, xTicks: xT.ticks.filter(v => v <= m.qmax + 1e-9), yMin: yT.lo, yMax: yT.hi, yTicks: yT.ticks, xLabel: () => t("ax.q"), yLabel: () => t("ax.eur") });
-    const dib = (G, fs, campo, cls, extra = {}) => { line(G, fs.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, fs.filter(r => r.q <= q + 1e-9).map(r => [r.q, r[campo]]), "curve " + cls, extra); };
+    const dib = (G, fs, campo, cls, extra = {}) => { line(G, fs.map(r => [r.q, r[campo]]), "curve faint " + cls, extra); line(G, tramo(fs, campo, qDib(m, q)), "curve " + cls, extra); };
     dib(F, m.filas1, "IT", "c-ink"); dib(F, m.filas1, "CT", "c-s2"); dib(F, m.filas2, "CT", "c-s1");
     F.plot.append(sv("line", { x1: F.sx(m.cap), x2: F.sx(m.cap), y1: F.sy(yT.lo), y2: F.sy(yT.hi), class: "limite" })); label(F, m.cap, yT.lo, t("lb.capl"), "end", "mark-txt", -6);
     $("lb-lg1").replaceChildren(...ley([[C.ink, t("lg.it")], [C.s2, t("lb.ct1")], [C.s1, t("lb.ct2")]]));
@@ -2380,20 +2394,22 @@ window.OBS = (() => {
   }
 
   // Reproducir y pausa
-  function lbParar() { if (lb.reloj) { clearInterval(lb.reloj); lb.reloj = null; } $("lb-play").textContent = t("lb.play"); }
+  function lbParar() { if (lb.reloj) { cancelAnimationFrame(lb.reloj); lb.reloj = null; } lb.qf = null; $("lb-play").textContent = t("lb.play"); }
+  // Reproducir (26/11/2026): la cantidad avanza sin saltos; dura medio segundo por unidad (entre 3 y 10 segundos en total)
   $("lb-play").addEventListener("click", () => {
-    if (lb.reloj) { lbParar(); return; }
+    if (lb.reloj) { lbParar(); renderLab(); return; }
     const m = lbModelo(); if (!m.ok) return;
-    if (+$("lb-q").value >= m.qmax) $("lb-q").value = "0";
-    const pasos = Math.max(1, Math.round(m.qmax / m.paso)), dur = +$("lb-vel").value * 1000;
-    const cada = Math.min(1200, Math.max(40, dur / pasos));
+    let q0 = +$("lb-q").value; if (q0 >= m.qmax - 1e-9) q0 = 0;
+    const dur = Math.min(10000, Math.max(3000, (m.qmax - q0) / m.paso * 500)), t0 = performance.now();
     $("lb-play").textContent = t("lb.pause");
-    renderLab();
-    lb.reloj = setInterval(() => {
-      const v = +$("lb-q").value + m.paso;
-      if (v > m.qmax + 1e-9) { lbParar(); return; }
-      $("lb-q").value = String(v); renderLab();
-    }, cada);
+    const paso = ahora => {
+      if (!lb.reloj) return;
+      const k = Math.min(1, (ahora - t0) / dur), qf = q0 + (m.qmax - q0) * k;
+      lb.qf = qf; $("lb-q").value = String(Math.floor(qf / m.paso + 1e-9) * m.paso);
+      renderLab();
+      if (k < 1) lb.reloj = requestAnimationFrame(paso); else { lbParar(); renderLab(); }
+    };
+    lb.qf = q0; lb.reloj = requestAnimationFrame(paso);
   });
   $("lb-q").addEventListener("input", () => { lbParar(); renderLab(); });
   ["lb-ct", "lb-it", "lb-p", "lb-cap", "lb-dem", "lb-p2"].forEach(id => $(id).addEventListener("input", () => { lbParar(); renderLab(); }));

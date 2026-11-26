@@ -2,8 +2,8 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-11-26 09:15
-- Commit de partida: `2634d12`
+- Generado: 2026-11-26 09:36
+- Commit de partida: `6c41a9e`
 - Cambios sin confirmar en el repositorio (sin contar este archivo): 5
 
 ## Interruptores de la web
@@ -57,7 +57,7 @@
 ### sa03 · SA 3 · La producción
 
 - Web: `sa03/index.html`
-- Vault: `SA03-la-produccion/material/observatorio-sa3.html` (2026-11-26 09:14, 307 KB)
+- Vault: `SA03-la-produccion/material/observatorio-sa3.html` (2026-11-26 09:36, 309 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -79,7 +79,7 @@
 ### sa04 · SA 4 · El mercado
 
 - Web: `sa04/index.html`
-- Vault: `SA04-el-mercado/material/observatorio-sa4.html` (2026-11-26 09:14, 243 KB)
+- Vault: `SA04-el-mercado/material/observatorio-sa4.html` (2026-11-26 09:36, 276 KB)
 - Copia: ✓ copiada
 - En el menú: estado `proto`, oculta: no
 - Pestañas:
@@ -93,7 +93,9 @@
     - Tu monopolio: ¿qué cambia frente a la competencia?
   - **Competencia real**
     - ¿Qué cambia si el coste marginal no sube?
+    - ¿Quién gana la guerra de precios?
     - ¿Conviven o se hacen la guerra?
+    - Tus dos empresas: ¿quién aguanta la guerra?
   - **Comparar supuestos**
     - Comparar supuestos
 - Fuentes que cita:

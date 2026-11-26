@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-26T09:15:01.400137+00:00",
+ "generado": "2026-11-26T09:36:58.982604+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,12 +33,17 @@
      "fecha": "2026-11-25T15:50:59+00:00"
     }
    ],
-   "leido": "2026-11-26T09:14:57.991135+00:00"
+   "leido": "2026-11-26T09:36:54.993287+00:00"
   },
   {
    "nombre": "Cinco Días",
    "salmon": true,
    "items": [
+    {
+     "titulo": "El Gobierno convoca 14.373 plazas para la Administración General del Estado",
+     "enlace": "https://elpais.com/economia/2026-11-26/el-gobierno-convoca-14373-plazas-para-la-administracion-general-del-estado.html",
+     "fecha": "2026-11-26T09:11:47+00:00"
+    },
     {
      "titulo": "Isidro Fainé deja la presidencia de la Fundación CEDE en manos de Ramon Adell",
      "enlace": "https://elpais.com/economia/2026-11-26/isidro-faine-deja-la-presidencia-de-la-fundacion-cede-en-manos-de-ramon-adell.html",
@@ -58,19 +63,19 @@
      "titulo": "¿Han desaparecido 400.000 pisos de alquiler en España? Hay menos anuncios, pero más casas alquiladas",
      "enlace": "https://elpais.com/economia/vivienda/2026-11-26/han-desaparecido-400000-pisos-de-alquiler-en-espana-hay-menos-anuncios-pero-mas-casas-alquiladas.html",
      "fecha": "2026-11-26T04:30:01+00:00"
-    },
-    {
-     "titulo": "La economía sénior gana peso y obliga a repensar el consumo y el ahorro",
-     "enlace": "https://elpais.com/economia/foro-futuro/2026-11-26/la-economia-senior-gana-peso-y-obliga-a-repensar-el-consumo-y-el-ahorro.html",
-     "fecha": "2026-11-26T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-26T09:14:58.699957+00:00"
+   "leido": "2026-11-26T09:36:55.939947+00:00"
   },
   {
    "nombre": "Invertia · El Español",
    "salmon": true,
    "items": [
+    {
+     "titulo": "El Gobierno convoca 14.313 plazas de empleo público a tres días de las elecciones generales",
+     "enlace": "https://www.elespanol.com/invertia/economia/empleo/20261126/gobierno-convoca-plazas-empleo-publico-dias-elecciones-generales/1003744472931_0.html",
+     "fecha": "2026-11-26T09:29:47+00:00"
+    },
     {
      "titulo": "Isidro Fainé deja la presidencia de la Fundación CEDE después de 29 años y cede el testigo al vicepresidente Ramón Adell",
      "enlace": "https://www.elespanol.com/invertia/empresas/20261126/isidro-faine-deja-presidencia-fundacion-cede-despues-anos-cede-testigo-ramon-adell/1003744472833_0.html",
@@ -90,14 +95,9 @@
      "titulo": "Así se ha fraguado la victoria de De Cos en el BCE: volantazo de Macron, caos en Berlín y traición alemana a Holanda",
      "enlace": "https://www.elespanol.com/invertia/economia/bancos-centrales/20261126/fraguado-victoria-cos-bce-volantazo-macron-caos-berlin-traicion-alemana-holanda/1003744466670_0.html",
      "fecha": "2026-11-26T04:00:00+00:00"
-    },
-    {
-     "titulo": "La caja negra del Iryo en Adamuz descarta una avería y centra la investigación en el estado de la vía",
-     "enlace": "https://www.elespanol.com/invertia/observatorios/movilidad/20261126/caja-negra-iryo-adamuz-descarta-averia-centra-investigacion-via/1003744471718_0.html",
-     "fecha": "2026-11-26T04:00:00+00:00"
     }
    ],
-   "leido": "2026-11-26T09:14:59.264270+00:00"
+   "leido": "2026-11-26T09:36:56.718625+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-26T09:14:59.449456+00:00"
+   "leido": "2026-11-26T09:36:57.252731+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-26T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-26T09:14:59.760274+00:00"
+   "leido": "2026-11-26T09:36:57.555382+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,12 +173,22 @@
      "fecha": "2026-11-25T21:08:48+00:00"
     }
    ],
-   "leido": "2026-11-26T09:15:00.020815+00:00"
+   "leido": "2026-11-26T09:36:57.961077+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "El Gobierno convoca 14.373 plazas para funcionarios a tres días de las elecciones y más de medio año después de aprobar la oferta",
+     "enlace": "https://www.elmundo.es/economia/2026/11/26/6b07f70fe9cf4a07788b457c.html",
+     "fecha": "2026-11-26T09:18:42+00:00"
+    },
+    {
+     "titulo": "Tu empresa puede dejarte sin cesta de Navidad si estás de baja, pero hay una excepción que debes conocer",
+     "enlace": "https://www.elmundo.es/economia/2026/11/26/6b07ef1bfc6c83c32c8b45a4.html",
+     "fecha": "2026-11-26T09:14:59+00:00"
+    },
     {
      "titulo": "Isidro Fainé se retira de la presidencia de la Confederación de Directivos tras 30 años pero sigue al frente de la Caixa: \"Se cierra un círculo\"",
      "enlace": "https://www.elmundo.es/economia/2026/11/26/6b07ee0ee4d4d837308b458e.html",
@@ -193,19 +203,9 @@
      "titulo": "La realidad detrás del aumento de las hipotecas: no solo hay más compradores, sino viviendas más caras y hogares que no pueden pagarlas",
      "enlace": "https://www.elmundo.es/economia/vivienda/2026/11/26/6b06f8d121efa04c238b456e.html",
      "fecha": "2026-11-25T23:59:29+00:00"
-    },
-    {
-     "titulo": "La engañifa del impuesto a la banca: Hacienda elude desvelar en el BOE cómo repartirlo entre las CCAA y el Banco de España se mantiene en contra",
-     "enlace": "https://www.elmundo.es/economia/2026/11/26/6b0723c521efa0a0268b459f.html",
-     "fecha": "2026-11-25T23:59:28+00:00"
-    },
-    {
-     "titulo": "El Corte Inglés aprueba su plan estratégico con 5.000 millones de inversión y sin horizonte de salida a Bolsa",
-     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/26/6b0723f0e9cf4a2a398b4598.html",
-     "fecha": "2026-11-25T23:53:08+00:00"
     }
    ],
-   "leido": "2026-11-26T09:15:00.387114+00:00"
+   "leido": "2026-11-26T09:36:58.366283+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,12 +237,27 @@
      "fecha": "2026-11-26T01:11:05+00:00"
     }
    ],
-   "leido": "2026-11-26T09:15:00.610679+00:00"
+   "leido": "2026-11-26T09:36:58.603183+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Comunitat Valenciana | Salvamento Marítimo no observa restos ni contaminación en la zona del buque hundido entre Valencia e Ibiza",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/salvamento-maritimo-no-observa-restos-ni-contaminacion-en-la-zona-del-buque-hundido-entre-valencia-e-ibiza",
+     "fecha": "2026-11-26T09:33:57+00:00"
+    },
+    {
+     "titulo": "Comarca y empresa | Paiporta avanza en la reconstrucción del alcantarillado con nuevos trabajos de inspección del subsuelo",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/paiporta-avanza-en-la-reconstruccion-del-alcantarillado-con-nuevos-trabajos-de-inspeccion-del-subsuelo",
+     "fecha": "2026-11-26T09:25:34+00:00"
+    },
+    {
+     "titulo": "Música y ópera | Rulo y la Contrabanda traerá su 'Zona Cero Tour' a la Sala Auditorio Roig Arena",
+     "enlace": "https://valenciaplaza.com/musica-opera-valencia-comunitat-valenciana/rulo-y-la-contrabanda-traera-su-zona-cero-tour-a-la-sala-auditorio-roig-arena",
+     "fecha": "2026-11-26T09:25:01+00:00"
+    },
     {
      "titulo": "Mercados | SpaceX lanzará un millón de satélites para crear el primer centro de datos en el espacio",
      "enlace": "https://valenciaplaza.com/valenciaplaza/bolsas/spacex-lanzara-un-millon-de-satelites-para-crear-el-primer-centro-de-datos-en-el-espacio",
@@ -252,24 +267,9 @@
      "titulo": "Tierra de empresas | La VI edición de ‘Inspiration Day’ del Club de Marketing del Mediterráneo, en imágenes",
      "enlace": "https://valenciaplaza.com/valenciaplaza/tierra-de-empresas/la-vi-edicion-de-inspiration-day-del-club-de-marketing-del-mediterraneo-en-imagenes",
      "fecha": "2026-11-26T05:39:00+00:00"
-    },
-    {
-     "titulo": "Comunitat Valenciana | Buen día... para Ximo Puig, mal día... para Isabel Díaz Ayuso",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/buen-dia-para-ximo-puig-mal-dia-para-isabel-diaz-ayuso",
-     "fecha": "2026-11-26T05:00:05+00:00"
-    },
-    {
-     "titulo": "Empresas | NRG y San Benedetto firman el primer contrato de autoconsumo industrial de proximidad en la Comunitat",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/empresas1/nrg-y-san-benedetto-firman-el-primer-contrato-de-autoconsumo-industrial-de-proximidad-en-la-comunitat",
-     "fecha": "2026-11-26T05:00:05+00:00"
-    },
-    {
-     "titulo": "Empresas | Los empresarios del 'baby boom' se jubilan y las pymes buscan relevo para evitar el cierre",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/empresas1/los-empresarios-del-baby-boom-se-jubilan-y-las-pymes-buscan-relevo-para-evitar-el-cierre",
-     "fecha": "2026-11-26T05:00:05+00:00"
     }
    ],
-   "leido": "2026-11-26T09:15:01.400094+00:00"
+   "leido": "2026-11-26T09:36:58.982558+00:00"
   }
  ]
 }
