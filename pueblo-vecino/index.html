@@ -17,7 +17,7 @@
 <html lang="es">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title data-t="v.titulo">El pueblo · tu hogar</title>
+<title data-t="v.titulo">Oikos · tu hogar</title>
 <style>
 :root { --bg: #f4efe2; --paper: #fffdf6; --ink: #1f2a24; --muted: #5a625b; --rule: #d9d0bb; --merc: #2c4a86; --asam: #2d6a4f; --ok: #2d6a4f; --bad: #a83a28; --sol: #e9b949; --aviso: #fff7e0; --avisob: #e6d29a; --chip: #eef3ea; --chipb: #cfdcc8; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #161a17; --paper: #1f2420; --ink: #e9e7df; --muted: #a9ada4; --rule: #3a413b; --merc: #9db4e6; --asam: #8fcfa9; --ok: #8fcfa9; --bad: #f0907c; --sol: #d9a93a; --aviso: #2e2a1c; --avisob: #5c5131; --chip: #243026; --chipb: #3b4a3d; } }
@@ -133,7 +133,7 @@ footer { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-item
 </style>
 <div class="app">
   <header>
-    <div class="marca"><span data-t="v.pueblo">El pueblo</span><small id="cuando"></small></div>
+    <div class="marca"><span data-t="v.pueblo">Oikos</span><small id="cuando"></small></div>
     <ol class="fases" id="fases"></ol>
     <div class="yo"><div id="quien"></div><div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div></div>
   </header>
@@ -156,7 +156,7 @@ function leerURL() {
 function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {} }
 
 const TXT = {
-  es: { "v.titulo": "El pueblo · tu hogar", "v.pueblo": "El pueblo", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)", "v.entrar": "Entrar",
+  es: { "v.titulo": "Oikos · tu hogar", "v.pueblo": "Oikos", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)", "v.entrar": "Entrar",
     "v.elige": "Elige el código de tu puesto para empezar.", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
     "v.cuando": "Año {n} · {e}", "v.emis": "Emisiones acumuladas: {n}", "e.invierno": "invierno", "e.primavera": "primavera", "e.verano": "verano", "e.otono": "otoño",
     "f.1": "Suceso", "f.2": "Empleo", "f.3": "Asamblea", "f.4": "Resultado", "f.5": "Frase", "v.puesto": "Puesto {c}", "v.hogar": "Hogar {h}", "v.cambiar": "Cambiar de puesto",
@@ -195,7 +195,7 @@ const TXT = {
     "obj.h": "Objetivo de tu hogar", "obj.hambre": "Que nadie de tu casa pase hambre", "obj.escuela": "Que vuestros {n} niños vayan a la escuela", "obj.libre": "Que os quede al menos lo mismo que {r}: {x} soles para objetos y ocio", "obj.ref": "el año pasado", "obj.ref1": "en un año normal",
     "obj.si": "Ahora mismo, lo conseguís.", "obj.no": "Ahora mismo, no lo conseguís.", "obj.ok": "¡Objetivo conseguido!", "obj.mal": "Objetivo no conseguido", "obj.p": "Es solo de tu hogar. A veces no coincide con lo que conviene al pueblo: lo decidís vosotros.",
     "g.h": "Quién gana y quién pierde", "g.p": "Lo que le queda a cada hogar para objetos y ocio, media por sector.", "g.ganan": "Ganan: {x}.", "g.pierden": "Pierden: {x}.", "g.igual": "Nadie gana ni pierde más de un sol.", "g.sec": "{s} ({d} soles)" },
-  va: { "v.titulo": "El poble · la teua llar", "v.pueblo": "El poble", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)", "v.entrar": "Entrar",
+  va: { "v.titulo": "Oikos · la teua llar", "v.pueblo": "Oikos", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)", "v.entrar": "Entrar",
     "v.elige": "Tria el codi del teu lloc per a començar.", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
     "v.cuando": "Any {n} · {e}", "v.emis": "Emissions acumulades: {n}", "e.invierno": "hivern", "e.primavera": "primavera", "e.verano": "estiu", "e.otono": "tardor",
     "f.1": "Fet", "f.2": "Treball", "f.3": "Assemblea", "f.4": "Resultat", "f.5": "Frase", "v.puesto": "Lloc {c}", "v.hogar": "Llar {h}", "v.cambiar": "Canviar de lloc",

@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T17:43:22.594971+00:00",
+ "generado": "2026-11-27T18:49:19.367195+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,7 +33,7 @@
      "fecha": "2026-11-27T09:35:00+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:17.245628+00:00"
+   "leido": "2026-11-27T18:49:13.506798+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:18.028027+00:00"
+   "leido": "2026-11-27T18:49:14.484012+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-27T09:01:52+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:18.517713+00:00"
+   "leido": "2026-11-27T18:49:15.167606+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:19.610758+00:00"
+   "leido": "2026-11-27T18:49:16.244308+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:20.170065+00:00"
+   "leido": "2026-11-27T18:49:16.717515+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,7 +173,7 @@
      "fecha": "2026-11-27T00:46:15+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:20.840635+00:00"
+   "leido": "2026-11-27T18:49:17.349453+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,7 +205,7 @@
      "fecha": "2026-11-27T10:53:36+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:21.363712+00:00"
+   "leido": "2026-11-27T18:49:17.969642+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,12 +237,17 @@
      "fecha": "2026-11-27T09:17:15+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:22.089426+00:00"
+   "leido": "2026-11-27T18:49:18.786686+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Comarca y empresa | Paterna impulsa la proyección internacional de su Cordà en la Feria de Turismo de Londres",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/paterna-impulsa-la-proyeccion-internacional-de-su-corda-en-la-feria-de-turismo-de-londres",
+     "fecha": "2026-11-27T18:04:22+00:00"
+    },
     {
      "titulo": "València | València celebra el lunes una Cremà por los 10 años de las Fallas como Patrimonio mundial",
      "enlace": "https://valenciaplaza.com/valenciaplaza/valencia/valencia-celebra-el-lunes-una-crema-por-los-10-anos-de-las-fallas-como-patrimonio-mundial",
@@ -262,14 +267,9 @@
      "titulo": "Comunitat Valenciana | El Gobierno estudia cómo y a qué puerto trasladar el 'Med Emre' y la Generalitat rechaza acogerlo",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-gobierno-estudia-como-y-a-que-puerto-trasladar-el-med-emre-y-la-generalitat-rechaza-acogerlo",
      "fecha": "2026-11-27T15:38:15+00:00"
-    },
-    {
-     "titulo": "Comarca y empresa | El Consell ratifica la emergencia de las obras para reparar el acceso principal al Parque Logístico de Valencia",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/el-consell-ratifica-la-emergencia-de-las-obras-para-reparar-el-acceso-principal-al-parque-logistico-de-valencia-2026-11-27",
-     "fecha": "2026-11-27T15:20:25+00:00"
     }
    ],
-   "leido": "2026-11-27T17:43:22.594925+00:00"
+   "leido": "2026-11-27T18:49:19.367151+00:00"
   }
  ]
 }

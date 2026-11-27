@@ -44,6 +44,8 @@
 
   // Páginas comunes a todo el curso (fuera de la lista de SA)
   const TODAS_EXTRA = [
+    { ruta: "oikos/", num: "⌂", t: { es: "Oikos, el pueblo de la clase", va: "Oikos, el poble de la classe" }, corto: { es: "Oikos", va: "Oikos" },
+      d: { es: "El juego que nos acompaña todo el curso: nuestro laboratorio de economía.", va: "El joc que ens acompanya tot el curs: el nostre laboratori d'economia." } },
     { ruta: "actualidad/", num: "◆", t: { es: "Actualidad", va: "Actualitat" }, corto: { es: "Actualidad", va: "Actualitat" },
       d: { es: "Las noticias de economía que comentamos en clase.", va: "Les notícies d'economia que comentem a classe." } },
     { ruta: "libro/", num: "¶", t: { es: "Libro del alumnado", va: "Llibre de l'alumnat" }, corto: { es: "Libro", va: "Llibre" },

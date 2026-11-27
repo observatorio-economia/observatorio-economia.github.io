@@ -195,6 +195,77 @@ def t(textos, clave, es, va=""):
     return clave
 
 
+# ---------------------------------------------------------------- Oikos (el juego del pueblo: pestaña propia, 27/11/2026)
+def oikos():
+    """Genera oikos/index.html: qué es Oikos, cómo se juega en clase y en casa, y qué añade cada SA."""
+    destino = web / "oikos"; destino.mkdir(exist_ok=True)
+    tx = {}
+    t(tx, "pg.title", "Oikos · el pueblo de la clase", "Oikos · el poble de la classe")
+    t(tx, "ok.eyebrow", "Economía · 1.º de Bachillerato", "Economia · 1r de Batxillerat")
+    t(tx, "ok.lede", "Oikos es el pueblo de la clase: un juego que nos acompaña todo el curso y que es nuestro laboratorio de economía. En griego, oikos es «la casa», y de ahí viene la palabra «economía»: la norma (nomos) de la casa común.",
+      "Oikos és el poble de la classe: un joc que ens acompanya tot el curs i que és el nostre laboratori d'economia. En grec, oikos és «la casa», i d'ací ve la paraula «economia»: la norma (nomos) de la casa comuna.")
+    t(tx, "ok.clase", "Jugar en clase", "Jugar a classe")
+    t(tx, "ok.clase.p", "La partida se ve en el proyector. Si hay ordenadores o móviles, cada hogar decide desde el suyo con el código que da el docente.",
+      "La partida es veu en el projector. Si hi ha ordinadors o mòbils, cada llar decidix des del seu amb el codi que dona el docent.")
+    t(tx, "ok.vecino", "Entrar con tu hogar", "Entrar amb la teua llar")
+    t(tx, "ok.proy", "Pantalla del proyector (la usa el docente)", "Pantalla del projector (la usa el docent)")
+    t(tx, "ok.casa", "Laboratorio en casa", "Laboratori a casa")
+    t(tx, "ok.casa.p", "En clase se decide; en casa se experimenta. Abre el laboratorio y carga el archivo del pueblo que te dé tu profesor (en Aules): puedes repetir un año cambiando una sola decisión y comparar los dos resultados. Lo que hagas no cambia la partida de clase.",
+      "A classe es decidix; a casa s'experimenta. Obri el laboratori i carrega l'arxiu del poble que et done el teu professor (en Aules): pots repetir un any canviant una sola decisió i comparar els dos resultats. El que faces no canvia la partida de classe.")
+    t(tx, "ok.lab", "Abrir el laboratorio", "Obrir el laboratori")
+    t(tx, "ok.sa", "Qué añade cada situación de aprendizaje", "Què afig cada situació d'aprenentatge")
+    t(tx, "ok.sa.p", "El pueblo vive 26 años a lo largo del curso. Cada SA le añade una capa nueva.", "El poble viu 26 anys al llarg del curs. Cada SA li afig una capa nova.")
+    filas = [
+        ("1", "1-3", "Mercado y asamblea: quién decide qué se produce y cómo se reparte. Sucesos, retos y votaciones.", "Mercat i assemblea: qui decidix què es produïx i com es repartix. Fets, reptes i votacions."),
+        ("2", "4", "En diseño: decisiones con riesgo e incertidumbre.", "En disseny: decisions amb risc i incertesa."),
+        ("3", "5-7", "Empresas con propietario: costes, técnicas, beneficio, paro y quiebras.", "Empreses amb propietari: costos, tècniques, benefici, atur i fallides."),
+        ("4", "8-9", "Competencia entre empresas y la central de energía, que es la única.", "Competència entre empreses i la central d'energia, que és l'única."),
+        ("5", "10-13", "El PIB del pueblo, de dónde sale el crecimiento, el desarrollo y el clima.", "El PIB del poble, d'on ix el creixement, el desenvolupament i el clima."),
+        ("6", "14-16", "Sindicato y negociación, paro y desigualdad.", "Sindicat i negociació, atur i desigualtat."),
+        ("7", "17-18", "En diseño: impuestos, pensiones, déficit y deuda.", "En disseny: imposts, pensions, dèficit i deute."),
+        ("8", "19-21", "El dinero y el banco del pueblo.", "Els diners i el banc del poble."),
+        ("9", "22-23", "Comercio y migraciones con el pueblo vecino.", "Comerç i migracions amb el poble veí."),
+        ("10", "24-26", "Las finanzas: un segundo banco, riesgos y crisis.", "Les finances: un segon banc, riscos i crisis."),
+    ]
+    t(tx, "ok.col.sa", "SA", "SA"); t(tx, "ok.col.a", "Años del pueblo", "Anys del poble"); t(tx, "ok.col.q", "Qué se juega", "Què es juga")
+    trs = []
+    for n, a, es_, va_ in filas:
+        trs.append(f'<tr><td>{n}</td><td>{a}</td><td data-i18n="{t(tx, "ok.f" + n, es_, va_)}">{esc(es_)}</td></tr>')
+    t(tx, "ok.libro", "El libro del pueblo y los datos", "El llibre del poble i les dades")
+    t(tx, "ok.libro.p", "Cada año que se cierra queda en el libro del pueblo, con el suceso, los retos y la frase de la clase. Dentro del juego, el edificio del Observatorio da acceso a los informes, a los datos de cada año y a las actividades de la SA.",
+      "Cada any que es tanca queda en el llibre del poble, amb el fet, els reptes i la frase de la classe. Dins del joc, l'edifici de l'Observatori dona accés als informes, a les dades de cada any i a les activitats de la SA.")
+    cuerpo = f"""  <header class="top">
+    <span class="eyebrow" data-i18n="ok.eyebrow">Economía · 1.º de Bachillerato</span>
+    <h1>Oikos</h1>
+    <p class="lede" data-i18n="ok.lede"></p>
+  </header>
+  <section class="obs-fase">
+    <h2 data-i18n="ok.clase"></h2>
+    <p data-i18n="ok.clase.p"></p>
+    <p><a class="btn" href="../pueblo-vecino/" data-i18n="ok.vecino"></a></p>
+    <p class="small"><a href="../pueblo/" data-i18n="ok.proy"></a></p>
+  </section>
+  <section class="obs-fase">
+    <h2 data-i18n="ok.casa"></h2>
+    <p data-i18n="ok.casa.p"></p>
+    <p><a class="btn" href="../pueblo/?lab=1" data-i18n="ok.lab"></a></p>
+  </section>
+  <section class="obs-fase">
+    <h2 data-i18n="ok.sa"></h2>
+    <p class="small" data-i18n="ok.sa.p"></p>
+    <div class="scroll" tabindex="0"><table class="tabla-oikos">
+      <thead><tr><th scope="col" data-i18n="ok.col.sa"></th><th scope="col" data-i18n="ok.col.a"></th><th scope="col" data-i18n="ok.col.q"></th></tr></thead>
+      <tbody>{''.join(trs)}</tbody>
+    </table></div>
+  </section>
+  <section class="obs-fase">
+    <h2 data-i18n="ok.libro"></h2>
+    <p data-i18n="ok.libro.p"></p>
+  </section>"""
+    (destino / "index.html").write_text(pagina("../", "Oikos", cuerpo, tx), encoding="utf-8")
+    aviso(True, "oikos/index.html  (pestaña del juego del pueblo)")
+
+
 # ---------------------------------------------------------------- Actualidad (noticias comentadas y titulares)
 # Las comentadas las escribe Jordi en el vault (05-SA/_actualidad/AAAA-MM-DD-….md, con «estado: publicado»).
 # Los titulares salen de los canales RSS de scripts/fuentes-actualidad.json: solo título, medio, fecha y enlace.
@@ -602,6 +673,7 @@ aviso(True, f"libro/index.html  ({len(SAS)} SA con apuntes)")
 # (interruptor MOSTRAR_LIBRO en menu.js); la portada enseña la actualidad.
 publicados = sum(publicada(sm, sc) for sa in SAS.values() for sm, sc in sa["sesiones"])
 escribir_estado(publicados, actualidad(vault))
+oikos()
 
 # ---------------------------------------------------------------- 7 · Inventario de lo publicado
 def inventario():

@@ -1,5 +1,5 @@
 /* Generado por actualizar.sh: no editar a mano. Web instalable del Observatorio. */
-const VERSION = "obs-15dde5458ee2";
+const VERSION = "obs-ecd1014f6bc3";
 const ARCHIVOS = [
 "./",
 "actualidad/datos.json",
@@ -19,6 +19,7 @@ const ARCHIVOS = [
 "index.html",
 "libro/index.html",
 "manifest.webmanifest",
+"oikos/index.html",
 "prueba-alumno/index.html",
 "prueba-proyector/index.html",
 "pueblo-vecino/index.html",
