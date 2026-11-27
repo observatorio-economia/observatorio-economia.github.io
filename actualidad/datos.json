@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T23:11:49.344786+00:00",
+ "generado": "2026-11-27T23:46:43.746007+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,16 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Corregir el déficit de 813.000 viviendas costará 131.560 millones: el mapa de inversión por autonomías",
+     "enlace": "https://www.expansion.com/economia/2026/11/28/corregir-deficit-813-000-viviendas-costara-131-560-millones-mapa-inversion-autonomias.html",
+     "fecha": "2026-11-27T23:18:29+00:00"
+    },
+    {
+     "titulo": "Golpe de casi 1.000 millones a las empresas por la subida de la cotización máxima",
+     "enlace": "https://www.expansion.com/economia/2026/11/28/golpe-1-000-millones-empresas-subida-cotizacion-maxima.html",
+     "fecha": "2026-11-27T23:18:27+00:00"
+    },
     {
      "titulo": "Así quedan las pensiones en 2027 con la revalorización del 3,5%",
      "enlace": "https://www.expansion.com/economia/2026/11/27/asi-quedan-pensiones-2027-revalorizacion-3-5.html",
@@ -21,19 +31,9 @@
      "titulo": "Los dos momentos del debate",
      "enlace": "https://www.expansion.com/elecciones/elecciones-generales/2026/11/27/dos-momentos-debate.html",
      "fecha": "2026-11-27T12:20:50+00:00"
-    },
-    {
-     "titulo": "Jubilación parcial: quién puede cobrar parte de la pensión y seguir trabajando a tiempo parcial, y cuánto se cobra",
-     "enlace": "https://www.expansion.com/economia/2026/11/27/jubilacion-parcial-cobrar-parte-pension-seguir-trabajando-parcial-cuanto-cobra.html",
-     "fecha": "2026-11-27T10:09:36+00:00"
-    },
-    {
-     "titulo": "Cuánto cobra de pensión quien se jubila en 2027 con 15, 25 o 35 años cotizados en España",
-     "enlace": "https://www.expansion.com/economia/2026/11/27/cuanto-cobra-pension-jubila-2027-15-25-35-anos-cotizados-espana.html",
-     "fecha": "2026-11-27T10:08:41+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:39.138208+00:00"
+   "leido": "2026-11-27T23:46:38.200890+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:40.948758+00:00"
+   "leido": "2026-11-27T23:46:39.062980+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-27T09:43:49+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:42.941926+00:00"
+   "leido": "2026-11-27T23:46:39.758835+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:45.237283+00:00"
+   "leido": "2026-11-27T23:46:40.748510+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:46.418525+00:00"
+   "leido": "2026-11-27T23:46:41.226570+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,7 +173,7 @@
      "fecha": "2026-11-27T00:46:16+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:47.196729+00:00"
+   "leido": "2026-11-27T23:46:42.043904+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,7 +205,7 @@
      "fecha": "2026-11-27T12:47:15+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:47.730131+00:00"
+   "leido": "2026-11-27T23:46:42.596746+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,7 +237,7 @@
      "fecha": "2026-11-27T10:10:21+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:48.281782+00:00"
+   "leido": "2026-11-27T23:46:43.193505+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -269,7 +269,7 @@
      "fecha": "2026-11-27T19:37:37+00:00"
     }
    ],
-   "leido": "2026-11-27T23:11:49.344734+00:00"
+   "leido": "2026-11-27T23:46:43.745961+00:00"
   }
  ]
 }
