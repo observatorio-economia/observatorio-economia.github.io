@@ -110,6 +110,7 @@ footer { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-item
 .puntos i { width: 12px; height: 12px; border-radius: 50%; background: var(--rule); display: block; }
 .puntos i.ok { background: var(--ok); }
 .pista { color: var(--muted); font-size: 13px; flex: 1; text-align: right; }
+.reloj { display: flex; align-items: baseline; gap: 8px; } .reloj b { font-size: 20px; font-variant-numeric: tabular-nums; } .reloj b.poco { color: var(--bad); } .reloj small { color: var(--muted); }
 .inicio { max-width: 520px; margin: 40px auto; display: grid; gap: 14px; }
 .inicio label { display: grid; gap: 6px; font-weight: 600; }
 .inicio select, .inicio input { padding: 10px 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); min-height: 46px; }
@@ -184,7 +185,10 @@ const TXT = {
     "x.enviando": "Enviando…", "x.enviado": "Enviado.", "x.error": "No se ha podido enviar: avisa al docente.",
     "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía", "s.suelo": "Vivero y agua", "s.investigacion": "Laboratorio",
     "suc.ninguno": "Un año normal", "suc.gustos": "Cambian los gustos", "suc.mayores": "Hay más personas mayores", "suc.sequia": "Sequía en un huerto", "suc.averia": "Avería en la red", "suc.riada": "Riada", "suc.calor": "Ola de calor", "suc.crisis": "Crisis de confianza",
-    "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar",
+    "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar", "t.p": "Cuando se acabe el tiempo, se pasa a la fase siguiente.", "t.p2": "Si no eliges a tiempo, lo decide la regla automática.", "t.p3": "Si no votas a tiempo, tu voto cuenta como «como está».", "t.p5": "Tiempo para escribir la frase.",
+    "pr.h": "Antes de ver el resultado: tu predicción", "pr.p": "No cuenta para nada más: al final se verá qué hogar ha acertado más.", "pr.tuya": "Tu predicción", "pr.ok": "¡Has acertado!", "pr.mal": "No has acertado: ha sido «{s}».",
+    "pr.racion": "¿La ración por persona será mayor que {ref}?", "pr.hambre": "¿Cuántas personas pasarán hambre este año?", "pr.queda": "¿A vuestro hogar le quedará más o menos que {ref} para objetos y ocio?", "pr.ref": "el año pasado", "pr.ref1": "en un año normal",
+    "pr.racion.mas": "Mayor", "pr.racion.igual": "Igual", "pr.racion.menos": "Menor", "pr.hambre.0": "Nadie", "pr.hambre.1-5": "De 1 a 5", "pr.hambre.6+": "Más de 5", "pr.queda.mas": "Más", "pr.queda.igual": "Igual", "pr.queda.menos": "Menos",
     "r.reto0": "Reto del pueblo: protección", "r.reto1": "Reto del pueblo: coste", "reto.hambre": "Que nadie pase hambre este año", "reto.cuidados": "Que todas las personas que necesitan cuidados estén atendidas", "reto.obra": "Hacer una obra que mejore el pueblo",
     "reto.aporte": "Que la aportación a la caja común no pase del 45 % de lo que cobra el pueblo", "reto.medio": "Que al hogar del medio le quede al menos lo mismo que el año pasado para objetos y ocio",
     "r.si": "Con lo decidido hasta ahora, se consigue.", "r.no": "Con lo decidido hasta ahora, todavía no se consigue.", "r.ok": "¡Reto conseguido!", "r.mal": "Reto no conseguido", "r.p": "Depende de lo que decidáis. Los dos retos a veces tiran en sentido contrario.",
@@ -220,7 +224,10 @@ const TXT = {
     "x.enviando": "Enviant…", "x.enviado": "Enviat.", "x.error": "No s'ha pogut enviar: avisa el docent.",
     "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia", "s.suelo": "Viver i aigua", "s.investigacion": "Laboratori",
     "suc.ninguno": "Un any normal", "suc.gustos": "Canvien els gustos", "suc.mayores": "Hi ha més persones majors", "suc.sequia": "Sequera en un hort", "suc.averia": "Avaria en la xarxa", "suc.riada": "Riuada", "suc.calor": "Onada de calor", "suc.crisis": "Crisi de confiança",
-    "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar",
+    "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar", "t.p": "Quan s'acabe el temps, es passa a la fase següent.", "t.p2": "Si no tries a temps, ho decidix la regla automàtica.", "t.p3": "Si no votes a temps, el teu vot compta com «com està».", "t.p5": "Temps per a escriure la frase.",
+    "pr.h": "Abans de veure el resultat: la teua predicció", "pr.p": "No compta per a res més: al final es veurà quina llar ha encertat més.", "pr.tuya": "La teua predicció", "pr.ok": "Has encertat!", "pr.mal": "No has encertat: ha sigut «{s}».",
+    "pr.racion": "La ració per persona serà més gran que {ref}?", "pr.hambre": "Quantes persones passaran fam este any?", "pr.queda": "A la vostra llar li quedarà més o menys que {ref} per a objectes i oci?", "pr.ref": "l'any passat", "pr.ref1": "en un any normal",
+    "pr.racion.mas": "Més gran", "pr.racion.igual": "Igual", "pr.racion.menos": "Més menuda", "pr.hambre.0": "Ningú", "pr.hambre.1-5": "D'1 a 5", "pr.hambre.6+": "Més de 5", "pr.queda.mas": "Més", "pr.queda.igual": "Igual", "pr.queda.menos": "Menys",
     "r.reto0": "Repte del poble: protecció", "r.reto1": "Repte del poble: cost", "reto.hambre": "Que ningú no passe fam este any", "reto.cuidados": "Que totes les persones que necessiten cures estiguen ateses", "reto.obra": "Fer una obra que millore el poble",
     "reto.aporte": "Que l'aportació a la caixa comuna no passe del 45 % del que cobra el poble", "reto.medio": "Que a la llar del mig li quede almenys el mateix que l'any passat per a objectes i oci",
     "r.si": "Amb el que s'ha decidit fins ara, s'aconseguix.", "r.no": "Amb el que s'ha decidit fins ara, encara no s'aconseguix.", "r.ok": "Repte aconseguit!", "r.mal": "Repte no aconseguit", "r.p": "Depén del que decidiu. Els dos reptes a vegades tiren en sentit contrari.",
@@ -357,9 +364,25 @@ function puebloOp(v, x, ref) {
   if (v.id === "log-cuidados") return [tv("o.cui", { a: x.p.a, d: x.p.dp }), x.p.a - ref.p.a];
   return [tv("o.hambre", { n: x.p.h }), ref.p.h - x.p.h];
 }
+// Predicción antes del resultado: una pregunta de un toque; en el resultado se ve si se ha acertado
+const OPS_PRED = { racion: ["mas", "igual", "menos"], hambre: ["0", "1-5", "6+"], queda: ["mas", "igual", "menos"] };
+const preguntaPred = q => tv("pr." + q.id, { ref: tr(q.ref ? "pr.ref" : "pr.ref1") });
+function prediccion() {
+  const q = EST.pred; if (!q) return null;
+  const fase = EST.partida + "-" + EST.anio + "-pred", elegido = mio(fase);
+  return mk("section", { class: "tarjeta pred", "aria-label": tr("pr.h") }, mk("h3", { text: tr("pr.h") }), mk("p", { class: "regla", text: preguntaPred(q) }),
+    mk("div", { class: "ops cinco" }, OPS_PRED[q.id].map(o => mk("button", { type: "button", class: "op", "aria-pressed": String(elegido === o), on: () => enviar(fase, o) }, mk("span", { class: "que", text: tr("pr." + q.id + "." + o) })))),
+    mk("p", { class: "nota", text: tr("pr.p") }));
+}
+function resultadoPred(h) {
+  const q = EST.pred, mia = q && mio(EST.partida + "-" + EST.anio + "-pred"); if (!mia) return null;
+  const sol = q.sol || (q.id === "queda" ? (Math.abs(h.y.l - h.rl) < 1 ? "igual" : h.y.l > h.rl ? "mas" : "menos") : null); if (!sol) return null;
+  return mk("div", { class: "meta final " + (mia === sol ? "si" : "no") }, mk("span", { class: "et", text: tr("pr.tuya") }), mk("b", { text: preguntaPred(q) + " " + tr("pr." + q.id + "." + mia) }),
+    mk("span", { class: "ya", text: mia === sol ? tr("pr.ok") : tv("pr.mal", { s: tr("pr." + q.id + "." + sol) }) }));
+}
 function fase3(h, k) {
   const vs = EST.votos || [];
-  if (!vs.length) return [mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.no") }), metas(h)];
+  if (!vs.length) return [mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.no") }), metas(h), prediccion()];
   return [mk("div", {}, mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.p") })), metas(h),
     mk("div", { class: "votos" }, vs.map(v => {
       const fase = EST.partida + "-" + EST.anio + "-v-" + v.id, elegido = mio(fase);
@@ -375,7 +398,7 @@ function fase3(h, k) {
             mk("span", { class: "col2" }, mk("span", { text: tr("o.tu") }), x.im ? mk("b", { class: "menos", text: tr("o.imp") }) : signo(x.d[k], "o.mas", "o.menos")),
             mk("span", { class: "col2" }, mk("span", { text: tr("o.pueblo") }), mk("b", { class: pd > 0 ? "mas" : pd < 0 ? "menos" : null, text: pt }), ef ? mk("span", { style: "text-transform:none;letter-spacing:0;font-weight:500", text: tv("o.ef", { t: ef }) }) : null));
         })));
-    }))];
+    })), prediccion()];
 }
 function dato(et, v, sub) { return mk("div", { class: "dato" }, mk("div", { class: "et", text: tr(et) }), mk("div", { class: "v", text: v }), sub); }
 function cambio(a, b) { if (b == null) return null; const d = a - b; return mk("div", { class: "antes " + (d > 0.5 ? "mas" : d < -0.5 ? "menos" : ""), text: Math.abs(d) < 1 ? tr("d.igual") : tv(d > 0 ? "d.mas" : "d.menos", { n: fmt(Math.abs(d)) }) }); }
@@ -388,7 +411,7 @@ function fase4(h) {
     if (!hechos.length) hechos.push(tr("h.nada"));
   }
   const G = EST.resumen, sec = x => tv("g.sec", { s: tr("s." + x.s), d: (x.d > 0 ? "+" : "−") + fmt(Math.abs(x.d)) });
-  return [mk("div", {}, mk("h1", { text: tr("f4.h") }), mk("p", { class: "lead", text: tr(p ? "f4.p" : "f4.p1") })), metas(h),
+  return [mk("div", {}, mk("h1", { text: tr("f4.h") }), mk("p", { class: "lead", text: tr(p ? "f4.p" : "f4.p1") })), metas(h), resultadoPred(h),
     mk("div", { class: "comparar" },
       dato("d.cobrado", fmt(y.c), cambio(y.c, p && p.c)),
       dato("d.raciones", fmt(y.ra, 2), mk("div", { class: "antes " + (y.ha ? "menos" : ""), text: tr("d.minimo") })),
@@ -423,8 +446,13 @@ function pie(h) {
   const L = EST.listos || { n: 0, N: 0 };
   $("pie").hidden = false;
   $("pie").replaceChildren(b, mk("div", { class: "puntos", "aria-hidden": "true" }, Array.from({ length: L.N }, (_, i) => mk("i", { class: i < L.n ? "ok" : null }))),
-    mk("b", { text: tv("b.cuenta", { n: L.n, N: L.N }) }), mk("span", { class: "pista", text: pista }), mk("p", { id: "estado", "aria-live": "polite" }));
+    mk("b", { text: tv("b.cuenta", { n: L.n, N: L.N }) }), mk("span", { class: "pista", text: pista }),
+    EST.reloj ? mk("span", { class: "reloj" }, mk("b", { id: "reloj", text: "⏱ " + resta() }), mk("small", { text: tr(f === 2 ? "t.p2" : f === 3 ? "t.p3" : f === 5 ? "t.p5" : "t.p") })) : null,
+    mk("p", { id: "estado", "aria-live": "polite" }));
 }
+// Reloj de la fase: lo pone el proyector; aquí solo se cuenta hacia atrás
+const resta = () => { const q = Math.max(0, Math.ceil((EST.reloj - Date.now()) / 1000)); return Math.floor(q / 60) + ":" + String(q % 60).padStart(2, "0"); };
+setInterval(() => { const n = document.getElementById("reloj"); if (n && EST && EST.reloj) { n.textContent = "⏱ " + resta(); n.classList.toggle("poco", EST.reloj - Date.now() < 15000); } }, 1000);
 // ---------- pantalla ----------
 function inicio() {
   const sel = mk("select", { id: "codigo" }, mk("option", { value: "", text: "—" }), Array.from({ length: 25 }, (_, i) => { const c = "P" + String(i + 1).padStart(2, "0"); return mk("option", { value: c, text: c }); }));

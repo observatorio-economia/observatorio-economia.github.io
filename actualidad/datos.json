@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T12:17:54.674475+00:00",
+ "generado": "2026-11-27T17:12:48.664042+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,11 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Los dos momentos del debate",
+     "enlace": "https://www.expansion.com/elecciones/elecciones-generales/2026/11/27/dos-momentos-debate.html",
+     "fecha": "2026-11-27T12:20:50+00:00"
+    },
     {
      "titulo": "Jubilación parcial: quién puede cobrar parte de la pensión y seguir trabajando a tiempo parcial, y cuánto se cobra",
      "enlace": "https://www.expansion.com/economia/2026/11/27/jubilacion-parcial-cobrar-parte-pension-seguir-trabajando-parcial-cuanto-cobra.html",
@@ -26,19 +31,24 @@
      "titulo": "Francia se asoma a la recesión tras una contracción del PIB del 0,2% en el tercer trimestre",
      "enlace": "https://www.expansion.com/economia/2026/11/27/francia-asoma-recesion-contraccion-pib-0-2-tercer-trimestre.html",
      "fecha": "2026-11-27T09:35:00+00:00"
-    },
-    {
-     "titulo": "¿Cuánto suben las pensiones en 2027?: los jubilados cobrarán 852 euros más",
-     "enlace": "https://www.expansion.com/economia/2026/11/27/cuanto-suben-pensiones-2027-jubilados-cobraran-852-euros.html",
-     "fecha": "2026-11-27T09:32:03+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:51.680736+00:00"
+   "leido": "2026-11-27T17:12:43.653124+00:00"
   },
   {
    "nombre": "Cinco Días",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Gráficos para entender el crecimiento de la economía sénior",
+     "enlace": "https://elpais.com/economia/foro-futuro/2026-11-27/graficos-para-entender-el-crecimiento-de-la-economia-senior.html",
+     "fecha": "2026-11-27T16:40:56+00:00"
+    },
+    {
+     "titulo": "La pensión media de jubilación de los hombres ya supera los 1.800 euros al mes",
+     "enlace": "https://elpais.com/economia/2026-11-27/la-pension-media-de-jubilacion-de-los-hombres-ya-supera-los-1800-euros-al-mes.html",
+     "fecha": "2026-11-27T15:00:24+00:00"
+    },
     {
      "titulo": "Las pensiones subirán un 3,5% en 2027 tras crecer la inflación el 4,1% en noviembre",
      "enlace": "https://elpais.com/economia/2026-11-27/las-pensiones-subiran-un-35-en-2027.html",
@@ -53,24 +63,24 @@
      "titulo": "Los diez minutos que desenredaron el nudo para encumbrar a Hernández de Cos como presidente del BCE",
      "enlace": "https://elpais.com/economia/2026-11-27/los-diez-minutos-que-desenredaron-el-nudo-para-encumbrar-a-hernandez-de-cos-como-presidente-del-bce.html",
      "fecha": "2026-11-27T04:30:01+00:00"
-    },
-    {
-     "titulo": "Sines: el pueblo de menos de 15.000 habitantes que devorará hasta el 20% del consumo eléctrico de Portugal por los centros de datos",
-     "enlace": "https://elpais.com/economia/negocios/2026-11-27/sines-el-pueblo-que-devorara-el-20-del-consumo-electrico-de-portugal-con-menos-de-15000-habitantes-por-los-centros-de-datos.html",
-     "fecha": "2026-11-27T04:30:01+00:00"
-    },
-    {
-     "titulo": "Trabas legales y dudas sobre su efectividad: ¿se pueden gravar las remesas de los trabajadores extranjeros como propone Vox?",
-     "enlace": "https://elpais.com/economia/2026-11-27/trabas-legales-y-dudas-sobre-su-efectividad-se-pueden-gravar-las-remesas-de-los-trabajadores-extranjeros-como-propone-vox.html",
-     "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:52.244268+00:00"
+   "leido": "2026-11-27T17:12:44.547564+00:00"
   },
   {
    "nombre": "Invertia · El Español",
    "salmon": true,
    "items": [
+    {
+     "titulo": "El Ibex 35 recupera los 19.300 puntos al subir un 2,7% en la semana y Wall Street repunta en una jornada a medio gas",
+     "enlace": "https://www.elespanol.com/invertia/mercados/20261127/ibex-recupera-puntos-subir-semana-wall-street-repunta-jornada-medio-gas/1003744475196_0.html",
+     "fecha": "2026-11-27T16:47:05+00:00"
+    },
+    {
+     "titulo": "La Comisión Europea aprueba sin condiciones la adquisición de Allfunds por Deutsche Börse",
+     "enlace": "https://www.elespanol.com/invertia/mis-finanzas/fondos-de-inversion/20261127/comision-europea-aprueba-sin-condiciones-adquisicion-allfunds-deutsche-borse/1003744475057_0.html",
+     "fecha": "2026-11-27T12:51:42+00:00"
+    },
     {
      "titulo": "TSK nombra a Beatriz García Rico presidenta provisional tras el fallecimiento de Sabino García Vallina",
      "enlace": "https://www.elespanol.com/invertia/empresas/20261127/tsk-nombra-beatriz-garcia-rico-presidenta-provisional-fallecimiento-sabino-vallina/1003744474931_0.html",
@@ -82,22 +92,12 @@
      "fecha": "2026-11-27T09:43:49+00:00"
     },
     {
-     "titulo": "La inflación se modera hasta el 4,1% en noviembre por el abaratamiento de los combustibles",
-     "enlace": "https://www.elespanol.com/invertia/economia/20261127/inflacion-modera-noviembre-abaratamiento-combustibles/1003744474396_0.html",
-     "fecha": "2026-11-27T08:06:23+00:00"
-    },
-    {
-     "titulo": "Las pensiones subirán un 3,5% en 2027 y la prestación media superará los 1.427 euros al mes",
-     "enlace": "https://www.elespanol.com/invertia/economia/macroeconomia/20261127/pensiones-subiran-prestacion-media-superara-euros-mes/1003744474421_0.html",
-     "fecha": "2026-11-27T08:01:18+00:00"
-    },
-    {
-     "titulo": "Ibex 35, la bolsa en directo hoy | El Ibex 35 sube un 0,9% en la apertura y supera los 19.200 puntos",
-     "enlace": "https://www.elespanol.com/invertia/mercados/20261127/ibex-bolsa-directo-hoy-cotizaciones-noticias-tiempo-real/1003744474361_10.html",
-     "fecha": "2026-11-27T06:32:26+00:00"
+     "titulo": "Sacyr dibuja dos escenarios técnicos de entrada tras rebotar desde los 3,88 euros",
+     "enlace": "https://www.elespanol.com/invertia/mercados/20261127/sacyr-dibuja-escenarios-tecnicos-entrada-rebotar-euros/1003744474479_0.html",
+     "fecha": "2026-11-27T09:01:52+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:52.587060+00:00"
+   "leido": "2026-11-27T17:12:45.092052+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,12 +109,17 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:52.835995+00:00"
+   "leido": "2026-11-27T17:12:46.022053+00:00"
   },
   {
    "nombre": "El País · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "La pensión media de jubilación de los hombres ya supera los 1.800 euros al mes",
+     "enlace": "https://elpais.com/economia/2026-11-27/la-pension-media-de-jubilacion-de-los-hombres-ya-supera-los-1800-euros-al-mes.html",
+     "fecha": "2026-11-27T15:00:24+00:00"
+    },
     {
      "titulo": "Las pensiones subirán un 3,5% en 2027 tras crecer la inflación el 4,1% en noviembre",
      "enlace": "https://elpais.com/economia/2026-11-27/las-pensiones-subiran-un-35-en-2027.html",
@@ -134,14 +139,9 @@
      "titulo": "El retorno de Huang y la destrucción de la cultura corporativa",
      "enlace": "https://cincodias.elpais.com/opinion/2026-11-27/el-retorno-de-huang-y-la-destruccion-de-la-cultura-corporativa.html",
      "fecha": "2026-11-27T04:40:00+00:00"
-    },
-    {
-     "titulo": "Las claves: la caída del cigarrillo empuja a las tabaqueras a unir fuerzas",
-     "enlace": "https://cincodias.elpais.com/opinion/2026-11-27/las-claves-la-caida-del-cigarrillo-empuja-a-las-tabaqueras-a-unir-fuerzas.html",
-     "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:53.140211+00:00"
+   "leido": "2026-11-27T17:12:46.544886+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,12 +173,22 @@
      "fecha": "2026-11-27T00:46:15+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:53.425115+00:00"
+   "leido": "2026-11-27T17:12:47.098367+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Francia entra en recesión técnica tras la caída del PIB por segundo trimestre consecutivo",
+     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b09a09021efa02d428b459b.html",
+     "fecha": "2026-11-27T15:31:22+00:00"
+    },
+    {
+     "titulo": "Banco Santander potencia su negocio de empresas en España con relevos en siete Direcciones Territoriales del país",
+     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/27/6b0978e3e85eceb9638b4587.html",
+     "fecha": "2026-11-27T12:47:15+00:00"
+    },
     {
      "titulo": "Euríbor hoy, viernes 27 de noviembre: la tasa diaria cierra la semana con una subida para empañar las bajadas previas",
      "enlace": "https://www.elmundo.es/economia/vivienda/2026/11/27/6b0966e6e9cf4a6f1c8b45ad.html",
@@ -193,83 +203,73 @@
      "titulo": "Los ninis crecen en casi 100.000 en el último año y vuelven a máximos de 2020",
      "enlace": "https://www.elmundo.es/economia/2026/11/27/6b095ee8e9cf4ad0358b4571.html",
      "fecha": "2026-11-27T10:53:36+00:00"
-    },
-    {
-     "titulo": "Las escuelas de Los Ángeles bloquean funciones de Inteligencia Artificial y Google amenaza con cortar el acceso a su buscador",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b094f6efc6c83666f8b45b3.html",
-     "fecha": "2026-11-27T09:54:27+00:00"
-    },
-    {
-     "titulo": "¿Puedes poner protectores en las columnas del garaje sin permiso de los vecinos? Esto dice la Ley de Propiedad Horizontal",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b094234e9cf4a96368b4589.html",
-     "fecha": "2026-11-27T09:22:27+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:53.962253+00:00"
+   "leido": "2026-11-27T17:12:47.684572+00:00"
   },
   {
    "nombre": "ABC · Economía",
    "salmon": false,
    "items": [
     {
+     "titulo": "Las pensiones subirán un 3,5% en 2027 y el Gobierno busca rascar votos con el anuncio del alza de las mínimas, las no contributivas y el IMV",
+     "enlace": "https://www.abc.es/economia/pensiones-subiran-2027-gobierno-busca-rascar-votos-20261127090146-nt.html",
+     "fecha": "2026-11-27T16:29:18+00:00"
+    },
+    {
+     "titulo": "Depósitos bancarios para pequeños ahorradores: cuánto dinero hace falta para abrirlos y cuáles pagan más",
+     "enlace": "https://www.abc.es/economia/guia-financiera/depositos-bancarios-pequenos-ahorradores-dinero-20261126153925-nt.html",
+     "fecha": "2026-11-27T14:50:43+00:00"
+    },
+    {
+     "titulo": "Las 11 mejores cuentas remuneradas de noviembre con hasta un 4% TIN",
+     "enlace": "https://www.abc.es/economia/guia-financiera/mejores-cuentas-remuneradas-sin-comisiones-20261112060008-nt.html",
+     "fecha": "2026-11-27T12:37:55+00:00"
+    },
+    {
      "titulo": "Así queda la subida de las pensiones en 2027 en España tras la revalorización del 3,5%: cuantía para mínimas, medias y máximas",
      "enlace": "https://www.abc.es/economia/cuentas-corrientes/queda-subida-pensiones-2027-espana-tras-revalorizacion-20261127090805-nt.html",
      "fecha": "2026-11-27T10:10:21+00:00"
     },
     {
-     "titulo": "Las pensiones subirán un 3,5% en 2027 y el Gobierno busca rascar votos con el anuncio del alza de las mínimas, las no contributivas y el IMV",
-     "enlace": "https://www.abc.es/economia/pensiones-subiran-2027-gobierno-busca-rascar-votos-20261127090146-nt.html",
-     "fecha": "2026-11-27T09:18:08+00:00"
-    },
-    {
      "titulo": "Shein se desinfla antes del Black Friday: suma un nuevo arancel de la UE y caen sus ventas en Europa",
      "enlace": "https://www.abc.es/economia/cuentas-corrientes/shein-paga-arancel-ue-ingresos-desploman-europa-20261127013453-nt.html",
      "fecha": "2026-11-27T09:17:15+00:00"
-    },
-    {
-     "titulo": "Las compras de vivienda a tocateja caen a mínimos desde la burbuja ante la escalada de precios",
-     "enlace": "https://www.abc.es/economia/cuentas-corrientes/compras-vivienda-tocateja-caen-minimos-anos-ante-20261127013653-nt.html",
-     "fecha": "2026-11-27T00:36:54+00:00"
-    },
-    {
-     "titulo": "Los altos funcionarios exigen un escudo jurídico y laboral que blinde su autonomía frente a los políticos",
-     "enlace": "https://www.abc.es/economia/altos-funcionarios-exigen-escudo-juridico-laboral-blinde-20261127013459-nt.html",
-     "fecha": "2026-11-27T00:34:59+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:54.274185+00:00"
+   "leido": "2026-11-27T17:12:48.287326+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
     {
-     "titulo": "Comunitat Valenciana | Bruselas avisa de que la discriminación a residentes por \"prioridad nacional\" viola el Derecho de la UE",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/bruselas-avisa-de-que-la-discriminacion-a-residentes-por-prioridad-nacional-viola-el-derecho-de-la-ue",
-     "fecha": "2026-11-27T12:16:20+00:00"
+     "titulo": "València | València celebra el lunes una Cremà por los 10 años de las Fallas como Patrimonio mundial",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/valencia/valencia-celebra-el-lunes-una-crema-por-los-10-anos-de-las-fallas-como-patrimonio-mundial",
+     "fecha": "2026-11-27T16:48:27+00:00"
     },
     {
-     "titulo": "Tierra de empresas | Más personas acuden al psicólogo: crece la demanda de profesionales",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/tierra-de-empresas/mas-personas-acuden-al-psicologo-crece-la-demanda-de-profesionales",
-     "fecha": "2026-11-27T12:04:18+00:00"
+     "titulo": "Más cultura | El mago Jammes Garibo hechizará València con su espectáculo 'Maestros de la magia'",
+     "enlace": "https://valenciaplaza.com/noticas-cultura-valencia-comunitat-valenciana/el-mago-jammes-garibo-presentara-maestros-de-la-magia-en-valencia",
+     "fecha": "2026-11-27T16:31:49+00:00"
     },
     {
-     "titulo": "Más cultura | El Consell da luz verde al nombramiento de Miguel Galdón como director del IVC",
-     "enlace": "https://valenciaplaza.com/noticas-cultura-valencia-comunitat-valenciana/el-consell-da-luz-verde-al-nombramiento-de-miguel-galdon-como-director-del-ivc",
-     "fecha": "2026-11-27T11:57:29+00:00"
+     "titulo": "Comunitat Valenciana | El Consell aprueba hasta 12,2 millones para abaratar el crédito a pymes y autónomos",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-consell-aprueba-hasta-122-millones-para-abaratar-el-credito-a-pymes-y-autonomos",
+     "fecha": "2026-11-27T16:11:50+00:00"
     },
     {
-     "titulo": "València | Retiran la lona de Vox con referencias a la inmigración denunciada por PSPV y Compromís",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/valencia/retiran-la-lona-de-vox-con-referencias-a-la-inmigracion-denunciada-por-pspv-y-compromis",
-     "fecha": "2026-11-27T11:53:38+00:00"
+     "titulo": "Comunitat Valenciana | El Gobierno estudia cómo y a qué puerto trasladar el 'Med Emre' y la Generalitat rechaza acogerlo",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-gobierno-estudia-como-y-a-que-puerto-trasladar-el-med-emre-y-la-generalitat-rechaza-acogerlo",
+     "fecha": "2026-11-27T15:38:15+00:00"
     },
     {
-     "titulo": "Comunitat Valenciana | El Consell aprueba un crédito extraordinario de 50 millones de euros para atender los gastos derivados de la dana Adam",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-consell-aprueba-un-credito-extraordinario-de-50-millones-de-euros-para-atender-los-gastos-derivados-de-la-dana-adam-2026-11-27",
-     "fecha": "2026-11-27T11:41:47+00:00"
+     "titulo": "Comarca y empresa | El Consell ratifica la emergencia de las obras para reparar el acceso principal al Parque Logístico de Valencia",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/el-consell-ratifica-la-emergencia-de-las-obras-para-reparar-el-acceso-principal-al-parque-logistico-de-valencia-2026-11-27",
+     "fecha": "2026-11-27T15:20:25+00:00"
     }
    ],
-   "leido": "2026-11-27T12:17:54.674442+00:00"
+   "leido": "2026-11-27T17:12:48.663993+00:00"
   }
  ]
 }
