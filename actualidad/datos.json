@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T22:07:49.419372+00:00",
+ "generado": "2026-11-27T22:38:08.992709+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,7 +33,7 @@
      "fecha": "2026-11-27T09:52:58+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:43.216994+00:00"
+   "leido": "2026-11-27T22:38:02.850928+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:44.195042+00:00"
+   "leido": "2026-11-27T22:38:03.836711+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-27T09:43:49+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:44.794750+00:00"
+   "leido": "2026-11-27T22:38:04.437270+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:45.709412+00:00"
+   "leido": "2026-11-27T22:38:05.450762+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,12 +141,17 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:46.289009+00:00"
+   "leido": "2026-11-27T22:38:06.073555+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Vox pone al alcance de la motosierra 200.000 millones en recortes del Estado del Bienestar y rebajas fiscales a los ricos",
+     "enlace": "https://www.eldiario.es/economia/vox-pone-alcance-motosierra-200-000-millones-recortes-bienestar-rebajas-fiscales-ricos_1_13681204.html",
+     "fecha": "2026-11-27T22:26:51+00:00"
+    },
     {
      "titulo": "La falsa vivienda asequible del PP y la privatización de lo público",
      "enlace": "https://www.eldiario.es/economia/una-casa-para-vivir/falsa-vivienda-asequible-pp-privatizacion-publico_132_13698194.html",
@@ -166,14 +171,9 @@
      "titulo": "La inmigración en perspectiva",
      "enlace": "https://www.eldiario.es/economia/inmigracion-perspectiva_129_13695183.html",
      "fecha": "2026-11-27T00:46:16+00:00"
-    },
-    {
-     "titulo": "La puerta giratoria entre el PP y la patronal: más de 70 cargos populares han trabajado para la CEOE",
-     "enlace": "https://www.eldiario.es/economia/puerta-giratoria-pp-patronal-70-cargos-populares-han-trabajado-ceoe_1_13695993.html",
-     "fecha": "2026-11-27T00:46:15+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:47.402347+00:00"
+   "leido": "2026-11-27T22:38:06.896378+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,7 +205,7 @@
      "fecha": "2026-11-27T11:00:00+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:48.185484+00:00"
+   "leido": "2026-11-27T22:38:07.543041+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,7 +237,7 @@
      "fecha": "2026-11-27T10:10:21+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:48.978536+00:00"
+   "leido": "2026-11-27T22:38:08.468355+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -269,7 +269,7 @@
      "fecha": "2026-11-27T19:28:10+00:00"
     }
    ],
-   "leido": "2026-11-27T22:07:49.419325+00:00"
+   "leido": "2026-11-27T22:38:08.992666+00:00"
   }
  ]
 }

@@ -87,7 +87,7 @@
     const txt = document.getElementById("ok-doc-u").value.trim().toLowerCase() + ":" + document.getElementById("ok-doc-c").value;
     const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
     const h = [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
-    if (h !== "93022db064f8927607a4a8a1a36f8ea700f0849ebef15fb4efb4e963558951d5") { document.getElementById("ok-doc-m").textContent = OBS.t("ok.doc.mal"); return; }
+    if (h !== "f195347c1f2c2ad52b2a8e75c2b76e67d8d785089e15f1317da90f79d9fc9a87") { document.getElementById("ok-doc-m").textContent = OBS.t("ok.doc.mal"); return; }
     try { localStorage.setItem("oikos-docente", h); } catch (e) {}
     location.href = "../pueblo/";
   });

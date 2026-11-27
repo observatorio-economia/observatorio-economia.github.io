@@ -241,7 +241,7 @@ def oikos():
     t(tx, "ok.doc.mal", "El usuario o la clave no son correctos.", "L'usuari o la clau no són correctes.")
     # Entrada del docente: el mismo resumen (SHA-256 de «usuario:clave») que la pantalla del proyector (pueblo3d/usabilidad.js).
     # No es seguridad de verdad: solo evita que el alumnado entre por error en la pantalla del proyector.
-    hash_doc = "93022db064f8927607a4a8a1a36f8ea700f0849ebef15fb4efb4e963558951d5"
+    hash_doc = "f195347c1f2c2ad52b2a8e75c2b76e67d8d785089e15f1317da90f79d9fc9a87"
     # Dirección de la hoja de Google de la clase (opcional): si Jordi la pega en el vault, «Entrar con tu hogar»
     # lleva al alumnado directamente a su hogar también la primera vez. La dirección queda pública en la web.
     hoja_txt = vault / "SA01-que-es-la-economia" / "material" / "oikos-hoja.txt"
