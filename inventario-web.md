@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-11-27 10:09
-- Commit de partida: `d75dd0b`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 3
+- Generado: 2026-11-27 12:17
+- Commit de partida: `c85a7db`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 5
 
 ## Interruptores de la web
 
@@ -186,7 +186,7 @@
 ### pueblo
 
 - Web: `pueblo/index.html`
-- Vault: `SA01-que-es-la-economia/material/juego-pueblo.html` (2026-11-27 09:01, 784 KB)
+- Vault: `SA01-que-es-la-economia/material/juego-pueblo.html` (2026-11-27 12:17, 803 KB)
 - Copia: ✓ copiada
 - En el menú: no aparece
 - Pestañas: ninguna (una sola pantalla)
@@ -199,20 +199,25 @@
   - `ft.hambre`: Personas con hambre
   - `ft.mal`: Jornadas mal colocadas (mercado / asamblea)
   - `ft.prod`: Producci\xF3n
+  - `ft.reto`: Retos del pueblo
   - `ft.sal`: Salario m\xE1s alto / m\xE1s bajo
   - `ft.suceso`: Suceso
   - `ft.turno`: Hogares con turno
+  - `j.res.ref`: Lo que le queda a cada hogar para objetos y ocio, comparado con el a\xF1o pasado (media de los hogares de cada sector).
+  - `j.res.ref1`: Lo que le queda a cada hogar para objetos y ocio, comparado con un a\xF1o normal sin suceso (media de los hogares de cada sector).
   - `obs.fuentes`: Fuentes y notas
 - Versión en valenciano: sí
 
 ### pueblo-vecino
 
 - Web: `pueblo-vecino/index.html`
-- Vault: `SA01-que-es-la-economia/material/juego-pueblo-vecino.html` (2026-11-27 10:09, 40 KB)
+- Vault: `SA01-que-es-la-economia/material/juego-pueblo-vecino.html` (2026-11-27 12:17, 46 KB)
 - Copia: ✓ copiada
 - En el menú: no aparece
 - Pestañas: ninguna (una sola pantalla)
-- Fuentes que cita: no se han localizado claves de fuente (`src`, `ref`…); revisar a mano
+- Fuentes que cita:
+  - `obj.ref`: el año pasado
+  - `obj.ref1`: en un año normal
 - Versión en valenciano: sí
 
 ### prueba-alumno

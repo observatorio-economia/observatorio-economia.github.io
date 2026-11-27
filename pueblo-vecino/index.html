@@ -114,7 +114,21 @@ footer { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-item
 .inicio label { display: grid; gap: 6px; font-weight: 600; }
 .inicio select, .inicio input { padding: 10px 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); min-height: 46px; }
 #estado { margin: 0; font-size: 13px; color: var(--muted); }
-@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 12px; } header, footer { padding: 10px 12px; } .op { grid-template-columns: 1fr; } .pista { text-align: left; } }
+.meta { border: 2px solid var(--ink); border-radius: 14px; padding: 10px 14px; display: grid; gap: 2px; background: var(--paper); }
+.meta .et { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--muted); }
+.meta b { font-size: 17px; }
+.meta .ya { font-size: 13px; font-weight: 700; }
+.meta.si { border-color: var(--ok); } .meta.si .ya { color: var(--ok); } .meta.no .ya, .meta.aun .ya { color: var(--bad); } .meta.aun { border-style: dashed; }
+.meta.final.si { background: var(--ok); color: var(--paper); } .meta.final.si .et, .meta.final.si .ya { color: var(--paper); }
+.metas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.gp { margin: 8px 0 0; padding-left: 18px; } .gp .mas { color: var(--ok); font-weight: 700; } .gp .menos { color: var(--bad); font-weight: 700; }
+.suceso.revela { animation: revela .6s ease-out; }
+@keyframes revela { 0% { opacity: 0; transform: scale(.85); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .suceso.revela { animation: none; } }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 12px; } header, footer { padding: 10px 12px; } .op { grid-template-columns: 1fr; } .pista { text-align: left; }
+  /* en el móvil, primero lo que hay que hacer; la casa y las cuentas, debajo */
+  main > .col:first-child { order: 2; } .fases { order: 3; flex-basis: 100%; justify-content: flex-start; } .fases li:not([aria-current]) { display: none; }
+  .fases li[aria-current]::after { content: attr(data-n); font-weight: 500; opacity: .8; margin-left: 6px; } .yo { margin-left: auto; } .casa img { aspect-ratio: 21 / 9; } }
 </style>
 <div class="app">
   <header>
@@ -170,7 +184,13 @@ const TXT = {
     "x.enviando": "Enviando…", "x.enviado": "Enviado.", "x.error": "No se ha podido enviar: avisa al docente.",
     "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía", "s.suelo": "Vivero y agua", "s.investigacion": "Laboratorio",
     "suc.ninguno": "Un año normal", "suc.gustos": "Cambian los gustos", "suc.mayores": "Hay más personas mayores", "suc.sequia": "Sequía en un huerto", "suc.averia": "Avería en la red", "suc.riada": "Riada", "suc.calor": "Ola de calor", "suc.crisis": "Crisis de confianza",
-    "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar" },
+    "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar",
+    "r.reto0": "Reto del pueblo: protección", "r.reto1": "Reto del pueblo: coste", "reto.hambre": "Que nadie pase hambre este año", "reto.cuidados": "Que todas las personas que necesitan cuidados estén atendidas", "reto.obra": "Hacer una obra que mejore el pueblo",
+    "reto.aporte": "Que la aportación a la caja común no pase del 45 % de lo que cobra el pueblo", "reto.medio": "Que al hogar del medio le quede al menos lo mismo que el año pasado para objetos y ocio",
+    "r.si": "Con lo decidido hasta ahora, se consigue.", "r.no": "Con lo decidido hasta ahora, todavía no se consigue.", "r.ok": "¡Reto conseguido!", "r.mal": "Reto no conseguido", "r.p": "Depende de lo que decidáis. Los dos retos a veces tiran en sentido contrario.",
+    "obj.h": "Objetivo de tu hogar", "obj.hambre": "Que nadie de tu casa pase hambre", "obj.escuela": "Que vuestros {n} niños vayan a la escuela", "obj.libre": "Que os quede al menos lo mismo que {r}: {x} soles para objetos y ocio", "obj.ref": "el año pasado", "obj.ref1": "en un año normal",
+    "obj.si": "Ahora mismo, lo conseguís.", "obj.no": "Ahora mismo, no lo conseguís.", "obj.ok": "¡Objetivo conseguido!", "obj.mal": "Objetivo no conseguido", "obj.p": "Es solo de tu hogar. A veces no coincide con lo que conviene al pueblo: lo decidís vosotros.",
+    "g.h": "Quién gana y quién pierde", "g.p": "Lo que le queda a cada hogar para objetos y ocio, media por sector.", "g.ganan": "Ganan: {x}.", "g.pierden": "Pierden: {x}.", "g.igual": "Nadie gana ni pierde más de un sol.", "g.sec": "{s} ({d} soles)" },
   va: { "v.titulo": "El poble · la teua llar", "v.pueblo": "El poble", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)", "v.entrar": "Entrar",
     "v.elige": "Tria el codi del teu lloc per a començar.", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
     "v.cuando": "Any {n} · {e}", "v.emis": "Emissions acumulades: {n}", "e.invierno": "hivern", "e.primavera": "primavera", "e.verano": "estiu", "e.otono": "tardor",
@@ -200,7 +220,13 @@ const TXT = {
     "x.enviando": "Enviant…", "x.enviado": "Enviat.", "x.error": "No s'ha pogut enviar: avisa el docent.",
     "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia", "s.suelo": "Viver i aigua", "s.investigacion": "Laboratori",
     "suc.ninguno": "Un any normal", "suc.gustos": "Canvien els gustos", "suc.mayores": "Hi ha més persones majors", "suc.sequia": "Sequera en un hort", "suc.averia": "Avaria en la xarxa", "suc.riada": "Riuada", "suc.calor": "Onada de calor", "suc.crisis": "Crisi de confiança",
-    "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar" }
+    "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar",
+    "r.reto0": "Repte del poble: protecció", "r.reto1": "Repte del poble: cost", "reto.hambre": "Que ningú no passe fam este any", "reto.cuidados": "Que totes les persones que necessiten cures estiguen ateses", "reto.obra": "Fer una obra que millore el poble",
+    "reto.aporte": "Que l'aportació a la caixa comuna no passe del 45 % del que cobra el poble", "reto.medio": "Que a la llar del mig li quede almenys el mateix que l'any passat per a objectes i oci",
+    "r.si": "Amb el que s'ha decidit fins ara, s'aconseguix.", "r.no": "Amb el que s'ha decidit fins ara, encara no s'aconseguix.", "r.ok": "Repte aconseguit!", "r.mal": "Repte no aconseguit", "r.p": "Depén del que decidiu. Els dos reptes a vegades tiren en sentit contrari.",
+    "obj.h": "Objectiu de la teua llar", "obj.hambre": "Que ningú de ta casa no passe fam", "obj.escuela": "Que els vostres {n} xiquets vagen a l'escola", "obj.libre": "Que vos quede almenys el mateix que {r}: {x} sous per a objectes i oci", "obj.ref": "l'any passat", "obj.ref1": "en un any normal",
+    "obj.si": "Ara mateix, ho aconseguiu.", "obj.no": "Ara mateix, no ho aconseguiu.", "obj.ok": "Objectiu aconseguit!", "obj.mal": "Objectiu no aconseguit", "obj.p": "És només de la teua llar. A vegades no coincidix amb el que convé al poble: ho decidiu vosaltres.",
+    "g.h": "Qui guanya i qui perd", "g.p": "El que li queda a cada llar per a objectes i oci, mitjana per sector.", "g.ganan": "Guanyen: {x}.", "g.pierden": "Perden: {x}.", "g.igual": "Ningú no guanya ni perd més d'un sou.", "g.sec": "{s} ({d} sous)" }
 };
 Object.assign(T.es, TXT.es); Object.assign(T.va, TXT.va);
 const tv = (k, v = {}) => tr(k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? "");
@@ -236,7 +262,7 @@ async function leer() {
 // ---------- piezas ----------
 const signo = (n, kM, km, kIg = "o.igual") => Math.abs(n) < 1 ? mk("b", { text: tr(kIg) }) : mk("b", { class: n > 0 ? "mas" : "menos", text: tv(n > 0 ? kM : km, { n: fmt(Math.abs(n)) }) });
 function cabecera() {
-  $("fases").replaceChildren(...[1, 2, 3, 4, 5].map(f => mk("li", { class: EST && f < EST.fase ? "hecha" : null, "aria-current": EST && f === EST.fase ? "step" : null, text: tr("f." + f) })));
+  $("fases").replaceChildren(...[1, 2, 3, 4, 5].map(f => mk("li", { class: EST && f < EST.fase ? "hecha" : null, "aria-current": EST && f === EST.fase ? "step" : null, "data-n": f + "/5", text: tr("f." + f) })));
   $("cuando").textContent = EST ? tv("v.cuando", { n: EST.anio, e: tr("e." + ESTACION[EST.fase]) }) + (EST.emis != null ? " · " + tv("v.emis", { n: fmt(EST.emis) }) : "") : "";
   const h = hogar();
   $("quien").replaceChildren(...(codigo ? [mk("span", { text: tv("v.puesto", { c: codigo }) }), h ? mk("b", { text: tv("v.hogar", { h: h.nombre }) }) : null] : []));
@@ -268,10 +294,27 @@ function tarjetaCuentas(h) {
     mk("div", { class: "barrita", "aria-hidden": "true" }, [[k.a, "#8aa6c9"], [k.co, "#e0a25a"], [k.sv, "#a58bc4"], [Math.max(0, k.l), "#7fb069"]].map(([v, c]) => mk("i", { style: `flex:${v};background:${c}` }))),
     mk("p", { class: "nota", text: tr("k.leyenda") }));
 }
+// ---------- reto del pueblo y objetivo del hogar ----------
+// El objetivo sale de cómo le fue al hogar el año anterior; durante el año se ve si, con lo decidido, se consigue
+function objetivo(h) {
+  const p = h.p;
+  if (p && p.ha) return { k: "obj.hambre", v: {}, ok: !h.y.ha };
+  if (p && h.n && p.ne < h.n) return { k: "obj.escuela", v: { n: h.n }, ok: h.y.ne >= h.n };
+  return { k: "obj.libre", v: { r: tr(p ? "obj.ref" : "obj.ref1"), x: fmt(h.rl ?? (p ? p.l : h.y.l)) }, ok: h.y.l >= (h.rl ?? (p ? p.l : h.y.l)) - 0.5 };
+}
+function metas(h) {
+  const f = EST.fase, vivo = f === 2 || f === 3, fin = f >= 4, Rs = EST.retos || [], o = objetivo(h);
+  const caja = (et, txt, ok, nota, kOk, kMal, kSi, kNo) => mk("div", { class: "meta" + (fin ? " final " + (ok ? "si" : "no") : vivo ? (ok ? " si" : " aun") : "") },
+    mk("span", { class: "et", text: tr(et) }), mk("b", { text: txt }), mk("span", { class: fin || vivo ? "ya" : "nota", text: fin ? tr(ok ? kOk : kMal) : vivo ? tr(ok ? kSi : kNo) : tr(nota) }));
+  return mk("div", { class: "metas" }, Rs.map((R, i) => caja("r.reto" + i, tr("reto." + R.id), R.ok, "r.p", "r.ok", "r.mal", "r.si", "r.no")),
+    EST.suceso ? caja("obj.h", tv(o.k, o.v), o.ok, "obj.p", "obj.ok", "obj.mal", "obj.si", "obj.no") : null);
+}
 // ---------- fases ----------
-function fase1() {
-  if (!EST.suceso) return [mk("h1", { text: tr("f1.h") }), mk("p", { class: "lead", text: tr("f1.no") })];
-  return [mk("h1", { text: tr("f1.h") }), mk("p", { class: "suceso", text: tr("suc." + EST.suceso) }), mk("p", { class: "lead", text: tr("f1.p") })];
+let sucesoVisto = null;
+function fase1(h) {
+  if (!EST.suceso) { sucesoVisto = null; return [mk("h1", { text: tr("f1.h") }), mk("p", { class: "lead", text: tr("f1.no") })]; }
+  const nuevo = sucesoVisto !== EST.partida + EST.anio + EST.suceso; sucesoVisto = EST.partida + EST.anio + EST.suceso;
+  return [mk("h1", { text: tr("f1.h") }), mk("p", { class: "suceso" + (nuevo ? " revela" : ""), text: tr("suc." + EST.suceso) }), mk("p", { class: "lead", text: tr("f1.p") }), metas(h)];
 }
 function fase2(h, k) {
   if (!EST.empleo) return [mk("h1", { text: tr("f2.h") }), mk("p", { class: "lead", text: tr("f2.hecho") })];
@@ -297,7 +340,7 @@ function fase2(h, k) {
       mk("b", { class: "grande", text: tv("s.cobrariais", { c: fmt(c) }) }), signo(c - h.y.c, "o.mas", "o.menos"),
       mk("span", { text: tv("s.quedaria", { l: fmt(l) }) }), signo(l - h.y.l, "o.mas", "o.menos"));
   } else if (elegido === h.sector) cons = mk("div", { class: "consecuencia" }, mk("span", { text: tv("s.os", { s: tr("s." + h.sector) }) }));
-  return [mk("div", {}, mk("h1", { text: tr("f2.h") }), mk("p", { class: "lead", text: tr("f2.p") })), mk("div", { class: "sectores" }, tarjetas), cons];
+  return [mk("div", {}, mk("h1", { text: tr("f2.h") }), mk("p", { class: "lead", text: tr("f2.p") })), metas(h), mk("div", { class: "sectores" }, tarjetas), cons];
 }
 function tituloVoto(v) {
   if (v.id === "paga") return tr("v.paga"); if (v.id === "ayuda") return tr("v.ayuda"); if (v.id === "sem") return tr("v.sem");
@@ -316,8 +359,8 @@ function puebloOp(v, x, ref) {
 }
 function fase3(h, k) {
   const vs = EST.votos || [];
-  if (!vs.length) return [mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.no") })];
-  return [mk("div", {}, mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.p") })),
+  if (!vs.length) return [mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.no") }), metas(h)];
+  return [mk("div", {}, mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.p") })), metas(h),
     mk("div", { class: "votos" }, vs.map(v => {
       const fase = EST.partida + "-" + EST.anio + "-v-" + v.id, elegido = mio(fase);
       const iRef = Math.max(0, v.ops.map(String).indexOf(String(v.actual))), ref = v.ef[iRef];
@@ -344,7 +387,8 @@ function fase4(h) {
     if (Math.abs(y.a - p.a) >= 1) hechos.push(tv("h.aport", { n: fmt(Math.abs(y.a - p.a)), m: tr(y.a > p.a ? "h.mas" : "h.menos") }));
     if (!hechos.length) hechos.push(tr("h.nada"));
   }
-  return [mk("div", {}, mk("h1", { text: tr("f4.h") }), mk("p", { class: "lead", text: tr(p ? "f4.p" : "f4.p1") })),
+  const G = EST.resumen, sec = x => tv("g.sec", { s: tr("s." + x.s), d: (x.d > 0 ? "+" : "−") + fmt(Math.abs(x.d)) });
+  return [mk("div", {}, mk("h1", { text: tr("f4.h") }), mk("p", { class: "lead", text: tr(p ? "f4.p" : "f4.p1") })), metas(h),
     mk("div", { class: "comparar" },
       dato("d.cobrado", fmt(y.c), cambio(y.c, p && p.c)),
       dato("d.raciones", fmt(y.ra, 2), mk("div", { class: "antes " + (y.ha ? "menos" : ""), text: tr("d.minimo") })),
@@ -355,7 +399,11 @@ function fase4(h) {
       mk("li", {}, mk("b", { class: P_.h ? "menos" : null, text: fmt(P_.h) }), tr("p.hambre")),
       mk("li", {}, mk("b", { text: tv("d.de", { a: P_.e, b: P_.n }) }), tr("p.esc")),
       mk("li", {}, mk("b", { text: tv("d.de", { a: P_.a, b: P_.dp }) }), tr("p.cui")),
-      P_.ob.length ? mk("li", {}, mk("b", { text: P_.ob.map(o => tr("ob." + o)).join(", ") }), tr("p.obras")) : null))];
+      P_.ob.length ? mk("li", {}, mk("b", { text: P_.ob.map(o => tr("ob." + o)).join(", ") }), tr("p.obras")) : null)),
+    G ? mk("div", { class: "tarjeta" }, mk("h2", { text: tr("g.h") }), mk("p", { class: "nota", text: tr("g.p") }), mk("ul", { class: "gp" },
+      G.ganan.length ? mk("li", { class: "mas", text: tv("g.ganan", { x: G.ganan.map(sec).join(", ") }) }) : null,
+      G.pierden.length ? mk("li", { class: "menos", text: tv("g.pierden", { x: G.pierden.map(sec).join(", ") }) }) : null,
+      !G.ganan.length && !G.pierden.length ? mk("li", { text: tr("g.igual") }) : null)) : null];
 }
 function fase5() {
   const fase = EST.partida + "-" + EST.anio + "-frase";
@@ -396,7 +444,7 @@ function pintar() {
   if (!EST) { $("pie").hidden = true; $("cuerpo").replaceChildren(mk("div", { class: "inicio tarjeta" }, mk("p", { text: tr("v.espera") }), mk("button", { type: "button", class: "btn", text: tr("v.cambiar"), on: () => { codigo = ""; pintar(); } }), mk("p", { id: "estado", "aria-live": "polite" }))); return; }
   const k = parseInt(codigo.slice(1), 10) - 1, h = EST.hogares[k];
   if (!h) { codigo = ""; pintar(); return; }
-  const f = EST.fase, contenido = f === 1 ? fase1() : f === 2 ? fase2(h, k) : f === 3 ? fase3(h, k) : f === 4 ? fase4(h) : fase5();
+  const f = EST.fase, contenido = f === 1 ? fase1(h) : f === 2 ? fase2(h, k) : f === 3 ? fase3(h, k) : f === 4 ? fase4(h) : fase5();
   $("cuerpo").replaceChildren(mk("main", {}, mk("div", { class: "col" }, tarjetaCasa(h), tarjetaCuentas(h)), mk("div", { class: "col" }, contenido)));
   pie(h);
 }

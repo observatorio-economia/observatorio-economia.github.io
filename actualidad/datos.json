@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T10:09:17.979327+00:00",
+ "generado": "2026-11-27T12:17:54.674475+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,11 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Jubilación parcial: quién puede cobrar parte de la pensión y seguir trabajando a tiempo parcial, y cuánto se cobra",
+     "enlace": "https://www.expansion.com/economia/2026/11/27/jubilacion-parcial-cobrar-parte-pension-seguir-trabajando-parcial-cuanto-cobra.html",
+     "fecha": "2026-11-27T10:09:36+00:00"
+    },
     {
      "titulo": "Cuánto cobra de pensión quien se jubila en 2027 con 15, 25 o 35 años cotizados en España",
      "enlace": "https://www.expansion.com/economia/2026/11/27/cuanto-cobra-pension-jubila-2027-15-25-35-anos-cotizados-espana.html",
@@ -26,14 +31,9 @@
      "titulo": "¿Cuánto suben las pensiones en 2027?: los jubilados cobrarán 852 euros más",
      "enlace": "https://www.expansion.com/economia/2026/11/27/cuanto-suben-pensiones-2027-jubilados-cobraran-852-euros.html",
      "fecha": "2026-11-27T09:32:03+00:00"
-    },
-    {
-     "titulo": "La inflación se modera al 4,1% en noviembre y las pensiones se revalorizarán un 3,5% en 2027",
-     "enlace": "https://www.expansion.com/economia/2026/11/27/inflacion-modera-4-1-noviembre-pensiones-revalorizaran-3-5-2027.html",
-     "fecha": "2026-11-27T08:04:09+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:13.631509+00:00"
+   "leido": "2026-11-27T12:17:51.680736+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,12 +65,22 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:14.518798+00:00"
+   "leido": "2026-11-27T12:17:52.244268+00:00"
   },
   {
    "nombre": "Invertia · El Español",
    "salmon": true,
    "items": [
+    {
+     "titulo": "TSK nombra a Beatriz García Rico presidenta provisional tras el fallecimiento de Sabino García Vallina",
+     "enlace": "https://www.elespanol.com/invertia/empresas/20261127/tsk-nombra-beatriz-garcia-rico-presidenta-provisional-fallecimiento-sabino-vallina/1003744474931_0.html",
+     "fecha": "2026-11-27T12:03:50+00:00"
+    },
+    {
+     "titulo": "La Guardia Civil no puede acreditar que la soldadura fuera revisada y sitúa la fractura como causa del accidente de Adamuz",
+     "enlace": "https://www.elespanol.com/invertia/observatorios/movilidad/20261127/guardia-civil-no-puede-acreditar-soldadura-revisada-situa-fractura-causa-accidente-adamuz/1003744474566_0.html",
+     "fecha": "2026-11-27T09:43:49+00:00"
+    },
     {
      "titulo": "La inflación se modera hasta el 4,1% en noviembre por el abaratamiento de los combustibles",
      "enlace": "https://www.elespanol.com/invertia/economia/20261127/inflacion-modera-noviembre-abaratamiento-combustibles/1003744474396_0.html",
@@ -85,19 +95,9 @@
      "titulo": "Ibex 35, la bolsa en directo hoy | El Ibex 35 sube un 0,9% en la apertura y supera los 19.200 puntos",
      "enlace": "https://www.elespanol.com/invertia/mercados/20261127/ibex-bolsa-directo-hoy-cotizaciones-noticias-tiempo-real/1003744474361_10.html",
      "fecha": "2026-11-27T06:32:26+00:00"
-    },
-    {
-     "titulo": "Dónde invertir en bolsa hoy: valores para aprovechar una reconquista de los 20.000 puntos",
-     "enlace": "https://www.elespanol.com/invertia/mercados/20261127/invertir-bolsa-hoy-valores-aprovechar-reconquista-puntos/1003744474350_0.html",
-     "fecha": "2026-11-27T06:19:51+00:00"
-    },
-    {
-     "titulo": "Hernández de Cos en el BCE: el aliado español de Draghi que tendrá como reto aplacar la crisis de deuda francesa",
-     "enlace": "https://www.elespanol.com/invertia/economia/bancos-centrales/20261127/hernandez-cos-bce-aliado-espanol-draghi-reto-aplacar-crisis-deuda-francesa/1003744473781_0.html",
-     "fecha": "2026-11-27T04:00:00+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:14.854691+00:00"
+   "leido": "2026-11-27T12:17:52.587060+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:15.601557+00:00"
+   "leido": "2026-11-27T12:17:52.835995+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,12 +141,17 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:15.826121+00:00"
+   "leido": "2026-11-27T12:17:53.140211+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "La falsa vivienda asequible del PP y la privatización de lo público",
+     "enlace": "https://www.eldiario.es/economia/una-casa-para-vivir/falsa-vivienda-asequible-pp-privatizacion-publico_132_13698194.html",
+     "fecha": "2026-11-27T11:45:04+00:00"
+    },
     {
      "titulo": "Las pensiones subirán un 3,5% en 2027",
      "enlace": "https://www.eldiario.es/economia/pensiones-subiran-3-5-2027_1_13697886.html",
@@ -166,19 +171,29 @@
      "titulo": "La puerta giratoria entre el PP y la patronal: más de 70 cargos populares han trabajado para la CEOE",
      "enlace": "https://www.eldiario.es/economia/puerta-giratoria-pp-patronal-70-cargos-populares-han-trabajado-ceoe_1_13695993.html",
      "fecha": "2026-11-27T00:46:15+00:00"
-    },
-    {
-     "titulo": "Los líderes de la UE escenifican el desencuentro y dejan para diciembre la negociación del presupuesto europeo",
-     "enlace": "https://www.eldiario.es/economia/lideres-ue-escenifican-desencuentro-dejan-diciembre-negociacion-presupuesto-europeo_1_13696056.html",
-     "fecha": "2026-11-26T23:40:17+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:16.634561+00:00"
+   "leido": "2026-11-27T12:17:53.425115+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Euríbor hoy, viernes 27 de noviembre: la tasa diaria cierra la semana con una subida para empañar las bajadas previas",
+     "enlace": "https://www.elmundo.es/economia/vivienda/2026/11/27/6b0966e6e9cf4a6f1c8b45ad.html",
+     "fecha": "2026-11-27T11:22:26+00:00"
+    },
+    {
+     "titulo": "Hasta 1.060 euros extra antes de Navidad: la promoción bancaria que conviene conocer",
+     "enlace": "https://www.elmundo.es/economia/ahorro-y-consumo/2026/11/27/6b043ffce85ece81488b456d.html",
+     "fecha": "2026-11-27T11:00:00+00:00"
+    },
+    {
+     "titulo": "Los ninis crecen en casi 100.000 en el último año y vuelven a máximos de 2020",
+     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b095ee8e9cf4ad0358b4571.html",
+     "fecha": "2026-11-27T10:53:36+00:00"
+    },
     {
      "titulo": "Las escuelas de Los Ángeles bloquean funciones de Inteligencia Artificial y Google amenaza con cortar el acceso a su buscador",
      "enlace": "https://www.elmundo.es/economia/2026/11/27/6b094f6efc6c83666f8b45b3.html",
@@ -188,24 +203,9 @@
      "titulo": "¿Puedes poner protectores en las columnas del garaje sin permiso de los vecinos? Esto dice la Ley de Propiedad Horizontal",
      "enlace": "https://www.elmundo.es/economia/2026/11/27/6b094234e9cf4a96368b4589.html",
      "fecha": "2026-11-27T09:22:27+00:00"
-    },
-    {
-     "titulo": "Los precios se moderan hasta el 4,1% en noviembre por el abaratamiento de los combustibles",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b0936cce85ece382f8b4577.html",
-     "fecha": "2026-11-27T08:11:17+00:00"
-    },
-    {
-     "titulo": "El Gobierno confirma que subirá las pensiones un 3,5% a dos días de las elecciones: 775 euros más al año de media para los jubilados",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b0935cb21efa0364f8b45a2.html",
-     "fecha": "2026-11-27T08:00:04+00:00"
-    },
-    {
-     "titulo": "EEUU anuncia nuevos aranceles a la UE, China o Japón tras una investigación formal sobre presuntos subsidios y exceso de capacidad industrial",
-     "enlace": "https://www.elmundo.es/economia/2026/11/25/6b06ef89e4d4d8ad388b45b2.html",
-     "fecha": "2026-11-27T06:28:54+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:16.925123+00:00"
+   "leido": "2026-11-27T12:17:53.962253+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -214,7 +214,7 @@
     {
      "titulo": "Así queda la subida de las pensiones en 2027 en España tras la revalorización del 3,5%: cuantía para mínimas, medias y máximas",
      "enlace": "https://www.abc.es/economia/cuentas-corrientes/queda-subida-pensiones-2027-espana-tras-revalorizacion-20261127090805-nt.html",
-     "fecha": "2026-11-27T10:05:09+00:00"
+     "fecha": "2026-11-27T10:10:21+00:00"
     },
     {
      "titulo": "Las pensiones subirán un 3,5% en 2027 y el Gobierno busca rascar votos con el anuncio del alza de las mínimas, las no contributivas y el IMV",
@@ -237,39 +237,39 @@
      "fecha": "2026-11-27T00:34:59+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:17.657209+00:00"
+   "leido": "2026-11-27T12:17:54.274185+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
     {
-     "titulo": "Comunitat Valenciana | La Comisión Europea confirma que la \"prioridad nacional\" de PP y Vox vulnera el derecho comunitario",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/la-comision-europea-confirma-que-la-prioridad-nacional-de-pp-y-vox-vulnera-el-derecho-comunitario",
-     "fecha": "2026-11-27T10:05:21+00:00"
+     "titulo": "Comunitat Valenciana | Bruselas avisa de que la discriminación a residentes por \"prioridad nacional\" viola el Derecho de la UE",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/bruselas-avisa-de-que-la-discriminacion-a-residentes-por-prioridad-nacional-viola-el-derecho-de-la-ue",
+     "fecha": "2026-11-27T12:16:20+00:00"
     },
     {
-     "titulo": "València | Los bomberos intervienen por desprendimientos en el Mercado Central de València",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/valencia/los-bomberos-intervienen-por-desprendimientos-en-el-mercado-central-de-valencia",
-     "fecha": "2026-11-27T10:03:40+00:00"
+     "titulo": "Tierra de empresas | Más personas acuden al psicólogo: crece la demanda de profesionales",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/tierra-de-empresas/mas-personas-acuden-al-psicologo-crece-la-demanda-de-profesionales",
+     "fecha": "2026-11-27T12:04:18+00:00"
     },
     {
-     "titulo": "Motor | Saica y Vicente Ferrer presentan por primera vez en España la nueva gama Adventure Yamaha RW en la Feria de Valencia Dos Ruedas 2026",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/plazamotor/saica-y-vicente-ferrer-presentan-por-primera-vez-en-espana-la-nueva-gama-adventure-yamaha-rw-en-la-feria-de-valencia-dos-ruedas-2026",
-     "fecha": "2026-11-27T10:01:32+00:00"
+     "titulo": "Más cultura | El Consell da luz verde al nombramiento de Miguel Galdón como director del IVC",
+     "enlace": "https://valenciaplaza.com/noticas-cultura-valencia-comunitat-valenciana/el-consell-da-luz-verde-al-nombramiento-de-miguel-galdon-como-director-del-ivc",
+     "fecha": "2026-11-27T11:57:29+00:00"
     },
     {
-     "titulo": "guiahedonista | FOTOGALERÍA: Coffee Corner celebra su 30º aniversario",
-     "enlace": "https://valenciaplaza.com/noticias-revista-plaza/guiahedonista/fotogaleria-coffee-corner-celebra-su-30-aniversario",
-     "fecha": "2026-11-27T09:46:19+00:00"
+     "titulo": "València | Retiran la lona de Vox con referencias a la inmigración denunciada por PSPV y Compromís",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/valencia/retiran-la-lona-de-vox-con-referencias-a-la-inmigracion-denunciada-por-pspv-y-compromis",
+     "fecha": "2026-11-27T11:53:38+00:00"
     },
     {
-     "titulo": "Música y ópera | Berklee Ensemble Nights acerca el jazz y el flamenco a CaixaForum València",
-     "enlace": "https://valenciaplaza.com/musica-opera-valencia-comunitat-valenciana/berklee-ensemble-nights-acerca-el-jazz-y-el-flamenco-a-caixaforum-valencia",
-     "fecha": "2026-11-27T09:46:12+00:00"
+     "titulo": "Comunitat Valenciana | El Consell aprueba un crédito extraordinario de 50 millones de euros para atender los gastos derivados de la dana Adam",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-consell-aprueba-un-credito-extraordinario-de-50-millones-de-euros-para-atender-los-gastos-derivados-de-la-dana-adam-2026-11-27",
+     "fecha": "2026-11-27T11:41:47+00:00"
     }
    ],
-   "leido": "2026-11-27T10:09:17.979275+00:00"
+   "leido": "2026-11-27T12:17:54.674442+00:00"
   }
  ]
 }
