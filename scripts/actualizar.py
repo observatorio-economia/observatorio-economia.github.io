@@ -234,16 +234,41 @@ def oikos():
     t(tx, "ok.libro", "El libro del pueblo y los datos", "El llibre del poble i les dades")
     t(tx, "ok.libro.p", "Cada año que se cierra queda en el libro del pueblo, con el suceso, los retos y la frase de la clase. Dentro del juego, el edificio del Observatorio da acceso a los informes, a los datos de cada año y a las actividades de la SA.",
       "Cada any que es tanca queda en el llibre del poble, amb el fet, els reptes i la frase de la classe. Dins del joc, l'edifici de l'Observatori dona accés als informes, a les dades de cada any i a les activitats de la SA.")
-    cuerpo = f"""  <header class="top">
-    <span class="eyebrow" data-i18n="ok.eyebrow">Economía · 1.º de Bachillerato</span>
-    <h1>Oikos</h1>
-    <p class="lede" data-i18n="ok.lede"></p>
-  </header>
-  <section class="obs-fase">
-    <h2 data-i18n="ok.clase"></h2>
-    <p data-i18n="ok.clase.p"></p>
-    <p><a class="btn" href="../pueblo-vecino/" data-i18n="ok.vecino"></a></p>
-    <p class="small"><a href="../pueblo/" data-i18n="ok.proy"></a></p>
+    t(tx, "ok.hero.alt", "El pueblo de Oikos visto desde arriba: casas, huertos, talleres, la escuela y la asamblea.", "El poble d'Oikos vist des de dalt: cases, horts, tallers, l'escola i l'assemblea.")
+    t(tx, "ok.entrar.p", "La primera vez, entra con el enlace de Aules o con el código QR del proyector y elige el número de tu tarjeta (P01 a P25). Después, este botón ya te lleva a tu hogar.", "La primera vegada, entra amb l'enllaç d'Aules o amb el codi QR del projector i tria el número de la teua targeta (P01 a P25). Després, este botó ja et porta a la teua llar.")
+    t(tx, "ok.doc", "Acceso docente", "Accés docent")
+    t(tx, "ok.doc.u", "Usuario", "Usuari"); t(tx, "ok.doc.c", "Clave", "Clau"); t(tx, "ok.doc.b", "Entrar al proyector", "Entrar al projector")
+    t(tx, "ok.doc.mal", "El usuario o la clave no son correctos.", "L'usuari o la clau no són correctes.")
+    # Entrada del docente: el mismo resumen (SHA-256 de «usuario:clave») que la pantalla del proyector (pueblo3d/usabilidad.js).
+    # No es seguridad de verdad: solo evita que el alumnado entre por error en la pantalla del proyector.
+    hash_doc = "93022db064f8927607a4a8a1a36f8ea700f0849ebef15fb4efb4e963558951d5"
+    cuerpo = f"""  <style>
+    .ok-hero {{ position: relative; border-radius: 18px; overflow: hidden; border: 2px solid var(--ink); background: #cfe8ea; margin-top: 12px; }}
+    .ok-hero img {{ display: block; width: 100%; height: clamp(300px, 50vw, 560px); object-fit: cover; object-position: center 38%; }}
+    .ok-hero-txt {{ position: absolute; left: 0; right: 0; bottom: 0; padding: 22px clamp(16px, 4vw, 40px) 26px; background: linear-gradient(transparent, #14110dd9 38%); color: #fffaf0; display: flex; flex-direction: column; gap: 8px; }}
+    .ok-hero-txt h1 {{ font-size: clamp(56px, 10vw, 120px); line-height: .9; margin: 0; color: #fffaf0; }}
+    .ok-hero-txt .eyebrow {{ color: #f3e7cf; }}
+    .ok-hero-txt p {{ margin: 0; max-width: 62ch; font-size: clamp(16px, 1.6vw, 19px); color: #fffaf0; }}
+    .ok-entrar {{ align-self: flex-start; font-size: clamp(19px, 2vw, 24px); padding: 14px 28px; border-radius: 10px; margin-top: 8px; background: #f2b134; color: #1d1a15; border-color: #f2b134; text-decoration: none; }}
+    .ok-entrar:hover {{ background: #ffc85a; }}
+    .ok-hero-txt .small {{ color: #f3e7cf; }}
+    @media (max-width: 640px) {{ .ok-hero img {{ height: 260px; }} .ok-hero-txt {{ position: static; background: #14110d; }} }}
+    .ok-doc {{ margin: 40px 0 10px; border-top: 1px solid var(--rule); padding-top: 12px; }}
+    .ok-doc summary {{ font-size: 14px; color: var(--muted); font-weight: 500; }}
+    .ok-doc form {{ display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-top: 10px; }}
+    .ok-doc label {{ display: flex; flex-direction: column; font-size: 13px; color: var(--muted); gap: 3px; }}
+    .ok-doc input {{ font: inherit; font-size: 15px; padding: 7px 9px; min-height: 42px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); color: var(--ink); }}
+    .ok-doc .ok-mal {{ color: var(--bad); font-weight: 600; flex-basis: 100%; margin: 0; }}
+  </style>
+  <section class="ok-hero" aria-labelledby="ok-h1">
+    <img src="pueblo.jpg" width="1440" height="780" alt="" data-i18n-attr="alt:ok.hero.alt">
+    <div class="ok-hero-txt">
+      <span class="eyebrow" data-i18n="ok.eyebrow">Economía · 1.º de Bachillerato</span>
+      <h1 id="ok-h1">Oikos</h1>
+      <p data-i18n="ok.lede"></p>
+      <a class="btn ok-entrar" href="../pueblo-vecino/" data-i18n="ok.vecino"></a>
+      <p class="small" data-i18n="ok.entrar.p"></p>
+    </div>
   </section>
   <section class="obs-fase">
     <h2 data-i18n="ok.casa"></h2>
@@ -261,7 +286,29 @@ def oikos():
   <section class="obs-fase">
     <h2 data-i18n="ok.libro"></h2>
     <p data-i18n="ok.libro.p"></p>
-  </section>"""
+  </section>
+  <section class="ok-doc" aria-label="Docente">
+    <details>
+      <summary data-i18n="ok.doc"></summary>
+      <form id="ok-doc-f">
+        <label><span data-i18n="ok.doc.u"></span><input id="ok-doc-u" autocomplete="username" required></label>
+        <label><span data-i18n="ok.doc.c"></span><input id="ok-doc-c" type="password" autocomplete="current-password" required></label>
+        <button type="submit" class="btn" data-i18n="ok.doc.b"></button>
+        <p class="ok-mal" id="ok-doc-m" aria-live="polite"></p>
+      </form>
+    </details>
+  </section>
+  <script>
+  document.getElementById("ok-doc-f").addEventListener("submit", async ev => {{
+    ev.preventDefault();
+    const txt = document.getElementById("ok-doc-u").value.trim().toLowerCase() + ":" + document.getElementById("ok-doc-c").value;
+    const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
+    const h = [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join("");
+    if (h !== "{hash_doc}") {{ document.getElementById("ok-doc-m").textContent = OBS.t("ok.doc.mal"); return; }}
+    try {{ localStorage.setItem("oikos-docente", h); }} catch (e) {{}}
+    location.href = "../pueblo/";
+  }});
+  </script>"""
     (destino / "index.html").write_text(pagina("../", "Oikos", cuerpo, tx), encoding="utf-8")
     aviso(True, "oikos/index.html  (pestaña del juego del pueblo)")
 

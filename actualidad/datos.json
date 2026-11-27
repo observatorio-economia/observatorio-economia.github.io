@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T18:55:34.927443+00:00",
+ "generado": "2026-11-27T20:42:11.249081+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,11 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Estados Unidos y Europa tienen problemas económicos opuestos",
+     "enlace": "https://www.expansion.com/economia/financial-times/2026/11/27/estados-unidos-europa-problemas-economicos-opuestos.html",
+     "fecha": "2026-11-27T18:57:33+00:00"
+    },
     {
      "titulo": "Los dos momentos del debate",
      "enlace": "https://www.expansion.com/elecciones/elecciones-generales/2026/11/27/dos-momentos-debate.html",
@@ -26,14 +31,9 @@
      "titulo": "La cara oculta de los récords del empleo",
      "enlace": "https://www.expansion.com/opinion/2026/11/27/cara-oculta-records-empleo.html",
      "fecha": "2026-11-27T09:52:58+00:00"
-    },
-    {
-     "titulo": "Francia se asoma a la recesión tras una contracción del PIB del 0,2% en el tercer trimestre",
-     "enlace": "https://www.expansion.com/economia/2026/11/27/francia-asoma-recesion-contraccion-pib-0-2-tercer-trimestre.html",
-     "fecha": "2026-11-27T09:35:00+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:29.747236+00:00"
+   "leido": "2026-11-27T20:42:07.545912+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,12 +65,17 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:30.688305+00:00"
+   "leido": "2026-11-27T20:42:08.133346+00:00"
   },
   {
    "nombre": "Invertia · El Español",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Puig compra el 75% de Grupo Artessence, dueño de Parfums de Marly e Initio, por 1.200 millones de euros",
+     "enlace": "https://www.elespanol.com/invertia/empresas/distribucion/20261127/puig-compra-grupo-artessence-dueno-parfums-marly-initio-millones-euros/1003744475729_0.html",
+     "fecha": "2026-11-27T19:20:44+00:00"
+    },
     {
      "titulo": "El Ibex 35 recupera los 19.300 puntos al subir un 2,7% en la semana y Wall Street repunta en una jornada a medio gas",
      "enlace": "https://www.elespanol.com/invertia/mercados/20261127/ibex-recupera-puntos-subir-semana-wall-street-repunta-jornada-medio-gas/1003744475196_0.html",
@@ -90,14 +95,9 @@
      "titulo": "La Guardia Civil no puede acreditar que la soldadura fuera revisada y sitúa la fractura como causa del accidente de Adamuz",
      "enlace": "https://www.elespanol.com/invertia/observatorios/movilidad/20261127/guardia-civil-no-puede-acreditar-soldadura-revisada-situa-fractura-causa-accidente-adamuz/1003744474566_0.html",
      "fecha": "2026-11-27T09:43:49+00:00"
-    },
-    {
-     "titulo": "Sacyr dibuja dos escenarios técnicos de entrada tras rebotar desde los 3,88 euros",
-     "enlace": "https://www.elespanol.com/invertia/mercados/20261127/sacyr-dibuja-escenarios-tecnicos-entrada-rebotar-euros/1003744474479_0.html",
-     "fecha": "2026-11-27T09:01:52+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:31.315731+00:00"
+   "leido": "2026-11-27T20:42:08.584513+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:32.056731+00:00"
+   "leido": "2026-11-27T20:42:09.163874+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:32.599597+00:00"
+   "leido": "2026-11-27T20:42:09.628033+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,12 +173,17 @@
      "fecha": "2026-11-27T00:46:15+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:33.260110+00:00"
+   "leido": "2026-11-27T20:42:10.105506+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Puig adquiere el 75% del Grupo Artessence por 1.200 millones de euros",
+     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/27/6b09d574fdddff01718b4582.html",
+     "fecha": "2026-11-27T19:28:13+00:00"
+    },
     {
      "titulo": "Francia entra en recesión técnica tras la caída del PIB por segundo trimestre consecutivo",
      "enlace": "https://www.elmundo.es/economia/2026/11/27/6b09a09021efa02d428b459b.html",
@@ -198,19 +203,19 @@
      "titulo": "Hasta 1.060 euros extra antes de Navidad: la promoción bancaria que conviene conocer",
      "enlace": "https://www.elmundo.es/economia/ahorro-y-consumo/2026/11/27/6b043ffce85ece81488b456d.html",
      "fecha": "2026-11-27T11:00:00+00:00"
-    },
-    {
-     "titulo": "Los ninis crecen en casi 100.000 en el último año y vuelven a máximos de 2020",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b095ee8e9cf4ad0358b4571.html",
-     "fecha": "2026-11-27T10:53:36+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:33.883737+00:00"
+   "leido": "2026-11-27T20:42:10.508260+00:00"
   },
   {
    "nombre": "ABC · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Puig compra el 75% de Grupo Artessence, matriz de Parfums de Marly e Initio por 1.200 millones",
+     "enlace": "https://www.abc.es/economia/puig-compra-grupo-artessence-matriz-parfums-marly-20261127203153-nt.html",
+     "fecha": "2026-11-27T20:20:19+00:00"
+    },
     {
      "titulo": "Las pensiones subirán un 3,5% en 2027 y el Gobierno busca rascar votos con el anuncio del alza de las mínimas, las no contributivas y el IMV",
      "enlace": "https://www.abc.es/economia/pensiones-subiran-2027-gobierno-busca-rascar-votos-20261127090146-nt.html",
@@ -230,46 +235,41 @@
      "titulo": "Así queda la subida de las pensiones en 2027 en España tras la revalorización del 3,5%: cuantía para mínimas, medias y máximas",
      "enlace": "https://www.abc.es/economia/cuentas-corrientes/queda-subida-pensiones-2027-espana-tras-revalorizacion-20261127090805-nt.html",
      "fecha": "2026-11-27T10:10:21+00:00"
-    },
-    {
-     "titulo": "Shein se desinfla antes del Black Friday: suma un nuevo arancel de la UE y caen sus ventas en Europa",
-     "enlace": "https://www.abc.es/economia/cuentas-corrientes/shein-paga-arancel-ue-ingresos-desploman-europa-20261127013453-nt.html",
-     "fecha": "2026-11-27T09:17:15+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:34.440260+00:00"
+   "leido": "2026-11-27T20:42:10.925970+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
     {
+     "titulo": "Comunitat Valenciana | Morant: \"No podemos permitir que los fascistas vuelvan a gobernar España 50 años después\"",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/morant-no-podemos-permitir-que-los-fascistas-vuelvan-a-gobernar-espana-50-anos-despues",
+     "fecha": "2026-11-27T20:08:01+00:00"
+    },
+    {
+     "titulo": "Comunitat Valenciana | Llorca llama a movilizar el voto para que Feijóo llegue a la Moncloa y la Comunitat tenga \"el impulso que merece\"",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/llorca-llama-a-movilizar-el-voto-para-que-feijoo-llegue-a-la-moncloa-y-la-comunitat-tenga-el-impulso-que-merece",
+     "fecha": "2026-11-27T20:00:34+00:00"
+    },
+    {
+     "titulo": "Comunitat Valenciana | Compromís-Front Valencià cierran su campaña con satisfacción y avisan de que \"hay partida\"",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/compromis-front-valencia-cierran-su-campana-con-satisfaccion-y-avisan-de-que-hay-partida",
+     "fecha": "2026-11-27T19:37:37+00:00"
+    },
+    {
+     "titulo": "Plaza Innovación | Una investigación en modelos animales muestra que es posible revertir alteraciones neuronales del síndrome de Down",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/plaza-innovacion/una-investigacion-en-modelos-animales-muestra-que-es-posible-revertir-alteraciones-neuronales-del-sindrome-de-down",
+     "fecha": "2026-11-27T19:28:10+00:00"
+    },
+    {
      "titulo": "Comarca y empresa | Paterna impulsa la proyección internacional de su Cordà en la Feria de Turismo de Londres",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/paterna-impulsa-la-proyeccion-internacional-de-su-corda-en-la-feria-de-turismo-de-londres",
      "fecha": "2026-11-27T18:04:22+00:00"
-    },
-    {
-     "titulo": "València | València celebra el lunes una Cremà por los 10 años de las Fallas como Patrimonio mundial",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/valencia/valencia-celebra-el-lunes-una-crema-por-los-10-anos-de-las-fallas-como-patrimonio-mundial",
-     "fecha": "2026-11-27T16:48:27+00:00"
-    },
-    {
-     "titulo": "Más cultura | El mago Jammes Garibo hechizará València con su espectáculo 'Maestros de la magia'",
-     "enlace": "https://valenciaplaza.com/noticas-cultura-valencia-comunitat-valenciana/el-mago-jammes-garibo-presentara-maestros-de-la-magia-en-valencia",
-     "fecha": "2026-11-27T16:31:49+00:00"
-    },
-    {
-     "titulo": "Comunitat Valenciana | El Consell aprueba hasta 12,2 millones para abaratar el crédito a pymes y autónomos",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-consell-aprueba-hasta-122-millones-para-abaratar-el-credito-a-pymes-y-autonomos",
-     "fecha": "2026-11-27T16:11:50+00:00"
-    },
-    {
-     "titulo": "Comunitat Valenciana | El Gobierno estudia cómo y a qué puerto trasladar el 'Med Emre' y la Generalitat rechaza acogerlo",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/el-gobierno-estudia-como-y-a-que-puerto-trasladar-el-med-emre-y-la-generalitat-rechaza-acogerlo",
-     "fecha": "2026-11-27T15:38:15+00:00"
     }
    ],
-   "leido": "2026-11-27T18:55:34.927403+00:00"
+   "leido": "2026-11-27T20:42:11.249031+00:00"
   }
  ]
 }
