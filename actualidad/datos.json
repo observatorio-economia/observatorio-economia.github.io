@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T22:38:08.992709+00:00",
+ "generado": "2026-11-27T23:11:49.344786+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,11 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Así quedan las pensiones en 2027 con la revalorización del 3,5%",
+     "enlace": "https://www.expansion.com/economia/2026/11/27/asi-quedan-pensiones-2027-revalorizacion-3-5.html",
+     "fecha": "2026-11-27T22:55:29+00:00"
+    },
     {
      "titulo": "Estados Unidos y Europa tienen problemas económicos opuestos",
      "enlace": "https://www.expansion.com/economia/financial-times/2026/11/27/estados-unidos-europa-problemas-economicos-opuestos.html",
@@ -26,14 +31,9 @@
      "titulo": "Cuánto cobra de pensión quien se jubila en 2027 con 15, 25 o 35 años cotizados en España",
      "enlace": "https://www.expansion.com/economia/2026/11/27/cuanto-cobra-pension-jubila-2027-15-25-35-anos-cotizados-espana.html",
      "fecha": "2026-11-27T10:08:41+00:00"
-    },
-    {
-     "titulo": "La cara oculta de los récords del empleo",
-     "enlace": "https://www.expansion.com/opinion/2026/11/27/cara-oculta-records-empleo.html",
-     "fecha": "2026-11-27T09:52:58+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:02.850928+00:00"
+   "leido": "2026-11-27T23:11:39.138208+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:03.836711+00:00"
+   "leido": "2026-11-27T23:11:40.948758+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-27T09:43:49+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:04.437270+00:00"
+   "leido": "2026-11-27T23:11:42.941926+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:05.450762+00:00"
+   "leido": "2026-11-27T23:11:45.237283+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:06.073555+00:00"
+   "leido": "2026-11-27T23:11:46.418525+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,12 +173,22 @@
      "fecha": "2026-11-27T00:46:16+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:06.896378+00:00"
+   "leido": "2026-11-27T23:11:47.196729+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "'Black Friday', Navidad y más gastos en época de inflación: ¿adelantar compras realmente ahorra dinero o vacía tu cuenta?",
+     "enlace": "https://www.elmundo.es/economia/2026/11/28/6b056e7dfdddff175c8b459e.html",
+     "fecha": "2026-11-27T23:05:07+00:00"
+    },
+    {
+     "titulo": "Tres generaciones, ante el reto de las pensiones: \"Mi nieta no tiene las mismas posibilidades que tuve yo, a pesar de que fueron los años de la posguerra y de Franco\"",
+     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b08115cfdddff7c108b45ac.html",
+     "fecha": "2026-11-27T21:44:06+00:00"
+    },
     {
      "titulo": "Puig adquiere el 75% del Grupo Artessence por 1.200 millones de euros",
      "enlace": "https://www.elmundo.es/economia/empresas/2026/11/27/6b09d574fdddff01718b4582.html",
@@ -193,19 +203,9 @@
      "titulo": "Banco Santander potencia su negocio de empresas en España con relevos en siete Direcciones Territoriales del país",
      "enlace": "https://www.elmundo.es/economia/empresas/2026/11/27/6b0978e3e85eceb9638b4587.html",
      "fecha": "2026-11-27T12:47:15+00:00"
-    },
-    {
-     "titulo": "Euríbor hoy, viernes 27 de noviembre: la tasa diaria cierra la semana con una subida para empañar las bajadas previas",
-     "enlace": "https://www.elmundo.es/economia/vivienda/2026/11/27/6b0966e6e9cf4a6f1c8b45ad.html",
-     "fecha": "2026-11-27T11:22:26+00:00"
-    },
-    {
-     "titulo": "Hasta 1.060 euros extra antes de Navidad: la promoción bancaria que conviene conocer",
-     "enlace": "https://www.elmundo.es/economia/ahorro-y-consumo/2026/11/27/6b043ffce85ece81488b456d.html",
-     "fecha": "2026-11-27T11:00:00+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:07.543041+00:00"
+   "leido": "2026-11-27T23:11:47.730131+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,12 +237,17 @@
      "fecha": "2026-11-27T10:10:21+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:08.468355+00:00"
+   "leido": "2026-11-27T23:11:48.281782+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Tierra de empresas | El futuro no grita, susurra: ¿están las empresas preparadas para escucharlo?",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/tierra-de-empresas/el-futuro-no-grita-susurra-estan-las-empresas-preparadas-para-escucharlo",
+     "fecha": "2026-11-27T23:00:07+00:00"
+    },
     {
      "titulo": "Comunitat Valenciana | Abascal también llena la plaza de Toros de València: \"Sánchez ha provocado la muerte en la Dana, en Urda y en Adamuz\"",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/abascal-tambien-llena-la-plaza-de-toros-de-valencia-sanchez-ha-provocado-la-muerte-en-la-dana-en-urda-y-en-adamuz",
@@ -262,14 +267,9 @@
      "titulo": "Comunitat Valenciana | Compromís-Front Valencià cierran su campaña con satisfacción y avisan de que \"hay partida\"",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/compromis-front-valencia-cierran-su-campana-con-satisfaccion-y-avisan-de-que-hay-partida",
      "fecha": "2026-11-27T19:37:37+00:00"
-    },
-    {
-     "titulo": "Plaza Innovación | Una investigación en modelos animales muestra que es posible revertir alteraciones neuronales del síndrome de Down",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/plaza-innovacion/una-investigacion-en-modelos-animales-muestra-que-es-posible-revertir-alteraciones-neuronales-del-sindrome-de-down",
-     "fecha": "2026-11-27T19:28:10+00:00"
     }
    ],
-   "leido": "2026-11-27T22:38:08.992666+00:00"
+   "leido": "2026-11-27T23:11:49.344734+00:00"
   }
  ]
 }

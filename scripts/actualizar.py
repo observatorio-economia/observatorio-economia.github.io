@@ -210,8 +210,8 @@ def oikos():
     t(tx, "ok.vecino", "Entrar con tu hogar", "Entrar amb la teua llar")
     t(tx, "ok.proy", "Pantalla del proyector (la usa el docente)", "Pantalla del projector (la usa el docent)")
     t(tx, "ok.casa", "Laboratorio en casa", "Laboratori a casa")
-    t(tx, "ok.casa.p", "En clase se decide; en casa se experimenta. Abre el laboratorio y carga el archivo del pueblo que te dé tu profesor (en Aules): puedes repetir un año cambiando una sola decisión y comparar los dos resultados. Lo que hagas no cambia la partida de clase.",
-      "A classe es decidix; a casa s'experimenta. Obri el laboratori i carrega l'arxiu del poble que et done el teu professor (en Aules): pots repetir un any canviant una sola decisió i comparar els dos resultats. El que faces no canvia la partida de classe.")
+    t(tx, "ok.casa.p", "En clase se decide; en casa se experimenta. Abre el laboratorio con el enlace de Aules y pon el código de la partida (o carga el archivo del pueblo): puedes repetir un año cambiando una sola decisión y comparar los dos resultados. Lo que hagas no cambia la partida de clase.",
+      "A classe es decidix; a casa s'experimenta. Obri el laboratori amb l'enllaç d'Aules i posa el codi de la partida (o carrega l'arxiu del poble): pots repetir un any canviant una sola decisió i comparar els dos resultats. El que faces no canvia la partida de classe.")
     t(tx, "ok.lab", "Abrir el laboratorio", "Obrir el laboratori")
     t(tx, "ok.sa", "Qué añade cada situación de aprendizaje", "Què afig cada situació d'aprenentatge")
     t(tx, "ok.sa.p", "El pueblo vive 26 años a lo largo del curso. Cada SA le añade una capa nueva.", "El poble viu 26 anys al llarg del curs. Cada SA li afig una capa nova.")
