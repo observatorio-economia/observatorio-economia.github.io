@@ -170,7 +170,7 @@ const TXT = {
     "s.hog": "{n} hogar(es)", "s.libres": "{n} plaza(s) libre(s)", "s.sinplazas": "sin plazas libres", "s.aqui": "Aquí estáis", "s.eleccion": "Tu elección", "s.solj": "soles/jornada",
     "s.si": "Si os cambiáis a {s} y nadie más se mueve:", "s.cobrariais": "cobraríais {c} soles al año", "s.quedaria": "y os quedarían {l} para objetos y ocio", "s.os": "Os quedáis en {s}.",
     "f3.h": "La asamblea vota", "f3.p": "Para cada opción: qué le pasa a tu hogar y qué le pasa al pueblo. Votad lo que creáis mejor.", "f3.no": "Todavía no hay ninguna votación abierta. Escucha la asamblea.",
-    "v.paga": "Paga por jornada en la asamblea", "v.ayuda": "Ayuda a cada hogar que pasaría hambre", "v.sem": "La semilla para sembrar el año que viene", "v.log": "¿Quién reparte {s}?", "v.obra": "¿Hacemos esta obra este año? {o}",
+    "v.paga": "Paga por jornada en la asamblea", "v.ayuda": "Ayuda a cada hogar que pasaría hambre", "v.sem": "La semilla para sembrar el año que viene", "v.inv": "¿Qué investiga el laboratorio? (se nota dentro de dos años)", "inv.cosecha": "La cosecha: más ración por jornada", "inv.escuela": "La escuela: más niños por maestro", "inv.energia": "La energía: la central necesita menos jornadas", "v.log": "¿Quién reparte {s}?", "v.obra": "¿Hacemos esta obra este año? {o}",
     "r.med": "Gana el valor del medio: la mitad ha votado eso o más y la otra mitad, eso o menos.", "r.60": "Para cambiar hace falta el 60 % de los votos.", "r.mitad": "Gana si tiene más de la mitad de los votos.",
     "o.tu": "Tu hogar", "o.pueblo": "El pueblo", "o.ahora": "ahora", "o.igual": "Igual", "o.mas": "+{n} soles al año", "o.menos": "−{n} soles al año", "o.imp": "No se puede: la caja común no llega",
     "o.hambre": "{n} personas con hambre", "o.esc": "{e} de {n} niños en la escuela", "o.cui": "{a} de {d} personas atendidas", "o.ef": "El año que viene: {t}", "o.ra": "+{n} raciones", "o.es": "+{n} plazas de escuela", "o.cu": "+{n} plazas de cuidados",
@@ -209,7 +209,7 @@ const TXT = {
     "s.hog": "{n} llar(s)", "s.libres": "{n} plaça(ces) lliure(s)", "s.sinplazas": "sense places lliures", "s.aqui": "Ací esteu", "s.eleccion": "La teua elecció", "s.solj": "sous/jornada",
     "s.si": "Si vos canvieu a {s} i ningú més no es mou:", "s.cobrariais": "cobraríeu {c} sous a l'any", "s.quedaria": "i vos quedarien {l} per a objectes i oci", "s.os": "Vos quedeu en {s}.",
     "f3.h": "L'assemblea vota", "f3.p": "Per a cada opció: què li passa a la teua llar i què li passa al poble. Voteu el que cregueu millor.", "f3.no": "Encara no hi ha cap votació oberta. Escolta l'assemblea.",
-    "v.paga": "Paga per jornada en l'assemblea", "v.ayuda": "Ajuda a cada llar que passaria fam", "v.sem": "La llavor per a sembrar l'any que ve", "v.log": "Qui reparteix {s}?", "v.obra": "Fem esta obra este any? {o}",
+    "v.paga": "Paga per jornada en l'assemblea", "v.ayuda": "Ajuda a cada llar que passaria fam", "v.sem": "La llavor per a sembrar l'any que ve", "v.inv": "Què investiga el laboratori? (es nota d'ací a dos anys)", "inv.cosecha": "La collita: més ració per jornada", "inv.escuela": "L'escola: més xiquets per mestre", "inv.energia": "L'energia: la central necessita menys jornades", "v.log": "Qui reparteix {s}?", "v.obra": "Fem esta obra este any? {o}",
     "r.med": "Guanya el valor del mig: la meitat ha votat això o més i l'altra meitat, això o menys.", "r.60": "Per a canviar cal el 60 % dels vots.", "r.mitad": "Guanya si té més de la meitat dels vots.",
     "o.tu": "La teua llar", "o.pueblo": "El poble", "o.ahora": "ara", "o.igual": "Igual", "o.mas": "+{n} sous a l'any", "o.menos": "−{n} sous a l'any", "o.imp": "No es pot: la caixa comuna no arriba",
     "o.hambre": "{n} persones amb fam", "o.esc": "{e} de {n} xiquets a l'escola", "o.cui": "{a} de {d} persones ateses", "o.ef": "L'any que ve: {t}", "o.ra": "+{n} racions", "o.es": "+{n} places d'escola", "o.cu": "+{n} places de cures",
@@ -350,13 +350,13 @@ function fase2(h, k) {
   return [mk("div", {}, mk("h1", { text: tr("f2.h") }), mk("p", { class: "lead", text: tr("f2.p") })), metas(h), mk("div", { class: "sectores" }, tarjetas), cons];
 }
 function tituloVoto(v) {
-  if (v.id === "paga") return tr("v.paga"); if (v.id === "ayuda") return tr("v.ayuda"); if (v.id === "sem") return tr("v.sem");
+  if (v.id === "paga") return tr("v.paga"); if (v.id === "ayuda") return tr("v.ayuda"); if (v.id === "sem") return tr("v.sem"); if (v.id === "inv") return tr("v.inv");
   if (v.id.startsWith("log-")) return tv("v.log", { s: tr("s." + v.id.slice(4)).toLowerCase() });
   return tv("v.obra", { o: tr("ob." + v.id.slice(5)) });
 }
 function textoOp(v, o) {
   if (v.id === "paga") return String(o); if (v.id === "ayuda") return +o ? tv("v.soles", { n: o }) : tr("v.nada");
-  if (v.id === "sem") return tr("sem." + o); if (v.id.startsWith("log-")) return tr("L." + o); return tr(o === "si" ? "v.si" : "v.no");
+  if (v.id === "sem") return tr("sem." + o); if (v.id === "inv") return tr("inv." + o); if (v.id.startsWith("log-")) return tr("L." + o); return tr(o === "si" ? "v.si" : "v.no");
 }
 function puebloOp(v, x, ref) {
   const s = v.id.slice(4);
