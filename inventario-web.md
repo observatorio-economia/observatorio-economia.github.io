@@ -2,9 +2,9 @@
 
 > Generado por `actualizar.sh` (scripts/actualizar.py): **no se edita a mano**. Lo que se ve en la web, leído de los archivos.
 
-- Generado: 2026-11-27 09:02
-- Commit de partida: `7d079dd`
-- Cambios sin confirmar en el repositorio (sin contar este archivo): 5
+- Generado: 2026-11-27 10:09
+- Commit de partida: `d75dd0b`
+- Cambios sin confirmar en el repositorio (sin contar este archivo): 3
 
 ## Interruptores de la web
 
@@ -208,7 +208,7 @@
 ### pueblo-vecino
 
 - Web: `pueblo-vecino/index.html`
-- Vault: `SA01-que-es-la-economia/material/juego-pueblo-vecino.html` (2026-11-27 09:01, 40 KB)
+- Vault: `SA01-que-es-la-economia/material/juego-pueblo-vecino.html` (2026-11-27 10:09, 40 KB)
 - Copia: ✓ copiada
 - En el menú: no aparece
 - Pestañas: ninguna (una sola pantalla)
