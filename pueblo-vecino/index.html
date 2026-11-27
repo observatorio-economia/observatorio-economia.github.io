@@ -13,62 +13,118 @@
 <link rel="stylesheet" href="../assets/observatorio.css">
 <script src="../assets/estado-web.js"></script>
 <script src="../assets/menu.js"></script>
+<!doctype html>
+<html lang="es">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title data-t="v.titulo">El pueblo · tu hogar</title>
-<style>:root { --bg: #faf7ef; --ink: #23262b; --muted: #5d636c; --paper: #ffffff; --rule: #d9d3c3; --ok: #2d6a4f; --bad: #a4372c; --acc: #2f4f8a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; } }
-:root[data-theme="dark"] { --bg: #17191a; --ink: #e8e6df; --muted: #a8a99f; --paper: #212423; --rule: #3a3d3b; --ok: #7cc4a0; --bad: #e8877b; --acc: #93acdb; }
+<style>
+:root { --bg: #f4efe2; --paper: #fffdf6; --ink: #1f2a24; --muted: #5a625b; --rule: #d9d0bb; --merc: #2c4a86; --asam: #2d6a4f; --ok: #2d6a4f; --bad: #a83a28; --sol: #e9b949; --aviso: #fff7e0; --avisob: #e6d29a; --chip: #eef3ea; --chipb: #cfdcc8; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #161a17; --paper: #1f2420; --ink: #e9e7df; --muted: #a9ada4; --rule: #3a413b; --merc: #9db4e6; --asam: #8fcfa9; --ok: #8fcfa9; --bad: #f0907c; --sol: #d9a93a; --aviso: #2e2a1c; --avisob: #5c5131; --chip: #243026; --chipb: #3b4a3d; } }
+:root[data-theme="dark"] { --bg: #161a17; --paper: #1f2420; --ink: #e9e7df; --muted: #a9ada4; --rule: #3a413b; --merc: #9db4e6; --asam: #8fcfa9; --ok: #8fcfa9; --bad: #f0907c; --sol: #d9a93a; --aviso: #2e2a1c; --avisob: #5c5131; --chip: #243026; --chipb: #3b4a3d; }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 16px; }
-main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
-h1 { font-size: 28px; margin: 0; }
-.small { font-size: 14px; color: var(--muted); }
-.caja { background: var(--paper); border: 2px solid var(--ink); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-label { font-size: 14px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
-input, select { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); min-height: 44px; }
-button { font: 600 16px system-ui, sans-serif; padding: 10px 14px; border-radius: 10px; border: 2px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; min-height: 48px; }
-button.prim { background: var(--ink); color: var(--bg); }
-button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
-.rejilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
-.rejilla button[aria-pressed="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
-.idiomas { display: flex; gap: 6px; justify-content: flex-end; }
-.idiomas button { min-height: 36px; padding: 4px 10px; font-size: 14px; }
-.ok { color: var(--ok); font-weight: 600; } .mal { color: var(--bad); font-weight: 600; }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 15px; }
-th, td { border-bottom: 1px solid var(--rule); padding: 5px 8px; text-align: left; }
-.cifras { display: flex; flex-wrap: wrap; gap: 10px; }
-.cifras div { background: var(--paper); border: 1px solid var(--rule); border-radius: 10px; padding: 8px 12px; min-width: 140px; }
-.cifras b { display: block; font-size: 28px; }
-.scroll { overflow-x: auto; }
-a { overflow-wrap: anywhere; }
-[hidden] { display: none !important; }
-
-.hogar { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
-.hogar b { font-size: 22px; }
-.estado { font-size: 15px; }
-.voto { border-top: 1px solid var(--rule); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
-.voto h3 { margin: 0; font-size: 18px; }
-.ops { display: flex; flex-wrap: wrap; gap: 8px; }
-.ops button[aria-pressed="true"], .rejilla button[aria-pressed="true"] { background: var(--acc); color: #fff; border-color: var(--acc); }
-.rejilla button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; }
-.rejilla button small { font-weight: 400; font-size: 14px; }
-textarea { font: inherit; padding: 8px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); min-height: 110px; width: 100%; }
-textarea:focus-visible { outline: 3px solid var(--acc); outline-offset: 2px; }
-h2 { margin: 0; font-size: 21px; }
-.suceso { font-size: 24px; font-weight: 700; margin: 0; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+button, select, input, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--sol); outline-offset: 2px; }
+.app { min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 10px 20px; background: var(--paper); border-bottom: 1px solid var(--rule); }
+.marca { font-weight: 800; font-size: 17px; }
+.marca small { display: block; font-weight: 500; font-size: 12.5px; color: var(--muted); }
+.fases { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; justify-content: center; list-style: none; margin: 0; padding: 0; }
+.fases li { padding: 5px 11px; border-radius: 999px; font-size: 13px; color: var(--muted); }
+.fases li.hecha { color: var(--ink); }
+.fases li.hecha::before { content: "✓ "; color: var(--ok); }
+.fases li[aria-current] { background: var(--ink); color: var(--paper); font-weight: 700; }
+.yo { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.yo b { color: var(--ink); font-size: 15px; display: block; }
+.idiomas { display: flex; gap: 4px; }
+.idiomas button { border: 1px solid var(--rule); background: var(--bg); border-radius: 8px; padding: 3px 8px; font-size: 12.5px; }
+main { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 18px; padding: 16px 20px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.tarjeta { background: var(--paper); border: 1px solid var(--rule); border-radius: 16px; padding: 14px 16px; }
+.casa { padding: 0; overflow: hidden; position: relative; }
+.casa img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #cfe3c8; }
+.casa .pin { position: absolute; left: 50%; top: 14%; transform: translateX(-50%); background: var(--paper); border: 2px solid var(--ink); border-radius: 10px; padding: 1px 9px; font: 700 12px Inter, system-ui, sans-serif; text-transform: uppercase; letter-spacing: .05em; color: var(--ink); }
+.casa .pin::after { content: ""; position: absolute; left: 50%; margin-left: -7px; bottom: -9px; border: 7px solid transparent; border-top-color: var(--ink); }
+.familia { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 14px 12px; margin: 0; list-style: none; }
+.chip { font-size: 13px; padding: 2px 10px; border-radius: 999px; background: var(--chip); border: 1px solid var(--chipb); }
+.chip.merc { color: var(--merc); font-weight: 600; } .chip.asam { color: var(--asam); font-weight: 600; }
+.chip.mal { color: var(--bad); font-weight: 600; }
+h1 { margin: 0; font-size: 24px; letter-spacing: -.015em; line-height: 1.2; }
+h2 { margin: 0 0 8px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+h3 { margin: 0 0 2px; font-size: 18px; }
+.lead { color: var(--muted); margin: 4px 0 0; }
+.cuentas { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-variant-numeric: tabular-nums; margin: 0; }
+.cuentas dt { margin: 0; } .cuentas dd { margin: 0; text-align: right; font-weight: 600; }
+.menos { color: var(--bad); } .mas { color: var(--ok); }
+.cuentas .total { border-top: 2px solid var(--ink); padding-top: 5px; font-weight: 800; font-size: 16px; }
+.barrita { display: flex; height: 10px; border-radius: 6px; overflow: hidden; margin-top: 8px; background: var(--rule); }
+.barrita i { display: block; }
+.nota { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; }
+.sectores { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.sec { position: relative; text-align: left; background: var(--paper); border: 2px solid var(--rule); border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; }
+.sec .ico { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 14px; margin-bottom: 3px; }
+.sec .nom { font-weight: 700; }
+.sec .sal { font-size: 23px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.sec .sal small { font-size: 12px; font-weight: 500; color: var(--muted); }
+.sec .var { font-size: 12.5px; font-weight: 600; } .sec .igual { color: var(--muted); }
+.sec .info { font-size: 12px; color: var(--muted); }
+.sec .marcaSec { position: absolute; top: 8px; right: 8px; font-size: 11px; font-weight: 800; padding: 1px 6px; border-radius: 6px; }
+.sec.tuyo .marcaSec { color: var(--asam); }
+.sec[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 3px var(--sol); }
+.sec[aria-pressed="true"] .marcaSec { background: var(--sol); color: #1f2a24; }
+.sec:disabled { opacity: .5; cursor: not-allowed; }
+.consecuencia { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; background: var(--aviso); border: 1px solid var(--avisob); border-radius: 14px; padding: 12px 16px; }
+.consecuencia b.grande { font-size: 21px; }
+.votos { display: grid; gap: 14px; }
+.regla { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
+.ops { display: grid; gap: 8px; }
+.op { display: grid; grid-template-columns: minmax(120px, 160px) 1fr 1fr; gap: 12px; align-items: center; background: var(--paper); border: 2px solid var(--rule); border-radius: 12px; padding: 8px 12px; text-align: left; }
+.op .que { font-weight: 800; font-size: 16px; }
+.op .que small { font-weight: 500; color: var(--muted); font-size: 12px; }
+.op .col2 { font-size: 13px; line-height: 1.3; }
+.op .col2 > span { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+.op .col2 b { font-size: 15px; }
+.op[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 3px var(--sol); }
+.op:disabled { opacity: .55; cursor: not-allowed; }
+.ops.cinco { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+.ops.cinco .op { grid-template-columns: 1fr; gap: 4px; padding: 10px; }
+.comparar { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.dato { background: var(--paper); border: 1px solid var(--rule); border-radius: 14px; padding: 12px 14px; }
+.dato .et { font-size: 12.5px; color: var(--muted); }
+.dato .v { font-size: 27px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.dato .antes { font-size: 12.5px; }
+.pueblo-res { display: flex; flex-wrap: wrap; gap: 12px 26px; margin: 0; padding: 0; list-style: none; }
+.pueblo-res b { font-size: 21px; display: block; }
+.hechos { margin: 0; padding-left: 18px; }
+.suceso { font-size: 30px; font-weight: 800; margin: 6px 0; }
+textarea { width: 100%; min-height: 110px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); }
+.btn { border: 2px solid var(--ink); background: var(--paper); border-radius: 12px; padding: 8px 16px; font-weight: 700; min-height: 44px; }
+.btn.prim { background: var(--ink); color: var(--paper); }
+footer { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 10px 20px; background: var(--paper); border-top: 1px solid var(--rule); }
+.listo { min-width: 200px; min-height: 50px; border-radius: 14px; border: 0; background: var(--ink); color: var(--paper); font-weight: 800; font-size: 18px; }
+.listo:disabled { background: var(--rule); color: var(--muted); cursor: not-allowed; }
+.listo.hecho { background: var(--ok); color: #fff; }
+.puntos { display: flex; flex-wrap: wrap; gap: 4px; max-width: 420px; }
+.puntos i { width: 12px; height: 12px; border-radius: 50%; background: var(--rule); display: block; }
+.puntos i.ok { background: var(--ok); }
+.pista { color: var(--muted); font-size: 13px; flex: 1; text-align: right; }
+.inicio { max-width: 520px; margin: 40px auto; display: grid; gap: 14px; }
+.inicio label { display: grid; gap: 6px; font-weight: 600; }
+.inicio select, .inicio input { padding: 10px 12px; border: 1px solid var(--rule); border-radius: 10px; background: var(--paper); min-height: 46px; }
+#estado { margin: 0; font-size: 13px; color: var(--muted); }
+@media (max-width: 860px) { main { grid-template-columns: 1fr; padding: 12px; } header, footer { padding: 10px 12px; } .op { grid-template-columns: 1fr; } .pista { text-align: left; } }
 </style>
-<main>
-  <div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div>
-  <h1 data-t="v.titulo">El pueblo · tu hogar</h1>
-  <div class="caja">
-    <label><span data-t="v.codigo">Código de tu puesto (está en la tarjeta)</span><select id="codigo"></select></label>
-    <label id="url-l" hidden><span data-t="v.url">Dirección del programa de Google (la da el docente)</span><input id="url" type="url" inputmode="url"></label>
-  </div>
-  <div class="caja" id="hogar" hidden></div>
-  <div class="caja" id="fase" aria-live="polite"></div>
-  <p id="estado" class="estado small" aria-live="polite"></p>
-</main>
+<div class="app">
+  <header>
+    <div class="marca"><span data-t="v.pueblo">El pueblo</span><small id="cuando"></small></div>
+    <ol class="fases" id="fases"></ol>
+    <div class="yo"><div id="quien"></div><div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div></div>
+  </header>
+  <div id="cuerpo"></div>
+  <footer id="pie" hidden></footer>
+</div>
 <script>// Piezas comunes de la prueba: idioma, dirección del programa de Google y guardado en el navegador
 const T = {
   es: {}, va: {}
@@ -85,108 +141,264 @@ function leerURL() {
 function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {} }
 
 const TXT = {
-  es: { "v.titulo": "El pueblo · tu hogar", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)",
-    "v.elige": "Elige tu código de puesto para empezar.", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
-    "v.anio": "Año {n}", "v.tu": "Tu hogar: {h}", "v.trabaja": "Trabajáis en {s}", "v.cobra": "{w} soles por jornada", "v.cargo": "A vuestro cargo: {c}", "v.nadie": "nadie",
-    "v.n": "{n} niño(s)", "v.m": "{n} mayor(es)", "v.e": "{n} enfermo(s)",
-    "v.f1": "Mira el proyector: este año pasa esto:", "v.f2": "¿Dónde trabaja tu hogar este año?", "v.f2.p": "Debajo de cada sector, lo que paga por jornada ahora. Si no eliges, tu hogar hará lo que haría el mercado: irse donde se pague más.",
-    "v.f3": "La asamblea vota", "v.f3.no": "Todavía no hay ninguna votación abierta. Escucha la asamblea.", "v.f4": "Mira el proyector.",
-    "v.f5": "¿Qué ha pasado este año y por qué?", "v.f5.p": "Una o dos frases. Se leerán algunas en voz alta, sin nombre.", "v.enviar": "Enviar",
-    "v.enviando": "Enviando…", "v.enviado": "Enviado. Puedes cambiarlo mientras la fase siga abierta.", "v.error": "No se ha podido enviar: avisa al docente.",
-    "v.paga": "Paga por jornada en la asamblea", "v.ayuda": "Ayuda a cada hogar que pasaría hambre", "v.sem": "La semilla para sembrar el año que viene", "v.log": "¿Quién reparte {s}? (hace falta el 60 % para cambiar)", "v.obra": "¿Hacemos esta obra este año? {o}",
-    "v.si": "Sí", "v.no": "No", "v.soles": "{n} soles", "v.nada": "Nada", "v.merc": "mercado", "v.asam": "asamblea",
-    "l.m": "Mercado", "l.a": "Asamblea", "l.v": "Mercado con vales", "sem.m": "La guarda cada hortelano", "sem.a": "La guarda la asamblea (granero común)",
-    "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Educación", "s.red": "Red eléctrica y agua", "s.suelo": "Suelo de las azoteas", "s.investigacion": "Investigación",
+  es: { "v.titulo": "El pueblo · tu hogar", "v.pueblo": "El pueblo", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)", "v.entrar": "Entrar",
+    "v.elige": "Elige el código de tu puesto para empezar.", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
+    "v.cuando": "Año {n} · {e}", "e.invierno": "invierno", "e.primavera": "primavera", "e.verano": "verano", "e.otono": "otoño",
+    "f.1": "Suceso", "f.2": "Empleo", "f.3": "Asamblea", "f.4": "Resultado", "f.5": "Frase", "v.puesto": "Puesto {c}", "v.hogar": "Hogar {h}", "v.cambiar": "Cambiar de puesto",
+    "c.casa": "Vuestra casa en el pueblo", "c.tucasa": "Tu casa", "c.ninos": "{n} niño(s) · en la escuela ✓", "c.ninosno": "{k} de {n} niños sin escuela", "c.cargo": "{n} persona(s) mayor(es) o enferma(s) a vuestro cargo", "c.hambre": "Pasáis hambre", "c.comido": "Habéis comido bien ✓",
+    "l.m": "mercado", "l.a": "asamblea", "l.v": "mercado con vales", "L.m": "Mercado", "L.a": "Asamblea", "L.v": "Mercado con vales",
+    "k.pasado": "Vuestras cuentas (año pasado)", "k.ahora": "Vuestras cuentas si nada cambia", "k.este": "Las cuentas de este año", "k.cobrais": "Cobráis (4 jornadas)", "k.aportais": "Aportáis a la caja común", "k.recibis": "Recibís (ayuda o pensión)", "k.obra": "Pagáis la obra de vuestro sector",
+    "k.comida": "Comida", "k.comidaA": "Comida (la reparte la asamblea)", "k.serv": "Escuela y cuidados de pago", "k.queda": "Os queda para objetos y ocio", "k.leyenda": "Azul: caja común · Naranja: comida · Morado: escuela y cuidados · Verde: lo que os queda",
+    "f1.h": "Este año pasa esto", "f1.p": "Escucha al docente en el proyector.", "f1.no": "Mira el proyector: el docente va a sortear lo que pasa este año.",
+    "f2.h": "¿Dónde trabaja vuestro hogar este año?", "f2.p": "Lo que paga cada sector por jornada y cuánto ha cambiado desde el año pasado. Si no elegís, haréis lo que haría el mercado: ir donde se pague más.",
+    "f2.hecho": "Ya se han aplicado las elecciones de trabajo. Mira el proyector.", "s.var.sube": "▲ +{n} desde el año pasado", "s.var.baja": "▼ {n} desde el año pasado", "s.var.igual": "= igual que el año pasado", "s.var.nuevo": "primer año",
+    "s.hog": "{n} hogar(es)", "s.libres": "{n} plaza(s) libre(s)", "s.sinplazas": "sin plazas libres", "s.aqui": "Aquí estáis", "s.eleccion": "Tu elección", "s.solj": "soles/jornada",
+    "s.si": "Si os cambiáis a {s} y nadie más se mueve:", "s.cobrariais": "cobraríais {c} soles al año", "s.quedaria": "y os quedarían {l} para objetos y ocio", "s.os": "Os quedáis en {s}.",
+    "f3.h": "La asamblea vota", "f3.p": "Para cada opción: qué le pasa a tu hogar y qué le pasa al pueblo. Votad lo que creáis mejor.", "f3.no": "Todavía no hay ninguna votación abierta. Escucha la asamblea.",
+    "v.paga": "Paga por jornada en la asamblea", "v.ayuda": "Ayuda a cada hogar que pasaría hambre", "v.sem": "La semilla para sembrar el año que viene", "v.log": "¿Quién reparte {s}?", "v.obra": "¿Hacemos esta obra este año? {o}",
+    "r.med": "Gana el valor del medio: la mitad ha votado eso o más y la otra mitad, eso o menos.", "r.60": "Para cambiar hace falta el 60 % de los votos.", "r.mitad": "Gana si tiene más de la mitad de los votos.",
+    "o.tu": "Tu hogar", "o.pueblo": "El pueblo", "o.ahora": "ahora", "o.igual": "Igual", "o.mas": "+{n} soles al año", "o.menos": "−{n} soles al año", "o.imp": "No se puede: la caja común no llega",
+    "o.hambre": "{n} personas con hambre", "o.esc": "{e} de {n} niños en la escuela", "o.cui": "{a} de {d} personas atendidas", "o.ef": "El año que viene: {t}", "o.ra": "+{n} raciones", "o.es": "+{n} plazas de escuela", "o.cu": "+{n} plazas de cuidados",
+    "v.si": "Sí", "v.no": "No", "v.soles": "{n} soles", "v.nada": "Nada", "sem.m": "La guarda cada hortelano", "sem.a": "La guarda la asamblea (granero común)",
+    "f4.h": "Así le ha ido a tu hogar este año", "f4.p": "Comparado con el año pasado. En el proyector, cómo le ha ido al pueblo entero.", "f4.p1": "Es el primer año: todavía no hay con qué comparar.",
+    "d.cobrado": "Habéis cobrado", "d.raciones": "Raciones por persona", "d.minimo": "Para no pasar hambre: 0,75", "d.ninos": "Niños en la escuela", "d.queda": "Os queda para objetos y ocio",
+    "d.mas": "▲ {n} más que el año pasado", "d.menos": "▼ {n} menos que el año pasado", "d.igual": "Igual que el año pasado", "d.de": "{a} de {b}", "d.sinninos": "No tenéis niños",
+    "h.titulo": "Lo que ha cambiado para vosotros", "h.sector": "Os cambiasteis de {a} a {b}.", "h.comida": "La comida os ha costado {n} soles {m} que el año pasado.", "h.aport": "Habéis aportado a la caja común {n} soles {m} que el año pasado.", "h.mas": "más", "h.menos": "menos", "h.nada": "Casi nada: vuestras cuentas se parecen a las del año pasado.",
+    "p.titulo": "El pueblo este año", "p.hambre": "personas con hambre", "p.esc": "niños en la escuela", "p.cui": "personas atendidas", "p.obras": "obras este año",
+    "f5.h": "¿Qué ha pasado este año y por qué?", "f5.p": "Una o dos frases. Se leerán algunas en voz alta, sin nombre.", "f5.enviar": "Enviar la frase", "f5.ok": "Frase enviada. Puedes cambiarla y volver a enviarla.",
+    "b.listo": "Listo", "b.visto": "Visto", "b.hecho": "Listo ✓", "b.vistoh": "Visto ✓", "b.cuenta": "{n} de {N} listos", "b.p2": "Elige dónde trabajáis para poder pulsar «Listo».", "b.p3": "Vota en todo lo que está abierto para poder pulsar «Listo».", "b.p5": "Envía tu frase para poder pulsar «Listo».", "b.todos": "Cuando estén todos, se pasa a la fase siguiente.",
+    "x.enviando": "Enviando…", "x.enviado": "Enviado.", "x.error": "No se ha podido enviar: avisa al docente.",
+    "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía y agua", "s.suelo": "Vivero", "s.investigacion": "Laboratorio",
     "suc.ninguno": "Un año normal", "suc.gustos": "Cambian los gustos", "suc.mayores": "Hay más personas mayores", "suc.sequia": "Sequía en un huerto", "suc.averia": "Avería en la red", "suc.riada": "Riada", "suc.calor": "Ola de calor", "suc.crisis": "Crisis de confianza",
     "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar" },
-  va: { "v.titulo": "El poble · la teua llar", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)",
+  va: { "v.titulo": "El poble · la teua llar", "v.pueblo": "El poble", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)", "v.entrar": "Entrar",
     "v.elige": "Tria el codi del teu lloc per a començar.", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
-    "v.anio": "Any {n}", "v.tu": "La teua llar: {h}", "v.trabaja": "Treballeu en {s}", "v.cobra": "{w} sous per jornada", "v.cargo": "Al vostre càrrec: {c}", "v.nadie": "ningú",
-    "v.n": "{n} xiquet(s)", "v.m": "{n} major(s)", "v.e": "{n} malalt(s)",
-    "v.f1": "Mira el projector: este any passa això:", "v.f2": "On treballa la teua llar este any?", "v.f2.p": "Davall de cada sector, el que paga per jornada ara. Si no tries, la teua llar farà el que faria el mercat: anar-se'n on es pague més.",
-    "v.f3": "L'assemblea vota", "v.f3.no": "Encara no hi ha cap votació oberta. Escolta l'assemblea.", "v.f4": "Mira el projector.",
-    "v.f5": "Què ha passat este any i per què?", "v.f5.p": "Una o dues frases. Se'n llegiran algunes en veu alta, sense nom.", "v.enviar": "Enviar",
-    "v.enviando": "Enviant…", "v.enviado": "Enviat. Pots canviar-ho mentre la fase continue oberta.", "v.error": "No s'ha pogut enviar: avisa el docent.",
-    "v.paga": "Paga per jornada en l'assemblea", "v.ayuda": "Ajuda a cada llar que passaria fam", "v.sem": "La llavor per a sembrar l'any que ve", "v.log": "Qui reparteix {s}? (cal el 60 % per a canviar)", "v.obra": "Fem esta obra este any? {o}",
-    "v.si": "Sí", "v.no": "No", "v.soles": "{n} sous", "v.nada": "Res", "v.merc": "mercat", "v.asam": "assemblea",
-    "l.m": "Mercat", "l.a": "Assemblea", "l.v": "Mercat amb vals", "sem.m": "La guarda cada hortolà", "sem.a": "La guarda l'assemblea (graner comú)",
-    "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Educació", "s.red": "Xarxa elèctrica i aigua", "s.suelo": "Sòl dels terrats", "s.investigacion": "Investigació",
+    "v.cuando": "Any {n} · {e}", "e.invierno": "hivern", "e.primavera": "primavera", "e.verano": "estiu", "e.otono": "tardor",
+    "f.1": "Fet", "f.2": "Treball", "f.3": "Assemblea", "f.4": "Resultat", "f.5": "Frase", "v.puesto": "Lloc {c}", "v.hogar": "Llar {h}", "v.cambiar": "Canviar de lloc",
+    "c.casa": "La vostra casa en el poble", "c.tucasa": "La teua casa", "c.ninos": "{n} xiquet(s) · a l'escola ✓", "c.ninosno": "{k} de {n} xiquets sense escola", "c.cargo": "{n} persona(es) major(s) o malalta(es) al vostre càrrec", "c.hambre": "Passeu fam", "c.comido": "Heu menjat bé ✓",
+    "l.m": "mercat", "l.a": "assemblea", "l.v": "mercat amb vals", "L.m": "Mercat", "L.a": "Assemblea", "L.v": "Mercat amb vals",
+    "k.pasado": "Els vostres comptes (l'any passat)", "k.ahora": "Els vostres comptes si res no canvia", "k.este": "Els comptes d'este any", "k.cobrais": "Cobreu (4 jornades)", "k.aportais": "Aporteu a la caixa comuna", "k.recibis": "Rebeu (ajuda o pensió)", "k.obra": "Pagueu l'obra del vostre sector",
+    "k.comida": "Menjar", "k.comidaA": "Menjar (el reparteix l'assemblea)", "k.serv": "Escola i cures de pagament", "k.queda": "Vos queda per a objectes i oci", "k.leyenda": "Blau: caixa comuna · Taronja: menjar · Morat: escola i cures · Verd: el que vos queda",
+    "f1.h": "Este any passa això", "f1.p": "Escolta el docent en el projector.", "f1.no": "Mira el projector: el docent sortejarà el que passa este any.",
+    "f2.h": "On treballa la vostra llar este any?", "f2.p": "El que paga cada sector per jornada i quant ha canviat des de l'any passat. Si no trieu, fareu el que faria el mercat: anar on es pague més.",
+    "f2.hecho": "Ja s'han aplicat les eleccions de treball. Mira el projector.", "s.var.sube": "▲ +{n} des de l'any passat", "s.var.baja": "▼ {n} des de l'any passat", "s.var.igual": "= igual que l'any passat", "s.var.nuevo": "primer any",
+    "s.hog": "{n} llar(s)", "s.libres": "{n} plaça(ces) lliure(s)", "s.sinplazas": "sense places lliures", "s.aqui": "Ací esteu", "s.eleccion": "La teua elecció", "s.solj": "sous/jornada",
+    "s.si": "Si vos canvieu a {s} i ningú més no es mou:", "s.cobrariais": "cobraríeu {c} sous a l'any", "s.quedaria": "i vos quedarien {l} per a objectes i oci", "s.os": "Vos quedeu en {s}.",
+    "f3.h": "L'assemblea vota", "f3.p": "Per a cada opció: què li passa a la teua llar i què li passa al poble. Voteu el que cregueu millor.", "f3.no": "Encara no hi ha cap votació oberta. Escolta l'assemblea.",
+    "v.paga": "Paga per jornada en l'assemblea", "v.ayuda": "Ajuda a cada llar que passaria fam", "v.sem": "La llavor per a sembrar l'any que ve", "v.log": "Qui reparteix {s}?", "v.obra": "Fem esta obra este any? {o}",
+    "r.med": "Guanya el valor del mig: la meitat ha votat això o més i l'altra meitat, això o menys.", "r.60": "Per a canviar cal el 60 % dels vots.", "r.mitad": "Guanya si té més de la meitat dels vots.",
+    "o.tu": "La teua llar", "o.pueblo": "El poble", "o.ahora": "ara", "o.igual": "Igual", "o.mas": "+{n} sous a l'any", "o.menos": "−{n} sous a l'any", "o.imp": "No es pot: la caixa comuna no arriba",
+    "o.hambre": "{n} persones amb fam", "o.esc": "{e} de {n} xiquets a l'escola", "o.cui": "{a} de {d} persones ateses", "o.ef": "L'any que ve: {t}", "o.ra": "+{n} racions", "o.es": "+{n} places d'escola", "o.cu": "+{n} places de cures",
+    "v.si": "Sí", "v.no": "No", "v.soles": "{n} sous", "v.nada": "Res", "sem.m": "La guarda cada hortolà", "sem.a": "La guarda l'assemblea (graner comú)",
+    "f4.h": "Així li ha anat a la teua llar este any", "f4.p": "Comparat amb l'any passat. En el projector, com li ha anat al poble sencer.", "f4.p1": "És el primer any: encara no hi ha amb què comparar.",
+    "d.cobrado": "Heu cobrat", "d.raciones": "Racions per persona", "d.minimo": "Per a no passar fam: 0,75", "d.ninos": "Xiquets a l'escola", "d.queda": "Vos queda per a objectes i oci",
+    "d.mas": "▲ {n} més que l'any passat", "d.menos": "▼ {n} menys que l'any passat", "d.igual": "Igual que l'any passat", "d.de": "{a} de {b}", "d.sinninos": "No teniu xiquets",
+    "h.titulo": "El que ha canviat per a vosaltres", "h.sector": "Vos vau canviar de {a} a {b}.", "h.comida": "El menjar vos ha costat {n} sous {m} que l'any passat.", "h.aport": "Heu aportat a la caixa comuna {n} sous {m} que l'any passat.", "h.mas": "més", "h.menos": "menys", "h.nada": "Quasi res: els vostres comptes s'assemblen als de l'any passat.",
+    "p.titulo": "El poble este any", "p.hambre": "persones amb fam", "p.esc": "xiquets a l'escola", "p.cui": "persones ateses", "p.obras": "obres este any",
+    "f5.h": "Què ha passat este any i per què?", "f5.p": "Una o dues frases. Se'n llegiran algunes en veu alta, sense nom.", "f5.enviar": "Enviar la frase", "f5.ok": "Frase enviada. Pots canviar-la i tornar-la a enviar.",
+    "b.listo": "Llest", "b.visto": "Vist", "b.hecho": "Llest ✓", "b.vistoh": "Vist ✓", "b.cuenta": "{n} de {N} llestos", "b.p2": "Tria on treballeu per a poder prémer «Llest».", "b.p3": "Vota en tot el que està obert per a poder prémer «Llest».", "b.p5": "Envia la teua frase per a poder prémer «Llest».", "b.todos": "Quan estiguen tots, es passa a la fase següent.",
+    "x.enviando": "Enviant…", "x.enviado": "Enviat.", "x.error": "No s'ha pogut enviar: avisa el docent.",
+    "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia i aigua", "s.suelo": "Viver", "s.investigacion": "Laboratori",
     "suc.ninguno": "Un any normal", "suc.gustos": "Canvien els gustos", "suc.mayores": "Hi ha més persones majors", "suc.sequia": "Sequera en un hort", "suc.averia": "Avaria en la xarxa", "suc.riada": "Riuada", "suc.calor": "Onada de calor", "suc.crisis": "Crisi de confiança",
     "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar" }
 };
 Object.assign(T.es, TXT.es); Object.assign(T.va, TXT.va);
 const tv = (k, v = {}) => tr(k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? "");
 const $ = id => document.getElementById(id);
-const mk = (tag, a = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(a)) { if (v == null) continue; if (k === "text") n.textContent = v; else n.setAttribute(k, v); } kids.flat().forEach(k => k != null && n.append(k)); return n; };
-const fmt = v => Math.round(v).toLocaleString("es-ES");
-let URL_G = leerURL(), EST = null, sinRed = 0;
-$("url").value = URL_G; $("url-l").hidden = !!URL_G;
-$("url").addEventListener("change", () => { URL_G = $("url").value.trim(); guardarURL(URL_G); leer(); });
-const sel = $("codigo"); sel.append(new Option("—", ""));
-for (let k = 1; k <= 25; k++) { const c = "P" + String(k).padStart(2, "0"); sel.append(new Option(c, c)); }
-try { sel.value = localStorage.getItem("pueblo-codigo") || ""; } catch {}
-sel.addEventListener("change", () => { try { localStorage.setItem("pueblo-codigo", sel.value); } catch {} pintar(); });
-// lo que ha enviado este puesto (para marcar el botón elegido)
+const mk = (tag, a = {}, ...kids) => { const n = document.createElement(tag); for (const [k, v] of Object.entries(a)) { if (v == null || v === false) continue; if (k === "text") n.textContent = v; else if (k === "on") n.addEventListener("click", v); else n.setAttribute(k, v === true ? "" : v); } kids.flat(Infinity).forEach(k => k != null && k !== false && n.append(k)); return n; };
+const fmt = (v, d = 0) => (+v).toLocaleString(LANG === "va" ? "ca-ES" : "es-ES", { maximumFractionDigits: d, minimumFractionDigits: d });
+const ICO = { huertos: "🌱", talleres: "⚙", ocio: "♪", cuidados: "♥", educacion: "✎", red: "⚡", suelo: "☘", investigacion: "⚗" };
+const ESTACION = { 1: "invierno", 2: "primavera", 3: "verano", 4: "otono", 5: "otono" };
+let URL_G = leerURL(), EST = null, sinRed = 0, codigo = "", texto = "";
+try { codigo = localStorage.getItem("pueblo-codigo") || ""; } catch {}
 const mios = (() => { try { return JSON.parse(localStorage.getItem("pueblo-mios") || "{}"); } catch { return {}; } })();
 const guardarMios = () => { try { localStorage.setItem("pueblo-mios", JSON.stringify(mios)); } catch {} };
-let texto = "";
-async function enviar(fase, valor) {
-  if (!sel.value || !URL_G) return;
-  mios[sel.value + "|" + fase] = valor; guardarMios(); $("estado").textContent = tr("v.enviando"); pintar();
-  try {
-    await fetch(URL_G, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ codigo: sel.value, fase, valor, envio_ms: Date.now() }) });
-    $("estado").textContent = tr("v.enviado");
-  } catch { $("estado").textContent = tr("v.error"); }
+const mio = fase => mios[codigo + "|" + fase];
+async function enviar(fase, valor, silencio) {
+  if (!codigo || !URL_G) return;
+  mios[codigo + "|" + fase] = valor; guardarMios(); if (!silencio) { estado(tr("x.enviando")); pintar(); }
+  try { await fetch(URL_G, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" }, body: JSON.stringify({ codigo, fase, valor, envio_ms: Date.now() }) }); if (!silencio) estado(tr("x.enviado")); }
+  catch { estado(tr("x.error")); }
 }
+const estado = m => { const e = $("estado"); if (e) e.textContent = m; };
 async function leer() {
-  if (!URL_G) { $("url-l").hidden = false; return; }
+  if (!URL_G || !codigo) return;
   try {
-    const r = await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "estado=1", { cache: "no-store" });
-    const d = await r.json(); const nuevo = JSON.stringify(d.estado || null);
-    sinRed = 0;
-    if (nuevo !== JSON.stringify(EST)) { EST = d.estado && d.estado.partida ? d.estado : null; pintar(); }
-  } catch { if (++sinRed === 3) { $("estado").textContent = tr("v.sinred"); } }
+    const d = await (await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "estado=1", { cache: "no-store" })).json();
+    sinRed = 0; const nuevo = d.estado && d.estado.partida ? d.estado : null;
+    if (JSON.stringify(nuevo) !== JSON.stringify(EST)) {
+      const antes = EST; EST = nuevo;
+      if (EST && (!antes || antes.partida !== EST.partida)) enviar(EST.partida + "-presente", "1", true);
+      pintar();
+    }
+  } catch { if (++sinRed === 3) estado(tr("v.sinred")); }
 }
-const botones = (fase, ops) => mk("div", { class: "ops" }, ops.map(([v, txt]) => { const b = mk("button", { type: "button", "aria-pressed": String(mios[sel.value + "|" + fase] === String(v)), text: txt }); b.addEventListener("click", () => enviar(fase, String(v))); return b; }));
+// ---------- piezas ----------
+const signo = (n, kM, km, kIg = "o.igual") => Math.abs(n) < 1 ? mk("b", { text: tr(kIg) }) : mk("b", { class: n > 0 ? "mas" : "menos", text: tv(n > 0 ? kM : km, { n: fmt(Math.abs(n)) }) });
+function cabecera() {
+  $("fases").replaceChildren(...[1, 2, 3, 4, 5].map(f => mk("li", { class: EST && f < EST.fase ? "hecha" : null, "aria-current": EST && f === EST.fase ? "step" : null, text: tr("f." + f) })));
+  $("cuando").textContent = EST ? tv("v.cuando", { n: EST.anio, e: tr("e." + ESTACION[EST.fase]) }) : "";
+  const h = hogar();
+  $("quien").replaceChildren(...(codigo ? [mk("span", { text: tv("v.puesto", { c: codigo }) }), h ? mk("b", { text: tv("v.hogar", { h: h.nombre }) }) : null] : []));
+}
+const hogar = () => EST && codigo ? EST.hogares[parseInt(codigo.slice(1), 10) - 1] : null;
+function tarjetaCasa(h) {
+  const y = EST.fase >= 4 ? h.y : (h.p || h.y), dep = (h.m || 0) + (h.e || 0), sinEsc = Math.max(0, (h.n || 0) - (h.y.ne || 0));
+  const lg = EST.logica[h.sector];
+  const img = mk("img", { src: (location.protocol === "file:" ? "juego-pueblo-casas/" : "casas/") + "casa-" + String(h.casa).padStart(2, "0") + ".jpg", alt: tr("c.casa") });
+  img.addEventListener("error", () => { img.remove(); });
+  return mk("div", { class: "tarjeta casa" }, img, mk("span", { class: "pin", "aria-hidden": "true", text: tr("c.tucasa") }),
+    mk("ul", { class: "familia" },
+      mk("li", { class: "chip " + (lg === "a" ? "asam" : "merc"), text: tr("s." + h.sector) + " · " + tr("l." + lg) }),
+      h.n ? mk("li", { class: "chip" + (sinEsc ? " mal" : ""), text: sinEsc ? tv("c.ninosno", { k: sinEsc, n: h.n }) : tv("c.ninos", { n: h.n }) }) : null,
+      dep ? mk("li", { class: "chip", text: tv("c.cargo", { n: dep }) }) : null,
+      EST.fase >= 4 ? mk("li", { class: "chip" + (h.y.ha ? " mal" : ""), text: tr(h.y.ha ? "c.hambre" : "c.comido") }) : null));
+}
+function tarjetaCuentas(h) {
+  const k = EST.fase >= 4 ? h.y : (h.p || h.y), tit = EST.fase >= 4 ? "k.este" : h.p ? "k.pasado" : "k.ahora";
+  const comidaA = !k.co && EST.logica.huertos === "a";
+  const filas = [["k.cobrais", k.c, ""], ["k.aportais", -k.a, "menos"]];
+  if (k.ex > 0.5) filas.push(["k.recibis", k.ex, "mas"]); if (k.ex < -0.5) filas.push(["k.obra", k.ex, "menos"]);
+  filas.push([comidaA ? "k.comidaA" : "k.comida", -k.co, k.co ? "menos" : ""]);
+  if (k.sv) filas.push(["k.serv", -k.sv, "menos"]);
+  const tot = Math.max(1, k.a + k.co + k.sv + Math.max(0, k.l));
+  return mk("div", { class: "tarjeta" }, mk("h2", { text: tr(tit) }),
+    mk("dl", { class: "cuentas" }, filas.map(([et, v, c]) => [mk("dt", { text: tr(et) }), mk("dd", { class: c, text: (v < 0 ? "−" : "") + fmt(Math.abs(v)) })]),
+      mk("dt", { class: "total", text: tr("k.queda") }), mk("dd", { class: "total" + (k.l < 0 ? " menos" : ""), text: fmt(k.l) })),
+    mk("div", { class: "barrita", "aria-hidden": "true" }, [[k.a, "#8aa6c9"], [k.co, "#e0a25a"], [k.sv, "#a58bc4"], [Math.max(0, k.l), "#7fb069"]].map(([v, c]) => mk("i", { style: `flex:${v};background:${c}` }))),
+    mk("p", { class: "nota", text: tr("k.leyenda") }));
+}
+// ---------- fases ----------
+function fase1() {
+  if (!EST.suceso) return [mk("h1", { text: tr("f1.h") }), mk("p", { class: "lead", text: tr("f1.no") })];
+  return [mk("h1", { text: tr("f1.h") }), mk("p", { class: "suceso", text: tr("suc." + EST.suceso) }), mk("p", { class: "lead", text: tr("f1.p") })];
+}
+function fase2(h, k) {
+  if (!EST.empleo) return [mk("h1", { text: tr("f2.h") }), mk("p", { class: "lead", text: tr("f2.hecho") })];
+  const fase = EST.partida + "-" + EST.anio + "-empleo", elegido = mio(fase), mov = EST.mov && EST.mov[k] || {};
+  const tarjetas = EST.sectores.map(s => {
+    const lg = EST.logica[s], tuyo = s === h.sector, w = EST.sal[s], wa = EST.salAnt ? EST.salAnt[s] : null;
+    const libres = lg === "a" ? (EST.plazas[s] || 0) - (EST.cuantos[s] || 0) : null;
+    const puede = tuyo || lg !== "a" || libres > 0;
+    const d = wa == null || w == null ? null : w - wa;
+    const varTxt = d == null ? tr("s.var.nuevo") : Math.abs(d) < 1 ? tr("s.var.igual") : tv(d > 0 ? "s.var.sube" : "s.var.baja", { n: fmt(Math.abs(d)) });
+    const info = [tv("s.hog", { n: EST.cuantos[s] || 0 }), tr("l." + lg), libres != null ? (libres > 0 ? tv("s.libres", { n: libres }) : tr("s.sinplazas")) : null].filter(Boolean).join(" · ");
+    const sel = elegido ? elegido === s : false;
+    return mk("button", { type: "button", class: "sec" + (tuyo ? " tuyo" : ""), "aria-pressed": String(sel), disabled: !puede, on: () => enviar(fase, s) },
+      mk("span", { class: "ico", "aria-hidden": "true", style: "background:" + (lg === "a" ? "var(--asam)" : "var(--merc)"), text: ICO[s] || "•" }),
+      mk("span", { class: "nom", text: tr("s." + s) }), mk("span", { class: "sal" }, w == null ? "—" : fmt(w), " ", mk("small", { text: tr("s.solj") })),
+      mk("span", { class: "var " + (d > 0.5 ? "mas" : d < -0.5 ? "menos" : "igual"), text: varTxt }), mk("span", { class: "info", text: info }),
+      sel ? mk("span", { class: "marcaSec", text: tr("s.eleccion") }) : tuyo ? mk("span", { class: "marcaSec", text: tr("s.aqui") }) : null);
+  });
+  let cons = null;
+  if (elegido && elegido !== h.sector && mov[elegido]) {
+    const [c, l] = mov[elegido];
+    cons = mk("div", { class: "consecuencia", "aria-live": "polite" }, mk("span", { text: tv("s.si", { s: tr("s." + elegido) }) }),
+      mk("b", { class: "grande", text: tv("s.cobrariais", { c: fmt(c) }) }), signo(c - h.y.c, "o.mas", "o.menos"),
+      mk("span", { text: tv("s.quedaria", { l: fmt(l) }) }), signo(l - h.y.l, "o.mas", "o.menos"));
+  } else if (elegido === h.sector) cons = mk("div", { class: "consecuencia" }, mk("span", { text: tv("s.os", { s: tr("s." + h.sector) }) }));
+  return [mk("div", {}, mk("h1", { text: tr("f2.h") }), mk("p", { class: "lead", text: tr("f2.p") })), mk("div", { class: "sectores" }, tarjetas), cons];
+}
 function tituloVoto(v) {
   if (v.id === "paga") return tr("v.paga"); if (v.id === "ayuda") return tr("v.ayuda"); if (v.id === "sem") return tr("v.sem");
-  if (v.id.startsWith("log-")) return tv("v.log", { s: tr("s." + v.id.slice(4)) });
-  if (v.id.startsWith("obra-")) return tv("v.obra", { o: tr("ob." + v.id.slice(5)) });
-  return v.id;
+  if (v.id.startsWith("log-")) return tv("v.log", { s: tr("s." + v.id.slice(4)).toLowerCase() });
+  return tv("v.obra", { o: tr("ob." + v.id.slice(5)) });
 }
 function textoOp(v, o) {
   if (v.id === "paga") return String(o); if (v.id === "ayuda") return +o ? tv("v.soles", { n: o }) : tr("v.nada");
-  if (v.id === "sem") return tr("sem." + o); if (v.id.startsWith("log-")) return tr("l." + o);
-  if (v.id.startsWith("obra-")) return tr(o === "si" ? "v.si" : "v.no"); return String(o);
+  if (v.id === "sem") return tr("sem." + o); if (v.id.startsWith("log-")) return tr("L." + o); return tr(o === "si" ? "v.si" : "v.no");
 }
+function puebloOp(v, x, ref) {
+  const s = v.id.slice(4);
+  if (v.id === "log-educacion") return [tv("o.esc", { e: x.p.e, n: x.p.n }), x.p.e - ref.p.e];
+  if (v.id === "log-cuidados") return [tv("o.cui", { a: x.p.a, d: x.p.dp }), x.p.a - ref.p.a];
+  return [tv("o.hambre", { n: x.p.h }), ref.p.h - x.p.h];
+}
+function fase3(h, k) {
+  const vs = EST.votos || [];
+  if (!vs.length) return [mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.no") })];
+  return [mk("div", {}, mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.p") })),
+    mk("div", { class: "votos" }, vs.map(v => {
+      const fase = EST.partida + "-" + EST.anio + "-v-" + v.id, elegido = mio(fase);
+      const iRef = Math.max(0, v.ops.map(String).indexOf(String(v.actual))), ref = v.ef[iRef];
+      const cinco = v.ops.length > 3;
+      const regla = v.id === "paga" || v.id === "ayuda" ? "r.med" : v.id.startsWith("log-") ? "r.60" : "r.mitad";
+      return mk("section", { class: "tarjeta voto", "aria-label": tituloVoto(v) }, mk("h3", { text: tituloVoto(v) }), mk("p", { class: "regla", text: tr(regla) }),
+        mk("div", { class: "ops" + (cinco ? " cinco" : "") }, v.ops.map((o, i) => {
+          const x = v.ef[i], [pt, pd] = puebloOp(v, x, ref);
+          const ef = x.ef ? [x.ef.ra > 0 ? tv("o.ra", { n: x.ef.ra }) : null, x.ef.es > 0 ? tv("o.es", { n: x.ef.es }) : null, x.ef.cu > 0 ? tv("o.cu", { n: x.ef.cu }) : null].filter(Boolean).join(", ") : "";
+          return mk("button", { type: "button", class: "op", "aria-pressed": String(elegido === String(o)), disabled: x.im, on: () => enviar(fase, String(o)) },
+            mk("span", { class: "que" }, textoOp(v, o), String(o) === String(v.actual) ? mk("small", { text: " · " + tr("o.ahora") }) : null),
+            mk("span", { class: "col2" }, mk("span", { text: tr("o.tu") }), x.im ? mk("b", { class: "menos", text: tr("o.imp") }) : signo(x.d[k], "o.mas", "o.menos")),
+            mk("span", { class: "col2" }, mk("span", { text: tr("o.pueblo") }), mk("b", { class: pd > 0 ? "mas" : pd < 0 ? "menos" : null, text: pt }), ef ? mk("span", { style: "text-transform:none;letter-spacing:0;font-weight:500", text: tv("o.ef", { t: ef }) }) : null));
+        })));
+    }))];
+}
+function dato(et, v, sub) { return mk("div", { class: "dato" }, mk("div", { class: "et", text: tr(et) }), mk("div", { class: "v", text: v }), sub); }
+function cambio(a, b) { if (b == null) return null; const d = a - b; return mk("div", { class: "antes " + (d > 0.5 ? "mas" : d < -0.5 ? "menos" : ""), text: Math.abs(d) < 1 ? tr("d.igual") : tv(d > 0 ? "d.mas" : "d.menos", { n: fmt(Math.abs(d)) }) }); }
+function fase4(h) {
+  const y = h.y, p = h.p, P_ = EST.pueblo, hechos = [];
+  if (p) {
+    if (p.s !== y.s) hechos.push(tv("h.sector", { a: tr("s." + p.s), b: tr("s." + y.s) }));
+    if (Math.abs(y.co - p.co) >= 1) hechos.push(tv("h.comida", { n: fmt(Math.abs(y.co - p.co)), m: tr(y.co > p.co ? "h.mas" : "h.menos") }));
+    if (Math.abs(y.a - p.a) >= 1) hechos.push(tv("h.aport", { n: fmt(Math.abs(y.a - p.a)), m: tr(y.a > p.a ? "h.mas" : "h.menos") }));
+    if (!hechos.length) hechos.push(tr("h.nada"));
+  }
+  return [mk("div", {}, mk("h1", { text: tr("f4.h") }), mk("p", { class: "lead", text: tr(p ? "f4.p" : "f4.p1") })),
+    mk("div", { class: "comparar" },
+      dato("d.cobrado", fmt(y.c), cambio(y.c, p && p.c)),
+      dato("d.raciones", fmt(y.ra, 2), mk("div", { class: "antes " + (y.ha ? "menos" : ""), text: tr("d.minimo") })),
+      h.n ? dato("d.ninos", tv("d.de", { a: y.ne, b: h.n }), p ? cambio(y.ne, p.ne) : null) : dato("d.ninos", "—", mk("div", { class: "antes", text: tr("d.sinninos") })),
+      dato("d.queda", fmt(y.l), cambio(y.l, p && p.l))),
+    p ? mk("div", { class: "tarjeta" }, mk("h2", { text: tr("h.titulo") }), mk("ul", { class: "hechos" }, hechos.map(x => mk("li", { text: x })))) : null,
+    mk("div", { class: "tarjeta" }, mk("h2", { text: tr("p.titulo") }), mk("ul", { class: "pueblo-res" },
+      mk("li", {}, mk("b", { class: P_.h ? "menos" : null, text: fmt(P_.h) }), tr("p.hambre")),
+      mk("li", {}, mk("b", { text: tv("d.de", { a: P_.e, b: P_.n }) }), tr("p.esc")),
+      mk("li", {}, mk("b", { text: tv("d.de", { a: P_.a, b: P_.dp }) }), tr("p.cui")),
+      P_.ob.length ? mk("li", {}, mk("b", { text: P_.ob.map(o => tr("ob." + o)).join(", ") }), tr("p.obras")) : null))];
+}
+function fase5() {
+  const fase = EST.partida + "-" + EST.anio + "-frase";
+  const ta = mk("textarea", { id: "frase", maxlength: "300", "aria-label": tr("f5.h") }); ta.value = mio(fase) || texto;
+  ta.addEventListener("input", () => { texto = ta.value; });
+  const b = mk("button", { type: "button", class: "btn prim", text: tr("f5.enviar"), on: () => { if (ta.value.trim()) enviar(fase, ta.value.trim().slice(0, 300)); } });
+  return [mk("h1", { text: tr("f5.h") }), mk("p", { class: "lead", text: tr("f5.p") }), ta, mk("div", {}, b), mio(fase) ? mk("p", { class: "nota", text: tr("f5.ok") }) : null];
+}
+// ---------- pie: listo ----------
+function pie(h) {
+  const f = EST.fase, mira = f === 1 || f === 4, k = EST.listo, hecho = mio(k) === "1";
+  let puede = true, pista = tr("b.todos");
+  if (f === 2 && EST.empleo && !mio(EST.partida + "-" + EST.anio + "-empleo")) { puede = false; pista = tr("b.p2"); }
+  if (f === 3 && (EST.votos || []).some(v => !mio(EST.partida + "-" + EST.anio + "-v-" + v.id))) { puede = false; pista = tr("b.p3"); }
+  if (f === 5 && !mio(EST.partida + "-" + EST.anio + "-frase")) { puede = false; pista = tr("b.p5"); }
+  const b = mk("button", { type: "button", class: "listo" + (hecho ? " hecho" : ""), disabled: !puede, on: () => enviar(k, "1") }, tr(hecho ? (mira ? "b.vistoh" : "b.hecho") : (mira ? "b.visto" : "b.listo")));
+  const L = EST.listos || { n: 0, N: 0 };
+  $("pie").hidden = false;
+  $("pie").replaceChildren(b, mk("div", { class: "puntos", "aria-hidden": "true" }, Array.from({ length: L.N }, (_, i) => mk("i", { class: i < L.n ? "ok" : null }))),
+    mk("b", { text: tv("b.cuenta", { n: L.n, N: L.N }) }), mk("span", { class: "pista", text: pista }), mk("p", { id: "estado", "aria-live": "polite" }));
+}
+// ---------- pantalla ----------
+function inicio() {
+  const sel = mk("select", { id: "codigo" }, mk("option", { value: "", text: "—" }), Array.from({ length: 25 }, (_, i) => { const c = "P" + String(i + 1).padStart(2, "0"); return mk("option", { value: c, text: c }); }));
+  sel.value = codigo;
+  const url = mk("input", { id: "url", type: "url", inputmode: "url" }); url.value = URL_G;
+  const b = mk("button", { type: "button", class: "btn prim", text: tr("v.entrar"), on: () => {
+    URL_G = url.value.trim(); guardarURL(URL_G); codigo = sel.value; try { localStorage.setItem("pueblo-codigo", codigo); } catch {}
+    EST = null; pintar(); leer(); } });
+  return mk("div", { class: "inicio tarjeta" }, mk("h1", { text: tr("v.titulo") }), mk("p", { class: "lead", text: tr("v.elige") }),
+    mk("label", { for: "codigo" }, tr("v.codigo"), sel), URL_G ? null : mk("label", { for: "url" }, tr("v.url"), url), b, mk("p", { id: "estado", "aria-live": "polite" }));
+}
+let editando = false;
 function pintar() {
-  const caja = $("fase"), hog = $("hogar");
-  if (!sel.value) { hog.hidden = true; caja.replaceChildren(mk("p", { text: tr("v.elige") })); return; }
-  if (!EST) { hog.hidden = true; caja.replaceChildren(mk("p", { text: tr("v.espera") })); return; }
-  const k = parseInt(sel.value.slice(1), 10) - 1, h = EST.hogares[k], base = EST.partida + "-" + EST.anio + "-";
-  if (h) {
-    const cargo = [h.n ? tv("v.n", { n: h.n }) : null, h.m ? tv("v.m", { n: h.m }) : null, h.e ? tv("v.e", { n: h.e }) : null].filter(Boolean).join(", ") || tr("v.nadie");
-    hog.hidden = false;
-    hog.replaceChildren(mk("div", { class: "hogar" }, mk("b", { text: tv("v.tu", { h: h.nombre }) }), mk("span", { text: tv("v.anio", { n: EST.anio }) }),
-      mk("span", { text: tv("v.trabaja", { s: tr("s." + h.sector) }) }), mk("span", { text: EST.sal[h.sector] != null ? tv("v.cobra", { w: fmt(EST.sal[h.sector]) }) : "" }),
-      mk("span", { class: "small", text: tv("v.cargo", { c: cargo }) })));
-  } else hog.hidden = true;
-  const f = EST.fase;
-  if (f === 1) caja.replaceChildren(...(EST.suceso ? [mk("h2", { text: tr("v.f1") }), mk("p", { class: "suceso", text: tr("suc." + EST.suceso) })] : [mk("p", { text: tr("v.f4") })]));
-  else if (f === 2 && EST.empleo) {
-    const fase = base + "empleo";
-    caja.replaceChildren(mk("h2", { text: tr("v.f2") }), mk("p", { class: "small", text: tr("v.f2.p") }),
-      mk("div", { class: "rejilla" }, EST.sectores.map(s => { const b = mk("button", { type: "button", "aria-pressed": String(mios[sel.value + "|" + fase] === s), "aria-label": tr("s." + s) + ": " + tv("v.cobra", { w: fmt(EST.sal[s] || 0) }) },
-        mk("span", { text: tr("s." + s) }), mk("small", { text: tv("v.cobra", { w: fmt(EST.sal[s] || 0) }) + " · " + tr(EST.logica[s] === "a" ? "v.asam" : "v.merc") })); b.addEventListener("click", () => enviar(fase, s)); return b; })));
-  } else if (f === 3) {
-    const vs = EST.votos || [];
-    caja.replaceChildren(mk("h2", { text: tr("v.f3") }), ...(vs.length ? vs.map(v => mk("div", { class: "voto" }, mk("h3", { text: tituloVoto(v) }), botones(base + "v-" + v.id, v.ops.map(o => [o, textoOp(v, o)])))) : [mk("p", { text: tr("v.f3.no") })]));
-  } else if (f === 5 && EST.frase) {
-    const fase = base + "frase", ta = mk("textarea", { id: "frase", maxlength: "300", "aria-label": tr("v.f5") }); ta.value = mios[sel.value + "|" + fase] || texto;
-    ta.addEventListener("input", () => { texto = ta.value; });
-    const b = mk("button", { type: "button", class: "prim", text: tr("v.enviar") }); b.addEventListener("click", () => { if (ta.value.trim()) enviar(fase, ta.value.trim().slice(0, 300)); });
-    if (!(document.activeElement && document.activeElement.id === "frase")) caja.replaceChildren(mk("h2", { text: tr("v.f5") }), mk("p", { class: "small", text: tr("v.f5.p") }), ta, mk("div", {}, b));
-  } else caja.replaceChildren(mk("p", { text: tr("v.f4") }));
+  cabecera();
+  if (document.activeElement && document.activeElement.id === "frase" && EST && EST.fase === 5) return; // no borrar lo que se está escribiendo
+  if (!codigo || !URL_G) { $("pie").hidden = true; $("cuerpo").replaceChildren(inicio()); return; }
+  if (!EST) { $("pie").hidden = true; $("cuerpo").replaceChildren(mk("div", { class: "inicio tarjeta" }, mk("p", { text: tr("v.espera") }), mk("button", { type: "button", class: "btn", text: tr("v.cambiar"), on: () => { codigo = ""; pintar(); } }), mk("p", { id: "estado", "aria-live": "polite" }))); return; }
+  const k = parseInt(codigo.slice(1), 10) - 1, h = EST.hogares[k];
+  if (!h) { codigo = ""; pintar(); return; }
+  const f = EST.fase, contenido = f === 1 ? fase1() : f === 2 ? fase2(h, k) : f === 3 ? fase3(h, k) : f === 4 ? fase4(h) : fase5();
+  $("cuerpo").replaceChildren(mk("main", {}, mk("div", { class: "col" }, tarjetaCasa(h), tarjetaCuentas(h)), mk("div", { class: "col" }, contenido)));
+  pie(h);
 }
 window.alIdioma = pintar;
 aplicar(); pintar(); leer(); setInterval(leer, 4000);
