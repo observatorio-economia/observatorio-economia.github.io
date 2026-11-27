@@ -55,6 +55,11 @@ h1 { margin: 0; font-size: 24px; letter-spacing: -.015em; line-height: 1.2; }
 h2 { margin: 0 0 8px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
 h3 { margin: 0 0 2px; font-size: 18px; }
 .lead { color: var(--muted); margin: 4px 0 0; }
+.ayuda { border: 2px solid var(--sol); background: var(--aviso); display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.ayuda h2 { margin: 0; font-size: 18px; } .ayuda p { margin: 0; }
+.ensayo { margin: 0; padding: 8px 12px; border-radius: 12px; background: var(--ink); color: var(--paper); font-weight: 700; }
+.ayuda-btn { border: 1px solid var(--rule); background: var(--bg); border-radius: 8px; padding: 3px 10px; font-size: 12.5px; font-weight: 600; }
+.ayuda-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .cuentas { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; font-variant-numeric: tabular-nums; margin: 0; }
 .cuentas dt { margin: 0; } .cuentas dd { margin: 0; text-align: right; font-weight: 600; }
 .menos { color: var(--bad); } .mas { color: var(--ok); }
@@ -135,7 +140,7 @@ footer { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-item
   <header>
     <div class="marca"><span data-t="v.pueblo">Oikos</span><small id="cuando"></small></div>
     <ol class="fases" id="fases"></ol>
-    <div class="yo"><div id="quien"></div><div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div></div>
+    <div class="yo"><button type="button" class="ayuda-btn" id="ayuda-btn" hidden aria-pressed="false" data-t="ay.btn" onclick="ayudaPedida = !ayudaPedida; pintar()">Ayuda</button><div id="quien"></div><div class="idiomas"><button type="button" onclick="idioma('es')" lang="es">Castellano</button><button type="button" onclick="idioma('va')" lang="ca">Valencià</button></div></div>
   </header>
   <div id="cuerpo"></div>
   <footer id="pie" hidden></footer>
@@ -235,6 +240,21 @@ const TXT = {
     "obj.si": "Ara mateix, ho aconseguiu.", "obj.no": "Ara mateix, no ho aconseguiu.", "obj.ok": "Objectiu aconseguit!", "obj.mal": "Objectiu no aconseguit", "obj.p": "És només de la teua llar. A vegades no coincidix amb el que convé al poble: ho decidiu vosaltres.",
     "g.h": "Qui guanya i qui perd", "g.p": "El que li queda a cada llar per a objectes i oci, mitjana per sector.", "g.ganan": "Guanyen: {x}.", "g.pierden": "Perden: {x}.", "g.igual": "Ningú no guanya ni perd més d'un sou.", "g.sec": "{s} ({d} sous)" }
 };
+// Ayuda de cada fase y año de ensayo (tutorial, 27/11/2026)
+Object.assign(TXT.es, { "ay.h": "Qué tienes que hacer ahora", "ay.btn": "Ayuda", "ay.ok": "Entendido", "ay.ensayo": "Año de ensayo: estamos aprendiendo a jugar y no cuenta.",
+  "ay.1": "Ha pasado el suceso del año. Mira los dos retos del pueblo y el objetivo de tu hogar: durante el año verás si se consiguen. Cuando lo hayáis leído, pulsad «Visto».",
+  "ay.2": "Elige dónde trabaja tu hogar. Cada tarjeta dice el salario por jornada y si sube o baja; las azules las reparte el mercado y las verdes, la asamblea. Al elegir, ves cuánto cobraríais y cuánto os quedaría. Después, «Listo».",
+  "ay.3": "Vota en cada votación abierta. Cada opción dice cuánto ganaría o perdería tu hogar y qué pasaría en el pueblo; «ahora» es lo que hay. Después, «Listo».",
+  "ay.4": "Mira lo que ha pasado: tu hogar y el pueblo comparados con el año pasado, los retos y si habéis acertado la predicción.",
+  "ay.5": "Escribe una frase sobre el año: qué ha pasado y por qué. Envíala y pulsa «Listo».",
+  "ay.cifras": "Tus cifras: la tarjeta de tu casa dice dónde trabajáis, quién reparte ese sector, los niños y las personas a vuestro cargo. Las cuentas dicen lo que cobráis, lo que aportáis a la caja común, la comida y lo que os queda para objetos y ocio." });
+Object.assign(TXT.va, { "ay.h": "Què has de fer ara", "ay.btn": "Ajuda", "ay.ok": "Entesos", "ay.ensayo": "Any d'assaig: estem aprenent a jugar i no compta.",
+  "ay.1": "Ha passat el fet de l'any. Mira els dos reptes del poble i l'objectiu de la teua llar: durant l'any veuràs si s'aconseguixen. Quan ho hàgeu llegit, premeu «Vist».",
+  "ay.2": "Tria on treballa la teua llar. Cada targeta diu el salari per jornada i si puja o baixa; les blaves les reparteix el mercat i les verdes, l'assemblea. En triar, veus quant cobraríeu i quant vos quedaria. Després, «Llest».",
+  "ay.3": "Vota en cada votació oberta. Cada opció diu quant guanyaria o perdria la teua llar i què passaria en el poble; «ara» és el que hi ha. Després, «Llest».",
+  "ay.4": "Mira el que ha passat: la teua llar i el poble comparats amb l'any passat, els reptes i si heu encertat la predicció.",
+  "ay.5": "Escriu una frase sobre l'any: què ha passat i per què. Envia-la i prem «Llest».",
+  "ay.cifras": "Les teues xifres: la targeta de la teua casa diu on treballeu, qui reparteix eixe sector, els xiquets i les persones a càrrec vostre. Els comptes diuen el que cobreu, el que aporteu a la caixa comuna, el menjar i el que vos queda per a objectes i oci." });
 Object.assign(T.es, TXT.es); Object.assign(T.va, TXT.va);
 const tv = (k, v = {}) => tr(k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? "");
 const $ = id => document.getElementById(id);
@@ -471,7 +491,14 @@ function inicio() {
   return mk("div", { class: "inicio tarjeta" }, mk("h1", { text: tr("v.titulo") }), mk("p", { class: "lead", text: tr("v.elige") }),
     mk("label", { for: "codigo" }, tr("v.codigo"), sel), URL_G ? null : mk("label", { for: "url" }, tr("v.url"), url), b, mk("p", { id: "estado", "aria-live": "polite" }));
 }
-let editando = false;
+let editando = false, ayudaPedida = false;
+const vistas = (() => { try { return JSON.parse(localStorage.getItem("oikos-ayuda") || "{}"); } catch { return {}; } })();
+function ayuda(f) {
+  if (!(EST.tutorial || ayudaPedida || !vistas[f])) return null;
+  if (EST.tutorial && !vistas[f]) { vistas[f] = 1; try { localStorage.setItem("oikos-ayuda", JSON.stringify(vistas)); } catch {} }
+  const ok = mk("button", { type: "button", class: "btn", text: tr("ay.ok"), on: () => { vistas[f] = 1; ayudaPedida = false; try { localStorage.setItem("oikos-ayuda", JSON.stringify(vistas)); } catch {} pintar(); } });
+  return mk("section", { class: "tarjeta ayuda", "aria-labelledby": "ay-h" }, mk("h2", { id: "ay-h", text: tr("ay.h") }), mk("p", { text: tr("ay." + f) }), mk("p", { class: "nota", text: tr("ay.cifras") }), EST.tutorial ? null : ok);
+}
 function pintar() {
   cabecera();
   if (document.activeElement && document.activeElement.id === "frase" && EST && EST.fase === 5) return; // no borrar lo que se está escribiendo
@@ -480,7 +507,9 @@ function pintar() {
   const k = parseInt(codigo.slice(1), 10) - 1, h = EST.hogares[k];
   if (!h) { codigo = ""; pintar(); return; }
   const f = EST.fase, contenido = f === 1 ? fase1(h) : f === 2 ? fase2(h, k) : f === 3 ? fase3(h, k) : f === 4 ? fase4(h) : fase5();
-  $("cuerpo").replaceChildren(mk("main", {}, mk("div", { class: "col" }, tarjetaCasa(h), tarjetaCuentas(h)), mk("div", { class: "col" }, contenido)));
+  const banda = EST.tutorial ? mk("p", { class: "ensayo", role: "status", text: tr("ay.ensayo") }) : null;
+  $("cuerpo").replaceChildren(mk("main", {}, mk("div", { class: "col" }, tarjetaCasa(h), tarjetaCuentas(h)), mk("div", { class: "col" }, banda, ayuda(f), contenido)));
+  $("ayuda-btn").hidden = false; $("ayuda-btn").setAttribute("aria-pressed", String(ayudaPedida));
   pie(h);
 }
 window.alIdioma = pintar;
