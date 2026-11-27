@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T20:42:11.249081+00:00",
+ "generado": "2026-11-27T21:36:59.876109+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -33,7 +33,7 @@
      "fecha": "2026-11-27T09:52:58+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:07.545912+00:00"
+   "leido": "2026-11-27T21:36:54.073349+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:08.133346+00:00"
+   "leido": "2026-11-27T21:36:54.816517+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-27T09:43:49+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:08.584513+00:00"
+   "leido": "2026-11-27T21:36:55.439282+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:09.163874+00:00"
+   "leido": "2026-11-27T21:36:56.562007+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:09.628033+00:00"
+   "leido": "2026-11-27T21:36:57.171323+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,7 +173,7 @@
      "fecha": "2026-11-27T00:46:15+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:10.105506+00:00"
+   "leido": "2026-11-27T21:36:57.899335+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
@@ -205,7 +205,7 @@
      "fecha": "2026-11-27T11:00:00+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:10.508260+00:00"
+   "leido": "2026-11-27T21:36:58.607875+00:00"
   },
   {
    "nombre": "ABC · Economía",
@@ -237,12 +237,17 @@
      "fecha": "2026-11-27T10:10:21+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:10.925970+00:00"
+   "leido": "2026-11-27T21:36:59.324303+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
    "salmon": false,
    "items": [
+    {
+     "titulo": "Comunitat Valenciana | Abascal también llena la plaza de Toros de València: \"Sánchez ha provocado la muerte en la Dana, en Urda y en Adamuz\"",
+     "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/abascal-tambien-llena-la-plaza-de-toros-de-valencia-sanchez-ha-provocado-la-muerte-en-la-dana-en-urda-y-en-adamuz",
+     "fecha": "2026-11-27T21:16:40+00:00"
+    },
     {
      "titulo": "Comunitat Valenciana | Morant: \"No podemos permitir que los fascistas vuelvan a gobernar España 50 años después\"",
      "enlace": "https://valenciaplaza.com/valenciaplaza/comunitat-valenciana1/morant-no-podemos-permitir-que-los-fascistas-vuelvan-a-gobernar-espana-50-anos-despues",
@@ -262,14 +267,9 @@
      "titulo": "Plaza Innovación | Una investigación en modelos animales muestra que es posible revertir alteraciones neuronales del síndrome de Down",
      "enlace": "https://valenciaplaza.com/valenciaplaza/plaza-innovacion/una-investigacion-en-modelos-animales-muestra-que-es-posible-revertir-alteraciones-neuronales-del-sindrome-de-down",
      "fecha": "2026-11-27T19:28:10+00:00"
-    },
-    {
-     "titulo": "Comarca y empresa | Paterna impulsa la proyección internacional de su Cordà en la Feria de Turismo de Londres",
-     "enlace": "https://valenciaplaza.com/valenciaplaza/comarca-y-empresa/paterna-impulsa-la-proyeccion-internacional-de-su-corda-en-la-feria-de-turismo-de-londres",
-     "fecha": "2026-11-27T18:04:22+00:00"
     }
    ],
-   "leido": "2026-11-27T20:42:11.249031+00:00"
+   "leido": "2026-11-27T21:36:59.876057+00:00"
   }
  ]
 }

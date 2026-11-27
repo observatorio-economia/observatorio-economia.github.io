@@ -242,6 +242,16 @@ def oikos():
     # Entrada del docente: el mismo resumen (SHA-256 de «usuario:clave») que la pantalla del proyector (pueblo3d/usabilidad.js).
     # No es seguridad de verdad: solo evita que el alumnado entre por error en la pantalla del proyector.
     hash_doc = "93022db064f8927607a4a8a1a36f8ea700f0849ebef15fb4efb4e963558951d5"
+    # Dirección de la hoja de Google de la clase (opcional): si Jordi la pega en el vault, «Entrar con tu hogar»
+    # lleva al alumnado directamente a su hogar también la primera vez. La dirección queda pública en la web.
+    hoja_txt = vault / "SA01-que-es-la-economia" / "material" / "oikos-hoja.txt"
+    hoja = hoja_txt.read_text(encoding="utf-8").strip() if hoja_txt.exists() else ""
+    if hoja and not re.match(r"^https://script\.google\.com/macros/s/[\w-]+/exec$", hoja):
+        aviso(False, "oikos-hoja.txt no parece una dirección /exec de Google: no se usa"); hoja = ""
+    import urllib.parse
+    enlace_hogar = "../pueblo-vecino/" + ("?u=" + urllib.parse.quote(hoja, safe="") if hoja else "")
+    if hoja:
+        t(tx, "ok.entrar.p", "Elige el número de tu tarjeta (P01 a P25). El enlace también está en Aules.", "Tria el número de la teua targeta (P01 a P25). L'enllaç també està en Aules.")
     cuerpo = f"""  <style>
     .ok-hero {{ position: relative; border-radius: 18px; overflow: hidden; border: 2px solid var(--ink); background: #cfe8ea; margin-top: 12px; }}
     .ok-hero img {{ display: block; width: 100%; height: clamp(300px, 50vw, 560px); object-fit: cover; object-position: center 38%; }}
@@ -266,7 +276,7 @@ def oikos():
       <span class="eyebrow" data-i18n="ok.eyebrow">Economía · 1.º de Bachillerato</span>
       <h1 id="ok-h1">Oikos</h1>
       <p data-i18n="ok.lede"></p>
-      <a class="btn ok-entrar" href="../pueblo-vecino/" data-i18n="ok.vecino"></a>
+      <a class="btn ok-entrar" href="{esc(enlace_hogar)}" data-i18n="ok.vecino"></a>
       <p class="small" data-i18n="ok.entrar.p"></p>
     </div>
   </section>

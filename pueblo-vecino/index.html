@@ -157,7 +157,7 @@ function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {}
 
 const TXT = {
   es: { "v.titulo": "Oikos · tu hogar", "v.pueblo": "Oikos", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)", "v.entrar": "Entrar",
-    "v.elige": "Elige el código de tu puesto para empezar.", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
+    "v.elige": "Elige el código de tu puesto para empezar.", "v.dentro": "ya ha entrado", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
     "v.cuando": "Año {n} · {e}", "v.emis": "Emisiones acumuladas: {n}", "e.invierno": "invierno", "e.primavera": "primavera", "e.verano": "verano", "e.otono": "otoño",
     "f.1": "Suceso", "f.2": "Empleo", "f.3": "Asamblea", "f.4": "Resultado", "f.5": "Frase", "v.puesto": "Puesto {c}", "v.hogar": "Hogar {h}", "v.cambiar": "Cambiar de puesto",
     "c.casa": "Vuestra casa en el pueblo", "c.tucasa": "Tu casa", "c.ninos": "{n} niño(s) · en la escuela ✓", "c.ninosno": "{k} de {n} niños sin escuela", "c.cargo": "{n} persona(s) mayor(es) o enferma(s) a vuestro cargo", "c.hambre": "Pasáis hambre", "c.comido": "Habéis comido bien ✓",
@@ -196,7 +196,7 @@ const TXT = {
     "obj.si": "Ahora mismo, lo conseguís.", "obj.no": "Ahora mismo, no lo conseguís.", "obj.ok": "¡Objetivo conseguido!", "obj.mal": "Objetivo no conseguido", "obj.p": "Es solo de tu hogar. A veces no coincide con lo que conviene al pueblo: lo decidís vosotros.",
     "g.h": "Quién gana y quién pierde", "g.p": "Lo que le queda a cada hogar para objetos y ocio, media por sector.", "g.ganan": "Ganan: {x}.", "g.pierden": "Pierden: {x}.", "g.igual": "Nadie gana ni pierde más de un sol.", "g.sec": "{s} ({d} soles)" },
   va: { "v.titulo": "Oikos · la teua llar", "v.pueblo": "Oikos", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)", "v.entrar": "Entrar",
-    "v.elige": "Tria el codi del teu lloc per a començar.", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
+    "v.elige": "Tria el codi del teu lloc per a començar.", "v.dentro": "ja ha entrat", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
     "v.cuando": "Any {n} · {e}", "v.emis": "Emissions acumulades: {n}", "e.invierno": "hivern", "e.primavera": "primavera", "e.verano": "estiu", "e.otono": "tardor",
     "f.1": "Fet", "f.2": "Treball", "f.3": "Assemblea", "f.4": "Resultat", "f.5": "Frase", "v.puesto": "Lloc {c}", "v.hogar": "Llar {h}", "v.cambiar": "Canviar de lloc",
     "c.casa": "La vostra casa en el poble", "c.tucasa": "La teua casa", "c.ninos": "{n} xiquet(s) · a l'escola ✓", "c.ninosno": "{k} de {n} xiquets sense escola", "c.cargo": "{n} persona(es) major(s) o malalta(es) al vostre càrrec", "c.hambre": "Passeu fam", "c.comido": "Heu menjat bé ✓",
@@ -254,7 +254,14 @@ async function enviar(fase, valor, silencio) {
   catch { estado(tr("x.error")); }
 }
 const estado = m => { const e = $("estado"); if (e) e.textContent = m; };
+let PRES = null, elegido = "";
 async function leer() {
+  if (URL_G && !codigo) { // todavía sin puesto: se mira qué puestos han entrado ya
+    try { const d = await (await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "estado=1", { cache: "no-store" })).json();
+      const p = d.estado && Array.isArray(d.estado.presentes) ? d.estado.presentes : null;
+      if (JSON.stringify(p) !== JSON.stringify(PRES)) { PRES = p; pintar(); } } catch {}
+    return;
+  }
   if (!URL_G || !codigo) return;
   try {
     const d = await (await fetch(URL_G + (URL_G.includes("?") ? "&" : "?") + "estado=1", { cache: "no-store" })).json();
@@ -383,7 +390,7 @@ function resultadoPred(h) {
 function fase3(h, k) {
   const vs = EST.votos || [];
   if (!vs.length) return [mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.no") }), metas(h), prediccion()];
-  return [mk("div", {}, mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.p") })), metas(h),
+  return [mk("div", {}, mk("h1", { text: tr("f3.h") }), mk("p", { class: "lead", text: tr("f3.p") })),
     mk("div", { class: "votos" }, vs.map(v => {
       const fase = EST.partida + "-" + EST.anio + "-v-" + v.id, elegido = mio(fase);
       const iRef = Math.max(0, v.ops.map(String).indexOf(String(v.actual))), ref = v.ef[iRef];
@@ -398,7 +405,7 @@ function fase3(h, k) {
             mk("span", { class: "col2" }, mk("span", { text: tr("o.tu") }), x.im ? mk("b", { class: "menos", text: tr("o.imp") }) : signo(x.d[k], "o.mas", "o.menos")),
             mk("span", { class: "col2" }, mk("span", { text: tr("o.pueblo") }), mk("b", { class: pd > 0 ? "mas" : pd < 0 ? "menos" : null, text: pt }), ef ? mk("span", { style: "text-transform:none;letter-spacing:0;font-weight:500", text: tv("o.ef", { t: ef }) }) : null));
         })));
-    })), prediccion()];
+    })), metas(h), prediccion()];
 }
 function dato(et, v, sub) { return mk("div", { class: "dato" }, mk("div", { class: "et", text: tr(et) }), mk("div", { class: "v", text: v }), sub); }
 function cambio(a, b) { if (b == null) return null; const d = a - b; return mk("div", { class: "antes " + (d > 0.5 ? "mas" : d < -0.5 ? "menos" : ""), text: Math.abs(d) < 1 ? tr("d.igual") : tv(d > 0 ? "d.mas" : "d.menos", { n: fmt(Math.abs(d)) }) }); }
@@ -455,8 +462,8 @@ const resta = () => { const q = Math.max(0, Math.ceil((EST.reloj - Date.now()) /
 setInterval(() => { const n = document.getElementById("reloj"); if (n && EST && EST.reloj) { n.textContent = "⏱ " + resta(); n.classList.toggle("poco", EST.reloj - Date.now() < 15000); } }, 1000);
 // ---------- pantalla ----------
 function inicio() {
-  const sel = mk("select", { id: "codigo" }, mk("option", { value: "", text: "—" }), Array.from({ length: 25 }, (_, i) => { const c = "P" + String(i + 1).padStart(2, "0"); return mk("option", { value: c, text: c }); }));
-  sel.value = codigo;
+  const sel = mk("select", { id: "codigo" }, mk("option", { value: "", text: "—" }), Array.from({ length: 25 }, (_, i) => { const c = "P" + String(i + 1).padStart(2, "0"); return mk("option", { value: c, text: PRES && PRES.includes(c) ? c + " · " + tr("v.dentro") : c }); }));
+  sel.value = codigo || elegido; sel.addEventListener("change", () => { elegido = sel.value; });
   const url = mk("input", { id: "url", type: "url", inputmode: "url" }); url.value = URL_G;
   const b = mk("button", { type: "button", class: "btn prim", text: tr("v.entrar"), on: () => {
     URL_G = url.value.trim(); guardarURL(URL_G); codigo = sel.value; try { localStorage.setItem("pueblo-codigo", codigo); } catch {}
