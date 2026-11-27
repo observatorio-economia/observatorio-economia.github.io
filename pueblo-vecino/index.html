@@ -143,7 +143,7 @@ function guardarURL(u) { try { localStorage.setItem("prueba-url", u); } catch {}
 const TXT = {
   es: { "v.titulo": "El pueblo · tu hogar", "v.pueblo": "El pueblo", "v.codigo": "Código de tu puesto (está en la tarjeta)", "v.url": "Dirección del programa de Google (la da el docente)", "v.entrar": "Entrar",
     "v.elige": "Elige el código de tu puesto para empezar.", "v.espera": "Esperando a que el docente empiece la partida…", "v.sinred": "No llega la partida: avisa al docente.",
-    "v.cuando": "Año {n} · {e}", "e.invierno": "invierno", "e.primavera": "primavera", "e.verano": "verano", "e.otono": "otoño",
+    "v.cuando": "Año {n} · {e}", "v.emis": "Emisiones acumuladas: {n}", "e.invierno": "invierno", "e.primavera": "primavera", "e.verano": "verano", "e.otono": "otoño",
     "f.1": "Suceso", "f.2": "Empleo", "f.3": "Asamblea", "f.4": "Resultado", "f.5": "Frase", "v.puesto": "Puesto {c}", "v.hogar": "Hogar {h}", "v.cambiar": "Cambiar de puesto",
     "c.casa": "Vuestra casa en el pueblo", "c.tucasa": "Tu casa", "c.ninos": "{n} niño(s) · en la escuela ✓", "c.ninosno": "{k} de {n} niños sin escuela", "c.cargo": "{n} persona(s) mayor(es) o enferma(s) a vuestro cargo", "c.hambre": "Pasáis hambre", "c.comido": "Habéis comido bien ✓",
     "l.m": "mercado", "l.a": "asamblea", "l.v": "mercado con vales", "L.m": "Mercado", "L.a": "Asamblea", "L.v": "Mercado con vales",
@@ -168,12 +168,12 @@ const TXT = {
     "f5.h": "¿Qué ha pasado este año y por qué?", "f5.p": "Una o dos frases. Se leerán algunas en voz alta, sin nombre.", "f5.enviar": "Enviar la frase", "f5.ok": "Frase enviada. Puedes cambiarla y volver a enviarla.",
     "b.listo": "Listo", "b.visto": "Visto", "b.hecho": "Listo ✓", "b.vistoh": "Visto ✓", "b.cuenta": "{n} de {N} listos", "b.p2": "Elige dónde trabajáis para poder pulsar «Listo».", "b.p3": "Vota en todo lo que está abierto para poder pulsar «Listo».", "b.p5": "Envía tu frase para poder pulsar «Listo».", "b.todos": "Cuando estén todos, se pasa a la fase siguiente.",
     "x.enviando": "Enviando…", "x.enviado": "Enviado.", "x.error": "No se ha podido enviar: avisa al docente.",
-    "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía y agua", "s.suelo": "Vivero", "s.investigacion": "Laboratorio",
+    "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía", "s.suelo": "Vivero y agua", "s.investigacion": "Laboratorio",
     "suc.ninguno": "Un año normal", "suc.gustos": "Cambian los gustos", "suc.mayores": "Hay más personas mayores", "suc.sequia": "Sequía en un huerto", "suc.averia": "Avería en la red", "suc.riada": "Riada", "suc.calor": "Ola de calor", "suc.crisis": "Crisis de confianza",
     "ob.huertos": "Invernadero grande", "ob.cuidados": "Centro de día", "ob.educacion": "Aula nueva", "ob.red": "Otro árbol solar", "ob.suelo": "Compostera", "ob.talleres": "Herramientas nuevas", "ob.parcelaHuertos": "Azoteas nuevas", "ob.parcelaSolar": "Campo solar" },
   va: { "v.titulo": "El poble · la teua llar", "v.pueblo": "El poble", "v.codigo": "Codi del teu lloc (està en la targeta)", "v.url": "Adreça del programa de Google (la dona el docent)", "v.entrar": "Entrar",
     "v.elige": "Tria el codi del teu lloc per a començar.", "v.espera": "Esperant que el docent comence la partida…", "v.sinred": "No arriba la partida: avisa el docent.",
-    "v.cuando": "Any {n} · {e}", "e.invierno": "hivern", "e.primavera": "primavera", "e.verano": "estiu", "e.otono": "tardor",
+    "v.cuando": "Any {n} · {e}", "v.emis": "Emissions acumulades: {n}", "e.invierno": "hivern", "e.primavera": "primavera", "e.verano": "estiu", "e.otono": "tardor",
     "f.1": "Fet", "f.2": "Treball", "f.3": "Assemblea", "f.4": "Resultat", "f.5": "Frase", "v.puesto": "Lloc {c}", "v.hogar": "Llar {h}", "v.cambiar": "Canviar de lloc",
     "c.casa": "La vostra casa en el poble", "c.tucasa": "La teua casa", "c.ninos": "{n} xiquet(s) · a l'escola ✓", "c.ninosno": "{k} de {n} xiquets sense escola", "c.cargo": "{n} persona(es) major(s) o malalta(es) al vostre càrrec", "c.hambre": "Passeu fam", "c.comido": "Heu menjat bé ✓",
     "l.m": "mercat", "l.a": "assemblea", "l.v": "mercat amb vals", "L.m": "Mercat", "L.a": "Assemblea", "L.v": "Mercat amb vals",
@@ -198,7 +198,7 @@ const TXT = {
     "f5.h": "Què ha passat este any i per què?", "f5.p": "Una o dues frases. Se'n llegiran algunes en veu alta, sense nom.", "f5.enviar": "Enviar la frase", "f5.ok": "Frase enviada. Pots canviar-la i tornar-la a enviar.",
     "b.listo": "Llest", "b.visto": "Vist", "b.hecho": "Llest ✓", "b.vistoh": "Vist ✓", "b.cuenta": "{n} de {N} llestos", "b.p2": "Tria on treballeu per a poder prémer «Llest».", "b.p3": "Vota en tot el que està obert per a poder prémer «Llest».", "b.p5": "Envia la teua frase per a poder prémer «Llest».", "b.todos": "Quan estiguen tots, es passa a la fase següent.",
     "x.enviando": "Enviant…", "x.enviado": "Enviat.", "x.error": "No s'ha pogut enviar: avisa el docent.",
-    "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia i aigua", "s.suelo": "Viver", "s.investigacion": "Laboratori",
+    "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia", "s.suelo": "Viver i aigua", "s.investigacion": "Laboratori",
     "suc.ninguno": "Un any normal", "suc.gustos": "Canvien els gustos", "suc.mayores": "Hi ha més persones majors", "suc.sequia": "Sequera en un hort", "suc.averia": "Avaria en la xarxa", "suc.riada": "Riuada", "suc.calor": "Onada de calor", "suc.crisis": "Crisi de confiança",
     "ob.huertos": "Hivernacle gran", "ob.cuidados": "Centre de dia", "ob.educacion": "Aula nova", "ob.red": "Un altre arbre solar", "ob.suelo": "Compostadora", "ob.talleres": "Eines noves", "ob.parcelaHuertos": "Terrats nous", "ob.parcelaSolar": "Camp solar" }
 };
@@ -237,7 +237,7 @@ async function leer() {
 const signo = (n, kM, km, kIg = "o.igual") => Math.abs(n) < 1 ? mk("b", { text: tr(kIg) }) : mk("b", { class: n > 0 ? "mas" : "menos", text: tv(n > 0 ? kM : km, { n: fmt(Math.abs(n)) }) });
 function cabecera() {
   $("fases").replaceChildren(...[1, 2, 3, 4, 5].map(f => mk("li", { class: EST && f < EST.fase ? "hecha" : null, "aria-current": EST && f === EST.fase ? "step" : null, text: tr("f." + f) })));
-  $("cuando").textContent = EST ? tv("v.cuando", { n: EST.anio, e: tr("e." + ESTACION[EST.fase]) }) : "";
+  $("cuando").textContent = EST ? tv("v.cuando", { n: EST.anio, e: tr("e." + ESTACION[EST.fase]) }) + (EST.emis != null ? " · " + tv("v.emis", { n: fmt(EST.emis) }) : "") : "";
   const h = hogar();
   $("quien").replaceChildren(...(codigo ? [mk("span", { text: tv("v.puesto", { c: codigo }) }), h ? mk("b", { text: tv("v.hogar", { h: h.nombre }) }) : null] : []));
 }
