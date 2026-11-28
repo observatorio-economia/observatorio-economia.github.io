@@ -186,7 +186,7 @@ const TXT = {
     "h.titulo": "Lo que ha cambiado para vosotros", "h.sector": "Os cambiasteis de {a} a {b}.", "h.comida": "La comida os ha costado {n} soles {m} que el año pasado.", "h.aport": "Habéis aportado a la caja común {n} soles {m} que el año pasado.", "h.mas": "más", "h.menos": "menos", "h.nada": "Casi nada: vuestras cuentas se parecen a las del año pasado.",
     "p.titulo": "El pueblo este año", "p.hambre": "personas con hambre", "p.esc": "niños en la escuela", "p.cui": "personas atendidas", "p.obras": "obras este año",
     "f5.h": "¿Qué ha pasado este año y por qué?", "f5.p": "Una o dos frases. Se leerán algunas en voz alta, sin nombre.", "f5.enviar": "Enviar la frase", "f5.ok": "Frase enviada. Puedes cambiarla y volver a enviarla.",
-    "b.listo": "Listo", "b.visto": "Visto", "b.hecho": "Listo ✓", "b.vistoh": "Visto ✓", "b.cuenta": "{n} de {N} listos", "b.p2": "Elige dónde trabajáis para poder pulsar «Listo».", "b.p3": "Vota en todo lo que está abierto para poder pulsar «Listo».", "b.p5": "Envía tu frase para poder pulsar «Listo».", "b.todos": "Cuando estén todos, se pasa a la fase siguiente.",
+    "b.listo": "Listo", "b.visto": "Visto", "b.hecho": "Listo ✓", "b.vistoh": "Visto ✓", "b.cuenta": "{n} de {N} listos", "b.p2": "Elige dónde trabajáis para poder pulsar «Listo».", "b.p3": "Vota en todo lo que está abierto para poder pulsar «Listo».", "b.p5": "Envía tu frase para poder pulsar «Listo».", "b.todos": "Cuando estén todos, se pasa a la fase siguiente.", "b.todos4": "Aquí se comenta en clase: el docente pasa de fase cuando acabéis.",
     "x.enviando": "Enviando…", "x.enviado": "Enviado.", "x.error": "No se ha podido enviar: avisa al docente.",
     "s.huertos": "Huertos", "s.talleres": "Talleres", "s.ocio": "Ocio", "s.cuidados": "Cuidados", "s.educacion": "Escuela", "s.red": "Energía", "s.suelo": "Vivero y agua", "s.investigacion": "Laboratorio",
     "suc.ninguno": "Un año normal", "suc.gustos": "Cambian los gustos", "suc.mayores": "Hay más personas mayores", "suc.sequia": "Sequía en un huerto", "suc.averia": "Avería en la red", "suc.riada": "Riada", "suc.calor": "Ola de calor", "suc.crisis": "Crisis de confianza",
@@ -225,7 +225,7 @@ const TXT = {
     "h.titulo": "El que ha canviat per a vosaltres", "h.sector": "Vos vau canviar de {a} a {b}.", "h.comida": "El menjar vos ha costat {n} sous {m} que l'any passat.", "h.aport": "Heu aportat a la caixa comuna {n} sous {m} que l'any passat.", "h.mas": "més", "h.menos": "menys", "h.nada": "Quasi res: els vostres comptes s'assemblen als de l'any passat.",
     "p.titulo": "El poble este any", "p.hambre": "persones amb fam", "p.esc": "xiquets a l'escola", "p.cui": "persones ateses", "p.obras": "obres este any",
     "f5.h": "Què ha passat este any i per què?", "f5.p": "Una o dues frases. Se'n llegiran algunes en veu alta, sense nom.", "f5.enviar": "Enviar la frase", "f5.ok": "Frase enviada. Pots canviar-la i tornar-la a enviar.",
-    "b.listo": "Llest", "b.visto": "Vist", "b.hecho": "Llest ✓", "b.vistoh": "Vist ✓", "b.cuenta": "{n} de {N} llestos", "b.p2": "Tria on treballeu per a poder prémer «Llest».", "b.p3": "Vota en tot el que està obert per a poder prémer «Llest».", "b.p5": "Envia la teua frase per a poder prémer «Llest».", "b.todos": "Quan estiguen tots, es passa a la fase següent.",
+    "b.listo": "Llest", "b.visto": "Vist", "b.hecho": "Llest ✓", "b.vistoh": "Vist ✓", "b.cuenta": "{n} de {N} llestos", "b.p2": "Tria on treballeu per a poder prémer «Llest».", "b.p3": "Vota en tot el que està obert per a poder prémer «Llest».", "b.p5": "Envia la teua frase per a poder prémer «Llest».", "b.todos": "Quan estiguen tots, es passa a la fase següent.", "b.todos4": "Ací es comenta en classe: el docent passa de fase quan acabeu.",
     "x.enviando": "Enviant…", "x.enviado": "Enviat.", "x.error": "No s'ha pogut enviar: avisa el docent.",
     "s.huertos": "Horts", "s.talleres": "Tallers", "s.ocio": "Oci", "s.cuidados": "Cures", "s.educacion": "Escola", "s.red": "Energia", "s.suelo": "Viver i aigua", "s.investigacion": "Laboratori",
     "suc.ninguno": "Un any normal", "suc.gustos": "Canvien els gustos", "suc.mayores": "Hi ha més persones majors", "suc.sequia": "Sequera en un hort", "suc.averia": "Avaria en la xarxa", "suc.riada": "Riuada", "suc.calor": "Onada de calor", "suc.crisis": "Crisi de confiança",
@@ -465,7 +465,7 @@ function fase5() {
 // ---------- pie: listo ----------
 function pie(h) {
   const f = EST.fase, mira = f === 1 || f === 4, k = EST.listo, hecho = mio(k) === "1";
-  let puede = true, pista = tr("b.todos");
+  let puede = true, pista = tr(EST.fase === 4 ? "b.todos4" : "b.todos");
   if (f === 2 && EST.empleo && !mio(EST.partida + "-" + EST.anio + "-empleo")) { puede = false; pista = tr("b.p2"); }
   if (f === 3 && (EST.votos || []).some(v => !mio(EST.partida + "-" + EST.anio + "-v-" + v.id))) { puede = false; pista = tr("b.p3"); }
   if (f === 5 && !mio(EST.partida + "-" + EST.anio + "-frase")) { puede = false; pista = tr("b.p5"); }
