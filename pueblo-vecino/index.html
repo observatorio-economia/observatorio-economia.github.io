@@ -472,10 +472,10 @@ function pie(h) {
   const b = mk("button", { type: "button", class: "listo" + (hecho ? " hecho" : ""), disabled: !puede, on: () => enviar(k, "1") }, tr(hecho ? (mira ? "b.vistoh" : "b.hecho") : (mira ? "b.visto" : "b.listo")));
   const L = EST.listos || { n: 0, N: 0 };
   $("pie").hidden = false;
-  $("pie").replaceChildren(b, mk("div", { class: "puntos", "aria-hidden": "true" }, Array.from({ length: L.N }, (_, i) => mk("i", { class: i < L.n ? "ok" : null }))),
+  $("pie").replaceChildren(...[b, mk("div", { class: "puntos", "aria-hidden": "true" }, Array.from({ length: L.N }, (_, i) => mk("i", { class: i < L.n ? "ok" : null }))),
     mk("b", { text: tv("b.cuenta", { n: L.n, N: L.N }) }), mk("span", { class: "pista", text: pista }),
     EST.reloj ? mk("span", { class: "reloj" }, mk("b", { id: "reloj", text: "⏱ " + resta() }), mk("small", { text: tr(f === 2 ? "t.p2" : f === 3 ? "t.p3" : f === 5 ? "t.p5" : "t.p") })) : null,
-    mk("p", { id: "estado", "aria-live": "polite" }));
+    mk("p", { id: "estado", "aria-live": "polite" })].filter(Boolean));
 }
 // Reloj de la fase: lo pone el proyector; aquí solo se cuenta hacia atrás
 const resta = () => { const q = Math.max(0, Math.ceil((EST.reloj - Date.now()) / 1000)); return Math.floor(q / 60) + ":" + String(q % 60).padStart(2, "0"); };
@@ -497,7 +497,7 @@ function ayuda(f) {
   if (!(EST.tutorial || ayudaPedida || !vistas[f])) return null;
   if (EST.tutorial && !vistas[f]) { vistas[f] = 1; try { localStorage.setItem("oikos-ayuda", JSON.stringify(vistas)); } catch {} }
   const ok = mk("button", { type: "button", class: "btn", text: tr("ay.ok"), on: () => { vistas[f] = 1; ayudaPedida = false; try { localStorage.setItem("oikos-ayuda", JSON.stringify(vistas)); } catch {} pintar(); } });
-  return mk("section", { class: "tarjeta ayuda", "aria-labelledby": "ay-h" }, mk("h2", { id: "ay-h", text: tr("ay.h") }), mk("p", { text: tr("ay." + f) }), mk("p", { class: "nota", text: tr("ay.cifras") }), EST.tutorial ? null : ok);
+  return mk("section", { class: "tarjeta ayuda", "aria-labelledby": "ay-h" }, mk("h2", { id: "ay-h", text: tr("ay.h") }), mk("p", { text: tr("ay." + f) }), f === 1 ? mk("p", { class: "nota", text: tr("ay.cifras") }) : null, EST.tutorial ? null : ok);
 }
 function pintar() {
   cabecera();

@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-27T23:46:43.746007+00:00",
+ "generado": "2026-11-28T00:47:50.370254+00:00",
  "comentadas": [],
  "carrusel": [],
  "titulares": [
@@ -7,6 +7,16 @@
    "nombre": "Expansión",
    "salmon": true,
    "items": [
+    {
+     "titulo": "Choque de dos modelos económicos: lo que se juega España en las urnas",
+     "enlace": "https://www.expansion.com/elecciones/elecciones-generales/2026/11/28/choque-dos-modelos-economicos-juega-espana-urnas.html",
+     "fecha": "2026-11-27T23:52:41+00:00"
+    },
+    {
+     "titulo": "Las cinco grandes batallas que se dirimen en el frente económico",
+     "enlace": "https://www.expansion.com/elecciones/elecciones-generales/2026/11/28/cinco-grandes-batallas-dirimen-frente-economico.html",
+     "fecha": "2026-11-27T23:50:59+00:00"
+    },
     {
      "titulo": "Corregir el déficit de 813.000 viviendas costará 131.560 millones: el mapa de inversión por autonomías",
      "enlace": "https://www.expansion.com/economia/2026/11/28/corregir-deficit-813-000-viviendas-costara-131-560-millones-mapa-inversion-autonomias.html",
@@ -21,19 +31,9 @@
      "titulo": "Así quedan las pensiones en 2027 con la revalorización del 3,5%",
      "enlace": "https://www.expansion.com/economia/2026/11/27/asi-quedan-pensiones-2027-revalorizacion-3-5.html",
      "fecha": "2026-11-27T22:55:29+00:00"
-    },
-    {
-     "titulo": "Estados Unidos y Europa tienen problemas económicos opuestos",
-     "enlace": "https://www.expansion.com/economia/financial-times/2026/11/27/estados-unidos-europa-problemas-economicos-opuestos.html",
-     "fecha": "2026-11-27T18:57:33+00:00"
-    },
-    {
-     "titulo": "Los dos momentos del debate",
-     "enlace": "https://www.expansion.com/elecciones/elecciones-generales/2026/11/27/dos-momentos-debate.html",
-     "fecha": "2026-11-27T12:20:50+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:38.200890+00:00"
+   "leido": "2026-11-28T00:47:44.970303+00:00"
   },
   {
    "nombre": "Cinco Días",
@@ -65,7 +65,7 @@
      "fecha": "2026-11-27T04:30:01+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:39.062980+00:00"
+   "leido": "2026-11-28T00:47:45.732008+00:00"
   },
   {
    "nombre": "Invertia · El Español",
@@ -97,7 +97,7 @@
      "fecha": "2026-11-27T09:43:49+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:39.758835+00:00"
+   "leido": "2026-11-28T00:47:46.262176+00:00"
   },
   {
    "nombre": "The Conversation · Economía",
@@ -109,7 +109,7 @@
      "fecha": "2026-11-19T16:35:19+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:40.748510+00:00"
+   "leido": "2026-11-28T00:47:47.324443+00:00"
   },
   {
    "nombre": "El País · Economía",
@@ -141,7 +141,7 @@
      "fecha": "2026-11-27T04:40:00+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:41.226570+00:00"
+   "leido": "2026-11-28T00:47:48.180662+00:00"
   },
   {
    "nombre": "elDiario.es · Economía",
@@ -173,71 +173,71 @@
      "fecha": "2026-11-27T00:46:16+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:42.043904+00:00"
+   "leido": "2026-11-28T00:47:48.667144+00:00"
   },
   {
    "nombre": "El Mundo · Economía",
    "salmon": false,
    "items": [
     {
+     "titulo": "Renfe fue advertida hace un año del desgaste de las ruedas de sus trenes",
+     "enlace": "https://www.elmundo.es/economia/2026/11/28/6b09cebbe9cf4a055a8b457a.html",
+     "fecha": "2026-11-28T00:36:44+00:00"
+    },
+    {
+     "titulo": "Sánchez deja en un mes una mochila de más 6.000 millones en gasto en Defensa para la próxima legislatura y deja sin margen al Ministerio",
+     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/28/6b09a17ce9cf4a3f3c8b45b0.html",
+     "fecha": "2026-11-28T00:36:43+00:00"
+    },
+    {
+     "titulo": "Trump resucita la guerra comercial contra China: una ofensiva de aranceles y chips que golpea también a sus aliados asiáticos",
+     "enlace": "https://www.elmundo.es/economia/macroeconomia/2026/11/28/6b080af9fc6c833c0c8b45a9.html",
+     "fecha": "2026-11-28T00:36:30+00:00"
+    },
+    {
+     "titulo": "La hábil puesta en escena que ayuda a Jensen Huang a salir siempre vencedor",
+     "enlace": "https://www.elmundo.es/economia/2026/11/28/6b09c787fc6c8304258b457d.html",
+     "fecha": "2026-11-28T00:36:28+00:00"
+    },
+    {
      "titulo": "'Black Friday', Navidad y más gastos en época de inflación: ¿adelantar compras realmente ahorra dinero o vacía tu cuenta?",
      "enlace": "https://www.elmundo.es/economia/2026/11/28/6b056e7dfdddff175c8b459e.html",
      "fecha": "2026-11-27T23:05:07+00:00"
-    },
-    {
-     "titulo": "Tres generaciones, ante el reto de las pensiones: \"Mi nieta no tiene las mismas posibilidades que tuve yo, a pesar de que fueron los años de la posguerra y de Franco\"",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b08115cfdddff7c108b45ac.html",
-     "fecha": "2026-11-27T21:44:06+00:00"
-    },
-    {
-     "titulo": "Puig adquiere el 75% del Grupo Artessence por 1.200 millones de euros",
-     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/27/6b09d574fdddff01718b4582.html",
-     "fecha": "2026-11-27T19:28:13+00:00"
-    },
-    {
-     "titulo": "Francia entra en recesión técnica tras la caída del PIB por segundo trimestre consecutivo",
-     "enlace": "https://www.elmundo.es/economia/2026/11/27/6b09a09021efa02d428b459b.html",
-     "fecha": "2026-11-27T15:31:22+00:00"
-    },
-    {
-     "titulo": "Banco Santander potencia su negocio de empresas en España con relevos en siete Direcciones Territoriales del país",
-     "enlace": "https://www.elmundo.es/economia/empresas/2026/11/27/6b0978e3e85eceb9638b4587.html",
-     "fecha": "2026-11-27T12:47:15+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:42.596746+00:00"
+   "leido": "2026-11-28T00:47:49.193617+00:00"
   },
   {
    "nombre": "ABC · Economía",
    "salmon": false,
    "items": [
     {
-     "titulo": "Puig compra el 75% de Grupo Artessence, matriz de Parfums de Marly e Initio por 1.200 millones",
-     "enlace": "https://www.abc.es/economia/puig-compra-grupo-artessence-matriz-parfums-marly-20261127203153-nt.html",
-     "fecha": "2026-11-27T20:20:19+00:00"
+     "titulo": "Oposiciones del Estado 2026: cómo lograr una de las 14.373 plazas, plazos y requisitos",
+     "enlace": "https://www.abc.es/economia/cuentas-corrientes/oposiciones-estado-2026-lograr-14373-plazas-plazos-20261127012119-nt.html",
+     "fecha": "2026-11-28T00:37:38+00:00"
+    },
+    {
+     "titulo": "Ni la nevera ni el horno, este es el aparato que dispara el consumo de luz en casa",
+     "enlace": "https://www.abc.es/economia/cuentas-corrientes/nevera-horno-aparato-dispara-consumo-luz-casa-20261128013639-nt.html",
+     "fecha": "2026-11-28T00:37:02+00:00"
+    },
+    {
+     "titulo": "La confianza no se impone por decreto",
+     "enlace": "https://www.abc.es/economia/juan-ramon-rallo-confianza-impone-decreto-20261128010344-nt.html",
+     "fecha": "2026-11-28T00:03:44+00:00"
     },
     {
      "titulo": "Las pensiones subirán un 3,5% en 2027 y el Gobierno busca rascar votos con el anuncio del alza de las mínimas, las no contributivas y el IMV",
      "enlace": "https://www.abc.es/economia/pensiones-subiran-2027-gobierno-busca-rascar-votos-20261127090146-nt.html",
-     "fecha": "2026-11-27T16:29:18+00:00"
+     "fecha": "2026-11-28T00:03:19+00:00"
     },
     {
-     "titulo": "Depósitos bancarios para pequeños ahorradores: cuánto dinero hace falta para abrirlos y cuáles pagan más",
-     "enlace": "https://www.abc.es/economia/guia-financiera/depositos-bancarios-pequenos-ahorradores-dinero-20261126153925-nt.html",
-     "fecha": "2026-11-27T14:50:43+00:00"
-    },
-    {
-     "titulo": "Las 11 mejores cuentas remuneradas de noviembre con hasta un 4% TIN",
-     "enlace": "https://www.abc.es/economia/guia-financiera/mejores-cuentas-remuneradas-sin-comisiones-20261112060008-nt.html",
-     "fecha": "2026-11-27T12:37:55+00:00"
-    },
-    {
-     "titulo": "Así queda la subida de las pensiones en 2027 en España tras la revalorización del 3,5%: cuantía para mínimas, medias y máximas",
-     "enlace": "https://www.abc.es/economia/cuentas-corrientes/queda-subida-pensiones-2027-espana-tras-revalorizacion-20261127090805-nt.html",
-     "fecha": "2026-11-27T10:10:21+00:00"
+     "titulo": "Puig compra el 75% de Grupo Artessence, matriz de Parfums de Marly e Initio por 1.200 millones",
+     "enlace": "https://www.abc.es/economia/puig-compra-grupo-artessence-matriz-parfums-marly-20261127203153-nt.html",
+     "fecha": "2026-11-27T20:20:19+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:43.193505+00:00"
+   "leido": "2026-11-28T00:47:49.679682+00:00"
   },
   {
    "nombre": "Valencia Plaza · Economía",
@@ -269,7 +269,7 @@
      "fecha": "2026-11-27T19:37:37+00:00"
     }
    ],
-   "leido": "2026-11-27T23:46:43.745961+00:00"
+   "leido": "2026-11-28T00:47:50.370210+00:00"
   }
  ]
 }
